@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言本篇主要写Vuex中模块最基本的的一个单位，Module – 模块对象">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vuex@next源码解析 - module篇">
+<meta property="og:url" content="https://prohibitorum.top/751322f675bd.html">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言本篇主要写Vuex中模块最基本的的一个单位，Module – 模块对象">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/26/z5nmgeNq61i8jAd.png">
+<meta property="article:published_time" content="2020-10-26T13:04:26.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Vuex">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/26/z5nmgeNq61i8jAd.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/751322f675bd.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/751322f675bd.html","path":"751322f675bd.html","title":"Vuex@next源码解析 - module篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vuex@next源码解析 - module篇 | 恋の歌</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start --><script>
+    (function (window) {
+  let swiper = window.Swiper;
+  let loaderPromise = Promise.resolve();
+  const defaultJsUrl =
+    "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js";
+  const defaultCssUrl =
+    "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css";
+
+  const isLoaded = async () => {
+    await loaderPromise;
+    return !!swiper;
+  };
+
+  window.$SwiperLoader = {
+    async load(
+      jsUrl = defaultJsUrl,
+      cssUrl = defaultCssUrl,
+    ) {
+      if (await isLoaded()) {
+        return;
+      }
+      const styleTag = document.createElement("link");
+      const scriptTag = document.createElement("script");
+      // TODO fix reject error
+      return (loaderPromise = Promise.all([
+        new Promise((resolve, reject) => {
+          let callback;
+          styleTag.addEventListener(
+            "load",
+            (callback = () => {
+              styleTag.removeEventListener("load", callback);
+              resolve();
+            })
+          );
+          styleTag.setAttribute("rel", "stylesheet");
+          styleTag.setAttribute("href", cssUrl);
+          document.head.appendChild(styleTag);
+        }),
+        new Promise((resolve, reject) => {
+          let callback;
+          scriptTag.addEventListener(
+            "load",
+            (callback = () => {
+              scriptTag.removeEventListener("load", callback);
+              resolve();
+            })
+          );
+          scriptTag.setAttribute("src", jsUrl);
+          document.body.appendChild(scriptTag);
+        }),
+        Promise.resolve().then(() => {
+          // custom style for swiper
+          const styleTag = document.createElement("style");
+          styleTag.innerHTML = `
+            :root { 
+              --swiper-navigation-size: 1.25em 
+            }
+
+            .swiper {
+              position: relative;
+              margin-bottom: 20px;
+            }
+
+            .swiper-slide {
+              box-sizing: border-box;
+              padding: 0 calc(var(--swiper-navigation-size)/ 44 * 27 + 2 * var(--swiper-navigation-sides-offset, 10px) + 6px);
+            }
+
+            .swiper-button-wrapper {
+              position: absolute;
+              z-index: 10;
+              top: 0;
+              bottom: 0;
+              width: calc(var(--swiper-navigation-size)/ 44 * 27 + 2 * var(--swiper-navigation-sides-offset, 10px) + 6px);
+              background-color: var(--content-bg-color);
+            }
+
+            .swiper-button-wrapper.swiper-button-wrapper-prev {
+              left: 0;
+            }
+
+            .swiper-button-wrapper.swiper-button-wrapper-next {
+              right: 0;
+            }
+          `;
+          document.head.append(styleTag);
+        }),
+      ]));
+    },
+  };
+})(window);
+
+  </script><!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#module-js"><span class="nav-number">2.</span> <span class="nav-text">module.js</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#constructor-NaN"><span class="nav-number">2.1.</span> <span class="nav-text">constructor</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#addChild"><span class="nav-number">2.2.</span> <span class="nav-text">addChild</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#removeChild"><span class="nav-number">2.3.</span> <span class="nav-text">removeChild</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getChild"><span class="nav-number">2.4.</span> <span class="nav-text">getChild</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hasModule"><span class="nav-number">2.5.</span> <span class="nav-text">hasModule</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#update"><span class="nav-number">2.6.</span> <span class="nav-text">update</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forEachXXX"><span class="nav-number">2.7.</span> <span class="nav-text">forEachXXX</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">126</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/751322f675bd.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vuex@next源码解析 - module篇 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vuex@next源码解析 - module篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-26 13:04:26" itemprop="dateCreated datePublished" datetime="2020-10-26T13:04:26+00:00">2020-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本篇主要写<code>Vuex</code>中模块最基本的的一个单位，<code>Module</code> – 模块对象</p>
+<span id="more"></span>
+
+<h1 id="module-js"><a href="#module-js" class="headerlink" title="module.js"></a><code>module.js</code></h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">constructor</span> (rawModule, runtime) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  get namespaced () &#123;&#125;</span><br><span class="line"></span><br><span class="line">  addChild (key, <span class="variable language_">module</span>) &#123;&#125;</span><br><span class="line">  removeChild (key) &#123;&#125;</span><br><span class="line">  getChild (key) &#123;&#125;</span><br><span class="line">  hasChild (key) &#123;&#125;</span><br><span class="line">  </span><br><span class="line">  update (rawModule) &#123;&#125;</span><br><span class="line"></span><br><span class="line">  forEachChild (fn) &#123;&#125;</span><br><span class="line">  forEachGetter (fn) &#123;&#125;</span><br><span class="line">  forEachAction (fn) &#123;&#125;</span><br><span class="line">  forEachMutation (fn) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不用因为这么多方法感到退却，因为其实这些方法都是一些非常简单的方法，放下心往👇看就完事~</p>
+<ul>
+<li><code>constructor</code> 构造器函数</li>
+<li><code>addChild</code> 添加一个子模块<code>Module</code>对象</li>
+<li><code>removeChild</code> 移除一个子模块<code>Module</code>对象</li>
+<li><code>getChild</code> 得到一个子模块<code>Module</code>对象</li>
+<li><code>hasChild</code> 是否拥有一个子模块<code>Module</code>对象</li>
+<li><code>update</code> 更新本模块</li>
+<li><code>forEachChild</code> 遍历每一个子模块</li>
+<li><code>forEachGetter</code> 遍历本模块每一个<code>getter</code></li>
+<li><code>forEachAction</code> 遍历本模块每一个<code>action</code></li>
+<li><code>forEachMutation</code> 遍历本模块每一个<code>mutation</code></li>
+</ul>
+<p>看起来很多，其实对于<code>xxxChild</code>这几个方法，颇有点增删改查的味道😂</p>
+<p>后四个<code>forEachXXX</code>函数很明显为遍历函数</p>
+<h2 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a><code>constructor</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Base data struct for store&#x27;s module, package with some attribute and method</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span> (rawModule, runtime) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">runtime</span> = runtime</span><br><span class="line">    <span class="comment">// Store some children item</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_children</span> = <span class="title class_">Object</span>.<span class="title function_">create</span>(<span class="literal">null</span>)</span><br><span class="line">    <span class="comment">// Store the origin module object which passed by programmer</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_rawModule</span> = rawModule</span><br><span class="line">    <span class="keyword">const</span> rawState = rawModule.<span class="property">state</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Store the origin module&#x27;s state</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">state</span> = (<span class="keyword">typeof</span> rawState === <span class="string">&#x27;function&#x27;</span> ? <span class="title function_">rawState</span>() : rawState) || &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造器函数表明了将会往对象上挂载什么属性</p>
+<p><code>this.runtime</code> 表示是否是运行时注册的模块，前面说到的注册根<code>root</code>模块时</p>
+<p>在<code>ModuleCollection</code>的构造器中执行了<code>this.register([], rawRootModule, false)</code></p>
+<p>这里第三个参数为<code>false</code>也就表明了根模块是不可以卸载的</p>
+<p><code>this._children</code> 本模块包含的子<code>Module</code>对象</p>
+<p><code>this._rawModule</code> 用于创建模块的参数（就是用于传进来的<code>options</code>），比如现在有如下<code>store</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="number">24</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">modules</span>: &#123;</span><br><span class="line">    <span class="attr">m1</span>: &#123;</span><br><span class="line">      <span class="attr">state</span>: &#123;</span><br><span class="line">        <span class="attr">val</span>: <span class="number">124</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>那么对于根<code>root</code>和<code>m1</code>，他们的<code>_rawModule</code>，应该是这个传入的配置对象什么部分？</p>
+<p>可能有人会认为都是整个配置对象，但其实不是，因为在<code>ModuleCollection</code>类中的<code>register</code>方法中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// register nested modules</span></span><br><span class="line"><span class="keyword">if</span> (rawModule.<span class="property">modules</span>) &#123;</span><br><span class="line">  <span class="title function_">forEachValue</span>(rawModule.<span class="property">modules</span>, <span class="function">(<span class="params">rawChildModule, key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">register</span>(path.<span class="title function_">concat</span>(key), rawChildModule, runtime)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里通过工具函数<code>forEachValue</code>来来遍历传入的配置参数的<code>modules</code>（如果存在的情况下），每次回调的<code>rawChildModule</code>为本模块的一个配置对象</p>
+<p>比如此时遍历到了<code>modules</code>下的<code>m1</code>，此时两者分别为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rawChildModule = &#123;</span><br><span class="line">  <span class="attr">state</span>:&#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="number">124</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">key = <span class="string">&#x27;m1&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>那么对于<code>m1</code>，他的<code>_rawModule</code>和<code>rawChildModule</code>一样，就为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">_rawModule = &#123;</span><br><span class="line">  <span class="attr">state</span>:&#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="number">124</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而对于根<code>root</code>模块，他的<code>_rawModule</code>，就是整个传进来的参数对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">_rawModule = &#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="number">24</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">modules</span>: &#123;</span><br><span class="line">    <span class="attr">m1</span>: &#123;</span><br><span class="line">      <span class="attr">state</span>: &#123;</span><br><span class="line">        <span class="attr">val</span>: <span class="number">124</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以在控制台展开看看</p>
+<p><img data-src="https://i.loli.net/2020/10/26/z5nmgeNq61i8jAd.png"></p>
+<p>发现基本符合预期，但是根<code>root</code>模块的<code>state</code>是合并的，在这个文件中并没有相关的操作，哪又是在进行合并的呢？</p>
+<p>没错，之前<code>store</code>篇说过，是<code>store.js</code>文件中的<code>installModule</code>方法</p>
+<p>在<code>Store</code>类的构造器函数中，调用了<code>installModule</code>，如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> state = <span class="variable language_">this</span>.<span class="property">_modules</span>.<span class="property">root</span>.<span class="property">state</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">installModule</span>(<span class="variable language_">this</span>, state, [], <span class="variable language_">this</span>.<span class="property">_modules</span>.<span class="property">root</span>)</span><br></pre></td></tr></table></figure>
+
+<p>然后在<code>installModule</code>中，有一段判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// set state</span></span><br><span class="line"><span class="keyword">if</span> (!isRoot &amp;&amp; !hot) &#123;</span><br><span class="line">  <span class="keyword">const</span> parentState = <span class="title function_">getNestedState</span>(rootState, path.<span class="title function_">slice</span>(<span class="number">0</span>, -<span class="number">1</span>))</span><br><span class="line">  <span class="keyword">const</span> moduleName = path[path.<span class="property">length</span> - <span class="number">1</span>]</span><br><span class="line">  store.<span class="title function_">_withCommit</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">      <span class="keyword">if</span> (moduleName <span class="keyword">in</span> parentState) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">warn</span>(</span><br><span class="line">          <span class="string">`[vuex] state field &quot;<span class="subst">$&#123;moduleName&#125;</span>&quot; was overridden by a module with the same name at &quot;<span class="subst">$&#123;path.join(<span class="string">&#x27;.&#x27;</span>)&#125;</span>&quot;`</span></span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 挂载state</span></span><br><span class="line">    parentState[moduleName] = <span class="variable language_">module</span>.<span class="property">state</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时的<code>rootState</code>就是<code>this._modules.root.state</code></p>
+<p>也就是非根模块的时候，通过<code>getNestedState</code>取到父模块，然后把当前模块的<code>state</code>挂载到父模块的<code>state</code>上</p>
+<p><code>this.state</code> 也就是本模块的状态，通过<code>_rawModule.state</code>来获取</p>
+<p>这里做了个判断，也就是我们传入的<code>state</code>属性不一定是要一个对象，也可以是一个函数返回一个对象</p>
+<h2 id="addChild"><a href="#addChild" class="headerlink" title="addChild"></a><code>addChild</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  addChild (key, <span class="variable language_">module</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_children</span>[key] = <span class="variable language_">module</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>非常简单，我觉得初学者都能看懂🤣，就是往<code>_children</code>属性上挂载上传入的<code>Module</code>对象而已</p>
+<h2 id="removeChild"><a href="#removeChild" class="headerlink" title="removeChild"></a><code>removeChild</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  removeChild (key) &#123;</span><br><span class="line">    <span class="keyword">delete</span> <span class="variable language_">this</span>.<span class="property">_children</span>[key]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>delete</code>删除对应<code>key</code>的<code>Module</code>对象</p>
+<h2 id="getChild"><a href="#getChild" class="headerlink" title="getChild"></a><code>getChild</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  getChild (key) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_children</span>[key]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>_children</code>属性返回对应的<code>Module</code>对象</p>
+<h2 id="hasModule"><a href="#hasModule" class="headerlink" title="hasModule"></a><code>hasModule</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  hasChild (key) &#123;</span><br><span class="line">    <span class="keyword">return</span> key <span class="keyword">in</span> <span class="variable language_">this</span>.<span class="property">_children</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>in</code>操作符号判断模块名<code>key</code>是否存在<code>_children</code>属性中</p>
+<h2 id="update"><a href="#update" class="headerlink" title="update"></a><code>update</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  update (rawModule) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">namespaced</span> = rawModule.<span class="property">namespaced</span></span><br><span class="line">    <span class="keyword">if</span> (rawModule.<span class="property">actions</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">actions</span> = rawModule.<span class="property">actions</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (rawModule.<span class="property">mutations</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">mutations</span> = rawModule.<span class="property">mutations</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (rawModule.<span class="property">getters</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">getters</span> = rawModule.<span class="property">getters</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过传入的<code>rawModule</code>配置来更新本模块的<code>_rawModule</code></p>
+<p>可以看到，覆盖了<code>namespaced</code>，<code>getters</code>，<code>mutations</code>，<code>actions</code></p>
+<p>但是<strong>没有覆盖<code>state</code>！</strong>，<strong>没有覆盖<code>state</code>！！</strong>，<strong>没有覆盖<code>state</code>！！！</strong></p>
+<p>重要的话讲三遍好吧，这个API可以追溯到<code>store.hotUpdate</code>这个方法上，热更新时用到，可以不用太在意</p>
+<h2 id="forEachXXX"><a href="#forEachXXX" class="headerlink" title="forEachXXX"></a>forEachXXX</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> <span class="title class_">Module</span> &#123;</span><br><span class="line">  forEachChild (fn) &#123;</span><br><span class="line">    <span class="title function_">forEachValue</span>(<span class="variable language_">this</span>.<span class="property">_children</span>, fn)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  forEachGetter (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">getters</span>) &#123;</span><br><span class="line">      <span class="title function_">forEachValue</span>(<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">getters</span>, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachAction (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">actions</span>) &#123;</span><br><span class="line">      <span class="title function_">forEachValue</span>(<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">actions</span>, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  forEachMutation (fn) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">mutations</span>) &#123;</span><br><span class="line">      <span class="title function_">forEachValue</span>(<span class="variable language_">this</span>.<span class="property">_rawModule</span>.<span class="property">mutations</span>, fn)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这四个函数非常简单，依赖了工具函数<code>forEachValue</code>，</p>
+<p>每个函数对特定的对象进行属性以及对应值的遍历</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这个文件写完基本上核心代码就写完了</p>
+<p>接下来会整体改进这几篇文章的细节，使大家更容易懂</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Vuex/" rel="tag"># Vuex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/0d82814cc49b.html" rel="prev" title="美团2021校招前端笔试题">
+                  <i class="fa fa-angle-left"></i> 美团2021校招前端笔试题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/24f26b743454.html" rel="next" title="Vuex@next源码解析 - 工具函数篇篇">
+                  Vuex@next源码解析 - 工具函数篇篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"de562715284768d05032b56085395f43"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start --><style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>

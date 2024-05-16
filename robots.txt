@@ -1,0 +1,16 @@
+---
+layout: false
+---
+User-agent: *
+Allow: /
+Allow: /archives/
+Allow: /page/
+Allow: /schedule/
+Allow: /tags/
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /images/
+
+Sitemap: https://prohibitorum.top/sitemap.xml
+Sitemap: https://prohibitorum.top/baidusitemap.xml

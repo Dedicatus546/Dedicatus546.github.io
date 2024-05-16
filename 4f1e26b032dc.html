@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言hexo-tag-swiper ，一个能够在 Hexo 中使用 Swiper 的插件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 Hexo 中集成 Swiper">
+<meta property="og:url" content="https://prohibitorum.top/4f1e26b032dc.html">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言hexo-tag-swiper ，一个能够在 Hexo 中使用 Swiper 的插件。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-04-03T22:56:35.000Z">
+<meta property="article:modified_time" content="2023-04-03T22:56:35.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Swiper">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/4f1e26b032dc.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/4f1e26b032dc.html","path":"4f1e26b032dc.html","title":"在 Hexo 中集成 Swiper"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在 Hexo 中集成 Swiper | 恋の歌</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start --><script>
+    (function (window) {
+  let swiper = window.Swiper;
+  let loaderPromise = Promise.resolve();
+  const defaultJsUrl =
+    "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js";
+  const defaultCssUrl =
+    "https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css";
+
+  const isLoaded = async () => {
+    await loaderPromise;
+    return !!swiper;
+  };
+
+  window.$SwiperLoader = {
+    async load(
+      jsUrl = defaultJsUrl,
+      cssUrl = defaultCssUrl,
+    ) {
+      if (await isLoaded()) {
+        return;
+      }
+      const styleTag = document.createElement("link");
+      const scriptTag = document.createElement("script");
+      // TODO fix reject error
+      return (loaderPromise = Promise.all([
+        new Promise((resolve, reject) => {
+          let callback;
+          styleTag.addEventListener(
+            "load",
+            (callback = () => {
+              styleTag.removeEventListener("load", callback);
+              resolve();
+            })
+          );
+          styleTag.setAttribute("rel", "stylesheet");
+          styleTag.setAttribute("href", cssUrl);
+          document.head.appendChild(styleTag);
+        }),
+        new Promise((resolve, reject) => {
+          let callback;
+          scriptTag.addEventListener(
+            "load",
+            (callback = () => {
+              scriptTag.removeEventListener("load", callback);
+              resolve();
+            })
+          );
+          scriptTag.setAttribute("src", jsUrl);
+          document.body.appendChild(scriptTag);
+        }),
+        Promise.resolve().then(() => {
+          // custom style for swiper
+          const styleTag = document.createElement("style");
+          styleTag.innerHTML = `
+            :root { 
+              --swiper-navigation-size: 1.25em 
+            }
+
+            .swiper {
+              position: relative;
+              margin-bottom: 20px;
+            }
+
+            .swiper-slide {
+              box-sizing: border-box;
+              padding: 0 calc(var(--swiper-navigation-size)/ 44 * 27 + 2 * var(--swiper-navigation-sides-offset, 10px) + 6px);
+            }
+
+            .swiper-button-wrapper {
+              position: absolute;
+              z-index: 10;
+              top: 0;
+              bottom: 0;
+              width: calc(var(--swiper-navigation-size)/ 44 * 27 + 2 * var(--swiper-navigation-sides-offset, 10px) + 6px);
+              background-color: var(--content-bg-color);
+            }
+
+            .swiper-button-wrapper.swiper-button-wrapper-prev {
+              left: 0;
+            }
+
+            .swiper-button-wrapper.swiper-button-wrapper-next {
+              right: 0;
+            }
+          `;
+          document.head.append(styleTag);
+        }),
+      ]));
+    },
+  };
+})(window);
+
+  </script><!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E4%BD%BF%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">普通使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">2.3.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">2.3.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">2.3.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AA%E4%BD%BF%E7%94%A8%E5%9B%BE%E7%89%87"><span class="nav-number">2.4.</span> <span class="nav-text">只使用图片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%88%E6%9E%9C-1"><span class="nav-number">2.4.3.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">2.5.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">2.6.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">164</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">126</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/4f1e26b032dc.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在 Hexo 中集成 Swiper | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 Hexo 中集成 Swiper
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-03 22:56:35" itemprop="dateCreated datePublished" datetime="2023-04-03T22:56:35+00:00">2023-04-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>hexo-tag-swiper</code> ，一个能够在 Hexo 中使用 <code>Swiper</code> 的插件。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-tag-swiper --save</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>在 Hexo 的 <code>_config.yml</code> 中配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">swiper:</span></span><br><span class="line">  <span class="attr">jsUrl:</span> <span class="string">&quot;https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js&quot;</span>  <span class="string">//</span> <span class="string">default</span> <span class="string">is</span> <span class="string">&quot;https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js&quot;</span></span><br><span class="line">  <span class="attr">cssUrl:</span> <span class="string">&quot;https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css&quot;</span>  <span class="string">//</span> <span class="string">default</span> <span class="string">is</span> <span class="string">&quot;https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>jsUrl</code> - 引用的 <code>Swiper</code> js 文件的地址</li>
+<li><code>cssUrl</code> - 引用的 <code>Swiper</code> css 文件的地址</li>
+</ul>
+<p>插件内置了对 <code>next</code> 主题的简单样式支持，如果你的主题不是 <code>next</code> ，如果有需要可以在 <code>scripts</code> 文件夹下自己编写相关的样式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// scripts/swiper.my-theme.js</span></span><br><span class="line">hexo.<span class="property">extend</span>.<span class="property">injector</span>.<span class="title function_">register</span>(<span class="string">&quot;body_end&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; theme = <span class="string">&quot;my-theme&quot;</span> &#125; = hexo.<span class="property">config</span> || &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (theme === <span class="string">&quot;my-theme&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`&lt;style&gt;</span></span><br><span class="line"><span class="string">      // 额外的样式</span></span><br><span class="line"><span class="string">    &lt;/style&gt;`</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>my-theme</code> 是你当前使用的主题，对应到 Hexo 的 <code>_config.yml</code> 中为 <code>theme</code></p>
+<h2 id="普通使用"><a href="#普通使用" class="headerlink" title="普通使用"></a>普通使用</h2><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;% swiper %&#125;</span><br><span class="line">  &#123;% swiperItem %&#125;</span><br><span class="line">    write your content here</span><br><span class="line">  &#123;% endswiperItem %&#125;</span><br><span class="line">&#123;% endswiper %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;% swiper %&#125;</span><br><span class="line">  &#123;% swiperItem %&#125;</span><br><span class="line">    William Stoner is born on a small farm <span class="keyword">in</span> 1891. One day his father suggests he should attend the University of Missouri to study agriculture. Stoner agrees but, <span class="keyword">while</span> studying a compulsory literature course, he quickly falls <span class="keyword">in</span> love with literary studies. Without telling his parents, Stoner quits the agriculture program and studies only the humanities. He completes his MA <span class="keyword">in</span> English and begins teaching. In graduate school, he is friendly with fellow students Gordon Finch and Dave Masters. World War I begins, and Gordon and Dave enlist. Despite pressure from Gordon, Stoner decides to remain <span class="keyword">in</span> school during the war. Masters is killed <span class="keyword">in</span> France, <span class="keyword">while</span> Finch sees action and becomes an officer. At a faculty party, Stoner meets and becomes infatuated with a young woman named Edith, <span class="built_in">who</span> is staying with an aunt <span class="keyword">for</span> a few weeks.</span><br><span class="line">  &#123;% endswiperItem %&#125;</span><br><span class="line">  &#123;% swiperItem %&#125;</span><br><span class="line">    Stoner woos Edith, and she agrees to marry him. Stoner’s marriage to Edith is bad from the start. It gradually becomes clear that Edith has profound emotional problems. Significantly, she is bitter about having cancelled a trip to Europe with her aunt to marry Stoner. After three years of marriage, Edith suddenly informs Stoner that she wants a baby. She suddenly becomes passionate sexually, but this period is brief. When their daughter Grace is born, Edith remains bedridden <span class="keyword">for</span> nearly a year, and Stoner largely cares <span class="keyword">for</span> their child alone. He grows close with his young daughter, <span class="built_in">who</span> spends most of her time with him <span class="keyword">in</span> his study. Stoner gradually realizes that Edith is waging a campaign to separate him from his daughter emotionally.</span><br><span class="line">    Stoner woos Edith, and she agrees to marry him. Stoner’s marriage to Edith is bad from the start. It gradually becomes clear that Edith has profound emotional problems. Significantly, she is bitter about having cancelled a trip to Europe with her aunt to marry Stoner. After three years of marriage, Edith suddenly informs Stoner that she wants a baby. She suddenly becomes passionate sexually, but this period is brief. When their daughter Grace is born, Edith remains bedridden <span class="keyword">for</span> nearly a year, and Stoner largely cares <span class="keyword">for</span> their child alone. He grows close with his young daughter, <span class="built_in">who</span> spends most of her time with him <span class="keyword">in</span> his study. Stoner gradually realizes that Edith is waging a campaign to separate him from his daughter emotionally.</span><br><span class="line">  &#123;% endswiperItem %&#125;</span><br><span class="line">&#123;% endswiper %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h3>
+      <div class="swiper" id="swiperInst-8396daa1-3e52-41ec-b07c-8a306be7760d" style="width: 100%">
+        <div class="swiper-wrapper">
+          
+<div class="swiper-slide">
+  <p>William Stoner is born on a small farm in 1891. One day his father suggests he should attend the University of Missouri to study agriculture. Stoner agrees but, while studying a compulsory literature course, he quickly falls in love with literary studies. Without telling his parents, Stoner quits the agriculture program and studies only the humanities. He completes his MA in English and begins teaching. In graduate school, he is friendly with fellow students Gordon Finch and Dave Masters. World War I begins, and Gordon and Dave enlist. Despite pressure from Gordon, Stoner decides to remain in school during the war. Masters is killed in France, while Finch sees action and becomes an officer. At a faculty party, Stoner meets and becomes infatuated with a young woman named Edith, who is staying with an aunt for a few weeks.</p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p>Stoner woos Edith, and she agrees to marry him. Stoner’s marriage to Edith is bad from the start. It gradually becomes clear that Edith has profound emotional problems. Significantly, she is bitter about having cancelled a trip to Europe with her aunt to marry Stoner. After three years of marriage, Edith suddenly informs Stoner that she wants a baby. She suddenly becomes passionate sexually, but this period is brief. When their daughter Grace is born, Edith remains bedridden for nearly a year, and Stoner largely cares for their child alone. He grows close with his young daughter, who spends most of her time with him in his study. Stoner gradually realizes that Edith is waging a campaign to separate him from his daughter emotionally.<br>Stoner woos Edith, and she agrees to marry him. Stoner’s marriage to Edith is bad from the start. It gradually becomes clear that Edith has profound emotional problems. Significantly, she is bitter about having cancelled a trip to Europe with her aunt to marry Stoner. After three years of marriage, Edith suddenly informs Stoner that she wants a baby. She suddenly becomes passionate sexually, but this period is brief. When their daughter Grace is born, Edith remains bedridden for nearly a year, and Stoner largely cares for their child alone. He grows close with his young daughter, who spends most of her time with him in his study. Stoner gradually realizes that Edith is waging a campaign to separate him from his daughter emotionally.</p>
+
+</div>
+    
+        </div>
+        <div class="swiper-button-wrapper swiper-button-wrapper-prev">
+          <div class="swiper-button-prev"></div>
+        </div>
+        <div class="swiper-button-wrapper swiper-button-wrapper-next">
+          <div class="swiper-button-next"></div>
+        </div>
+      </div>
+      <script>
+        window.addEventListener("load", () => {
+          window.$SwiperLoader.load("https://fastly.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js", "https://fastly.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css").then(() => {
+            const swiperInst = new Swiper("#swiperInst-8396daa1-3e52-41ec-b07c-8a306be7760d", {
+              autoHeight: true,
+              observer: true,
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }
+            });
+            // fix swiper can't resize hight when change slide height in some condition
+            // such as using detail tag
+            const resizeObserver = new ResizeObserver((entries) => {
+              swiperInst.update();
+            });
+            document.querySelectorAll("#swiperInst-8396daa1-3e52-41ec-b07c-8a306be7760d .swiper-slide").forEach(el => {
+              resizeObserver.observe(el);
+            });
+          });
+        });
+      </script>
+    
+
+<h2 id="只使用图片"><a href="#只使用图片" class="headerlink" title="只使用图片"></a>只使用图片</h2><h3 id="语法-1"><a href="#语法-1" class="headerlink" title="语法"></a>语法</h3><p><code>&#123;% swiperImageItem [url] [ratio = 1.77778] %&#125;</code></p>
+<ul>
+<li><code>url</code> - 图片地址</li>
+<li><code>ratio</code> - 容器宽高比，通过 css 的 <code>aspect-ratio</code> 来控制</li>
+</ul>
+<h3 id="例子-1"><a href="#例子-1" class="headerlink" title="例子"></a>例子</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;% swiper %&#125;</span><br><span class="line">  &#123;% swiperImageItem https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202304022159088.avif %&#125;</span><br><span class="line">  &#123;% swiperImageItem https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202304022159851.avif %&#125;</span><br><span class="line">&#123;% endswiper %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="效果-1"><a href="#效果-1" class="headerlink" title="效果"></a>效果</h3>
+      <div class="swiper" id="swiperInst-bca87b81-69c3-4962-b8d2-c99400f1e154" style="width: 100%">
+        <div class="swiper-wrapper">
+          
+<div class="swiper-slide">
+  <img 
+    class="swiper-slide-img" 
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202304022159088.avif 
+    style="aspect-ratio: 1.77778" />
+</div>
+    
+
+<div class="swiper-slide">
+  <img 
+    class="swiper-slide-img" 
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202304022159851.avif 
+    style="aspect-ratio: 1.77778" />
+</div>
+    
+        </div>
+        <div class="swiper-button-wrapper swiper-button-wrapper-prev">
+          <div class="swiper-button-prev"></div>
+        </div>
+        <div class="swiper-button-wrapper swiper-button-wrapper-next">
+          <div class="swiper-button-next"></div>
+        </div>
+      </div>
+      <script>
+        window.addEventListener("load", () => {
+          window.$SwiperLoader.load("https://fastly.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js", "https://fastly.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css").then(() => {
+            const swiperInst = new Swiper("#swiperInst-bca87b81-69c3-4962-b8d2-c99400f1e154", {
+              autoHeight: true,
+              observer: true,
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }
+            });
+            // fix swiper can't resize hight when change slide height in some condition
+            // such as using detail tag
+            const resizeObserver = new ResizeObserver((entries) => {
+              swiperInst.update();
+            });
+            document.querySelectorAll("#swiperInst-bca87b81-69c3-4962-b8d2-c99400f1e154 .swiper-slide").forEach(el => {
+              resizeObserver.observe(el);
+            });
+          });
+        });
+      </script>
+    
+
+<h2 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h2><ul>
+<li>懒加载，<code>Swiper</code> 的 js 文件和 css 文件并非在生成时就插入 html 文档中，而是通过一个迷你的 <code>loader.js</code> 来加载</li>
+<li>简单适配了 <code>next</code> 主题</li>
+</ul>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><ul>
+<li>无法通过额外的参数来控制 <code>Swiper</code></li>
+</ul>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>目前的使用上基本不需要太多额外的参数，之后会考虑增加对 <code>Swiper</code> 其他参数的支持，比如 <code>slidesPerView</code>, <code>spaceBetween</code>, <code>speed</code> 等的支持</p>
+<p>不过我觉得这样子基本上就符合绝大部分人的需要了…</p>
+<p>如果你喜欢这个插件，可以给个 star 哦~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/Swiper/" rel="tag"># Swiper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/7be15600c913.html" rel="prev" title="记一次使用 nuxt3">
+                  <i class="fa fa-angle-left"></i> 记一次使用 nuxt3
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/1a198008e8f2.html" rel="next" title="为什么我们与 CSS-in-JS 分道扬镳（译）">
+                  为什么我们与 CSS-in-JS 分道扬镳（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"91fc2492246a8f611276dbcc1a307d88"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start --><style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>
