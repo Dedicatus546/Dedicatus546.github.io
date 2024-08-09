@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言如何分辨 getDisplayMedia 获取的是标签页、窗口还是屏幕？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？">
+<meta property="og:url" content="https://prohibitorum.top/47aa2f38ca3c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言如何分辨 getDisplayMedia 获取的是标签页、窗口还是屏幕？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311610386.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311613954.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311614503.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311624611.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311730863.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311743395.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311745517.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311806051.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311805897.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311831717.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312139881.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312148236.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312151333.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312150684.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312207222.avif">
+<meta property="article:published_time" content="2023-08-31T22:14:57.000Z">
+<meta property="article:modified_time" content="2023-08-31T22:14:57.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="WebRTC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311610386.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/47aa2f38ca3c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/47aa2f38ca3c","path":"47aa2f38ca3c.html","title":"如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？ | 恋の歌</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%A7%8D%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%8D%95%E8%8E%B7%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">浏览器种的两种捕获方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getDisplayMedia-%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.2.</span> <span class="nav-text">getDisplayMedia 接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%86%E8%BE%A8-getDisplayMedia-%E6%8D%95%E8%8E%B7%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.3.</span> <span class="nav-text">如何分辨 getDisplayMedia 捕获的类型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">168</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">130</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/47aa2f38ca3c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？ | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-31 22:14:57" itemprop="dateCreated datePublished" datetime="2023-08-31T22:14:57+00:00">2023-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如何分辨 <code>getDisplayMedia</code> 获取的是标签页、窗口还是屏幕？</p>
+<span id="more"></span>
+
+<p>起因最近公司的连麦在测试大哥的手里测出了个 BUG 。</p>
+<p>从捕获标签的画面切换到捕获窗口的画面的时候，麦克风没有恢复。</p>
+<p>因为这个系统在我入职之前基本上就完成的七七八八了，加上我刚入职的那一年基本上也没碰这个系统，所以里面的某些逻辑我也不是很清楚。</p>
+<p>当然，在知道问题之后，首先就是要复现出来，跟着测试老哥提供的步骤，很好地复现出来了。</p>
+<p>接下来就写写是如何解决的。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="浏览器种的两种捕获方式"><a href="#浏览器种的两种捕获方式" class="headerlink" title="浏览器种的两种捕获方式"></a>浏览器种的两种捕获方式</h2><p>在浏览器中，存在着两种捕获画面的方式，一种是我们比较熟知的摄像头设备捕获，一种就是对程序画面的捕获，这两种捕获分别对应着两个 API 。</p>
+<ul>
+<li><code>navigator.mediaDevices.getUserMedia</code> 捕获各种摄像头的画面，可以指定是否捕获音频和是否捕获视频。</li>
+<li><code>navigator.mediaDevices.getDisplayMedia</code> 程序画面的捕获，这里有三种，分别是浏览器标签页，指定窗口，整个屏幕。</li>
+</ul>
+<p>这里我们不讲 <code>getUserMedia</code> ，我们只专注 <code>getDisplayMedia</code> 。</p>
+<h2 id="getDisplayMedia-接口"><a href="#getDisplayMedia-接口" class="headerlink" title="getDisplayMedia 接口"></a>getDisplayMedia 接口</h2><p>通过 <code>getDisplayMedia</code> 接口，我们可以很方便的捕获某个标签页、某个窗口或者整个屏幕的画面，这个接口返回了一个 <code>MediaStream</code> 的对象。</p>
+<p>我们就可以通过这个对象来进行一些操作，比如得到视频轨或者音频轨，把流挂到 <code>video</code> 元素的 <code>srcObject</code> 上观看等等。</p>
+<p>对于本贴提到的我们的系统来说，我们主要是拿到视频的音视频轨道，然后喂给 Owt ，他的底层就是通过 <code>RTCRtpSender</code> 的 <code>replaceTrack</code> 接口来替换</p>
+<p>在浏览器上使用 <code>getDisplayMedia</code> 接口后，我们可以看到浏览器要询问我们捕获哪种窗口。</p>
+<div class="swiper" id="swiperInst-cuwbrlxi" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311610386.avif" alt="标签页"></p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311613954.avif" alt="窗口"></p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311614503.avif" alt="整个屏幕"></p>
+
+</div>
+    
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-cuwbrlxi", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-cuwbrlxi .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>如果成功选择了某个类型之后，<code>getDisplayMedia</code> 会返回一个 <code>Promise&lt;MediaStream&gt;</code> 对象。</p>
+<p>通过 <code>MediaStream.prototype.getTracks</code> 就可以看到所有的轨道（这里我选择的是标签页）。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311624611.avif"></p>
+<p>从上面的图来看，我们得到的 <code>MediaStream</code> 只有一个 video 轨道，这意味着流是没有声音的，那我们能同时捕获音频吗？</p>
+<p>答案是可以的，这需要我们往 <code>getDisplayMedia</code> 方法传入一个参数。这个参数我们称为“约束”对象。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia#parameters">MDN</a> 上，我们能看到这个接口支持的约束类型。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311730863.avif"></p>
+<p>可选的参数有</p>
+<ul>
+<li><code>video</code></li>
+<li><code>audio</code></li>
+<li><code>controller</code></li>
+<li><code>preferCurrentTab</code></li>
+<li><code>selfBrowserSurface</code></li>
+<li><code>surfaceSwitching</code></li>
+<li><code>systemAudio</code></li>
+</ul>
+<p>这里我们重点关注前两个参数，这两个参数决定我们是否要捕获视频或者音频。</p>
+<p>默认 <code>video</code> 为 <code>true</code> ，所以在前面我们直接调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getDisplayMedia</span>()</span><br></pre></td></tr></table></figure>
+
+<p>等同于</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getDisplayMedia</span>(&#123; <span class="attr">video</span>: <span class="literal">true</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>而 <code>audio</code> 参数默认为 <code>false</code> ，所以我们前面直接调用后只有一个 video 轨道。</p>
+<p>我们可以试下同时把 <code>video</code> 和 <code>audio</code> 都置为 <code>true</code> ，即执行：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getDisplayMedia</span>(&#123; </span><br><span class="line">  <span class="attr">video</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">audio</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311743395.avif"></p>
+<p>可以发现，左下角出现了一个是否获取音频选框。</p>
+<p>这时我们在标签页这里点击确认，观察流轨道的个数。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311745517.avif"></p>
+<p>可以发现音频和视频流都有了，这时如果我们想确认流是否有声音，我们可以挂到一个 <code>video</code> 元素上进行观看，如果耳机出现回声则证明流是有声音的。</p>
+<p>标签页是可以包括音频的，而窗口依然是不包括音频的（没有这个选框），整个屏幕左下角也有这个选框，不过默认是关闭的，如下图所示</p>
+<div class="swiper" id="swiperInst-e7srs6w9" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311806051.avif" alt="窗口"></p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311805897.avif" alt="整个屏幕"></p>
+
+</div>
+    
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-e7srs6w9", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-e7srs6w9 .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>所以现在问题就明了，我们需要在切换到窗口的捕获的时候，使用 <code>getUserMedia</code> 来拿到一条包含麦克风轨道的流。</p>
+<p>这就引出了我们标题提到的，如何分辨 <code>getDisplayMedia</code> 捕获的是标签页、窗口还是整个屏幕这个问题。</p>
+<h2 id="如何分辨-getDisplayMedia-捕获的类型"><a href="#如何分辨-getDisplayMedia-捕获的类型" class="headerlink" title="如何分辨 getDisplayMedia 捕获的类型"></a>如何分辨 getDisplayMedia 捕获的类型</h2><p>还记得我们传入 <code>getDisplayMedia</code> 的参数吗，前面我们把它称为“约束”。</p>
+<p>约束的意思就是你（浏览器）应该提供一个符合我要求（传入的参数）的东西。</p>
+<p>那么我们有办法在传入的时候指定我们是要捕获哪种类型的吗？</p>
+<p>理论上可以，这是因为约束里面的存在一个叫 <code>displaySurface</code> 的约束。</p>
+<p>这里我们要介绍一个 API ，即 <code>navigator.mediaDevices.getSupportedConstraints</code> 。</p>
+<p>通过它，我们可以获取当前支持的约束类型。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308311831717.avif"></p>
+<p>可以看到 <code>displaySurface</code> 是 <code>true</code> 的，意味着我们可以使用这个约束条件。</p>
+<p>这里要注意， <code>displaySurface</code> 可以为一下三个值：</p>
+<ul>
+<li><code>browser</code> 浏览器的标签页。</li>
+<li><code>window</code> 窗口。</li>
+<li><code>monitor</code> 整个屏幕。</li>
+</ul>
+<p><strong>但是</strong>，当我们使用如下的操作的时候，并不能按预期只让用户选择某一种类型的捕获。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getDisplayMedia</span>(&#123; </span><br><span class="line">  <span class="attr">video</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">audio</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">displaySurface</span>: <span class="string">&quot;monitor&quot;</span> <span class="comment">// 指定捕获整个屏幕</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312139881.avif"></p>
+<p>可以看出这个约束并没有生效，这难道是 bug 吗？</p>
+<p>其实这不是 bug ，这是规范中定义的，在 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API/Using_Screen_Capture#options_and_constraints">MDN</a> 中，我们可以看到如下的解释：</p>
+<blockquote>
+<p>Note: Constraints never cause changes to the list of sources available for capture by the Screen Sharing API. This ensures that web applications can’t force the user to share specific content by restricting the source list until only one item is left.</p>
+</blockquote>
+<p>粗略翻译就是，不能通过约束来强制用户使用特定的捕获方式。</p>
+<p>那好像我们就无法获取指定类型的捕获了？</p>
+<p>NoNoNo，在 <code>MediaStreamTrack</code> 中，还有一个 API 可以让我们知道 <code>MediaStreamTrack</code> 的 <code>displaySurface</code> 是什么，这个 API 就是 <code>MediaStreamTrack.prototype.getSettings</code> 。</p>
+<p>比如我们通过如下的代码来查看捕获标签页时调用 <code>getSettings</code> 返回的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">navigator.<span class="property">mediaDevices</span>.<span class="title function_">getDisplayMedia</span>(&#123;</span><br><span class="line">  <span class="attr">video</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">audio</span>: <span class="literal">true</span>,</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">ms</span> =&gt;</span> &#123;</span><br><span class="line">  ms.<span class="title function_">getTracks</span>().<span class="title function_">forEach</span>(<span class="function"><span class="params">track</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(track.<span class="title function_">getSettings</span>());</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<div class="swiper" id="swiperInst-hvjbpwd4" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312148236.avif" alt="标签页"></p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312151333.avif" alt="窗口"></p>
+
+</div>
+    
+
+<div class="swiper-slide">
+  <p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312150684.avif" alt="整个屏幕"></p>
+
+</div>
+    
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-hvjbpwd4", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-hvjbpwd4 .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>这里正好对应了我们之前说到的 <code>displaySurface</code> 的三个枚举值。</p>
+<p>至此，我们已经可以通过流来判断为哪一种类型了。</p>
+<p>虽然通过 <code>displaySurface</code> 约束无法让用户只选择某种类型的捕获，但完全可以以一种曲线救国的方式来做这个事</p>
+<p>我们可以先让用户自由选择，得到流之后我们找 <code>video</code> 类型的 <code>MediaStreamTrack</code> ，调用 <code>getSettings</code> ，观察返回对象的 <code>displaySurface</code> 。</p>
+<p>如果不是我们想要的那个值，就直接退出或者重写调用 <code>getDisplayMedia</code> 让用户重新选择。</p>
+<p>用一种直白的话就是，治不了浏览器，我还治不了你😡？不选指定的就不给你用😡。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这里要注意一点，就是 <code>MediaStreamTrack</code> 的 <code>displaySurface</code> 在火狐下是无法得到的。因为火狐不支持。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/08/31/202308312207222.avif"></p>
+<p>不过我们的系统只需要支持 Chrome 即可，所以并无大碍，安心地写完代码，顺利地提交，然后开始摸鱼…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/47aa2f38ca3c" title="如何分辨 getDisplayMedia 获取的是标签页、窗口或者屏幕？">https://prohibitorum.top/47aa2f38ca3c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/WebRTC/" rel="tag"># WebRTC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/eedc1ad17a60" rel="prev" title="2023 年记一次在梦中的求职">
+                  <i class="fa fa-angle-left"></i> 2023 年记一次在梦中的求职
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/240588e9b05b" rel="next" title="通过例子来解释防抖和节流（译）">
+                  通过例子来解释防抖和节流（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">372k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">22:33</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1693491297"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
