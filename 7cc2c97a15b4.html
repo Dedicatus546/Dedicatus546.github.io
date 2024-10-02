@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记一次 Hexo Next 主题下 Gitalk 无法获取 Github Token 问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决 Gitalk 无法获取 Github Token 问题">
+<meta property="og:url" content="https://prohibitorum.top/7cc2c97a15b4">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次 Hexo Next 主题下 Gitalk 无法获取 Github Token 问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261426831.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261440800.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261442420.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261443714.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261445218.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261447909.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261450438.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261452907.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281106221.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281112182.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281114088.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281116569.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281117515.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281121620.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281125915.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221427591.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221429287.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221431460.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221433872.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221435165.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221441392.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221445817.avif">
+<meta property="article:published_time" content="2022-07-26T09:33:33.000Z">
+<meta property="article:modified_time" content="2023-10-10T14:09:13.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Nodejs">
+<meta property="article:tag" content="Gitalk">
+<meta property="article:tag" content="Github API">
+<meta property="article:tag" content="Vercel">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261426831.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/7cc2c97a15b4.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/7cc2c97a15b4","path":"7cc2c97a15b4.html","title":"解决 Gitalk 无法获取 Github Token 问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>解决 Gitalk 无法获取 Github Token 问题 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%90%86-Github-%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.1.</span> <span class="nav-text">代理 Github 接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0-Vercel-%E4%B8%8A"><span class="nav-number">2.2.</span> <span class="nav-text">部署到 Vercel 上</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2022-8-26-vercel-%E4%BD%BF%E7%94%A8%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">2022-8-26 vercel 使用自定义域名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2022-10-22-%E4%BD%BF%E7%94%A8-netlify-%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.4.</span> <span class="nav-text">2022-10-22 使用 netlify 部署服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2023-08-13-%E4%BD%BF%E7%94%A8-Docker-%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.5.</span> <span class="nav-text">2023-08-13 使用 Docker 部署服务</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">172</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">137</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/7cc2c97a15b4">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="解决 Gitalk 无法获取 Github Token 问题 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          解决 Gitalk 无法获取 Github Token 问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-thumb-tack"></i>
+      </span>
+      <span class="post-meta-item-text">置顶</span>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-26 09:33:33" itemprop="dateCreated datePublished" datetime="2022-07-26T09:33:33+00:00">2022-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-10 14:09:13" itemprop="dateModified" datetime="2023-10-10T14:09:13+00:00">2023-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次 <code>Hexo Next</code> 主题下 <code>Gitalk</code> 无法获取 <code>Github Token</code> 问题</p>
+<span id="more"></span>
+
+<p>目前博客采用的 <code>Gitalk</code> 来作为帖子的评论系统</p>
+<p>其原理是通过帖子名来生成一个唯一 <code>id</code> ，用这个在 <code>Github</code> 仓库下开一个 <code>issue</code> ，这个 <code>issue</code> 就成为帖子的评论仓库了</p>
+<p>由于要操作到 <code>Github</code> 仓库，所以是需要借助 <code>Github</code> 的开放 <code>API</code> 来完成的</p>
+<p>其中有一步需要获取一个 <code>access_token</code> ，操蛋的是，这个 <code>API</code> 是不支持跨域访问的</p>
+<p><code>https://github.com/login/oauth/access_token</code></p>
+<p>所幸 <code>Gitalk</code> 使用了亚马逊的云服务代理里这个接口 </p>
+<p><code>https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token</code></p>
+<p>看起来没问题了，更操蛋的又来了，这个地址被墙了，意味着现在没法代理接口了，要么自己买服务器代理接口，要么科学上网</p>
+<p>科学上网不现实，你不能指望大家开着飞机来看你的帖子</p>
+<p>所以只能在自己写代理服务器上做文章了</p>
+<p>作为一个抠门抠到家的码农，要我花钱，你这是要我的命🤯</p>
+<p>果断百度 “免费 <code>VPS</code>” </p>
+<p>一看搜索结果…</p>
+<p>额，还是算了，免费的就是最贵的…</p>
+<p>正在我思来想去如何解决的时候，我想起了之前 <code>fork</code> 的一个网易云 <code>API</code> 项目，这个项目部署在了一个公共的服务上，好像还是免费的</p>
+<p>我就直接冲进我的仓库列表中进行一个地毯式地查找</p>
+<p>没错，就是它，<code>Vercel</code></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本文会通过两个方面来讲述整个过程</p>
+<ul>
+<li>代理 <code>https://github.com/login/oauth/access_token</code> 这个接口</li>
+<li>部署到 <code>Vercel</code> 上</li>
+</ul>
+<h2 id="代理-Github-接口"><a href="#代理-Github-接口" class="headerlink" title="代理 Github 接口"></a>代理 <code>Github</code> 接口</h2><p>作为一个切图仔，不对，前端工程师，首选 <code>JS</code> 来作为编写语言，毫无疑问，使用 <code>Node</code> 来作为代理服务器</p>
+<p>这里使用的技术栈为 <code>Koa</code> ，以及它的一些中间件，比如 <code>Koa-Router</code>， <code>Koa-BodyParser</code>，<code>Koa-Cors</code>，以及一个请求库，当然是我们的老朋友 <code>axios</code> </p>
+<p>然后，我们就可以写出一个整体的框架</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaCors</span> = <span class="built_in">require</span>(<span class="string">&#x27;@koa/cors&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaRouter</span> = <span class="built_in">require</span>(<span class="string">&#x27;@koa/router&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaBodyParser</span> = <span class="built_in">require</span>(<span class="string">&#x27;koa-bodyparser&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">&#x27;axios&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">KoaRouter</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/github_access_token&#x27;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="comment">// TODO</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/&#x27;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="string">&#x27;a cors proxy server!&#x27;</span>;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title class_">KoaCors</span>());</span><br><span class="line">app.<span class="title function_">use</span>(<span class="title class_">KoaBodyParser</span>());</span><br><span class="line">app.<span class="title function_">use</span>(router.<span class="title function_">routes</span>()).<span class="title function_">use</span>(router.<span class="title function_">allowedMethods</span>());</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">9999</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;cors-server success!&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里面最重要的就是 <code>post</code> 那个请求了</p>
+<p>我们可以查看亚马逊代理的请求头 </p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261426831.avif"></p>
+<p>发现它是 <code>content-type</code> 是 <code>json</code> 的，那么就简单了，直接 <code>axios</code> 发送然后把请求体带上即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/github_access_token&#x27;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> reqBody = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> axios.<span class="title function_">post</span>(<span class="string">&#x27;https://github.com/login/oauth/access_token&#x27;</span>, reqBody);</span><br><span class="line">  ctx.<span class="property">body</span> = res.<span class="property">data</span>;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当然，上面的代码是有问题的，官方的接口返回的是一串类似 <code>URL</code> 参数的东西，如下</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">access_token=****************&amp;scope=public_repo&amp;token_type=bearer</span><br></pre></td></tr></table></figure>
+
+<p>而亚马逊的代理会把它转成 <code>json</code> 格式返回，所以这里我们也需要转成 <code>json</code> 格式</p>
+<p>这个转化我们使用 <code>URLSearchParams</code> 来完成，非常简单</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">post</span>(<span class="string">&#x27;/github_access_token&#x27;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> reqBody = ctx.<span class="property">request</span>.<span class="property">body</span>;</span><br><span class="line">  <span class="keyword">const</span> res = <span class="keyword">await</span> axios.<span class="title function_">post</span>(<span class="string">&#x27;https://github.com/login/oauth/access_token&#x27;</span>, reqBody);</span><br><span class="line">  <span class="keyword">const</span> params = <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(res.<span class="property">data</span>);</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="title class_">Array</span>.<span class="title function_">from</span>(params.<span class="title function_">entries</span>()).<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj, [key, value]</span>) =&gt;</span> &#123;</span><br><span class="line">    obj[key] = value;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这样子我们就完成了全部代码的编写，是不是很简单？</p>
+<h2 id="部署到-Vercel-上"><a href="#部署到-Vercel-上" class="headerlink" title="部署到 Vercel 上"></a>部署到 <code>Vercel</code> 上</h2><p>这里我们需要在项目根目录下新建一个 <code>vercel.json</code> 配置文件，如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;builds&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;src&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./index.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;use&quot;</span><span class="punctuation">:</span> <span class="string">&quot;@vercel/node&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;routes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;src&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/(.*)&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;dest&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>当然，其实我没看过文档啥的，我是从那个网易云 <code>API</code> 项目上复制过来的</p>
+<p>不过粗略猜测一下，<code>build</code> 的 <code>src</code> 应该是指定了入口函数，而 <code>routes</code> 制定了路由映射的规则</p>
+<p>虽然我们项目启动的是 <code>9999</code> 端口，但是 <code>vercel</code> 部署统一都是 <code>443</code> 端口的（应该） ，内部再做转发</p>
+<p>然后我们登录到 <code>vercel</code> ，<a target="_blank" rel="noopener" href="https://vercel.com/dashboard">Dashboard - Vercel</a> ，使用 <code>github</code> 账号登录即可</p>
+<p>然后我们选择 <code>new Project</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261440800.avif"></p>
+<p><code>import</code> 这个 <code>cors-server</code> 项目</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261442420.avif"></p>
+<p>不用任何设置，直接点 <code>deploy</code> 部署即可</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261443714.avif"></p>
+<p>稍等一会之后，我们就可以看到项目部署成功了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261445218.avif"></p>
+<p>我们访问 <a target="_blank" rel="noopener" href="https://cors-server-ecru.vercel.app/"><code>https://cors-server-ecru.vercel.app</code></a> 就可以看到服务了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261447909.avif"></p>
+<p>然后我们修改 <code>Next</code> 主题下的配置文件，把 <code>_config.yml</code> 里的配置改成这个接口即可</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261450438.avif"></p>
+<p>提交到 <code>github</code> 上，然后即可成功使用 <code>github</code> 登录 <code>gitalk</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/26/202207261452907.avif"></p>
+<p>可以看到 <code>Options</code> 预检请求成功，证明跨域没问题，<code>Post</code> 请求也成功返回</p>
+<p>如果不想折腾，直接使用我这个下面这个地址替换亚马逊的地址即可</p>
+<p><code>https://cors-server-ecru.vercel.app/github_access_token</code></p>
+<p>当然，如果觉得不放心，完全可以 <code>fork</code> 我的项目，检查源代码啥的，然后自己部署到 <code>vercel</code>，几分钟的事</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/cors-server">cors-server</a></p>
+<p>喜欢可以点个 <code>star</code> 哦~</p>
+<h2 id="2022-8-26-vercel-使用自定义域名"><a href="#2022-8-26-vercel-使用自定义域名" class="headerlink" title="2022-8-26 vercel 使用自定义域名"></a>2022-8-26 vercel 使用自定义域名</h2><p>经评论区提醒，<code>vercel</code> 的服务无法访问。</p>
+<p>我去百度了一下，发现之前也有过这种情况，应该不是墙，只是 <code>DNS</code> 污染的间歇性抽风，目前已经找到解决办法。</p>
+<p>只需把地址换成 <code>https://vercel.prohibitorum.top/github_access_token</code> 即可，服务还是 <code>vercel</code> 的。</p>
+<p>如果你有自己的域名，那么可以按照如下来配置，首先打开的域名控制台，这里我是阿里云的域名，添加一条如下的规则。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281106221.avif"></p>
+<p>然后我们进入 <code>vercel</code> 的控制台，按照如下图，添加对应的域名，这里要和我们在域名控制台设置的一样。</p>
+<p>我们在域名控制台添加了 <code>vercel.prohibitorum.top</code> 指向了 <code>76.223.126.88</code> ，这里我们就填 <code>vercel.prohibitorum.top</code> 即可。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281112182.avif"></p>
+<p>新建之后我们点击右侧的 <code>edit</code> 按钮，会出现如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281114088.avif"></p>
+<p>点击 <code>View DNS Records &amp; More for XXX →</code> 这个链接，跳转到如下界面，然后添加一条 <code>CNAME</code> 规则，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281116569.avif"></p>
+<p>这样就完成了，然后访问你设置的网址，如果出现了如下页面就是成功了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281117515.avif"></p>
+<p>然后我们修改 <code>next</code> 主题下的配置即可，如下图所示，这里我用我的服务做示范：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281121620.avif"></p>
+<p>部署，然后就可以正常获取 <code>token</code> 了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/28/202208281125915.avif"></p>
+<p>话说 <code>github</code> 也是间歇性抽风，写个帖子是真的不容易，各种推送失败…</p>
+<h2 id="2022-10-22-使用-netlify-部署服务"><a href="#2022-10-22-使用-netlify-部署服务" class="headerlink" title="2022-10-22 使用 netlify 部署服务"></a>2022-10-22 使用 netlify 部署服务</h2><p>评论区有朋友说 <code>vercel</code> 有点慢，想使用 <code>netlify</code> 来部署。</p>
+<p>我也没用过 <code>netlify</code> ，不过既然都差不多，也就花了点时间搞了下，还行，可以部署。</p>
+<p>和 <code>vercel</code> 不同的是，这里 <code>netlify</code> 好像不支持路由映射？即使通过函数启动了服务器，好像也没用，这个没搞懂。</p>
+<p>不过这里用了另一种函数，<code>Edge Function</code> 边缘函数，它允许我们导出函数来拦截对应的请求。</p>
+<p>所以，你可以看到我们在 <code>netlify.toml</code> 文件内放了写了如下的配置。</p>
+<figure class="highlight toml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[build]</span></span><br><span class="line"><span class="attr">edge_functions</span> = <span class="string">&quot;edge_functions&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="section">[[edge_functions]]</span></span><br><span class="line"><span class="attr">path</span> = <span class="string">&quot;/github_access_token&quot;</span></span><br><span class="line"><span class="attr">function</span> = <span class="string">&quot;github_access_token&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>edge_functions = &quot;edge_functions&quot;</code> 指定了放边缘函数文件夹的路径。</p>
+<p>下面的部分即当访问 <code>/github_access_token</code> 这个路径时，用 <code>edge_functions</code> 下的 <code>github_access_token</code> 文件来处理它。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">Request</span>&#125; <span class="variable">request</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params">request</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (request.<span class="property">method</span> === <span class="string">&quot;OPTIONS&quot;</span>) &#123;</span><br><span class="line">    <span class="comment">// 预检请求</span></span><br><span class="line">    <span class="keyword">const</span> resp = <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="literal">null</span>, &#123;</span><br><span class="line">      <span class="attr">status</span>: <span class="number">204</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">    resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Methods&quot;</span>, <span class="string">&quot;POST, OPTIONS&quot;</span>);</span><br><span class="line">    resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Headers&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>);</span><br><span class="line">    resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Max-Age&quot;</span>, <span class="string">`<span class="subst">$&#123;<span class="number">86400</span> * <span class="number">30</span>&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> resp;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (request.<span class="property">method</span> === <span class="string">&quot;POST&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> reqBody = <span class="keyword">await</span> request.<span class="title function_">text</span>();</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;request body: &quot;</span>, reqBody);</span><br><span class="line">      <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&quot;https://github.com/login/oauth/access_token&quot;</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">        <span class="attr">body</span>: reqBody,</span><br><span class="line">        <span class="attr">headers</span>: &#123;</span><br><span class="line">          <span class="string">&quot;Content-type&quot;</span>: <span class="string">&quot;application/json&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">const</span> text = <span class="keyword">await</span> res.<span class="title function_">text</span>();</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;github api res: &quot;</span>, text);</span><br><span class="line">      <span class="keyword">const</span> params = <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(text);</span><br><span class="line">      <span class="keyword">const</span> resp = <span class="keyword">new</span> <span class="title class_">Response</span>(</span><br><span class="line">        <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(</span><br><span class="line">          <span class="title class_">Array</span>.<span class="title function_">from</span>(params.<span class="title function_">entries</span>()).<span class="title function_">reduce</span>(<span class="function">(<span class="params">obj, [key, value]</span>) =&gt;</span> &#123;</span><br><span class="line">            obj[key] = value;</span><br><span class="line">            <span class="keyword">return</span> obj;</span><br><span class="line">          &#125;, &#123;&#125;)</span><br><span class="line">        ),</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">status</span>: <span class="number">200</span>,</span><br><span class="line">        &#125;</span><br><span class="line">      );</span><br><span class="line">      resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Origin&quot;</span>, <span class="string">&quot;*&quot;</span>);</span><br><span class="line">      resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Methods&quot;</span>, <span class="string">&quot;POST, OPTIONS&quot;</span>);</span><br><span class="line">      resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Allow-Headers&quot;</span>, <span class="string">&quot;Content-Type&quot;</span>);</span><br><span class="line">      resp.<span class="property">headers</span>.<span class="title function_">set</span>(<span class="string">&quot;Access-Control-Max-Age&quot;</span>, <span class="string">`<span class="subst">$&#123;<span class="number">86400</span> * <span class="number">30</span>&#125;</span>`</span>);</span><br><span class="line">      <span class="keyword">return</span> resp;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(e);</span><br><span class="line">      <span class="keyword">throw</span> e;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Response</span>(<span class="string">&quot;a cors proxy by netlify!&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>目前代码已经更新，根目录下新增了 <code>edge_functions</code> 目录下的 <code>github_access_token.js</code> 文件。</p>
+<p>当然，这里我们就没必要用三方库了，直接手撕。</p>
+<p>对 <code>OPTIONS</code> ，<code>POST</code> ，其他方法分别处理即可。</p>
+<p>部署的话，点击这里进入 <a target="_blank" rel="noopener" href="https://netlify.com/">netlify</a> 。</p>
+<p>注册的话我们直接用 <code>github</code> 登录就行了，方便导入相应的仓库。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221427591.avif"></p>
+<p>选择 <code>github</code> ，第一次进要跳转到 <code>github</code> 那边授权，照做就行了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221429287.avif"></p>
+<p>选择 <code>cors-server</code> 仓库：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221431460.avif"></p>
+<p>配置默认即可，不需要填，直接点击 <code>deploy site</code> 。</p>
+<p>如果成功了，那么就有如下画面：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221433872.avif"></p>
+<p>然后我们进入 <code>https://xxxx.netlify.app/github_access_token</code> ，如果出现如下的画面，那么就完成了（这里 <code>xxxx</code> 是 <code>netlify</code> 随机的一个前缀）。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221435165.avif"></p>
+<p>至于域名的话，我觉得没必要，因为目前来看，没有污染问题。</p>
+<p>大家如果嫌麻烦，可以使用我的地址：<code>https://strong-caramel-969805.netlify.app/github_access_token</code> 即可。</p>
+<p>不过我还是建议大家自行注册，因为每个账号是有免费的额度的。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221441392.avif"></p>
+<p>接口访问效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/10/22/202210221445817.avif"></p>
+<h2 id="2023-08-13-使用-Docker-部署服务"><a href="#2023-08-13-使用-Docker-部署服务" class="headerlink" title="2023-08-13 使用 Docker 部署服务"></a>2023-08-13 使用 Docker 部署服务</h2><p>已支持 Docker 容器方式部署，不过这种方式适合你自己有服务器的情况，并且服务器要能正确代理原始的地址。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/jorben">@Jorbenzhu</a> 提供的 Dockerfile 文件。</p>
+<p>镜像已经提交到 DockerHub ，可以使用以下命令来拉取镜像。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull dedicatus545/github-cors-server:1.0.0</span><br></pre></td></tr></table></figure>
+
+<p>然后使用以下命令启动镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name cors-server -p8080:9999 dedicatus545/github-cors-server:1.0.0</span><br></pre></td></tr></table></figure>
+
+<p>这里容器内部是 9999 端口，绑定主机的 8080 端口，这里可以根据你的服务器端口占用情况进行动态修改。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>什么？你问我如果 <code>Github</code> 要是被墙了怎么办？</p>
+<p>那就凉拌，转 <code>Gitee</code> 是不可能转 <code>Gitee</code> 的，这辈子都不可能转 <code>Gitee</code> 。</p>
+<p>要是转了，我怕我的 <code>JavaScript</code> 标签有一天就变成 <code>J**aScript</code> 了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/7cc2c97a15b4" title="解决 Gitalk 无法获取 Github Token 问题">https://prohibitorum.top/7cc2c97a15b4</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+              <a href="/tags/Gitalk/" rel="tag"># Gitalk</a>
+              <a href="/tags/Github-API/" rel="tag"># Github API</a>
+              <a href="/tags/Vercel/" rel="tag"># Vercel</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/da3fa0a6f13c" rel="prev" title="一个替换 cdn 前缀的小工具">
+                  <i class="fa fa-angle-left"></i> 一个替换 cdn 前缀的小工具
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/587751cd41b2" rel="next" title="使用 husky 来为帖子增加更新时间">
+                  使用 husky 来为帖子增加更新时间 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">390k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">23:37</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1658799213"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
