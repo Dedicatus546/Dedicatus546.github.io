@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记录广州申迪的前端面试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录广州申迪的前端面试">
+<meta property="og:url" content="https://prohibitorum.top/f2de7c48b49e">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记录广州申迪的前端面试。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-28T22:18:36.000Z">
+<meta property="article:modified_time" content="2024-11-28T22:18:36.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="前端笔试题">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/f2de7c48b49e.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/f2de7c48b49e","path":"f2de7c48b49e.html","title":"记录广州申迪的前端面试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记录广州申迪的前端面试 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">基本数据类型和复杂数据类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%92%E5%AD%90-margin-top-%E5%9D%8D%E5%A1%8C"><span class="nav-number">2.2.</span> <span class="nav-text">盒子 margin-top 坍塌</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%B1%E7%84%A6%E7%9A%84%E4%BA%8B%E4%BB%B6%E5%90%8D"><span class="nav-number">2.3.</span> <span class="nav-text">失焦的事件名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE"><span class="nav-number">2.4.</span> <span class="nav-text">原型链</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E4%B8%AD%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">数组中插入元素的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E6%A0%8F%E8%BE%93%E5%85%A5%E5%9C%B0%E5%9D%80%E5%88%B0%E6%98%BE%E7%A4%BA%E9%A1%B5%E9%9D%A2%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.</span> <span class="nav-text">地址栏输入地址到显示页面的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="nav-number">2.7.</span> <span class="nav-text">深拷贝与浅拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E8%8A%82%E6%B5%81%EF%BC%88throttle%EF%BC%89%E5%87%BD%E6%95%B0"><span class="nav-number">2.8.</span> <span class="nav-text">手写一个节流（throttle）函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%8B%E5%86%99%E4%B8%80%E4%B8%AA%E8%A7%A3%E6%9E%90%E5%9C%B0%E5%9D%80%E6%A0%8F%E5%8F%82%E6%95%B0%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">2.9.</span> <span class="nav-text">手写一个解析地址栏参数的函数</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">179</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/f2de7c48b49e">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记录广州申迪的前端面试 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录广州申迪的前端面试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-28 22:18:36" itemprop="dateCreated datePublished" datetime="2024-11-28T22:18:36+00:00">2024-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">笔试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录广州申迪的前端面试。</p>
+<span id="more"></span>
+
+<p>找了一个月工作了，投了简历很多都是没回复的，一个月只面试了 4 家。</p>
+<p>感觉要回家送外卖了。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>这个公司需要先笔试，所以在那里填了差不多 1 个小时题目。</p>
+<h2 id="基本数据类型和复杂数据类型"><a href="#基本数据类型和复杂数据类型" class="headerlink" title="基本数据类型和复杂数据类型"></a>基本数据类型和复杂数据类型</h2><p>这个没什么好说的，看给的多少个空，一定要填的为 <code>number</code> ， <code>string</code> ， <code>boolean</code> ， <code>undefined</code> ， <code>null</code>  ，空多的话再协商 <code>symbol</code> 和 <code>bigint</code> 。</p>
+<p>复杂数据类型就是 <code>object</code> 对象。</p>
+<h2 id="盒子-margin-top-坍塌"><a href="#盒子-margin-top-坍塌" class="headerlink" title="盒子 margin-top 坍塌"></a>盒子 margin-top 坍塌</h2><p>给定两个块级盒子，上方盒子设置 <code>margin-bottom: 10px</code> 下方盒子设置 <code>margin-top: 5px</code> ，问两者的差距是多少。</p>
+<p>这题主要考相邻盒子的 <code>margin</code> 坍塌（也称为外边距折叠）以及 BFC ，即 Block Formatting Context ，中文名为区块格式化上下文。</p>
+<p>相邻盒子在默认情况下会发生 <code>margin</code> 坍塌，即会取 <code>margin</code> 大的一方作为两者的间距。所以该题答案为 <code>10px</code> 。</p>
+<p>为了解决这种情况，需要让其中的一个盒子创建 BFC ，这样即可解决该问题，最简单地解决方法就是加上 <code>overflow: hidden</code> 使其创建 BFC 。</p>
+<h2 id="失焦的事件名"><a href="#失焦的事件名" class="headerlink" title="失焦的事件名"></a>失焦的事件名</h2><p>聚焦是 <code>focus</code> ，失焦是 <code>blur</code> 。</p>
+<h2 id="原型链"><a href="#原型链" class="headerlink" title="原型链"></a>原型链</h2><p>输出以下代码的结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">o</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">o.<span class="property">protoType</span>.<span class="property">print</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> i = <span class="keyword">new</span> <span class="title function_">o</span>(<span class="string">&quot;dd&quot;</span>);</span><br><span class="line">i.<span class="property">name</span> = <span class="string">&quot;ee&quot;</span>;</span><br><span class="line">i.<span class="property">__proto__</span>.<span class="property">name</span> = <span class="string">&quot;dd&quot;</span></span><br><span class="line">i.<span class="property">__proto__</span>.<span class="title function_">print</span>();</span><br><span class="line">i.<span class="title function_">print</span>();</span><br></pre></td></tr></table></figure>
+
+<p>问输出结果，这里需要对原型链有一些认识，<code>o.protoType</code> 和 <code>i.__proto__</code> 为相同的对象，每个实例化的对象的 <code>__proto__</code> 都指向它构造器的 <code>protoType</code> 。</p>
+<p>接着我们需要知道，非箭头函数的调用的 <code>this</code> 取决于谁调用的它。</p>
+<ul>
+<li>对于 <code>i.__proto__.print()</code> 此时 <code>this</code> 为 <code>i.__proto__</code> 。</li>
+<li>对于 <code>i.print()</code> 此时 <code>this</code> 为 <code>i</code> 。</li>
+</ul>
+<p>这里需要注意 <code>i.print</code> 和 <code>i.__proto__.print</code> 为同一个函数， <code>i.print</code> 在 <code>i</code> 上没有找到 <code>print</code> 方法后一直往原型链上面查找。</p>
+<p>所以这道题的答案为 <code>dd</code> 和 <code>ee</code> 。</p>
+<h2 id="数组中插入元素的方法"><a href="#数组中插入元素的方法" class="headerlink" title="数组中插入元素的方法"></a>数组中插入元素的方法</h2><p>这里给了三个空，应该是填 <code>push</code> 、 <code>unshift</code> 和 <code>splice</code> 。</p>
+<p>PS：这里弄混了 <code>shift</code> 和 <code>unshift</code> ，写成 <code>shift</code> 了， <code>shift</code> 为弹出头元素，给自己菜麻了😅。</p>
+<ul>
+<li><code>push</code> 在尾部插入一个元素。</li>
+<li><code>unshift</code> 在头部插入一个元素。</li>
+<li><code>splice</code> 可以指定某个位置删除并插入元素，只需把第二个参数设置为 0 ，那么就不会删除元素了，再指定第三个以后的参数就可以往该位置插值了。</li>
+</ul>
+<h2 id="地址栏输入地址到显示页面的过程"><a href="#地址栏输入地址到显示页面的过程" class="headerlink" title="地址栏输入地址到显示页面的过程"></a>地址栏输入地址到显示页面的过程</h2><p>纯八股文，这种直接百度。</p>
+<h2 id="深拷贝与浅拷贝"><a href="#深拷贝与浅拷贝" class="headerlink" title="深拷贝与浅拷贝"></a>深拷贝与浅拷贝</h2><p>浅拷贝可以用很多内置的方法实现，比如字面对象的展开，数组的展开：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> copy = &#123; ...o &#125;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> copy = [...o];</span><br></pre></td></tr></table></figure>
+
+<p>或者使用 Object.assign 来进行浅拷贝：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> copy = <span class="title class_">Object</span>(&#123;&#125;, o);</span><br></pre></td></tr></table></figure>
+
+<p>深拷贝其实就是递归浅拷贝，当然也有一些方便的方法来进行快速的深拷贝。</p>
+<p>如果对象不包含无法序列化的类型（比如 Function ， Symbol ， DOM 对象等），且没有循环引用，则可以使用 <code>JSON.parse(JSON.stringify(obj))</code> 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> copy = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(o));</span><br></pre></td></tr></table></figure>
+
+<p>如果你的执行环境够现代，你还可以使用 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/structuredClone">structuredClone</a> 原生接口，它很好地处理了循环引用的情况，而且支持所有支持<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#%E6%94%AF%E6%8C%81%E7%9A%84%E7%B1%BB%E5%9E%8B">结构化克隆的类型</a>，当然对于其他类型也是无法克隆的。</p>
+<p>除此之外，还可以使用三方库，比如 lodash 的 <a target="_blank" rel="noopener" href="https://github.com/lodash/lodash/blob/main/dist/lodash.js#L11155">clone</a> ，不过它也是实现了结构化克隆的类型，如果还要支持其他不支持的类型，那就得手写克隆函数来处理对应的情况了。</p>
+<h2 id="手写一个节流（throttle）函数"><a href="#手写一个节流（throttle）函数" class="headerlink" title="手写一个节流（throttle）函数"></a>手写一个节流（throttle）函数</h2><p>可以基于时间戳或者 <code>setTimeout</code> 来实现。</p>
+<p><code>setTimeout</code> 的版本我们可以参考 <a target="_blank" rel="noopener" href="https://github.com/sodiray/radash">radash</a> 的实现:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">throttle</span> = (<span class="params">&#123; interval &#125;, func</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> ready = <span class="literal">true</span>;</span><br><span class="line">  <span class="keyword">let</span> timer = <span class="keyword">void</span> <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">throttled</span> = (<span class="params">...args</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (!ready)</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    <span class="title function_">func</span>(...args);</span><br><span class="line">    ready = <span class="literal">false</span>;</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      ready = <span class="literal">true</span>;</span><br><span class="line">      timer = <span class="keyword">void</span> <span class="number">0</span>;</span><br><span class="line">    &#125;, interval);</span><br><span class="line">  &#125;;</span><br><span class="line">  throttled.<span class="property">isThrottled</span> = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> timer !== <span class="keyword">void</span> <span class="number">0</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> throttled;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>基于 <code>Date.now</code> 实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">throttle</span>(<span class="params">func, delay</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> lastCallTime = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">throttled</span> = (<span class="params">...args</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line">    <span class="keyword">if</span> (now - lastCallTime &lt; delay) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="title function_">func</span>(...args);</span><br><span class="line">    lastCallTime = now;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> throttled;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="手写一个解析地址栏参数的函数"><a href="#手写一个解析地址栏参数的函数" class="headerlink" title="手写一个解析地址栏参数的函数"></a>手写一个解析地址栏参数的函数</h2><p>写一个函数 ，要求根据当前 <code>href</code> 来解析 <code>query</code> 参数，即，如果访问 <code>http://example.com?a=1&amp;b=2</code> ，那么函数 <code>fn(&quot;a&quot;)</code> 返回 <code>1</code> ， <code>fn(&quot;b&quot;)</code> 返回 <code>2</code> 。</p>
+<p>这道题直接使用 URL 对象来搞定，手写实现是不可能，只能调调 api 这个样子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">key</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> url = <span class="keyword">new</span> <span class="title function_">URL</span>(location.<span class="property">href</span>);</span><br><span class="line">  <span class="keyword">return</span> url.<span class="property">searchParams</span>.<span class="title function_">get</span>(key);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然如果要手写实现的话，其实就是那几个步骤：</p>
+<ul>
+<li>通过 <code>location.search</code> 拿到查询字符串。</li>
+<li>去掉 <code>?</code> ，然后通过 <code>&amp;</code> 分割。</li>
+<li>接着每一项通过 <code>=</code> 分割，索引 <code>0</code> 为键，索引 <code>1</code> 为值。</li>
+<li>返回对应值。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">searchKey</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> queryString = location.<span class="property">search</span>;</span><br><span class="line">  <span class="keyword">const</span> queryList = queryString.<span class="title function_">substring</span>(<span class="number">1</span>).<span class="title function_">split</span>(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; queryList.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> [key, value] = queryList[i].<span class="title function_">split</span>(<span class="string">&quot;=&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (key === searchKey) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">decodeURIComponent</span>(value);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/f2de7c48b49e" title="记录广州申迪的前端面试">https://prohibitorum.top/f2de7c48b49e</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E9%A2%98/" rel="tag"># 前端笔试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/582562e47bf1" rel="prev" title="git SSH 连接使用代理">
+                  <i class="fa fa-angle-left"></i> git SSH 连接使用代理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/3dba217ce9f2" rel="next" title="记录一次在 windows 上安装 Rocky Linux">
+                  记录一次在 windows 上安装 Rocky Linux <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">403k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">24:24</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1732779962"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

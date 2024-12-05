@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言ECMAScript2024（es15）新特性 参考文章：  ECMAScript 2024: What’s new? Regular expressions (RegExp)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript2024（es15）新特性">
+<meta property="og:url" content="https://prohibitorum.top/62a21028aeac">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言ECMAScript2024（es15）新特性 参考文章：  ECMAScript 2024: What’s new? Regular expressions (RegExp)">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/25/20241125155005264.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/25/20241125155157094.avif">
+<meta property="article:published_time" content="2024-11-25T15:04:25.000Z">
+<meta property="article:modified_time" content="2024-11-28T15:07:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/25/20241125155005264.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/62a21028aeac.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/62a21028aeac","path":"62a21028aeac.html","title":"ECMAScript2024（es15）新特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ECMAScript2024（es15）新特性 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Map-groupBy-%E5%92%8C-Object-groupBy"><span class="nav-number">2.1.</span> <span class="nav-text">Map.groupBy() 和 Object.groupBy()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise-withResolvers"><span class="nav-number">2.2.</span> <span class="nav-text">Promise.withResolvers()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E7%9A%84-v-%E6%A0%87%E5%BF%97"><span class="nav-number">2.3.</span> <span class="nav-text">正则的 &#x2F;v 标志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%A0%81%E7%82%B9-unicode-%E6%94%AF%E6%8C%81"><span class="nav-number">2.3.1.</span> <span class="nav-text">多码点 unicode 支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#q-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D"><span class="nav-number">2.3.2.</span> <span class="nav-text">\q 字符串匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86%E7%9A%84%E9%9B%86%E5%90%88%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.3.</span> <span class="nav-text">字符集的集合操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ArrayBuffer-%E5%92%8C-SharedArrayBuffer"><span class="nav-number">2.4.</span> <span class="nav-text">ArrayBuffer 和 SharedArrayBuffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#resize"><span class="nav-number">2.4.1.</span> <span class="nav-text">resize()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#transfer"><span class="nav-number">2.4.2.</span> <span class="nav-text">transfer()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isWellFormed-%E5%92%8C-toWellFormed"><span class="nav-number">2.5.</span> <span class="nav-text">isWellFormed() 和 toWellFormed()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#isWellFormed"><span class="nav-number">2.5.1.</span> <span class="nav-text">isWellFormed()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#toWellFormed"><span class="nav-number">2.5.2.</span> <span class="nav-text">toWellFormed()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Atomics-waitAsync"><span class="nav-number">2.6.</span> <span class="nav-text">Atomics.waitAsync()</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">179</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/62a21028aeac">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ECMAScript2024（es15）新特性 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript2024（es15）新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-25 15:04:25" itemprop="dateCreated datePublished" datetime="2024-11-25T15:04:25+00:00">2024-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-28 15:07:45" itemprop="dateModified" datetime="2024-11-28T15:07:45+00:00">2024-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ECMAScript2024（es15）新特性</p>
+<p>参考文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://2ality.com/2024/06/ecmascript-2024.html">ECMAScript 2024: What’s new?</a></li>
+<li><a target="_blank" rel="noopener" href="https://exploringjs.com/js/book/ch_regexps.html#regexp-flag-unicode-sets">Regular expressions (RegExp)</a></li>
+</ul>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Map-groupBy-和-Object-groupBy"><a href="#Map-groupBy-和-Object-groupBy" class="headerlink" title="Map.groupBy() 和 Object.groupBy()"></a>Map.groupBy() 和 Object.groupBy()</h2><p>官方支持的分组函数，再也不用引入 <a target="_blank" rel="noopener" href="https://www.lodashjs.com/docs/lodash.groupBy">lodash.groupBy</a> 了。</p>
+<p>为什么要定义两个方法呢，其实是两者都是将可迭代对象转为 <code>Map</code> 或者 <code>Object</code> ，<code>Map.groupBy()</code> 返回一个 <code>Map</code> ，而 <code>Object.groupBy()</code> 返回一个 <code>Object</code> 。</p>
+<p><code>Map.groupBy()</code> 和 <code>Object.groupBy() </code>的参数都为一个可迭代对象以及一个分组函数。</p>
+<p><code>Map.groupBy()</code> 例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> map = <span class="title class_">Map</span>.<span class="title function_">groupBy</span>([-<span class="number">3</span>, -<span class="number">2</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> item === <span class="number">0</span> ? <span class="string">&#x27;=0&#x27;</span></span><br><span class="line">    : item &gt; <span class="number">0</span> </span><br><span class="line">      ? <span class="string">&#x27;&gt;0&#x27;</span></span><br><span class="line">      : <span class="string">&#x27;&lt;0&#x27;</span> </span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(map);</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/25/20241125155005264.avif"></p>
+<p>注意这里返回的分组函数为键的值，这些值会作为 <code>Map</code> 的 <code>key</code> 或者 <code>Object</code> 的属性名。</p>
+<p><code>Object.groupBy()</code> 例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="title class_">Object</span>.<span class="title function_">groupBy</span>([-<span class="number">3</span>, -<span class="number">2</span>, -<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> item === <span class="number">0</span> ? <span class="string">&#x27;=0&#x27;</span></span><br><span class="line">    : item &gt; <span class="number">0</span></span><br><span class="line">      ? <span class="string">&#x27;&gt;0&#x27;</span></span><br><span class="line">      : <span class="string">&#x27;&lt;0&#x27;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj);</span><br></pre></td></tr></table></figure>
+
+<p>结果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/25/20241125155157094.avif"></p>
+<h2 id="Promise-withResolvers"><a href="#Promise-withResolvers" class="headerlink" title="Promise.withResolvers()"></a>Promise.withResolvers()</h2><p>某些时候，我们需要把 Promise 的 <code>resolve</code> 和 <code>reject</code> 提取到参数外，一般我们会封装如下的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">createPromise</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">let</span> resolve, reject</span><br><span class="line">  <span class="keyword">const</span> promise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">_resolve, _reject</span>) =&gt;</span> &#123;</span><br><span class="line">    resolve = _resolve;</span><br><span class="line">    reject = _reject;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    promise,</span><br><span class="line">    resolve,</span><br><span class="line">    reject,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样我们可以把 <code>resolve</code> 和 <code>reject</code> 当作普通函数一样用于其他的文件的任何位置。</p>
+<p>现在官方也是直接支持了这个方法，又可以少写几行代码了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; promise, resolve, reject &#125; = <span class="title class_">Promise</span>.<span class="title function_">withResolvers</span>();</span><br><span class="line"></span><br><span class="line">promise.<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;resolve&#x27;</span>)</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个脱离 Promise 包装器的函数，可以解决 promise</span></span><br><span class="line"><span class="comment">// 输出 &#x27;resolve&#x27;</span></span><br><span class="line"><span class="title function_">resolve</span>();</span><br></pre></td></tr></table></figure>
+
+<h2 id="正则的-v-标志"><a href="#正则的-v-标志" class="headerlink" title="正则的 &#x2F;v 标志"></a>正则的 &#x2F;v 标志</h2><p>正则相关的升级， <code>/v</code> 为 <code>/u</code> 模式的升级，对 unicode 的支持更加完善。</p>
+<p>在 <code>/u</code> 模式下，对应的是否开启字段为 <code>RegExp.prototype.unicode</code> ， 而 &#x2F;v 为 <code>RegExp.prototype.unicodeSets</code> 。</p>
+<p>如果你用正则比较多，那么只要知道如果需要处理 unicode 的话，使用 <code>/v</code> 而不用 <code>/u</code> 了（如果环境支持，这两者互斥，不要一起使用）。 <code>/v</code> 支持 <code>/u</code> 的所有特性。</p>
+<h3 id="多码点-unicode-支持"><a href="#多码点-unicode-支持" class="headerlink" title="多码点 unicode 支持"></a>多码点 unicode 支持</h3><p><code>/u</code> 模式对多码点的 unicode 支持不完善，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/^\p&#123;<span class="title class_">Emoji</span>&#125;$/u.<span class="title function_">test</span>(<span class="string">&#x27;😵‍💫&#x27;</span>); <span class="comment">// false，这个 emoji 为三码点</span></span><br><span class="line"><span class="regexp">/^\p&#123;Emoji&#125;$/u</span>.<span class="title function_">test</span>(<span class="string">&#x27;😡&#x27;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>改为 <code>/v</code> 之后，切换为 <code>RGI_Emoji</code> （Recommended for General Interchange (RGI) Emoji ，在 unicode 标准中定义）即可正常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/^\p&#123;RGI_Emoji&#125;$/v.<span class="title function_">test</span>(<span class="string">&#x27;😵‍💫&#x27;</span>); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="q-字符串匹配"><a href="#q-字符串匹配" class="headerlink" title="\q 字符串匹配"></a>\q 字符串匹配</h3><p><code>/v</code> 提供了新的 <code>\q</code> 来匹配字符串，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/^[\q&#123;😵‍💫&#125;]$/v.<span class="title function_">test</span>(<span class="string">&#x27;😵‍💫&#x27;</span>) <span class="comment">// true</span></span><br><span class="line">/^[\q&#123;abc|def&#125;]$/v.<span class="title function_">test</span>(<span class="string">&#x27;abc&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="字符集的集合操作"><a href="#字符集的集合操作" class="headerlink" title="字符集的集合操作"></a>字符集的集合操作</h3><p><code>/v</code> 提供了新的字符集的集合操作</p>
+<p>首先是支持嵌套的 <code>[]</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/^[\d\w]$/v</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"></span><br><span class="line">/^[[<span class="number">0</span>-<span class="number">9</span>][A-<span class="title class_">Za</span>-z0-9_]]$/v</span><br></pre></td></tr></table></figure>
+
+<p>默认并排写为并集操作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/^[[<span class="number">0</span>-<span class="number">9</span>][A-Z]]$/v.<span class="title function_">test</span>(<span class="string">&#x27;0&#x27;</span>); <span class="comment">//true</span></span><br><span class="line"><span class="regexp">/^[[0-9][A-Z]]$/</span>v.<span class="title function_">test</span>(<span class="string">&#x27;A&#x27;</span>); <span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>--</code> 来排除某些字符：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/^[\w--[a-g]]$/v.<span class="title function_">test</span>(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"></span><br><span class="line"><span class="regexp">/^[[A-Za-z0-9_]--[a-g]]$/</span>v;</span><br><span class="line"></span><br><span class="line"><span class="regexp">/^[[A-Za-z0-9_]--[a-g]]$/</span>v.<span class="title function_">test</span>(<span class="string">&#x27;a&#x27;</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>&amp;&amp;</code> 来匹配交叉的字符：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 5-6 为交叉部分</span></span><br><span class="line">/^[[<span class="number">0</span>-<span class="number">6</span>]&amp;&amp;[<span class="number">5</span>-<span class="number">9</span>]]$/v.<span class="title function_">test</span>(<span class="string">&#x27;5&#x27;</span>); <span class="comment">// true</span></span><br><span class="line"><span class="regexp">/^[[0-6]&amp;&amp;[5-9]]$/</span>v.<span class="title function_">test</span>(<span class="string">&#x27;6&#x27;</span>); <span class="comment">// true</span></span><br><span class="line"><span class="regexp">/^[[0-6]&amp;&amp;[5-9]]$/</span>v.<span class="title function_">test</span>(<span class="string">&#x27;7&#x27;</span>); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="ArrayBuffer-和-SharedArrayBuffer"><a href="#ArrayBuffer-和-SharedArrayBuffer" class="headerlink" title="ArrayBuffer 和 SharedArrayBuffer"></a>ArrayBuffer 和 SharedArrayBuffer</h2><p><code>ArrayBuffer</code> 和 <code>SharedArrayBuffer</code> 现在是可变长度（需要额外指定 <code>maxByteLength</code> 参数）的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buffer = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">2</span>, &#123; <span class="attr">maxByteLength</span>: <span class="number">4</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="resize"><a href="#resize" class="headerlink" title="resize()"></a>resize()</h3><p>可以通过新的 <code>resize</code> 方法原地改变大小，但注意不能超过设置的 <code>maxByteLength</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> buf = <span class="keyword">new</span> <span class="title class_">ArrayBuffer</span>(<span class="number">2</span>, &#123; <span class="attr">maxByteLength</span>: <span class="number">4</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(buf.<span class="property">byteLength</span>) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line">buf.<span class="title function_">resize</span>(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(buf.<span class="property">byteLength</span>) <span class="comment">// 4</span></span><br></pre></td></tr></table></figure>
+
+<p><code>ArrayBuffer</code> 的 <code>resize</code> 只要不超过 <code>maxByteLength</code> ，无论是变大还是变小都可以，而 <code>SharedArrayBuffer</code> 只能在不超过 <code>maxByteLength</code> 的情况下不断变大。</p>
+<h3 id="transfer"><a href="#transfer" class="headerlink" title="transfer()"></a>transfer()</h3><p>该方法可以理解为创建了另一个 <code>ArrayBuffer</code> ，但是是基于零拷贝移动或 realloc 方式的，简单点讲就是将内存的管理权转给了新的 <code>ArrayBuffer</code> 对象，即调用这个方法后，原 <code>ArrayBuffer</code> 对象就无法访问了，这和与 <code>Web Worker</code> 或 <code>Service Worker</code> 传输 <code>ArrayBuffer</code> 的过程是类似的。</p>
+<p>一个 <code>ArrayBuffer</code> 在被转移后， <code>byteLength</code> 会变为 <code>0</code> ，并且所有实例方法都会报错，如果需要检测一个 <code>ArrayBuffer</code> 是否已被转移，可以通过 <code>detached</code> 属性。</p>
+<h2 id="isWellFormed-和-toWellFormed"><a href="#isWellFormed-和-toWellFormed" class="headerlink" title="isWellFormed() 和 toWellFormed()"></a>isWellFormed() 和 toWellFormed()</h2><h3 id="isWellFormed"><a href="#isWellFormed" class="headerlink" title="isWellFormed()"></a>isWellFormed()</h3><p><code>isWellFormed</code> 用来检测字符串是否被正确地编码，在 JavaScript 中，字符串是 UTF-16 编码的，而 UTF-16 的辅助平面会占用四个字节，分为前导代理和后导代理，这个函数就是来检测是否存在单独的代理的。比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;ab\uD800&quot;</span>.<span class="title function_">isWellFormed</span>(); <span class="comment">// false</span></span><br><span class="line"><span class="string">&quot;\uDFFFab&quot;</span>.<span class="title function_">isWellFormed</span>(); <span class="comment">// false</span></span><br><span class="line"><span class="string">&quot;ab\uD83D\uDE04c&quot;</span>.<span class="title function_">isWellFormed</span>(); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="toWellFormed"><a href="#toWellFormed" class="headerlink" title="toWellFormed()"></a>toWellFormed()</h3><p><code>toWellFormed</code> 会将单独的代理对全部转化为 <code>U+FFFD</code> ，即替换字符（Replacement Character），该字符表现为一个问号（<code>�</code>）。这样可以确保字符串的编码正确。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;ab\uD800&quot;</span>.<span class="title function_">toWellFormed</span>(); <span class="comment">// &#x27;ab�&#x27;</span></span><br><span class="line"><span class="string">&quot;\uDFFFab&quot;</span>.<span class="title function_">toWellFormed</span>(); <span class="comment">// &#x27;�ab&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Atomics-waitAsync"><a href="#Atomics-waitAsync" class="headerlink" title="Atomics.waitAsync()"></a>Atomics.waitAsync()</h2><p>该函数支持异步等待对内存的操作，即 <code>Atomics.wait</code> 的异步版本，它解决了 <code>Atomics.wait</code> 同步阻塞当前线程的问题，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sharedBuffer = <span class="keyword">new</span> <span class="title class_">SharedArrayBuffer</span>(<span class="number">1024</span>);</span><br><span class="line"><span class="keyword">const</span> int32Array = <span class="keyword">new</span> <span class="title class_">Int32Array</span>(sharedBuffer);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待值从 0 改变</span></span><br><span class="line"><span class="comment">// 异步，不会阻塞接下来的代码</span></span><br><span class="line"><span class="keyword">const</span> res = <span class="title class_">Atomics</span>.<span class="title function_">waitAsync</span>(int32Array, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(res); <span class="comment">// true</span></span><br><span class="line">res.<span class="property">value</span>.<span class="title function_">then</span>(<span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(result); <span class="comment">// &#x27;ok&#x27; ，表示值没有变化，其他值为 &#x27;not-equal&#x27; 和 &#x27;timed-out&#x27;</span></span><br><span class="line">&#125;).<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(error);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 原子修改操作，但是值不变</span></span><br><span class="line">  <span class="title class_">Atomics</span>.<span class="title function_">store</span>(int32Array, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="comment">// 唤醒所有等待的 promise</span></span><br><span class="line">  <span class="title class_">Atomics</span>.<span class="title function_">notify</span>(int32Array, <span class="number">0</span>);</span><br><span class="line">&#125;, <span class="number">500</span>);</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/62a21028aeac" title="ECMAScript2024（es15）新特性">https://prohibitorum.top/62a21028aeac</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/f87197598d02" rel="prev" title="TypeScript 5.7（译）">
+                  <i class="fa fa-angle-left"></i> TypeScript 5.7（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/582562e47bf1" rel="next" title="git SSH 连接使用代理">
+                  git SSH 连接使用代理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">403k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">24:24</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1732777665"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
