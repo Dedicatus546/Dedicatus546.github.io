@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言工具函数还是放在一起写，不然感觉有时候写重点的时候，遇到工具函数，要花篇幅去解释会使得文章断层…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vuex@next源码解析 - 工具函数篇篇">
+<meta property="og:url" content="https://prohibitorum.top/24f26b743454">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言工具函数还是放在一起写，不然感觉有时候写重点的时候，遇到工具函数，要花篇幅去解释会使得文章断层…">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/26/ClxgQ1oecfVBW3E.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/26/eTWyqbAc7PsaNMg.png">
+<meta property="article:published_time" content="2020-10-26T16:12:19.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Vuex">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/26/ClxgQ1oecfVBW3E.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/24f26b743454.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/24f26b743454","path":"24f26b743454.html","title":"Vuex@next源码解析 - 工具函数篇篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vuex@next源码解析 - 工具函数篇篇 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Vuex%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">Vuex工具函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#find"><span class="nav-number">2.1.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forEachValue"><span class="nav-number">2.2.</span> <span class="nav-text">forEachValue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isObject"><span class="nav-number">2.3.</span> <span class="nav-text">isObject</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isPromise"><span class="nav-number">2.4.</span> <span class="nav-text">isPromise</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assert"><span class="nav-number">2.5.</span> <span class="nav-text">assert</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#partial"><span class="nav-number">2.6.</span> <span class="nav-text">partial</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deepCopy"><span class="nav-number">2.7.</span> <span class="nav-text">deepCopy</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/24f26b743454">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vuex@next源码解析 - 工具函数篇篇 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vuex@next源码解析 - 工具函数篇篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-26 16:12:19" itemprop="dateCreated datePublished" datetime="2020-10-26T16:12:19+00:00">2020-10-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>工具函数还是放在一起写，不然感觉有时候写重点的时候，遇到工具函数，要花篇幅去解释会使得文章断层…</p>
+<span id="more"></span>
+
+<p>工具函数基本在<code>src</code>的<code>utils.js</code>文件下</p>
+<h1 id="Vuex工具函数"><a href="#Vuex工具函数" class="headerlink" title="Vuex工具函数"></a><code>Vuex</code>工具函数</h1><h2 id="find"><a href="#find" class="headerlink" title="find"></a><code>find</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">find</span> (<span class="params">list, f</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> list.<span class="title function_">filter</span>(f)[<span class="number">0</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看他的实现可以看出使用了数组的<code>filter</code>来模拟寻找一个元素</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">find</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>], <span class="function"><span class="params">val</span> =&gt;</span> val &gt; <span class="number">2</span>);   <span class="comment">// 输出3</span></span><br></pre></td></tr></table></figure>
+
+<p>其实感觉可以使用<code>es6</code>的数组方法<code>find</code>的，也能有一样的效果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="title function_">find</span>(<span class="function"><span class="params">val</span> =&gt;</span> val &gt; <span class="number">3</span>);    <span class="comment">// 输出3</span></span><br></pre></td></tr></table></figure>
+
+<p>可能是为了兼容性考虑吧，<code>filter</code>在<code>es5</code>中就已经支持了，而<code>find</code>是<code>es6</code>才有的</p>
+<h2 id="forEachValue"><a href="#forEachValue" class="headerlink" title="forEachValue"></a><code>forEachValue</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">forEachValue</span> (<span class="params">obj, fn</span>) &#123;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(obj).<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> <span class="title function_">fn</span>(obj[key], key))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对对象进行遍历，传入的回调第一个参数为属性值，第二个参数为属性名</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">forEachValue</span>(&#123;</span><br><span class="line">  <span class="attr">m1</span>: &#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="string">&#x27;m1&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">m2</span>: &#123;</span><br><span class="line">    <span class="attr">val</span>: <span class="string">&#x27;m2&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="function">(<span class="params">value, propertyName</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(value);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(propertyName);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/26/ClxgQ1oecfVBW3E.png"></p>
+<p>这个函数在<code>Vuex</code>的主要代码中使用比较多</p>
+<h2 id="isObject"><a href="#isObject" class="headerlink" title="isObject"></a><code>isObject</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">isObject</span> (<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> obj !== <span class="literal">null</span> &amp;&amp; <span class="keyword">typeof</span> obj === <span class="string">&#x27;object&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断是否为对象，注意js中<code>typeof null === &#39;object&#39;</code>，所以<code>null</code>的情况要排除</p>
+<h2 id="isPromise"><a href="#isPromise" class="headerlink" title="isPromise"></a><code>isPromise</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isPromise</span> (<span class="params">val</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> val &amp;&amp; <span class="keyword">typeof</span> val.<span class="property">then</span> === <span class="string">&#x27;function&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Promise/A+</code>规范并没规定如何生成一个<code>Promise</code></p>
+<p>规范只定义了<code>then</code>函数的行为，这里满足存在<code>then</code>函数，即可认为它是一个<code>Promise</code></p>
+<p>这算是一种比较宽松的判断吧</p>
+<h2 id="assert"><a href="#assert" class="headerlink" title="assert"></a><code>assert</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">assert</span> (<span class="params">condition, msg</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!condition) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`[vuex] <span class="subst">$&#123;msg&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数是<code>Vuex</code>用来断言的一个工具函数，通过<code>condition</code>参数为<code>false</code>就抛出错误，统一以<code>[vuex]</code>为前缀字符串</p>
+<h2 id="partial"><a href="#partial" class="headerlink" title="partial"></a><code>partial</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">partial</span> (<span class="params">fn, arg</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">fn</span>(arg)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数从名字看挺迷惑的，<code>partial</code>意思：部分的，不完全的</p>
+<p>emmm，好吧，单纯从名字看无法推出函数内容</p>
+<p>但是从实现看就非常清楚了，这不就是绑定函数的参数然后延迟这个函数的执行吗</p>
+<h2 id="deepCopy"><a href="#deepCopy" class="headerlink" title="deepCopy"></a><code>deepCopy</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">deepCopy</span> (<span class="params">obj, cache = []</span>) &#123;</span><br><span class="line">  <span class="comment">// just return if obj is immutable value</span></span><br><span class="line">  <span class="keyword">if</span> (obj === <span class="literal">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">&#x27;object&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// if obj is hit, it is in circular structure</span></span><br><span class="line">  <span class="keyword">const</span> hit = <span class="title function_">find</span>(cache, <span class="function"><span class="params">c</span> =&gt;</span> c.<span class="property">original</span> === obj)</span><br><span class="line">  <span class="keyword">if</span> (hit) &#123;</span><br><span class="line">    <span class="keyword">return</span> hit.<span class="property">copy</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> copy = <span class="title class_">Array</span>.<span class="title function_">isArray</span>(obj) ? [] : &#123;&#125;</span><br><span class="line">  <span class="comment">// put the copy into cache at first</span></span><br><span class="line">  <span class="comment">// because we want to refer it in recursive deepCopy</span></span><br><span class="line">  cache.<span class="title function_">push</span>(&#123;</span><br><span class="line">    <span class="attr">original</span>: obj,</span><br><span class="line">    copy</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(obj).<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    copy[key] = <span class="title function_">deepCopy</span>(obj[key], cache)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> copy</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数应该是这个工具函数中最有意思的了吧，这个函数根据名字上看就是深拷贝的意思、</p>
+<p>函数有注释，如下</p>
+<blockquote>
+<p>Deep copy the given object considering circular structure.<br>This function caches all nested objects and its copies.<br>If it detects circular structure, use cached copy to avoid infinite loop.</p>
+</blockquote>
+<p>大概意思是，深拷贝传入的对象，并且考虑到循环引用的情况<br>这个函数缓存了所有嵌套的对象和他的拷贝<br>如果发现存在循环引用，使用缓存的拷贝来避免无限的循环</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// just return if obj is immutable value</span></span><br><span class="line"><span class="keyword">if</span> (obj === <span class="literal">null</span> || <span class="keyword">typeof</span> obj !== <span class="string">&#x27;object&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> obj</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第一个判断好理解，如果传入的不是一个对象，那么直接返回即可，这里包括了<code>null</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">deepCopy</span>(<span class="number">1</span>);    <span class="comment">// 返回1</span></span><br><span class="line"><span class="title function_">deepCopy</span>(<span class="string">&#x27;Hello World!&#x27;</span>);    <span class="comment">// 返回&#x27;Hello World&#x27;</span></span><br><span class="line"><span class="title function_">deepCopy</span>(<span class="literal">true</span>);    <span class="comment">// 返回true</span></span><br><span class="line"><span class="title function_">deepCopy</span>(<span class="literal">null</span>);    <span class="comment">// 返回null</span></span><br><span class="line"><span class="title function_">deepCopy</span>(<span class="literal">undefined</span>);    <span class="comment">// 返回undefined</span></span><br><span class="line"><span class="title function_">deepCopy</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;&#125;);    <span class="comment">// 返回function() &#123;&#125; 和入参是同一个函数</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// if obj is hit, it is in circular structure</span></span><br><span class="line"><span class="keyword">const</span> hit = <span class="title function_">find</span>(cache, <span class="function"><span class="params">c</span> =&gt;</span> c.<span class="property">original</span> === obj)</span><br><span class="line"><span class="keyword">if</span> (hit) &#123;</span><br><span class="line">  <span class="keyword">return</span> hit.<span class="property">copy</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二部分会在<code>cache</code>数组中查找是否已经登记过这个对象了</p>
+<p>如果登记过了，那么此时就是不应该拷贝这个对象了，直接返回它前面登记的拷贝对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> copy = <span class="title class_">Array</span>.<span class="title function_">isArray</span>(obj) ? [] : &#123;&#125;</span><br><span class="line"><span class="comment">// put the copy into cache at first</span></span><br><span class="line"><span class="comment">// because we want to refer it in recursive deepCopy</span></span><br><span class="line">cache.<span class="title function_">push</span>(&#123;</span><br><span class="line">  <span class="attr">original</span>: obj,</span><br><span class="line">  copy</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这一段就是把拷贝的对象和原对象登记到<code>cache</code>数组里面</p>
+<p>这里可以看出这个深拷贝只支持字面对象和数组，不支持<code>Set</code>或者<code>Map</code>等</p>
+<p>不过我感觉这也涵盖了许多的情况了，通用性感觉还是挺高的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="title function_">keys</span>(obj).<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">  copy[key] = <span class="title function_">deepCopy</span>(obj[key], cache)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> copy</span><br></pre></td></tr></table></figure>
+
+<p>接着就是通过<code>Object.keys</code>来递归的深拷贝每个属性对应的值，然后返回当前的拷贝出来的对象</p>
+<p>整体上我们可以测试下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123;</span><br><span class="line">  <span class="attr">p1</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">p2</span>: <span class="string">&#x27;2&#x27;</span>,</span><br><span class="line">  <span class="attr">p3</span>: <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;3&#x27;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">p4</span>: &#123;</span><br><span class="line">    <span class="attr">p5</span>: &#123;</span><br><span class="line">      <span class="attr">val</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> copy = <span class="title function_">deepCopy</span>(o);</span><br><span class="line"></span><br><span class="line">copy === o                        <span class="comment">// false</span></span><br><span class="line">copy.<span class="property">p1</span> === o.<span class="property">p1</span>                  <span class="comment">// true</span></span><br><span class="line">copy.<span class="property">p2</span> === o.<span class="property">p2</span>                  <span class="comment">// true</span></span><br><span class="line">copy.<span class="property">p3</span> === o.<span class="property">p3</span>                  <span class="comment">// true</span></span><br><span class="line">copy.<span class="property">p4</span> === o.<span class="property">p4</span>                  <span class="comment">// false</span></span><br><span class="line">copy.<span class="property">p4</span>.<span class="property">p5</span> === o.<span class="property">p4</span>.<span class="property">p5</span>            <span class="comment">// false</span></span><br><span class="line">copy.<span class="property">p4</span>.<span class="property">p5</span>.<span class="property">val</span> === o.<span class="property">p4</span>.<span class="property">p5</span>.<span class="property">val</span>    <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>测试如下</p>
+<p><img data-src="https://i.loli.net/2020/10/26/eTWyqbAc7PsaNMg.png"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>目前<code>Vuex</code>的源码解析的文章还在改进中，如果你幸运地来到了这里，也对我的帖子感兴趣，</p>
+<p>那么请再给我一点时间，让我更好地整理和调整文章的细节，谢谢😘</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/24f26b743454" title="Vuex@next源码解析 - 工具函数篇篇">https://prohibitorum.top/24f26b743454</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Vuex/" rel="tag"># Vuex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/751322f675bd" rel="prev" title="Vuex@next源码解析 - module篇">
+                  <i class="fa fa-angle-left"></i> Vuex@next源码解析 - module篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cab41e7ad82e" rel="next" title="Vuex@next源码解析 - helpers篇">
+                  Vuex@next源码解析 - helpers篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">404k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">24:31</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1603699939"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

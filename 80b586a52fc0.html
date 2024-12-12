@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言交了 300 不去感觉血亏，还是去参加吧… 滔博 🐮🍺 好吧，LPL 冲冲冲，预言一手 G2 爆冷干碎 LCK 哈哈哈哈哈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2020年蓝桥杯题目">
+<meta property="og:url" content="https://prohibitorum.top/80b586a52fc0">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言交了 300 不去感觉血亏，还是去参加吧… 滔博 🐮🍺 好吧，LPL 冲冲冲，预言一手 G2 爆冷干碎 LCK 哈哈哈哈哈">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/17/WCixPpetuGmVBgf.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/17/cER5MiNC81VtdGH.png">
+<meta property="article:published_time" content="2020-10-17T15:42:39.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="蓝桥杯">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/17/WCixPpetuGmVBgf.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/80b586a52fc0.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/80b586a52fc0","path":"80b586a52fc0.html","title":"2020年蓝桥杯题目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2020年蓝桥杯题目 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%97%A8%E6%B4%BE%E5%88%B6%E4%BD%9C"><span class="nav-number">2.1.</span> <span class="nav-text">门派制作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%BE2020"><span class="nav-number">2.2.</span> <span class="nav-text">找2020</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%9B%87%E5%BD%A2%E5%A1%AB%E7%A9%BA"><span class="nav-number">2.3.</span> <span class="nav-text">蛇形填空</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E6%AE%B5%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">七段码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E6%AC%A1%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">排序次数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%90%E7%BB%A9%E5%88%86%E6%9E%90"><span class="nav-number">2.6.</span> <span class="nav-text">成绩分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E8%AF%8D%E5%88%86%E6%9E%90"><span class="nav-number">2.7.</span> <span class="nav-text">单词分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E4%B8%89%E8%A7%92%E5%BD%A2"><span class="nav-number">2.8.</span> <span class="nav-text">数字三角形</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E4%B8%B2%E5%88%86%E5%80%BC%E5%92%8C"><span class="nav-number">2.9.</span> <span class="nav-text">字串分值和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E7%8F%A0"><span class="nav-number">2.10.</span> <span class="nav-text">装饰珠</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">180</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/80b586a52fc0">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2020年蓝桥杯题目 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2020年蓝桥杯题目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-17 15:42:39" itemprop="dateCreated datePublished" datetime="2020-10-17T15:42:39+00:00">2020-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>交了 300 不去感觉血亏，还是去参加吧…</p>
+<p>滔博 🐮🍺 好吧，LPL 冲冲冲，预言一手 G2 爆冷干碎 LCK 哈哈哈哈哈</p>
+<span id="more"></span>
+
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h2 id="门派制作"><a href="#门派制作" class="headerlink" title="门派制作"></a>门派制作</h2><p>大意就是找出<code>1 - 2020</code>中数字<code>2</code>出现的个数</p>
+<p>由于是填空题，直接遍历然后计算即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">2020</span>; i++)&#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> i;</span><br><span class="line">            <span class="keyword">while</span>(num &gt; <span class="number">0</span>)&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">rest</span> <span class="operator">=</span> num % <span class="number">10</span>;</span><br><span class="line">                <span class="keyword">if</span>(rest == <span class="number">2</span>)&#123;</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">                num = num / <span class="number">10</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>算出的答案为<code>624</code>，这题其实在力扣上有基本一样的，可以直接遍历数位计算出来</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-2s-in-range-lcci/">面试题 17.06. 2 出现的次数</a> &gt; <a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/number-of-digit-one/">233. 数字 1 的个数</a></p>
+</blockquote>
+<p>有兴趣的可以做做，我就做了第二题，虽然是看着题解做的 🤣</p>
+<p>基本思路就是把数字分成左右两半进行计算，从而以<code>O(n)</code>复杂度（<code>n</code>为数字长度）</p>
+<p>在第一题的控制台试了试，输出了<code>624</code>，那应该就是正确的</p>
+<p><img data-src="https://i.loli.net/2020/10/17/WCixPpetuGmVBgf.png"></p>
+<p>只能说暴力法天下第一好吧，只要我的电脑够快，复杂度就追不上我 🤣</p>
+<h2 id="找2020"><a href="#找2020" class="headerlink" title="找2020"></a>找<code>2020</code></h2><p>大意就是给你一个数组，对下面三种情况计数</p>
+<ul>
+<li>每行左到右出现<code>2020</code></li>
+<li>每列上到下出现<code>2020</code></li>
+<li>左上到右下对角线出现<code>2020</code></li>
+</ul>
+<p>同样，由于是填空题，所以依然暴力（因为想不出其他解法了 🤣）</p>
+<p>这一题给了个<code>txt</code>文件，答的时候看了下，应该是<code>300x300</code>的数组</p>
+<p>刚开始我认为我写不出来文件的读取，没想到查了查 api 文档竟然写出来了 🤣</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">lanqiao_P2</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">filePath</span> <span class="operator">=</span> <span class="string">&quot;D:\\2020.txt&quot;</span>;</span><br><span class="line">        <span class="comment">// 因为知道300x300了，这里就直接写死了。</span></span><br><span class="line">        <span class="type">int</span>[][] array = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">300</span>][<span class="number">300</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">curLine</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">BufferedReader</span> <span class="variable">br</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            br = <span class="keyword">new</span> <span class="title class_">BufferedReader</span>(<span class="keyword">new</span> <span class="title class_">InputStreamReader</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(filePath)));</span><br><span class="line">            <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> br.readLine();</span><br><span class="line">            <span class="keyword">while</span> (line != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="comment">// 防止空格</span></span><br><span class="line">                line = line.trim();</span><br><span class="line">                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; line.length(); i++) &#123;</span><br><span class="line">                    array[curLine][i] = line.charAt(i) - <span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                curLine++;</span><br><span class="line">                line = br.readLine();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (br != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    br.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 遍历行</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; array[i].length - <span class="number">3</span>; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (array[i][j] == <span class="number">2</span></span><br><span class="line">                        &amp;&amp; array[i][j + <span class="number">1</span>] == <span class="number">0</span></span><br><span class="line">                        &amp;&amp; array[i][j + <span class="number">2</span>] == <span class="number">2</span></span><br><span class="line">                        &amp;&amp; array[i][j + <span class="number">3</span>] == <span class="number">0</span>) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 遍历列</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array[<span class="number">0</span>].length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; array.length - <span class="number">3</span>; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (array[j][i] == <span class="number">2</span></span><br><span class="line">                        &amp;&amp; array[j + <span class="number">1</span>][i] == <span class="number">0</span></span><br><span class="line">                        &amp;&amp; array[j + <span class="number">2</span>][i] == <span class="number">2</span></span><br><span class="line">                        &amp;&amp; array[j + <span class="number">3</span>][i] == <span class="number">0</span>) &#123;</span><br><span class="line">                    count++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 遍历左上到右下</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array.length - <span class="number">3</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (array[i][i] == <span class="number">2</span></span><br><span class="line">                    &amp;&amp; array[i + <span class="number">1</span>][i + <span class="number">1</span>] == <span class="number">0</span></span><br><span class="line">                    &amp;&amp; array[i + <span class="number">2</span>][i + <span class="number">2</span>] == <span class="number">2</span></span><br><span class="line">                    &amp;&amp; array[i + <span class="number">3</span>][i + <span class="number">3</span>] == <span class="number">0</span>) &#123;</span><br><span class="line">                count++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这题忘了答案是啥来着了…</p>
+<h2 id="蛇形填空"><a href="#蛇形填空" class="headerlink" title="蛇形填空"></a>蛇形填空</h2><p>大意就是，数字按下面的规律，求<code>20</code>行<code>20</code>列的数字</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> 1  2  6  7 15 ...</span><br><span class="line"> 3  5  8 14 ...</span><br><span class="line"> 4  9 13 ...</span><br><span class="line">10 12 ...</span><br><span class="line">11 ...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>这题我没写代码来计算，我看着规律的…</p>
+<p>首先要确定<code>20</code>行<code>20</code>列最少要多少次<strong>蛇形</strong></p>
+<p>看样例可以知道</p>
+<p><code>3</code>行<code>3</code>列可以计算出<code>2</code>行<code>2</code>列</p>
+<p><code>5</code>行<code>5</code>列可以计算出<code>3</code>行<code>3</code>列</p>
+<p>那么计算<code>20</code>行<code>20</code>列，应该需要<code>39</code>行<code>39</code>列，即<code>20 * 2 - 1</code></p>
+<p>然后又可以看出每次蛇形的结束的值就是累加<code>1+2+...+n</code>的值</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1  2  ...</span><br><span class="line">3  ...</span><br></pre></td></tr></table></figure>
+
+<p>此时最后的值应该是 <code>1 + 2 = 3</code></p>
+<p>那么第<code>39</code>次蛇形的结束的值应该就是<code>1 + 2 + ... + 39 = 780</code></p>
+<p>起始值应该就是 <code>780 + 1 - 39 = 742</code></p>
+<p>根据样例的规律，斜着的奇数行的结束是在第一行，斜着的偶数行的结束在第一列，也就是</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> 1  2  6  7 15 ... 780</span><br><span class="line"> 3  5  8 14 ... 779</span><br><span class="line"> 4  9 13 ... 778</span><br><span class="line">10 12 ... ...</span><br><span class="line">11 ... 744</span><br><span class="line">... 743</span><br><span class="line">742</span><br></pre></td></tr></table></figure>
+
+<p>然后取中间的值，就是<code>20</code>行<code>20</code>列的值了，也就是<code>761</code></p>
+<p>（感觉是正确的…）</p>
+<h2 id="七段码"><a href="#七段码" class="headerlink" title="七段码"></a>七段码</h2><p>大意就是用发光二极管来表示字符串，问能表示多少（画的跟屎一样 😂）</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">----</span><br><span class="line">|  |</span><br><span class="line">----</span><br><span class="line">|  |</span><br><span class="line">----</span><br></pre></td></tr></table></figure>
+
+<p>有点类似我们数字时钟那个样子，如下</p>
+<p><img data-src="https://i.loli.net/2020/10/17/cER5MiNC81VtdGH.png"></p>
+<p>要求就是亮的部分不能断层，比如下面这些</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> ----      ----      ----      ----</span><br><span class="line"> |  |                |</span><br><span class="line"> ----                          ----</span><br><span class="line"> |  |</span><br><span class="line"> ----</span><br><span class="line">（可以）    （可以）   （可以）    （不可以）</span><br></pre></td></tr></table></figure>
+
+<p>这题做不出来 😂，太菜了，最后数了数亮 1 个到亮全部的个数，就提交了…</p>
+<h2 id="排序次数"><a href="#排序次数" class="headerlink" title="排序次数"></a>排序次数</h2><p>说的是冒泡排序，求一个交换次数为<code>100</code>的最短且字典序拍最前的字符串</p>
+<p>比如<code>bnl</code>需要交换<code>1</code>次（<code>n</code>和<code>l</code>互换）</p>
+<p>我的想法就是，比如<code>dcba</code>这种全倒排需要的次数是最大的，这个交换的次数就是</p>
+<p><code>3([d,c]-&gt;[d,b]-&gt;[d,a])+2([c,b]-&gt;[c,a])+1([b,a]) = 6</code></p>
+<p>所以可以知道要超过<code>100</code>次，那么此时最短的字符串应为<code>onmlkjihgfedcba</code></p>
+<p>这时的比较次数为<code>14+13+...+1=105</code>，如果是长度<code>13</code>，那么结果只有<code>91</code>，不符合题意</p>
+<p>但此时感觉不是字典序最短的，当时想着把<code>onmlkjihgfedcba</code>最前面的两个变成有序地来分析</p>
+<p><code>nomlkjihgfedcba</code>，<code>n</code>和<code>o</code>交换，影响<code>o</code>的的交换次数，而不影响<code>n</code>的交换次数</p>
+<ul>
+<li><code>onmlkjihgfedcba</code>在<code>o</code>冒泡到最末尾时，为<code>nmlkjihgfedcbao</code>，此时交换<code>14</code>次</li>
+<li><code>nomlkjihgfedcba</code>在<code>o</code>冒泡到最末尾时，为<code>nmlkjihgfedcbao</code>，此时交换<code>13</code>次</li>
+</ul>
+<p>字典序<code>nomlkjihgfedcba</code>是小于<code>onmlkjihgfedcba</code>的，所以还有优化的空间，</p>
+<p>也就是前面多少个字符顺序了会最接近次数<code>100</code></p>
+<p>又试了下前面<code>3</code>个顺序时，<code>mnolkjihgfedcba</code>，</p>
+<ul>
+<li>对于<code>o</code>，少比较<code>2</code>次</li>
+<li>对于<code>n</code>，少比较<code>1</code>次</li>
+</ul>
+<p>那么就少了<code>3</code>次，还是符合，但是如果前面<code>4</code>个有序，此时少了<code>3+2+1=6</code>次，就不符合了</p>
+<p>综上，我的答案为<code>mnolkjihgfedcba</code>，一通分析感觉相当有道理（还是有点小慌 🤣）</p>
+<h2 id="成绩分析"><a href="#成绩分析" class="headerlink" title="成绩分析"></a>成绩分析</h2><p>这题是不是有圈套，有点太基础的感觉…</p>
+<p>给 n 个分数，<code>0-100</code>，计算最大值，最小值和平均值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> -<span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">min</span> <span class="operator">=</span> <span class="number">101</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">cur</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">            max = Math.max(max, cur);</span><br><span class="line">            min = Math.min(min, cur);</span><br><span class="line">            sum += cur;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(max);</span><br><span class="line">        System.out.println(min);</span><br><span class="line">        <span class="comment">// 保留2位小数</span></span><br><span class="line">        System.out.println(Math.round(sum * <span class="number">1.0</span> / n * <span class="number">100</span>) * <span class="number">1.0</span> / <span class="number">100</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="单词分析"><a href="#单词分析" class="headerlink" title="单词分析"></a>单词分析</h2><p>emmm，这题是不是也有圈套？？？</p>
+<p>给定一个字符串，计算出现次数最多的字符和它的次数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> in.nextLine();</span><br><span class="line">        <span class="type">int</span>[] map = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            map[s.charAt(i) - <span class="string">&#x27;a&#x27;</span>]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">char</span> <span class="variable">maxC</span> <span class="operator">=</span> <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; map.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (map[i] &gt; count) &#123;</span><br><span class="line">                count = map[i];</span><br><span class="line">                maxC = (<span class="type">char</span>) (i + <span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(maxC);</span><br><span class="line">        System.out.println(count);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="数字三角形"><a href="#数字三角形" class="headerlink" title="数字三角形"></a>数字三角形</h2><p>这题和之前那个金字塔数字求和很像</p>
+<p>从上往下找累加最大值，比如</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">10 1</span><br><span class="line">10 2 3</span><br><span class="line">10 3 4 5</span><br></pre></td></tr></table></figure>
+
+<p>上面最大值为<code>40</code>，但是这题还有一个限制，就是往左和往右的次数之差不能超过<code>1</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span>[][] array = <span class="keyword">new</span> <span class="title class_">int</span>[n][n];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; array.length; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt;= i; j++) &#123;</span><br><span class="line">                array[i][j] = in.nextInt();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        max = <span class="number">0</span>;</span><br><span class="line">        dfs(array, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">        System.out.println(max);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span>[][] array, <span class="type">int</span> n, <span class="type">int</span> j, <span class="type">int</span> left, <span class="type">int</span> right, <span class="type">int</span> curSum)</span> &#123;</span><br><span class="line">        <span class="comment">// 剪枝</span></span><br><span class="line">        <span class="keyword">if</span> (left &gt; array.length / <span class="number">2</span> || right &gt; array.length / <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (n == array.length - <span class="number">1</span>) &#123;</span><br><span class="line">            max = Math.max(max, curSum + array[n][j]);</span><br><span class="line">            System.out.println(left + <span class="string">&quot;-&quot;</span> + right);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dfs(array, n + <span class="number">1</span>, j, left + <span class="number">1</span>, right, curSum + array[n][j]);</span><br><span class="line">        dfs(array, n + <span class="number">1</span>, j + <span class="number">1</span>, left, right + <span class="number">1</span>, curSum + array[n][j]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="字串分值和"><a href="#字串分值和" class="headerlink" title="字串分值和"></a>字串分值和</h2><p>这题 emmm，用了不知道叫不叫方法的方法</p>
+<p>给定一个字符串（只包含小写字母），计算它所有字串的分值的和</p>
+<p>分值的计算，比如对于<code>ababc</code></p>
+<p>分值就是该字符串不重复字符的个数，对于上面这个，也就是<code>3</code></p>
+<p>我的想法就是双重遍历，记忆前一个字串的分值，然后累加。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> in.nextLine().trim();</span><br><span class="line">        <span class="type">int</span>[] map = <span class="keyword">new</span> <span class="title class_">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            Arrays.fill(map, <span class="number">0</span>);</span><br><span class="line">            <span class="type">int</span> <span class="variable">curSum</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> i; j &lt; s.length(); j++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> s.charAt(j) - <span class="string">&#x27;a&#x27;</span>;</span><br><span class="line">                <span class="keyword">if</span> (map[index] == <span class="number">0</span>) &#123;</span><br><span class="line">                    map[index]++;</span><br><span class="line">                    curSum++;</span><br><span class="line">                &#125;</span><br><span class="line">                sum += curSum;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(sum);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="装饰珠"><a href="#装饰珠" class="headerlink" title="装饰珠"></a>装饰珠</h2><p>这个真没看懂，题目都没读懂，回来基本上就忘了</p>
+<p>给定<code>6</code>件装备，每件装备有<code>n</code>个镶嵌孔，镶嵌孔有等级，可以镶嵌不大于这个等级的镶嵌珠</p>
+<p>镶嵌镶嵌珠可以产生价值，相同的镶嵌珠可以增加价值</p>
+<p>给定 m 种镶嵌珠，给定镶嵌 k 个第 i 种镶嵌珠产生的价值，</p>
+<p>求<code>6</code>件装备产生的最大价值</p>
+<p>不会…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/80b586a52fc0" title="2020年蓝桥杯题目">https://prohibitorum.top/80b586a52fc0</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/" rel="tag"># 蓝桥杯</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/1f70e1987c43" rel="prev" title="CSS样式权重">
+                  <i class="fa fa-angle-left"></i> CSS样式权重
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/4adeb697944c" rel="next" title="JS如何解析URL的参数？">
+                  JS如何解析URL的参数？ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">404k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">24:31</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1602920559"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
