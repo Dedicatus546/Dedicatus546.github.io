@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.6（译）">
+<meta property="og:url" content="https://prohibitorum.top/10e09992a7cf">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.6">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-09-11T18:33:01.000Z">
+<meta property="article:modified_time" content="2024-09-13T11:57:46.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/10e09992a7cf.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/10e09992a7cf","path":"10e09992a7cf.html","title":"TypeScript 5.6（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.6（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A6%81%E6%AD%A2%E7%A9%BA%E5%80%BC%E5%92%8C%E7%9C%9F%E5%80%BC%E6%A3%80%E6%9F%A5"><span class="nav-number">2.1.</span> <span class="nav-text">禁止空值和真值检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%AE%E5%8A%A9%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">帮助迭代的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A5%E6%A0%BC%E7%9A%84%E5%86%85%E7%BD%AE%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A3%80%E6%9F%A5%EF%BC%88-%E2%80%93strictBuiltinIteratorReturn-%E9%80%89%E9%A1%B9%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">严格的内置迭代器检查（ –strictBuiltinIteratorReturn 选项）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E9%9A%8F%E6%84%8F%E7%9A%84%E6%A8%A1%E5%9D%97%E6%A0%87%E8%AF%86%E7%AC%A6"><span class="nav-number">2.4.</span> <span class="nav-text">支持随意的模块标识符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%93noUncheckedSideEffectImports-%E9%80%89%E9%A1%B9"><span class="nav-number">2.5.</span> <span class="nav-text">–noUncheckedSideEffectImports 选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%93noCheck-%E9%80%89%E9%A1%B9"><span class="nav-number">2.6.</span> <span class="nav-text">–noCheck 选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%81%E8%AE%B8-%E2%80%93build-%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%87%BA%E7%8E%B0%E9%94%99%E8%AF%AF"><span class="nav-number">2.7.</span> <span class="nav-text">允许 –build 过程中出现错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E5%99%A8%E4%B8%AD%E7%9A%84%E5%8C%BA%E5%9F%9F%E4%BC%98%E5%85%88%E8%AF%8A%E6%96%AD"><span class="nav-number">2.8.</span> <span class="nav-text">编辑器中的区域优先诊断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E7%B2%92%E5%BA%A6%E7%9A%84%E6%8F%90%E4%BA%A4%E5%AD%97%E7%AC%A6"><span class="nav-number">2.9.</span> <span class="nav-text">细粒度的提交字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E7%9A%84%E6%8E%92%E9%99%A4%E8%A7%84%E5%88%99"><span class="nav-number">2.10.</span> <span class="nav-text">自动导入的排除规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.11.</span> <span class="nav-text">需要注意的行为变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts"><span class="nav-number">2.11.1.</span> <span class="nav-text">lib.d.ts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E6%98%AF%E7%94%9F%E6%88%90-tsbuildinfo-%E6%96%87%E4%BB%B6"><span class="nav-number">2.11.2.</span> <span class="nav-text">总是生成 .tsbuildinfo 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8A%E9%87%8D-node-modules-%E4%B8%AD%E7%9A%84%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%90%8D%E5%92%8C-package-json-%E6%96%87%E4%BB%B6"><span class="nav-number">2.11.3.</span> <span class="nav-text">尊重 node_modules 中的文件扩展名和 package.json 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E4%B8%8A%E6%AD%A3%E7%A1%AE%E7%9A%84-override-%E6%A3%80%E6%9F%A5"><span class="nav-number">2.11.4.</span> <span class="nav-text">计算属性上正确的 override 检查</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">182</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/10e09992a7cf">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.6（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.6（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-09-11 18:33:01" itemprop="dateCreated datePublished" datetime="2024-09-11T18:33:01+00:00">2024-09-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-13 11:57:46" itemprop="dateModified" datetime="2024-09-13T11:57:46+00:00">2024-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>23 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-6/">Announcing TypeScript 5.6</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="禁止空值和真值检查"><a href="#禁止空值和真值检查" class="headerlink" title="禁止空值和真值检查"></a>禁止空值和真值检查</h2><p>你可能写过一个忘记调用 <code>.test(...)</code> 的正则表达式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="regexp">/0x[0-9a-f]/</span>) &#123;</span><br><span class="line">  <span class="comment">// 这个代码块总是会执行到</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又或者偶然间将 <code>&gt;=</code> （大于或等于操作符）写成了 <code>=&gt;</code> （这会创建一个箭头函数）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="function"><span class="params">x</span> =&gt;</span> <span class="number">0</span>) &#123;</span><br><span class="line">  <span class="comment">// 这个代码块总是会执行到</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又或者你可能尝试过使用 <code>??</code> 来指定一个默认值，但是混淆了诸如 <code>&lt;</code> 比较操作符和 <code>??</code> 操作符的优先级：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isValid</span>(<span class="params">value: string | number, options: any, strictness: <span class="string">&quot;strict&quot;</span> | <span class="string">&quot;loose&quot;</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (strictness === <span class="string">&quot;loose&quot;</span>) &#123;</span><br><span class="line">    value = +value</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> value &lt; options.<span class="property">max</span> ?? <span class="number">100</span>;</span><br><span class="line">  <span class="comment">// 这里会被解析成 (value &lt; options.max) ?? 100</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又或者在一个复杂的表达式中放错括号的位置：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (</span><br><span class="line">  <span class="title function_">isValid</span>(primaryValue, <span class="string">&quot;strict&quot;</span>) || <span class="title function_">isValid</span>(secondaryValue, <span class="string">&quot;strict&quot;</span>) ||</span><br><span class="line">  <span class="title function_">isValid</span>(primaryValue, <span class="string">&quot;loose&quot;</span> || <span class="title function_">isValid</span>(secondaryValue, <span class="string">&quot;loose&quot;</span>))</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="comment">//                           ^^^^ 👀 是否少了一个 &#x27;)&#x27;?</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这些例子都没有遵循作者的意图，但他们都是合法的 JavaScript 代码。先前的 TypeScript 会静默地接受这些例子。</p>
+<p>但通过一个小实验，我们发现许许多多的 bug 都是由上文标记为可疑的例子所造成的。在 TypeScript 5.6 中，当编译器从语法上发现一个真值检查和空检查时，它会报错，这种检查总是会以特定的方式进行评估。所以在上面的例子中，你会开始看到如下错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="regexp">/0x[0-9a-f]/</span>) &#123;</span><br><span class="line"><span class="comment">//  ~~~~~~~~~~~~</span></span><br><span class="line"><span class="comment">// error: This kind of expression is always truthy.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="function"><span class="params">x</span> =&gt;</span> <span class="number">0</span>) &#123;</span><br><span class="line"><span class="comment">//  ~~~~~~</span></span><br><span class="line"><span class="comment">// error: This kind of expression is always truthy.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isValid</span>(<span class="params">value: string | number, options: any, strictness: <span class="string">&quot;strict&quot;</span> | <span class="string">&quot;loose&quot;</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (strictness === <span class="string">&quot;loose&quot;</span>) &#123;</span><br><span class="line">    value = +value</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> value &lt; options.<span class="property">max</span> ?? <span class="number">100</span>;</span><br><span class="line">  <span class="comment">//     ~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line">  <span class="comment">// error: Right operand of ?? is unreachable because the left operand is never nullish.</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (</span><br><span class="line">  <span class="title function_">isValid</span>(primaryValue, <span class="string">&quot;strict&quot;</span>) || <span class="title function_">isValid</span>(secondaryValue, <span class="string">&quot;strict&quot;</span>) ||</span><br><span class="line">  <span class="title function_">isValid</span>(primaryValue, <span class="string">&quot;loose&quot;</span> || <span class="title function_">isValid</span>(secondaryValue, <span class="string">&quot;loose&quot;</span>))</span><br><span class="line">) &#123;</span><br><span class="line">  <span class="comment">//                    ~~~~~~~</span></span><br><span class="line">  <span class="comment">// error: This kind of expression is always truthy.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以通过开启 ESLint 的 <code>no-constant-binary-expression</code> 来达到相似的结果，你也可以在他们的<a target="_blank" rel="noopener" href="https://eslint.org/blog/2022/07/interesting-bugs-caught-by-no-constant-binary-expression/">博客帖子</a>中查看相关的成果。 TypeScript 执行的新的检查不会和 ESLint 的规则完美的重叠，我们相信在 TypeScript 自身中内置这些检查具有很大的价值。</p>
+<p>注意某些表达式仍然会被允许，即使他们总是为真值或者空值。具体来说是 <code>true</code> ， <code>false</code> ， <code>0</code> 和 <code>1</code> ，这些值仍然会被允许，比如如下的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">  <span class="title function_">doStuff</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">something</span>()) &#123;</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">doOtherStuff</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面这段代码非常惯用并且是有用的：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="literal">true</span> || <span class="title function_">inDebuggingOrDevelopmentEnvironment</span>()) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码对迭代代码或者调试代码都非常有用。</p>
+<p>如果你好奇它的实现或者它捕获的 bug 类型，可以查看这个实现了该特性的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59217">PR</a> 。</p>
+<h2 id="帮助迭代的函数"><a href="#帮助迭代的函数" class="headerlink" title="帮助迭代的函数"></a>帮助迭代的函数</h2><p>JavaScript 有一个可迭代（就是我们可以通过调用 <code>[Symbol.iterator]()</code> 来得到一个迭代器从而进行迭代）和迭代器（就是有一个 <code>next</code> 方法，当我们在迭代的时候，调用这个方法就可以尝试取得下一个值）的概念。总之，通常情况下，当你将它们放在一个 for-of 循环中，或者通过 <code>[...spread]</code> 展开它们到一个新数组的时候你并不会去思考这些概念。但 TypeScript 确实会通过 <code>Iterable</code> 和 <code>Iterator</code> 类型（甚至是 <code>IterableIterator</code> ，即可迭代的迭代器）来对这些概念进行建模。这些类型描述了让对象可用于像 for-of 结构所需的最小成员集合。</p>
+<p><code>Iterable</code> （和 <code>IterableIterator</code>）很棒，因为它们可以被用在 JavaScript 的各种地方，但一些人发现它们自身缺少了像 <code>Array</code> 的 <code>map</code> 、 <code>filter</code> 、以及某种原因的 <code>reduce</code> 方法。这也是为什么最近 ECMAScript 提出了一个相关的提案来将 <code>Array</code> 上的许多方法加到大多数由 JavaScript 生成的 <code>IterableIterator</code> 对象上。</p>
+<p>例如，每个生成器产生的对象会有一个 <code>map</code> 和一个 <code>take</code> 方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">positiveIntegers</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">yield</span> i;</span><br><span class="line">    i++;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> evenNumbers = <span class="title function_">positiveIntegers</span>().<span class="title function_">map</span>(<span class="function"><span class="params">x</span> =&gt;</span> x * <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Output:</span></span><br><span class="line"><span class="comment">//    2</span></span><br><span class="line"><span class="comment">//    4</span></span><br><span class="line"><span class="comment">//    6</span></span><br><span class="line"><span class="comment">//    8</span></span><br><span class="line"><span class="comment">//   10</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> value <span class="keyword">of</span> evenNumbers.<span class="title function_">take</span>(<span class="number">5</span>)) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这对 <code>Map</code> 和 <code>Set</code> 上的 <code>keys</code> 、 <code>values</code> 和 <code>entries</code> 方法也是一样的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> invertKeysAndValues&lt;K, V&gt;(<span class="attr">map</span>: <span class="title class_">Map</span>&lt;K, V&gt;): <span class="title class_">Map</span>&lt;V, K&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Map</span>(</span><br><span class="line">    map.<span class="title function_">entries</span>().<span class="title function_">map</span>(<span class="function">(<span class="params">[k, v]</span>) =&gt;</span> [v, k])</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你也可以继承 <code>Iterator</code> 对象：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 一个提供无限的 0 的流</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Zeroes</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Iterator</span>&lt;<span class="built_in">number</span>&gt; &#123;</span><br><span class="line">  <span class="title function_">next</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123; <span class="attr">value</span>: <span class="number">0</span>, <span class="attr">done</span>: <span class="literal">false</span> &#125; <span class="keyword">as</span> <span class="keyword">const</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> zeroes = <span class="keyword">new</span> <span class="title class_">Zeroes</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将流转化为无限的 1 </span></span><br><span class="line"><span class="keyword">const</span> ones = zeroes.<span class="title function_">map</span>(<span class="function"><span class="params">x</span> =&gt;</span> x + <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>你可以使用 <code>Iterator.from</code> 将任何已经存在的 <code>Iterable</code> 和 <code>Iterator</code> 改写为这种类型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Iterator</span>.<span class="title function_">from</span>(...).<span class="title function_">filter</span>(someFunction);</span><br></pre></td></tr></table></figure>
+
+<p>只要在一个较新的 JavaScript 运行时上，这些新方法就可以正常工作，你也对这些新的 <code>Iterator</code> 对象可以使用垫片。</p>
+<p>现在，我们需要谈一谈命名。</p>
+<p>前面我们提到 TypeScript 有 <code>Iterable</code> 和 <code>Iterator</code> 两个类型，然而，就如我们提到的那样，这些行为有点像“协议”，以此来确保某些操作可以正常工作。这意味着在 TypeScript 中，不是所有的 <code>Iterable</code> 和 <code>Iterator</code> 对象都有那些我们在上面提到的方法。</p>
+<p>但仍然会有一个新的运行时的值，名为 <code>Iterator</code> 。你可以引用 <code>Iterator</code> ，以及 <code>Iterator.prototype</code> ，将其作为 JavaScript 中实际的值。这有点别扭，因为 TypeScript 已经用 <code>Iterator</code> 定义了自身用于纯粹地类型检查。所以由于这个不幸命名冲突， TypeScript 需要引入一个另外的类型来描述这些原生或者说内置的可迭代的迭代器。</p>
+<p>TypeScript 5.6 引入了一个新的类型，名为 <code>IteratorObject</code> 。它的定义如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">IteratorObject</span>&lt;T, <span class="title class_">TReturn</span> = <span class="built_in">unknown</span>, <span class="title class_">TNext</span> = <span class="built_in">unknown</span>&gt; <span class="keyword">extends</span> <span class="title class_">Iterator</span>&lt;T, <span class="title class_">TReturn</span>, <span class="title class_">TNext</span>&gt; &#123;</span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="property">iterator</span>](): <span class="title class_">IteratorObject</span>&lt;T, <span class="title class_">TReturn</span>, <span class="title class_">TNext</span>&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>许多内置的集合和方法由 <code>IteratorObject</code> 生成其子类型（比如 <code>ArrayIterator</code> 、 <code>SetIterator</code> 、 <code>MapIterator</code> 等等），<code>lib.d.ts</code> 中的 JavaScript 核心和 DOM 类型，以及 <code>@types/node</code> ，都已经更新了这些新的类型。</p>
+<p>类似地，为了保持对等性，我们增加一个 <code>AsyncIteratorObject</code> 类型。 <code>AsyncIterator</code> 还未在 JavaScript 的运行时中存在，它让 <code>AsyncIterable</code> 对象拥有同样的方法，但它已在一个活动的<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-async-iterator-helpers">提案</a>中了，所以这个类型是为了它而提前准备的。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/bakkot">Kevin Gibbons</a> 贡献了这些类型，同时他也是该<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-iterator-helpers">提案</a>额度共同作者之一。</p>
+<h2 id="严格的内置迭代器检查（-–strictBuiltinIteratorReturn-选项）"><a href="#严格的内置迭代器检查（-–strictBuiltinIteratorReturn-选项）" class="headerlink" title="严格的内置迭代器检查（ –strictBuiltinIteratorReturn 选项）"></a>严格的内置迭代器检查（ –strictBuiltinIteratorReturn 选项）</h2><p>当你在一个 <code>Iterator&lt;T, TReturn&gt;</code> 上调用 <code>next()</code> 方法时，它会返回一个带有 <code>value</code> 和 <code>done</code> 属性的对象，这个对象由 <code>IteratorResult</code> 类型建模。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">IteratorResult</span>&lt;T, <span class="title class_">TReturn</span> = <span class="built_in">any</span>&gt; = <span class="title class_">IteratorYieldResult</span>&lt;T&gt; | <span class="title class_">IteratorReturnResult</span>&lt;<span class="title class_">TReturn</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IteratorYieldResult</span>&lt;<span class="title class_">TYield</span>&gt; &#123;</span><br><span class="line">  done?: <span class="literal">false</span>;</span><br><span class="line">  <span class="attr">value</span>: <span class="title class_">TYield</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">IteratorReturnResult</span>&lt;<span class="title class_">TReturn</span>&gt; &#123;</span><br><span class="line">  <span class="attr">done</span>: <span class="literal">true</span>;</span><br><span class="line">  <span class="attr">value</span>: <span class="title class_">TReturn</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的命名受到生成器函数工作方式的启发。生成器函数可以 <code>yield</code> 值，以及 <code>return</code> 一个最终的值，但两者之间的类型可以是不相关的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">abc123</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">&quot;a&quot;</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">&quot;b&quot;</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">&quot;c&quot;</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">123</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> iter = <span class="title function_">abc123</span>();</span><br><span class="line"></span><br><span class="line">iter.<span class="title function_">next</span>(); <span class="comment">// &#123; value: &quot;a&quot;, done: false &#125;</span></span><br><span class="line">iter.<span class="title function_">next</span>(); <span class="comment">// &#123; value: &quot;b&quot;, done: false &#125;</span></span><br><span class="line">iter.<span class="title function_">next</span>(); <span class="comment">// &#123; value: &quot;c&quot;, done: false &#125;</span></span><br><span class="line">iter.<span class="title function_">next</span>(); <span class="comment">// &#123; value: 123, done: true &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于新的 <code>IteratorObject</code> 类型，在安全实现它时我们遇到一些困难。同时，由于 <code>TReturn</code> 为 <code>any</code> （默认情况下）<code>IteratorResult</code> 在过去都是不安全的。比如，假设我们有一个 <code>IteratorResult&lt;string, any&gt;</code> 类型。如果我们最终拿到这个类型的值时，我们会得到一个 <code>string | any</code> 类型，也就是 <code>any</code> 类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">uppercase</span>(<span class="params"><span class="attr">iter</span>: <span class="title class_">Iterator</span>&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt;</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; value, done &#125; = iter.<span class="title function_">next</span>();</span><br><span class="line">    <span class="keyword">yield</span> value.<span class="title function_">toUppercase</span>(); <span class="comment">// 忘记第一时间检查 done 并且 写错了 toUpperCase 方法</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (done) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现如今对于每个 <code>Iterator</code> 来说，在不引入破坏性变更的情况下想要修复这个问题很难，但我们至少可以通过创建大多数的 <code>IteratorObjects</code> 来修复它。</p>
+<p>TypeScript 5.6 引入了一个新的固有的类型，名为 <code>BuiltinIteratorReturn</code> 以及一个新的 <code>--strict</code> 模式的标志 <code>--strictBuiltinIteratorReturn</code> 。 每当 <code>IteratorObject</code> 用在诸如 <code>lib.d.ts</code> 这些位置的时候，它们总是会为 <code>TReturn</code> 使用 <code>BuiltinIteratorReturn</code> 类型（你也会更频繁地看到更多具体的类型，比如： <code>MapIterator</code> 、 <code>ArrayIterator</code> 、 <code>SetIterator</code> ）。 </p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">MapIterator</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">IteratorObject</span>&lt;T, <span class="title class_">BuiltinIteratorReturn</span>, <span class="built_in">unknown</span>&gt; &#123;</span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="property">iterator</span>](): <span class="title class_">MapIterator</span>&lt;T&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Map</span>&lt;K, V&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Returns an iterable of key, value pairs for every entry in the map.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="title function_">entries</span>(): <span class="title class_">MapIterator</span>&lt;[K, V]&gt;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Returns an iterable of keys in the map</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="title function_">keys</span>(): <span class="title class_">MapIterator</span>&lt;K&gt;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Returns an iterable of values in the map</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="title function_">values</span>(): <span class="title class_">MapIterator</span>&lt;V&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>默认情况下 <code>BuiltinIteratorReturn</code> 为 <code>any</code> ，但当开启 <code>--strictBuiltinIteratorReturn</code> 后（或者通过 <code>--strict</code>），它就为 <code>undefined</code> 。在这个新模式下面，如果我们使用 <code>BuiltinIteratorReturn</code> ，之前的例子在现在就会正确地报错：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">uppercase</span>(<span class="params"><span class="attr">iter</span>: <span class="title class_">Iterator</span>&lt;<span class="built_in">string</span>, <span class="title class_">BuiltinIteratorReturn</span>&gt;</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; value, done &#125; = iter.<span class="title function_">next</span>();</span><br><span class="line">    <span class="keyword">yield</span> value.<span class="title function_">toUppercase</span>();</span><br><span class="line">    <span class="comment">//    ~~~~~ ~~~~~~~~~~~</span></span><br><span class="line">    <span class="comment">// error! ┃      ┃</span></span><br><span class="line">    <span class="comment">//        ┃      ┗━ Property &#x27;toUppercase&#x27; does not exist on type &#x27;string&#x27;. Did you mean &#x27;toUpperCase&#x27;?</span></span><br><span class="line">    <span class="comment">//        ┃</span></span><br><span class="line">    <span class="comment">//        ┗━ &#x27;value&#x27; is possibly &#x27;undefined&#x27;.</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (done) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常情况下你会在 <code>lib.d.ts</code> 文件中的各处看到配对的 <code>BuiltinIteratorReturn</code> 和 <code>IteratorObject</code> 。一般来说，我们建议在你的代码中尽可能地明确 <code>TReturn</code> 的类型。</p>
+<p>更多信息，你可以在该 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58243">PR</a> 中阅读该特性。</p>
+<h2 id="支持随意的模块标识符"><a href="#支持随意的模块标识符" class="headerlink" title="支持随意的模块标识符"></a>支持随意的模块标识符</h2><p>JavaScript 允许模块导出绑定到无效的标识符名称，比如字符串字面量：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> banana = <span class="string">&quot;🍌&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; banana <span class="keyword">as</span> <span class="string">&quot;🍌&quot;</span> &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>同样，它允许模块使用这些随意的名称来导入，将它们绑定到合法的标识符上：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="string">&quot;🍌&quot;</span> <span class="keyword">as</span> banana &#125; <span class="keyword">from</span> <span class="string">&quot;./foo&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">eat</span>(<span class="params"><span class="attr">food</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Eating&quot;</span>, food);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">eat</span>(banana);</span><br></pre></td></tr></table></figure>
+
+<p>这似乎很花里胡哨，但它与其他语言在互操作性上有作用（通常通过 JavaScript 或者 WebAssembly 的边界代码），因为其他的语言可能对合法的标识符集合存在不同的规则。它也对生成代码的工作有帮助，比如 esbuild 的 <a target="_blank" rel="noopener" href="https://esbuild.github.io/api/#inject">inject</a> 特性。</p>
+<p>TypeScript 5.6 现在允许在代码中使用这些随意的模块标识符。感谢 <a target="_blank" rel="noopener" href="https://github.com/evanw">Evan Wallace</a> 的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58640">贡献</a>。</p>
+<h2 id="–noUncheckedSideEffectImports-选项"><a href="#–noUncheckedSideEffectImports-选项" class="headerlink" title="–noUncheckedSideEffectImports 选项"></a>–noUncheckedSideEffectImports 选项</h2><p>在 JavaScript 中，可能存在导入一个没有实际导入任何值的模块的场景：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;some-module&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这个导入通常称为副作用导入，因为它们提供的有用的行为只有执行一些副作用（比如注册一个全局变量，或者为一个原型 <code>prototype</code> 添加一个垫片）。</p>
+<p>在 TypeScript 中，这个语法是一个怪癖：如果导入可以解析为一个有效的源文件的话， TypeScript 会加载和检查这个文件，相反，如果源文件无法被找到，那么 TypeScript 会静默地忽略这个导入 。</p>
+<p>这是一个奇怪的行为，但它是部分来源于 JavaScript 生态系统中的建模模式。比如，这个语法会在捆绑器中用于特殊的加载器来加载 CSS 或其他资源。捆绑器可能会配置为一种你可以通过编写类似如下的代码来引入具体的 <code>.css</code> 文件的方式：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;./button-component.css&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">Button</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式仍然掩盖了副作用导入的潜在拼写错误。这也是为什么 TypeScript 5.6 引入了一个新的名为 <code>--noUncheckedSideEffectImports</code> 的编译选项来捕获这些情况。当开启 <code>--noUncheckedSideEffectImports</code> ， TypeScript 现在如果无法找到副作用导入的源文件的话将会报错。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;oops-this-module-does-not-exist&quot;</span>;</span><br><span class="line"><span class="comment">//     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="comment">// error: Cannot find module &#x27;oops-this-module-does-not-exist&#x27; or its corresponding type declarations.</span></span><br></pre></td></tr></table></figure>
+
+<p>当开启这个选项时，一些正常运行的代码可能现在就会得到一个错误，就如同上面提到的 CSS 的例子。为了解决这个问题，那些只需为资源编写副作用导入的用户可以通过通配符来编写一个范围模块声明，从而得到更好地体验。这个声明可以写在一个全局的文件，就如同下面代码所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./src/globals.d.ts</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Recognize all CSS files as module imports.</span></span><br><span class="line"><span class="keyword">declare</span> <span class="variable language_">module</span> <span class="string">&quot;*.css&quot;</span> &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>事实上，在你的项目里可能早已存在这样一个文件。比如，只需一些诸如 <code>vite init</code> 的命令会创建一个相似的 <code>vite-env.d.ts</code> 文件。</p>
+<p>虽然这个选项在目前是默认关闭的，但我们鼓励用户去尝试使用它。</p>
+<p>更多的信息，可以查看相关的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58941">实现</a>。</p>
+<h2 id="–noCheck-选项"><a href="#–noCheck-选项" class="headerlink" title="–noCheck 选项"></a>–noCheck 选项</h2><p>TypeScript 5.6 引入了一个新的编译选项 <code>--noCheck</code> ，它允许对所有的输入文件跳过类型。这避免了对生成文件进行必要的任何语义分析所带来的不必要的类型检查。</p>
+<p>一种实现该功能的设想是从类型检查中分离 JavaScript 文件的生成过程，这样这两个过程就能单独的阶段执行。比如，当迭代代码的时候，你可以执行 <code>tsc --noCheck</code> ，接着执行 <code>tsc --noEmit</code> 来执行彻底地类型检查。你也可以并行地执行两个任务，即使是在 <code>--watch</code> 模式下，不过需要注意，如果你真的需要在同一时间执行话，你可能需要指定一个单独的 <code>--tsBuildInfoFile</code> 路径。</p>
+<p><code>--noCheck</code> 对以类似方式来生成声明文件的过程也很有用。在一个符合 <code>--isolatedDeclarations</code> 的项目上指定了 <code>--noCheck</code> ， TypeScript 可以在没有通过类型检查的情况下快速地生成声明文件。生成的声明文件纯粹地依赖于快速的语法转换。</p>
+<p>注意在指定了 <code>--noCheck</code> 但是没有使用 <code>--isolatedDeclarations</code> 的情况下， TypeScript 会仍然执行尽可能多的必要的类型检查来生成 <code>.d.ts</code> 文件。从这个意义上说， <code>--noCheck</code> 更像是一个误称，然而，该过程比完整的类型检查更加惰性，只会计算未注解声明的类型。这个速度比一个全量的类型检查更快。</p>
+<p><code>noCheck</code> 也可以作为 TypeScript 的 API 的一个标准选项。在内部， <code>transpileModule</code> 和 <code>transpileDeclaration</code> 早已使用 <code>noCheck</code> 来加快处理速度（至少从 TypeScript 5.5 就是这样了）。现在任何的构建工具都应该可以利用这个选项，采取各种自定义策略来协调和加速构建过程。</p>
+<p>更多的信息，查看 TypeScript 5.5 中内部启动的 noCheck 选项完成的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58364">工作</a>，以及使它可在命令行上公开访问的相关<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58839">工作</a>。</p>
+<h2 id="允许-–build-过程中出现错误"><a href="#允许-–build-过程中出现错误" class="headerlink" title="允许 –build 过程中出现错误"></a>允许 –build 过程中出现错误</h2><p>TypeScript 中的项目引用的概念允许你将代码库组织成多个项目以及为每个项目创建依赖。执行带有 <code>--build</code> 模式的 TypeScript 编译器（简称 <code>tsc -b</code> ）是构建跨项目以及计算那些项目和文件需要编译的内置的实际执行方式。</p>
+<p>先前，使用 <code>--build</code> 模式会假设开启 <code>--noEmitOnError</code> 选项，这样在遇到任何错误的时候会立即停止构建。这意味着如果任何“上游”的项目出现构建错误，那么“下游”项目将永远无法检查和构建。理论上，这是一个非常合理（ cromulent ，来自美国动画片《<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BE%9B%E6%99%AE%E6%A3%AE%E4%B8%80%E5%AE%B6">辛普森一家</a>》（The Simpsons），在剧中被刻意发明出来，意为“合适的”或“可接受的”，来自 ChatGPT 解释）的方法，如果一个项目出现错误，那么它的依赖不一定处在一致的状态。</p>
+<p>现实中，这种有点死板的方式使得类似升级的过程变得痛苦。比如；如果项目 b 依赖了项目 a ，更熟悉项目 b 的人在他们的依赖升级之前无法主动地升级他们的代码。他们在第一步升级项目 A 就被阻碍了。</p>
+<p>从 TypeScript 5.6 开始，即使在依赖的构建过程中出现错误 <code>--build</code> 模式会继续构建项目。在发现错误时，这些错误会被全部记录下来，然后尽最大努力输出文件，但是构建流程则会在特定的项目上继续完成。</p>
+<p>如果你想要在项目一出错的情况下停止构建，你可以使用新的标志，名为 <code>--stopOnBuildErrors</code> 。这对在 CI 环境中执行的构建，或者迭代一个重依赖其他项目的项目来说很有帮助。</p>
+<p>需要注意的是，为了实现这个功能， TypeScript 现在总是会为任何带有 <code>--build</code> （即使未指定 <code>--incremental</code> 或者 <code>--composite</code> ）的项目输出一个 <code>.tsbuildinfo</code> 文件。这是为了跟踪 <code>--build</code> 的调用情况以及接下来需要执行哪些工作的状态。</p>
+<p>可以在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58838">PR</a> 下阅读有关的变更。</p>
+<h2 id="编辑器中的区域优先诊断"><a href="#编辑器中的区域优先诊断" class="headerlink" title="编辑器中的区域优先诊断"></a>编辑器中的区域优先诊断</h2><p>当询问 TypeScript 的语言服务对一个文件的诊断（比如错误，建议，以及弃用）时，它通常需要检查整个文件。大部分情况下这很棒，但在极其巨大的文件下会造成延迟。这会令人沮丧因为修复一个拼写错误应该是一个快速的操作才对，但是在一个足够大的文件中却花费了数秒。</p>
+<p>为了解决它， TypeScript 5.6 引入了一个新的特性，名为区域优先诊断（region-prioritized diagnostics）或者区域优先检查（ region-prioritized checking）。编辑器现在也可以提供给定文件的相关区域，而不是只请求诊断一组文件，这通常是用户当前文件的可见区域。 TypeScript 语言服务就可以选择提供两组诊断集：一种是对区域，另一种是对完整的文件。这允许编辑操作可以在大文件中更快地响应，这样你就不用等待那些红色错误消失了。</p>
+<p>对于一些特定的成员，在我们的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/blob/7319968e90600102892a79142fb804bcbe384160/src/compiler/checker.ts">checker.ts</a> 测试中，一个完全的语义诊断响应需要耗时 3300 毫秒。相比之下，基于区域响应的诊断的响应只需耗时 143 毫秒。虽然剩余的整个文件的响应花费了大约 3200 毫秒，但这对快速编辑来说已经是巨大的差距了。</p>
+<p>这个特性也包含了相当一部分的工作，包括让整个诊断报告的使用体验更加一致。由于我们的类型检查器会利用缓存来避免额外工作的方式，同个类型间的连续的检查会有不同的（通常更短）错误信息。从技术上来说，即使是在这个特性之前，惰性的无序检查会造成程序在编辑器的两个位置报告不同的诊断，但我们不想加剧这个问题。随着最近工作的进行，我们已经解决了许多关于这些错误不一致性的问题。</p>
+<p>目前，这个功能可以在 VSCode 中使用 TypeScript 5.6 之后的版本来获取。</p>
+<p>更多细节的信息，请查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57842">PR</a> 。</p>
+<h2 id="细粒度的提交字符"><a href="#细粒度的提交字符" class="headerlink" title="细粒度的提交字符"></a>细粒度的提交字符</h2><p>TypeScript 的语言服务现在为每个完成项提供它自身的提交字符。提交字符是具体的字符，当键入的时候，会自动完成当前建议的完成项。</p>
+<p>这意味着随着时间推移当你键入某些字符时，你的编辑器现在会更加频繁地提交当前建议的完成项。比如，有如下的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">let</span> <span class="attr">food</span>: &#123;</span><br><span class="line">    <span class="title function_">eat</span>(): <span class="built_in">any</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> f = (foo<span class="comment">/**/</span></span><br></pre></td></tr></table></figure>
+
+<p>如果光标在 <code>/**/</code> 上，我们无法清楚地知道我们编写的代码是像 <code>let f = (food.eat())</code> 又或者是 <code>let f = (foo, bar) =&gt; foo + bar</code> 。你可以想象下编辑器能够根据我们接下来键入的字符来执行不同的自动完成。举个例子，如果我们键入了 <code>.</code> 字符，我们可能想要编辑器自动以变量 <code>food</code> 来完成，但如果我们键入的是 <code>,</code> 字符，我们可能是在编写一个箭头函数的参数。</p>
+<p>不幸的是，先前 TypeScript 只是通知编辑器当前文本可能定义一个新的参数名称，以至于没有提交字符是安全的，所以输入一个 <code>.</code> 不会做任何事，即使这件事是“明显”的，即编辑器应该用 <code>food</code> 单词来进行自动完成。</p>
+<p>TypeScript 现在会为每个完成项明确地列出哪些字符可以安全地提交。虽然这不会立即改变你的日常使用经验，但是支持这些提交字符地编辑器可以随着时间的推移看到行为上的改进。为了马上观察到这些改进，你可以在 VSCode <a target="_blank" rel="noopener" href="https://code.visualstudio.com/insiders/">预览版</a>中使用 TypeScript 的 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-typescript-next">nightly</a> 扩展。在上述代码中输入一个 <code>.</code> 就会以 <code>food</code> 进行自动完成了。</p>
+<p>更多的信息，查看这个添加了提交字符的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59339">PR</a> ，以及根据上下文来对提交字符进行调整的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59523">PR</a> 。</p>
+<h2 id="自动导入的排除规则"><a href="#自动导入的排除规则" class="headerlink" title="自动导入的排除规则"></a>自动导入的排除规则</h2><p>TypeScript 的语言服务现在允许指定一个正则列表来过滤掉某些说明符的自动导入建议。比如，如果你想要排除一个包的所有“深”导入，比如 <code>lodash</code> ，你可以 VSCode 中配置如下的偏好：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;typescript.preferences.autoImportSpecifierExcludeRegexes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;^lodash/.*$&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者另一种情况，你想要禁止从包入口进行导入：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;typescript.preferences.autoImportSpecifierExcludeRegexes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;^lodash$&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用如下的设置可以避免 <code>node:</code> 导入：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;typescript.preferences.autoImportSpecifierExcludeRegexes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;^node:&quot;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>为了指定某些正则的标志位，比如 <code>i</code> 或者 <code>u</code> ，你需要用斜杠包住正则表达式。当使用斜杠包住后，你需要转义其他内部的斜杠：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;typescript.preferences.autoImportSpecifierExcludeRegexes&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;^./lib/internal&quot;</span><span class="punctuation">,</span>        <span class="comment">// 无需转义</span></span><br><span class="line">    <span class="string">&quot;/^.\\/lib\\/internal/&quot;</span><span class="punctuation">,</span>  <span class="comment">// 需要转义 - 注意开头和结尾的斜杠</span></span><br><span class="line">    <span class="string">&quot;/^.\\/lib\\/internal/i&quot;</span>  <span class="comment">// 需要转义 - 我们需要斜杠从而指定 i 标志</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以为 JavaScript 配置同样的设置，即 <code>javascript.preferences.autoImportSpecifierExcludeRegexes</code> 。</p>
+<p>注意这个选项可能与 <code>typescript.preferences.autoImportFileExcludePatterns</code> 会有一些重叠，但它们之间是存在差异。对于已经存在的 <code>autoImportFileExcludePatterns</code> ，它会接收一个 glob 规则的列表来排除文件路径。这可能对一些场景来说更加简单，比如你想要避免具体文件或文件夹的自动导入，但这种程度远远不够。比如，如果你使用 <code>@types/node</code> 包，这个包中同一个文件声明了 <code>fs</code> 和 <code>node:fs</code> ，所以我们无法使用 <code>autoImportExcludePatterns</code> 来过滤掉其中的一个。</p>
+<p>新的 <code>autoImportSpecifierExcludeRegexes</code> 配置是具体于模块说明符的（即我们编写的导入语句的具体的字符串），所以我们可以编写一个规则来排除 <code>fs</code> 或者 <code>node:fs</code> 而不排除另外一个。更重要的是，我们可以编写规则来强制自动导入使用不同的说明符样式（比如使用 <code>./foo/bar.js</code> 而不是 <code>#foo/bar.js</code> ）。</p>
+<p>更多的信息，可以查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59543">PR</a> 。</p>
+<h2 id="需要注意的行为变更"><a href="#需要注意的行为变更" class="headerlink" title="需要注意的行为变更"></a>需要注意的行为变更</h2><h3 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h3><p>详情请查看<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/58764">此处</a>。</p>
+<h3 id="总是生成-tsbuildinfo-文件"><a href="#总是生成-tsbuildinfo-文件" class="headerlink" title="总是生成 .tsbuildinfo 文件"></a>总是生成 .tsbuildinfo 文件</h3><p>即使构建依赖过程存在错误，开启 <code>--build</code> 情况下也能够继续构建项目，为了在命令行种支持 <code>--noCheck</code> ， TypeScript 现在总是会为任何在 <code>--build</code> 下执行的项目生成一个 <code>.tsbuildinfo</code> 文件。无论 <code>--incremental</code> 是否打开都会执行这种情况。可以在此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58626">PR</a> 查看相关信息。</p>
+<h3 id="尊重-node-modules-中的文件扩展名和-package-json-文件"><a href="#尊重-node-modules-中的文件扩展名和-package-json-文件" class="headerlink" title="尊重 node_modules 中的文件扩展名和 package.json 文件"></a>尊重 node_modules 中的文件扩展名和 package.json 文件</h3><p>在 Node.js 支持 ECMAScript 模块的 v12 版本之前，对 TypeScript 来说从没有一种方式来知道在 <code>node_modules</code> 中找到的 <code>.d.ts</code> 文件对应的 JavaScript 文件是否是以 CommonJS 或者 ECMAScript 模块编写的。当绝大多数的 npm 包只使用 CommonJS 时，这问题不大，如果 TypeScript 对该文件发出疑问， 那么就只会假设所有内容的行为都是 CommonJS 。不幸的是，如果这个假设是错的那么会允许不安全的导入：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Copy</span></span><br><span class="line"><span class="comment">// node_modules/dep/index.d.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">function</span> <span class="title function_">doSomething</span>(<span class="params"></span>): <span class="built_in">void</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.ts</span></span><br><span class="line"><span class="comment">// 如果 dep 是 CommonJS 模块则 OK </span></span><br><span class="line"><span class="comment">// 如果 dep 是 ECMAScript 模块则不 OK ，即使是在捆绑器中</span></span><br><span class="line"><span class="keyword">import</span> dep <span class="keyword">from</span> <span class="string">&quot;dep&quot;</span>;</span><br><span class="line">dep.<span class="title function_">doSomething</span>();</span><br></pre></td></tr></table></figure>
+
+<p>在实践中，这不会频繁地出现。但是这些年随着 Node.js 开始支持 ECMAScript 模块， npm 上共享的 ESM 包的数量开始增长。幸运地是， Node.js 也引入了机制来帮助 TypeScript 区分一个文件是 ECMAScript 模块还是 CommonJS 模块，也就是 <code>.mjs</code> 和 <code>.cjs</code> 文件扩展名，以及 package.json 中的 <code>type</code> 字段。 TypeScript 4.7 添加了对这些标志的支持，同样也包括 <code>.mts</code> 和 <code>.cts</code> 文件。然而， TypeScript 只能在 <code>--module node16</code> 和 <code>--module nodenext</code> 下才能读取到这些标志，所以上面例子中不安全的导入对任何使用 <code>--module esnext</code> 和 <code>--moduleResolution bundler</code> 来说仍然是一个问题。</p>
+<p>为了解决它， TypeScript 5.6 收集了模块的格式信息，用这些信息来解决诸如上面例子提到的所有 <code>module</code> 模式带来的歧义（除去 <code>amd</code> 、 <code>umd</code> 和 <code>system</code> ）。特定格式的文件扩展（ <code>.mts</code> 和 <code>.cts</code> ） 在任何地方都能被良好地解析， <code>node_modules</code> 内的依赖的 packages.json 的 <code>type</code> 字段也会被考虑到，无论 <code>module</code> 是否设置。先前，从技术上说可以将 CommonJS 输出生成到 <code>.mjs</code> 文件中，反之亦然。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.mts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">&quot;oops&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// $ tsc --module commonjs main.mts</span></span><br><span class="line"><span class="comment">// main.mjs</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(<span class="built_in">exports</span>, <span class="string">&quot;__esModule&quot;</span>, &#123; <span class="attr">value</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"><span class="built_in">exports</span>.<span class="property">default</span> = <span class="string">&quot;oops&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>现在， <code>.mts</code> 文件就不会输出为 CommonJS 了，同样 <code>.cts</code> 文件也不会输出为 ESM 了。</p>
+<p>注意 TypeScript 5.5 的预发行版本提供了大部分的行为（此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57896">PR</a> 查看更多实现细节），但在 5.6 这个行为只会对 <code>node_modules</code> 生效。</p>
+<p>更多细节查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58825">PR</a> 。</p>
+<h3 id="计算属性上正确的-override-检查"><a href="#计算属性上正确的-override-检查" class="headerlink" title="计算属性上正确的 override 检查"></a>计算属性上正确的 override 检查</h3><p>先前，标记了 <code>override</code> 的计算属性不会正确地检查基类成员的存在性。同样，如果你使用 <code>noImplicitOverride</code> ，并且忘记对一个计算属性添加一个 <code>override</code> 修饰符，那么程序不会报错。</p>
+<p>TypeScript 5.6 现在会正确地检查计算属性的这两种情况。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = <span class="title class_">Symbol</span>(<span class="string">&quot;foo&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> bar = <span class="title class_">Symbol</span>(<span class="string">&quot;bar&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line">  [bar]() &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Base</span> &#123;</span><br><span class="line">    <span class="keyword">override</span> [foo]() &#123;&#125;</span><br><span class="line"><span class="comment">//           ~~~~~</span></span><br><span class="line"><span class="comment">// error: This member cannot have an &#x27;override&#x27; modifier because it is not declared in the base class &#x27;Base&#x27;.</span></span><br><span class="line"></span><br><span class="line">    [bar]() &#123;&#125;</span><br><span class="line"><span class="comment">//  ~~~~~</span></span><br><span class="line"><span class="comment">// error under noImplicitOverride: This member must have an &#x27;override&#x27; modifier because it overrides a member in the base class &#x27;Base&#x27;.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/a-tarasyuk">Oleksandr Tarasiuk</a> 修复了这个问题，相关的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57146">PR</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/10e09992a7cf" title="TypeScript 5.6（译）">https://prohibitorum.top/10e09992a7cf</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/202da2aab6d1" rel="prev" title="记一次分析某漫接口密钥">
+                  <i class="fa fa-angle-left"></i> 记一次分析某漫接口密钥
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d5936495bfca" rel="next" title="记一次分析某漫的图片">
+                  记一次分析某漫的图片 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">408k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">24:43</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1726050781"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
