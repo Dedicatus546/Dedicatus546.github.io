@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="JavaScript的一种跨标签页的通信方式。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript的一种跨标签页的通信方式">
+<meta property="og:url" content="https://prohibitorum.top/a659b9c42073">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="JavaScript的一种跨标签页的通信方式。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/14/fyD6US.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/08/14/f6eXE8.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/05/Iu5Aaj.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/05/Iu5LlV.gif">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/05/IuIeTH.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3VwXd.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3VWcQ.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3mthV.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3mzHs.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3K7NR.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3QVRx.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3UTVP.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/11/07/I3ahJU.png">
+<meta property="article:published_time" content="2021-08-11T17:02:06.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/08/14/fyD6US.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a659b9c42073.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a659b9c42073","path":"a659b9c42073.html","title":"JavaScript的一种跨标签页的通信方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JavaScript的一种跨标签页的通信方式 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AA%E5%B0%8F%E7%AA%97%E5%8F%A3"><span class="nav-number">1.</span> <span class="nav-text">生成一个小窗口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E4%B9%8B%E5%90%8E%E8%87%AA%E5%8A%A8%E5%85%B3%E9%97%AD"><span class="nav-number">2.</span> <span class="nav-text">授权之后自动关闭</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%BE%80%E6%8E%88%E6%9D%83%E9%A1%B5%E4%BC%A0%E8%BE%93%E6%95%B0%E6%8D%AE"><span class="nav-number">3.</span> <span class="nav-text">怎么往授权页传输数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%8E%E4%B9%88%E5%9C%A8%E6%8E%88%E6%9D%83%E4%B9%8B%E5%90%8E%E9%80%9A%E7%9F%A5%E5%88%B0%E5%8E%9F%E6%9D%A5%E7%9A%84%E9%A1%B5%E9%9D%A2"><span class="nav-number">4.</span> <span class="nav-text">怎么在授权之后通知到原来的页面</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">187</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">151</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a659b9c42073">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JavaScript的一种跨标签页的通信方式 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript的一种跨标签页的通信方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-08-11 17:02:06" itemprop="dateCreated datePublished" datetime="2021-08-11T17:02:06+00:00">2021-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>JavaScript</code>的一种跨标签页的通信方式。</p>
+<span id="more"></span>
+
+<p>刚好这个星期在搞第三方账号接入我们的一个系统。</p>
+<p>原型很简单，就是点击某个按钮，弹出一个第三方的账号接入页面，可能是输入账号，也可能是扫码等等。</p>
+<p>执行完授权操作之后，自动关闭授权窗口，然后局部刷新原来页面的授权账号列表。</p>
+<p>这个可以用掘金的授权登录来看，就类似下面这种类型：</p>
+<p><img data-src="https://z3.ax1x.com/2021/08/14/fyD6US.png"></p>
+<p>刚开始完全懵逼的好吧，没做过这种需求，只会登录注册的我流下了悔恨的泪水，呜呜呜😭。</p>
+<p>从原型来看，转为代码需要解决的点有三个：</p>
+<ul>
+<li>怎么生成这样的小窗口；</li>
+<li>怎么在授权之后自动关闭；</li>
+<li>怎么往授权页传输数据；</li>
+<li>怎么在授权之后通知到原来的页面；</li>
+</ul>
+<h1 id="生成一个小窗口"><a href="#生成一个小窗口" class="headerlink" title="生成一个小窗口"></a>生成一个小窗口</h1><p>平时可能为了新开一个标签页，可能会使用两种方式：</p>
+<ul>
+<li>使用<code>window.open(href, &quot;_blank&quot;)</code>来新开一个窗口；</li>
+<li>构建一个<code>&lt;a href=&quot;href&quot; target=&quot;_blank&quot;/&gt;</code>标签，然后使用<code>click</code>方法模拟点击，新开一个窗口；</li>
+</ul>
+<p>第二个感觉没戏，所以就把目光转向<code>window.open</code>，去<code>MDN</code>查了下，发现<code>window.open</code>可以打开小窗口！</p>
+<p>通过<code>window.open</code>的第三个参数，可以选择窗口的一些配置，常用的如下：</p>
+<ul>
+<li><code>width</code> 指定窗口宽度</li>
+<li><code>height</code> 指定窗口高度</li>
+<li><code>top</code> 窗口左上角距离屏幕左上角的高度偏移</li>
+<li><code>left</code> 窗口左上角距离屏幕左上角的宽度偏移</li>
+<li><code>menubar</code> 是否显示菜单栏</li>
+<li><code>toolbar</code> 是否显示工具栏</li>
+<li><code>status</code> 是否显示状态栏</li>
+<li><code>scrollbars</code> 是否显示滚动条</li>
+<li>…</li>
+</ul>
+<p>由于第三个参数需要以字符串的形式来传入，比如指定宽高的话就为<code>&#39;width=1000,height=500&#39;</code>。</p>
+<p>字符串还是比较不方便的，我们可以使用对象来传入，然后稍微处理下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">openUrl</span>(<span class="params">url, name, config = &#123;&#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> str = <span class="title class_">Object</span>.<span class="title function_">entries</span>(config)</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function">(<span class="params">[key, val]</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;val&#125;</span>`</span>)</span><br><span class="line">    .<span class="title function_">join</span>(<span class="string">&quot;,&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">window</span>.<span class="title function_">open</span>(url, name, str);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以尝试一下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">openUrl</span>(<span class="string">&quot;https://www.baidu.com&quot;</span>, <span class="string">&quot;百度&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">width</span>: <span class="number">1200</span>,</span><br><span class="line">  <span class="attr">height</span>: <span class="number">600</span>,</span><br><span class="line">  <span class="attr">top</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">left</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">menubar</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">  <span class="attr">toolbar</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">  <span class="attr">status</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">  <span class="attr">scrollbars</span>: <span class="string">&quot;yes&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://z3.ax1x.com/2021/08/14/f6eXE8.png"></p>
+<p>看起来还不错，那么第一个问题我们就解决了。</p>
+<h1 id="授权之后自动关闭"><a href="#授权之后自动关闭" class="headerlink" title="授权之后自动关闭"></a>授权之后自动关闭</h1><p>有<code>window.open</code>，感觉应该就有<code>window.close</code>，去<code>MDN</code>搜了搜，发现还真有，真好对应了窗口的关闭。</p>
+<p><code>MDN</code>对<code>window.close</code>的解释如下：</p>
+<blockquote>
+<p>该方法只能由<code>window.open</code>方法打开的窗口的<code>window</code>对象来调用。如果一个窗口不是由脚本打开的，那么，在调用该方法时，<code>JavaScript</code>控制台会出现类似下面的错误：<br>不能使用脚本关闭一个不是由脚本打开的窗口。 或<code>Scripts may not close windows that were not opened by script.</code>。</p>
+</blockquote>
+<p>也就是说，如果我们想关闭一个打开的窗口，前提是这个窗口是由我打开的</p>
+<p>那么我打开的这个窗口的 <code>window</code> 对象怎么获取呢，很简单，就是 <code>window.open</code> 的返回值</p>
+<p>我们可以打印下</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/05/Iu5Aaj.png"></p>
+<p>确实是一个 <code>window</code> 对象，而且也存在 <code>close</code> 方法</p>
+<p>我们试下调用 <code>close</code> 方法能不能关闭这个窗口</p>
+<p>贴下整体的代码（使用Vue3）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">openUrl</span> = (<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="language-javascript">  url: string,</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">  name: string,</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">  config: Record&lt;string, number | string&gt;</span></span></span><br><span class="line"><span class="params"><span class="language-javascript"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> str = <span class="title class_">Object</span>.<span class="title function_">entries</span>(config)</span></span><br><span class="line"><span class="language-javascript">    .<span class="title function_">map</span>(<span class="function">(<span class="params">[key, val]</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;val&#125;</span>`</span>)</span></span><br><span class="line"><span class="language-javascript">    .<span class="title function_">join</span>(<span class="string">&quot;,&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">return</span> <span class="variable language_">window</span>.<span class="title function_">open</span>(url, name, str);</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> <span class="attr">targetWindow</span>: <span class="title class_">Window</span> | <span class="literal">null</span> = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">openHandler</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  targetWindow = <span class="title function_">openUrl</span>(<span class="string">&quot;https://www.baidu.com&quot;</span>, <span class="string">&quot;百度&quot;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">width</span>: <span class="number">1200</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">height</span>: <span class="number">600</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">top</span>: <span class="number">100</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">left</span>: <span class="number">100</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">menubar</span>: <span class="string">&quot;no&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">toolbar</span>: <span class="string">&quot;no&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">status</span>: <span class="string">&quot;no&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">scrollbars</span>: <span class="string">&quot;yes&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">closeHandler</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  targetWindow?.<span class="title function_">close</span>();</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;openHandler&quot;</span>&gt;</span>打开窗口<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;closeHandler&quot;</span>&gt;</span>关闭窗口<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://z3.ax1x.com/2021/11/05/Iu5LlV.gif"></p>
+<p>没有问题，如果我们对自身直接使用 <code>window.close</code> 会有什么现象呢</p>
+<p>直接开控制台试一下</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/05/IuIeTH.png"></p>
+<p>发现出现了警告⚠️，而且标签页也没有被关闭，警告的大致意思就是只能又打开的窗口进行关闭</p>
+<p>那么第二个问题基本解决，接下来就是最后一个问题</p>
+<h1 id="怎么往授权页传输数据"><a href="#怎么往授权页传输数据" class="headerlink" title="怎么往授权页传输数据"></a>怎么往授权页传输数据</h1><p>在授权页我们进行登录，登录成功或者失败，我们都要通知到打开它的那个窗口</p>
+<p>比如登录成功了，通知父窗口局部刷新，或者发送数据给父窗口，父窗口根据这个数据获取用户信息等等</p>
+<p>刚开始，我想，既然父窗口拿到了子窗口的 <code>window</code> 对象，那么是否可以直接在上面挂在属性呢</p>
+<p>类似与 <code>window.val = 1</code> 的形式</p>
+<p>so，我们写出了如下的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">openHandler</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  targetWindow = <span class="title function_">openUrl</span>(<span class="string">&quot;https://www.baidu.com&quot;</span>, <span class="string">&quot;百度&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">width</span>: <span class="number">1200</span>,</span><br><span class="line">    <span class="attr">height</span>: <span class="number">600</span>,</span><br><span class="line">    <span class="attr">top</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="attr">left</span>: <span class="number">100</span>,</span><br><span class="line">    <span class="attr">menubar</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">    <span class="attr">toolbar</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">    <span class="attr">status</span>: <span class="string">&quot;no&quot;</span>,</span><br><span class="line">    <span class="attr">scrollbars</span>: <span class="string">&quot;yes&quot;</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 往 window 上挂在属性</span></span><br><span class="line">  targetWindow.<span class="property">myVal</span> = <span class="string">&quot;a val from sub window.&quot;</span>;</span><br><span class="line">  <span class="comment">// 打印该属性</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(targetWindow.<span class="property">myVal</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3VwXd.png"></p>
+<p>发现确实可以往上面挂在属性，控制台也正确地输出了</p>
+<p>正当我觉得应该可以实现的时候，在子窗口里面是打印不出来这个值的</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3VWcQ.png"></p>
+<p>这条路行不通，那怎么办呢，其实方法很简单，我们通过url来传递我们需要传递的数据，然后在子页面中对 <code>url</code> 进行解析即可</p>
+<p>比如我们想往授权页传输用户的 <code>id</code> ，我们可以打开一个 <code>&#39;http://target.com?userId=1&#39;</code></p>
+<p>我们可以稍稍的封装一下函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">openUrl</span> = (<span class="params"></span></span><br><span class="line"><span class="params">  url: string,</span></span><br><span class="line"><span class="params">  name: string,</span></span><br><span class="line"><span class="params">  config: Record&lt;string, number | string&gt;,</span></span><br><span class="line"><span class="params">  params: Record&lt;string, any&gt;</span></span><br><span class="line"><span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> str = <span class="title class_">Object</span>.<span class="title function_">entries</span>(config)</span><br><span class="line">      .<span class="title function_">map</span>(<span class="function">(<span class="params">[key, val]</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;val&#125;</span>`</span>)</span><br><span class="line">      .<span class="title function_">join</span>(<span class="string">&quot;,&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> queryStr = <span class="title class_">Object</span>.<span class="title function_">entries</span>(params)</span><br><span class="line">      .<span class="title function_">map</span>(<span class="function">(<span class="params">[key, val]</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;key&#125;</span>=<span class="subst">$&#123;val&#125;</span>`</span>)</span><br><span class="line">      .<span class="title function_">join</span>(<span class="string">&quot;&amp;&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">`<span class="subst">$&#123;url&#125;</span>?<span class="subst">$&#123;queryStr&#125;</span>`</span>, name, str);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>打开之后</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3mthV.png"></p>
+<p>发现 <code>url</code> 后面带上了参数</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3mzHs.png"></p>
+<p>然后我们在子页面中通过 <code>window.location.search</code> 即可拿到参数部分，然后进行解析就 <code>ok</code> 了</p>
+<h1 id="怎么在授权之后通知到原来的页面"><a href="#怎么在授权之后通知到原来的页面" class="headerlink" title="怎么在授权之后通知到原来的页面"></a>怎么在授权之后通知到原来的页面</h1><p>父窗口向子窗口传递数据搞定了，那么子窗口怎么向父窗口传递数据呢</p>
+<p>像这次的这个第三方接入的需求，需要第三方账号登录成功后通知父窗口发送请求来刷新局部的数据</p>
+<p>通过父向子传递数据我们知道，直接往 <code>window</code> 上挂在可能是行不通的</p>
+<p>不过光说无用，得试试，那么首先要解决怎么在子窗口中拿到父窗口的 <code>window</code> 对象</p>
+<p>这时候就要使用 <code>window</code> 上的 <code>opener</code> 属性了，它会返回打开它自身的 <code>window</code> 对象</p>
+<p>如果这个窗口不是由另一个窗口打开的，那么这个值为 <code>null</code> </p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3K7NR.png"></p>
+<p>那么怎么证明这子窗口里面这个 window 就是父窗口的 window 呢</p>
+<p>可以先在父窗口挂个属性，看子窗口能不能拿到</p>
+<p>可是当我想直接在子窗口看看能不能读到父窗口的属性的时候，报错了</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3QVRx.png"></p>
+<p>从文字不难看出，是跨域错误，两个不同域的窗体对象不能访问对方属性</p>
+<p>从而也就证实了往 window 上挂载属性是不可行的</p>
+<p>当然即使往 window 上挂载数据可行，从另一个角度想，用户在子窗口进行登录注册的动作是不确定的</p>
+<p>也就是说父窗口无法精确地判断子窗口究竟有没有完成动作</p>
+<p>也就是需要启动一个定时器来轮询子窗口 window 对象上的某个属性</p>
+<p>这样的代码看起来就不符合逻辑</p>
+<p>应该有点类似于发布订阅的类型，子窗口发送一个事件，父窗口往这个事件上注册回调，从而精确地判断子窗口完成动作的时间</p>
+<p>那么在 js 里面，有没有这样的 api 呢</p>
+<p>有的，它就是 <code>message</code> 事件和 <code>postMessage</code> 方法</p>
+<p><code>postMessage</code> 允许我们往另一个窗体上发送 <code>message</code> 事件以及传递相关的数据</p>
+<blockquote>
+<p>window.postMessage() 方法可以安全地实现跨源通信。通常，对于两个不同页面的脚本，只有当执行它们的页面位于具有相同的协议（通常为https），端口号（443为https的默认值），以及主机  (两个页面的模数 Document.domain设置为相同的值) 时，这两个脚本才能相互通信。window.postMessage() 方法提供了一种受控机制来规避此限制，只要正确的使用，这种方法就很安全。 - MDN</p>
+</blockquote>
+<p>它的函数签名有两个</p>
+<ul>
+<li><code>postMessage(message: any, targetOrigin: string, transfer?: Transferable[]): void</code></li>
+<li><code>postMessage(message: any, options?: WindowPostMessageOptions): void</code></li>
+</ul>
+<p>这两个其实一样，只不过把参数 <code>targetOrigin</code> 和 <code>transfer</code> 放到 <code>options</code> 里面而已</p>
+<p>发送 ok 了，那么就是监听 message 事件了</p>
+<p>通过 <code>window.addEventListener(&#39;message&#39;, callback)</code> 来监听</p>
+<p>回调的 <code>event</code> 参数有三个属性</p>
+<ul>
+<li><code>data</code> : 从其他 <code>window</code> 中传递过来的对象。</li>
+<li><code>origin</code> : 调用 <code>postMessage</code>  时消息发送方窗口的 <code>origin</code> . 这个字符串由 协议、”:&#x2F;&#x2F;“、域名、”:端口号”拼接而成。</li>
+<li><code>source</code> : 对发送消息的窗口对象的引用; 您可以使用此来在具有不同 <code>origin</code> 的两个窗口之间建立双向通信。</li>
+</ul>
+<p>那么现在就可以试一试了</p>
+<p>前面我们已经在子窗口中拿到父窗口的对象了</p>
+<p>我们先监听父窗口的 <code>message</code> 事件</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3UTVP.png"></p>
+<p>接着我们使用子窗口的 <code>postMessage</code> 来往父窗口发送 <code>message</code> 事件</p>
+<p><img data-src="https://z3.ax1x.com/2021/11/07/I3ahJU.png"></p>
+<p>发现成功拿到了数据</p>
+<p>这里需要注意是以 <code>window.opener</code> 返回的其他窗口的对象来使用 <code>postMessage</code> 方法</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a659b9c42073" title="JavaScript的一种跨标签页的通信方式">https://prohibitorum.top/a659b9c42073</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/004922bae706" rel="prev" title="在浏览器中使用摄像头和麦克风DEMO">
+                  <i class="fa fa-angle-left"></i> 在浏览器中使用摄像头和麦克风DEMO
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/41b9b1e48fe0" rel="next" title="view-design的Select组件双向绑定问题">
+                  view-design的Select组件双向绑定问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">414k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:07</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1628672526"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
