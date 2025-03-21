@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Why Async&#x2F;Await Is More Than Just Syntactic Sugar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么 Async&#x2F;Await 不只是语法糖">
+<meta property="og:url" content="https://prohibitorum.top/2fbccc5e3b09">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Why Async&#x2F;Await Is More Than Just Syntactic Sugar">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-02-27T15:50:17.000Z">
+<meta property="article:modified_time" content="2023-02-27T15:50:17.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Promise">
+<meta property="article:tag" content="Async&#x2F;Await">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/2fbccc5e3b09.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/2fbccc5e3b09","path":"2fbccc5e3b09.html","title":"为什么 Async/Await 不只是语法糖"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>为什么 Async/Await 不只是语法糖 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-JavaScript-%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%80%E5%B0%8F%E9%83%A8%E5%88%86%E5%8E%86%E5%8F%B2"><span class="nav-number">2.1.</span> <span class="nav-text">在 JavaScript 中关于异步编程的一小部分历史</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%89%E4%BA%9B%E6%97%B6%E5%80%99%E4%BD%BF%E7%94%A8-Promise-%E4%BC%9A%E8%AE%A9%E4%BB%A3%E7%A0%81%E7%9C%8B%E8%B5%B7%E6%9D%A5%E5%BE%88%E4%BD%8E%E7%BA%A7"><span class="nav-number">2.2.</span> <span class="nav-text">有些时候使用 Promise 会让代码看起来很低级</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-async-await"><span class="nav-number">2.3.</span> <span class="nav-text">引入 async&#x2F;await</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#async-await-%E5%AF%B9%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%E4%BB%A3%E7%A0%81%E9%83%BD%E6%8F%90%E4%BE%9B%E4%BA%86%E7%BB%9F%E4%B8%80%E7%9A%84%E7%BB%8F%E9%AA%8C"><span class="nav-number">2.4.</span> <span class="nav-text">async&#x2F;await 对同步和异步代码都提供了统一的经验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#async-await-%E6%8F%90%E4%BE%9B%E4%BA%86%E6%9B%B4%E5%A5%BD%E7%9A%84%E9%94%99%E8%AF%AF%E5%A0%86%E6%A0%88%E8%B7%9F%E8%B8%AA"><span class="nav-number">2.5.</span> <span class="nav-text">async&#x2F;await 提供了更好的错误堆栈跟踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9-async-await-%E6%99%AE%E9%81%8D%E7%9A%84%E5%8F%8D%E5%AF%B9%E6%84%8F%E8%A7%81"><span class="nav-number">2.6.</span> <span class="nav-text">对 async&#x2F;await 普遍的反对意见</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%B6%E4%BC%B8%E9%98%85%E8%AF%BB"><span class="nav-number">2.7.</span> <span class="nav-text">延伸阅读</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/2fbccc5e3b09">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="为什么 Async/Await 不只是语法糖 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为什么 Async/Await 不只是语法糖
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-27 15:50:17" itemprop="dateCreated datePublished" datetime="2023-02-27T15:50:17+00:00">2023-02-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%91%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">译文</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://www.zhenghao.io/posts/await-vs-promise">Why Async&#x2F;Await Is More Than Just Syntactic Sugar</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本文主要是我对 async&#x2F;await 对比 Promise 的一些见解。</p>
+<p>尽管网络上已经存在了许许多多的关于 <code>async/await</code> 对比 <code>Promise</code> 的文章，但是都有很多值得改进的地方，所以我就自己写了一篇。</p>
+<p>在这篇文章中，我关注的点是 <code>async/await</code> 不仅仅是 <code>Promise</code> 之上的语法糖，因为 <code>async/await</code> 确实提供了显著的好处。</p>
+<ul>
+<li><code>async/await</code> 允许我们去使用那些在同步程序中可用的所有的语法，从而我们能写出更加有表现力和更加可读的代码。</li>
+<li><code>async/await</code> 统一了异步编程的经验。</li>
+<li><code>async/await</code> 提供了更好的错误堆栈跟踪信息。</li>
+</ul>
+<blockquote>
+<p>这篇文章假定读者有关于 <code>Promise</code> 和 <code>async/await</code> 的基础知识。本文并不是类似 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous">MDN</a> 和 <a target="_blank" rel="noopener" href="https://javascript.info/promise-basics">javascript.info</a> 的基础教程。</p>
+</blockquote>
+<h2 id="在-JavaScript-中关于异步编程的一小部分历史"><a href="#在-JavaScript-中关于异步编程的一小部分历史" class="headerlink" title="在 JavaScript 中关于异步编程的一小部分历史"></a>在 JavaScript 中关于异步编程的一小部分历史</h2><p>异步编程在 JavaScript 中很常见。每当我们需要调用一个 web 服务，或者进行文件访问，或者进行数据库操作，尽管语言本身是单线程的，但是异步特性却能够让我们防止 UI 被阻塞。</p>
+<p>在 ES2015（ES6） 对 JavaScript 进行重大升级之前，解决异步编程的方式是回调。我们表达时间依赖（即异步操作的执行顺序）的唯一方法是将一个回调嵌套在另一个回调中。这会导致所谓的<a target="_blank" rel="noopener" href="http://callbackhell.com/">回调地狱</a>。</p>
+<blockquote>
+<p>reddit 上的一位用户 <a target="_blank" rel="noopener" href="https://www.reddit.com/r/javascript/comments/wmpdsu/comment/ik2cnoh/?utm_source=share&utm_medium=web2x&context=3">@theQuandary</a> 指出，在 ES6 之前，在 JavaScript 中异步编程有比回调更好的其他可选择的方式。很抱歉这里不是 100% 确定，因为我没有亲自经历过这段历史。</p>
+</blockquote>
+<p>在 ES2015， JavaScript 引入了 <code>Promise</code> 。对于异步操作来说它是最优的对象，我们可以很简单地使用它来进行传递，组合，聚合以及应用变换操作。时间依赖也可以通过链式调用 <code>then</code> 方法来清晰地表达。</p>
+<details><summary>更多历史...</summary><p>在 JavaScript 中引入 <code>Promise</code> 的点子并不是独创的。它是受到一个年代非常久远的语言—— <a target="_blank" rel="noopener" href="http://wiki.erights.org/wiki/Promise">E 语言</a>所启发的。 E 语言的创造者 <a target="_blank" rel="noopener" href="https://twitter.com/marksammiller">Mark Miller</a> 也是 <a target="_blank" rel="noopener" href="https://tc39wiki.calculist.org/about/people/">TC39 的成员</a>。 <code>async/await</code> 语法也借鉴了 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/dotnet/csharp/async">C#</a> 。</p>
+</details>
+
+<p>随着 <code>Promise</code> 成为一个强大的原始对象，这似乎意味着在 JavaScript 中异步编程已经被解决了，是这样吗？</p>
+<p>这不一定，因为有些时候使用 <code>Promise</code> 会让代码看起来很低级</p>
+<h2 id="有些时候使用-Promise-会让代码看起来很低级"><a href="#有些时候使用-Promise-会让代码看起来很低级" class="headerlink" title="有些时候使用 Promise 会让代码看起来很低级"></a>有些时候使用 Promise 会让代码看起来很低级</h2><p>尽管 Promise 有优点，但是在 JavaScript 中需要一个更加高级的语法来处理异步编程。</p>
+<p>我们可以考虑如下的例子，我们需要一个函数来延迟的轮询某个接口。如果轮询次数达到给定最大值，那么以 <code>null</code> 值来解决（resolve）这个 Promise 对象</p>
+<p>下面是一个使用 <code>Promise</code> 的可能的解决方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">apiCall</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span></span><br><span class="line">    <span class="comment">// 重试到第六次时，用字符串 &#x27;value&#x27; 来解决这个 Promise</span></span><br><span class="line">    count++ === <span class="number">5</span> ? <span class="title function_">resolve</span>(<span class="string">&#x27;value&#x27;</span>) : <span class="title function_">resolve</span>(<span class="literal">null</span>)</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sleep</span>(<span class="params">interval</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, interval));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">poll</span>(<span class="params">retry, interval</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 为了简洁，这里跳过对错误的处理</span></span><br><span class="line">    <span class="keyword">if</span> (retry === <span class="number">0</span>) <span class="title function_">resolve</span>(<span class="literal">null</span>);</span><br><span class="line">    <span class="title function_">apiCall</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (val !== <span class="literal">null</span>) <span class="title function_">resolve</span>(val);</span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="title function_">sleep</span>(interval).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="title function_">resolve</span>(<span class="title function_">poll</span>(retry - <span class="number">1</span>, interval));</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">poll</span>(<span class="number">6</span>, <span class="number">1000</span>).<span class="title function_">then</span>(<span class="variable language_">console</span>.<span class="property">log</span>); <span class="comment">// 输出 &#x27;value&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>这段逻辑的直觉性和可读性取决于阅读到该段代码的人对 <code>Promise</code> 的熟练程度，需要明白 <code>Promise.prototype.resolve</code> 是如何“扁平化” <code>Promise</code> 以及明白递归调用过程。对于我来说，写出这样一个函数，它的可读性并不是最好的。</p>
+<details><summary>可以通过 <code>setInterval</code> 来实现</summary><p>函数几乎都可以以另一种方式来编写。这是我的一个朋友 <a target="_blank" rel="noopener" href="https://twitter.com/jrsinclair">James</a> 编写的使用了 <code>setInterval</code> 的方式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">pollInterval</span> = (<span class="params">retry, interval</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> intervalToken, timeoutToken;</span><br><span class="line"></span><br><span class="line">    intervalToken = <span class="built_in">setInterval</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">      <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title function_">apiCall</span>();</span><br><span class="line">      <span class="keyword">if</span> (result !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="built_in">clearInterval</span>(intervalToken);</span><br><span class="line">        <span class="built_in">clearTimeout</span>(timeoutToken);</span><br><span class="line">        <span class="title function_">resolve</span>(result);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, interval);</span><br><span class="line"></span><br><span class="line">    timeoutToken = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">clearInterval</span>(intervalToken);</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="literal">null</span>);</span><br><span class="line">    &#125;, retry * interval);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></details>
+
+<h2 id="引入-async-await"><a href="#引入-async-await" class="headerlink" title="引入 async&#x2F;await"></a>引入 async&#x2F;await</h2><p>我们可以用 <code>async/await</code> 语法来重写上面的函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">poll</span>(<span class="params">retry, interval</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (retry &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">await</span> <span class="title function_">apiCall</span>().<span class="title function_">catch</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;&#125;); <span class="comment">// 为了简洁跳过错误处理</span></span><br><span class="line">    <span class="keyword">if</span> (value !== <span class="literal">null</span>) <span class="keyword">return</span> value;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">sleep</span>(interval);</span><br><span class="line">    retry--;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我想很多人会觉得上面的代码可读性更高，因为我们能够使用所有的常见的语法来处理异步操作，比如循环、 <code>try-catch</code> 。</p>
+<details><summary>递归方式</summary><p>然而，这并不是严格意义上的苹果与苹果的比较，因为我选择了一个递归解法来对比迭代解法。我们可以用递归重写上面的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">pollAsyncAwait</span> = <span class="keyword">async</span> (<span class="params">retry, interval</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (retry &lt; <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> value = <span class="keyword">await</span> <span class="title function_">apiCall</span>().<span class="title function_">catch</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> &#123;&#125;); <span class="comment">// 为了简洁跳过错误处理</span></span><br><span class="line">    <span class="keyword">if</span> (value !== <span class="literal">null</span>) <span class="keyword">return</span> value;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">sleep</span>(interval);</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">pollAsyncAwait</span>(retry - <span class="number">1</span>, interval);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></details>
+
+<p>这可能就是 <code>async/await</code> 的最大卖点 - 允许你以看起来同步的方式来编写异步代码。另一方面，这也可能是对 <code>async/await</code> 最常见的反对意见，关于这个话题，之后会聊到。</p>
+<p>顺带一提， <code>await</code> 甚至有正确的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence">运算符优先级</a>，这意味着 <code>await a + await b</code> 表示 <code>(await a) + (await b)</code> ，而不是 <code>await (a + await b)</code> 。</p>
+<h2 id="async-await-对同步和异步代码都提供了统一的经验"><a href="#async-await-对同步和异步代码都提供了统一的经验" class="headerlink" title="async&#x2F;await 对同步和异步代码都提供了统一的经验"></a>async&#x2F;await 对同步和异步代码都提供了统一的经验</h2><p>另一个 <code>async/await</code> 的优点是 <code>await</code> 会自动地把任何非 <code>Promise</code> （即没有 <code>thenable</code> 接口）对象 包装成 <code>Promise</code> 。 语义上 <code>await</code> 相当于 <code>Promise.resolve</code> ，这意味着你可以 <code>await</code> 任何东西</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fetchValue</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> val = <span class="keyword">await</span> <span class="title function_">fetchValue</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(val); <span class="comment">// 1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 👆 上面的代码相当于下面的代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(<span class="title function_">fetchValue</span>()).<span class="title function_">then</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(val); <span class="comment">// 1</span></span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<details><summary>注意这是一个浏览器相关的行为...</summary><p>把 <code>await foo</code> 和 <code>Promise.resolve(foo).then(...)</code> 画上等号并不是 100% 正确的。</p>
+<p>在 Chrome 73 之前， ECMA 规范把 <code>await foo</code> 转化为 <code>new Promise(resolve =&gt; resolve(p))</code> 。之后在这个 <a target="_blank" rel="noopener" href="https://github.com/tc39/ecma262/pull/1250">PR</a> 里修改了规范里的一处地方。但是直到现在，不是每个浏览器都遵守规范中的改变；截至本文编写之日， Safari 依然没有实现更新过后的规范。结果就是，在 Safari 和 Chrome 分别执行<a target="_blank" rel="noopener" href="https://gist.github.com/zhenghaohe/c90ec960b890eca60b7bd8008f856a70">这段代码段</a>会产生不同的结果。</p>
+</details>
+
+<p>如果我们直接调用 <code>fetchValue</code> 返回的数字 <code>1</code> 的 <code>then</code> 方法，就会产生如下错误：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fetchValue</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">fetchValue</span>().<span class="title function_">then</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(val);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// ❌ Uncaught TypeError: fetchValue(...).then is not a function</span></span><br></pre></td></tr></table></figure>
+
+<p>最终，<code>async</code> 函数返回的任何东西都总是是一个 <code>Promise</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>((<span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;)()); <span class="comment">// &#x27;[object Promise]&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="async-await-提供了更好的错误堆栈跟踪"><a href="#async-await-提供了更好的错误堆栈跟踪" class="headerlink" title="async&#x2F;await 提供了更好的错误堆栈跟踪"></a>async&#x2F;await 提供了更好的错误堆栈跟踪</h2><p>V8 工程师 <a target="_blank" rel="noopener" href="https://twitter.com/mathias">Mathias</a> 写了一篇 <a target="_blank" rel="noopener" href="https://mathiasbynens.be/notes/async-stack-traces">异步堆栈跟踪信息：为什么 await 胜过 Promise#then()</a> 的文章，介绍了相比 <code>Promise</code> ，在 <code>async/await</code> 下为什么引擎可以更好地捕获和存储堆栈跟踪信息。</p>
+<p>这里有一个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">bar</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;value&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;BEEP BEEP&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">foo</span>().<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(error.<span class="property">stack</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Error: BEEP BEEP</span></span><br><span class="line"><span class="comment">//     at bar (&lt;anonymous&gt;:7:9)</span></span><br><span class="line"><span class="comment">//     at foo (&lt;anonymous&gt;:2:9)</span></span><br><span class="line"><span class="comment">//     at &lt;anonymous&gt;:10:1</span></span><br></pre></td></tr></table></figure>
+
+<p><code>async</code> 版本正确地捕获了错误堆栈的跟踪信息。</p>
+<p>我们再来看一下 <code>Promise</code> 的版本：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">bar</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="string">&#x27;value&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;BEEP BEEP&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">foo</span>().<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(error.<span class="property">stack</span>));</span><br><span class="line"><span class="comment">// Error: BEEP BEEP  at &lt;anonymous&gt;:7:11</span></span><br></pre></td></tr></table></figure>
+
+<p>堆栈跟踪信息丢失了。把箭头函数改为具名函数，这种情况可以得到改善，但是仍然不够好：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">bar</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> <span class="string">&#x27;value&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">bar</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="keyword">function</span> <span class="title function_">thisWillThrow</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;BEEP BEEP&#x27;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">foo</span>().<span class="title function_">catch</span>(<span class="function">(<span class="params">error</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(error.<span class="property">stack</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Error: BEEP BEEP</span></span><br><span class="line"><span class="comment">//    at thisWillThrow (&lt;anonymous&gt;:7:11)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="对-async-await-普遍的反对意见"><a href="#对-async-await-普遍的反对意见" class="headerlink" title="对 async&#x2F;await 普遍的反对意见"></a>对 async&#x2F;await 普遍的反对意见</h2><p>我有了解到对 <code>async/await</code> 的两种普遍的反对意见。</p>
+<p>其一，当调用一个不必顺序执行的独立的异步函数时，即可以通过 <code>Promise.all</code> 正确地被处理时（如果我们使用宽松的术语的话，也可以叫做“并行”）， <code>async/await</code> 会成为一个自废武功的设计。</p>
+<p>这会让开发者对异步编程浅尝辄止，无法真正地了解 <code>Promise</code> 在幕后的工作原理。</p>
+<p>其二，这部分有些细微的差别。一些<a target="_blank" rel="noopener" href="https://dev.to/jesterxl/why-i-don-t-use-async-await-4amc">函数式编程热衷者</a>认为 <code>async/await</code> 会导致命令式编程。根据一位函数式开发者的观点，能够使用循环和 <code>try catch</code> 并不是好事，因为这些语法意味着副作用，并且鼓励不够理想的错误处理。</p>
+<p>我赞同这个论点。函数式开发者理所当然地关心他们所写程序的确定性。他们对自己的代码要有绝对的把握权。为了达到这个目的，引入一个带有类似 <a target="_blank" rel="noopener" href="https://folktale.origamitower.com/api/v2.3.0/en/folktale.result.html">Result</a> 类型的复杂的类型系统也是合理的。但我不认为 <code>async/await</code> 和函数式编程之间互相矛盾。我的朋友 <a target="_blank" rel="noopener" href="https://twitter.com/jrsinclair">James</a> ，一个熟练的函数式编程开发者，他说在 Haskell 语言中存在一个和 <code>async/await</code> 相等的特性 - <a target="_blank" rel="noopener" href="https://wiki.haskell.org/Keywords#do">Do 符号</a>特性。</p>
+<p>无论如何，我认为大多数人，包括我，函数编程只是一个后天养成的爱好（尽管我确实认为函数编程非常的酷，并且我也在慢慢地学习它）。由 <code>async/await</code> 提供的正常的控制流声明以及 <code>try catch</code> 的错误处理流程，对我们来说是极其有用的，在 JavaScript 中我们可以用它来编排复杂的异步操作。这正是为什么我说 “ <code>async/await</code> 只是一个语法糖” 这种说法是不够准确的。</p>
+<h2 id="延伸阅读"><a href="#延伸阅读" class="headerlink" title="延伸阅读"></a>延伸阅读</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://jrsinclair.com/articles/2019/how-to-run-async-js-in-parallel-or-sequential/">如何顺序或者并行执行 async 函数</a>。</li>
+<li>标题使用的“语法糖”这几个字在 Reddit 上也引发了一场有趣的<a target="_blank" rel="noopener" href="https://www.reddit.com/r/javascript/comments/wnli3o/on_syntactic_sugar/">讨论</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/2fbccc5e3b09" title="为什么 Async&#x2F;Await 不只是语法糖">https://prohibitorum.top/2fbccc5e3b09</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Promise/" rel="tag"># Promise</a>
+              <a href="/tags/Async-Await/" rel="tag"># Async/Await</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/7cf67a619937" rel="prev" title="在 JavaScript 中什么时候应该选择 Map 而不是 Object">
+                  <i class="fa fa-angle-left"></i> 在 JavaScript 中什么时候应该选择 Map 而不是 Object
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/7be15600c913" rel="next" title="记一次使用 nuxt3">
+                  记一次使用 nuxt3 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">422k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:34</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1677484217"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

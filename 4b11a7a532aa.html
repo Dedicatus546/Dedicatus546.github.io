@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言ECMAScript2019（es10）新特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript2019（es10）新特性">
+<meta property="og:url" content="https://prohibitorum.top/4b11a7a532aa">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言ECMAScript2019（es10）新特性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/23/20241223150808316.avif">
+<meta property="article:published_time" content="2024-12-23T16:06:35.000Z">
+<meta property="article:modified_time" content="2024-12-26T15:57:35.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/23/20241223150808316.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/4b11a7a532aa.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/4b11a7a532aa","path":"4b11a7a532aa.html","title":"ECMAScript2019（es10）新特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ECMAScript2019（es10）新特性 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-prototype-flat"><span class="nav-number">2.1.</span> <span class="nav-text">Array.prototype.flat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-prototype-flatMap"><span class="nav-number">2.2.</span> <span class="nav-text">Array.prototype.flatMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-fromEntries"><span class="nav-number">2.3.</span> <span class="nav-text">Object.fromEntries</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-prototype-trimStart-%E5%92%8C-String-prototype-trimEnd"><span class="nav-number">2.4.</span> <span class="nav-text">String.prototype.trimStart 和 String.prototype.trimEnd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#try-catch-%E7%9C%81%E7%95%A5%E5%BC%82%E5%B8%B8%E5%8F%98%E9%87%8F"><span class="nav-number">2.5.</span> <span class="nav-text">try-catch 省略异常变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Function-prototype-toString-%E6%94%B9%E8%BF%9B"><span class="nav-number">2.6.</span> <span class="nav-text">Function.prototype.toString 改进</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Symbol-prototype-description"><span class="nav-number">2.7.</span> <span class="nav-text">Symbol.prototype.description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96-JSON-stringify-%E5%AF%B9%E9%9D%9E%E6%B3%95-Unicode-%E5%AD%97%E7%AC%A6%E7%9A%84%E5%A4%84%E7%90%86"><span class="nav-number">2.8.</span> <span class="nav-text">优化 JSON.stringify 对非法 Unicode 字符的处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/4b11a7a532aa">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ECMAScript2019（es10）新特性 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript2019（es10）新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-23 16:06:35" itemprop="dateCreated datePublished" datetime="2024-12-23T16:06:35+00:00">2024-12-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-26 15:57:35" itemprop="dateModified" datetime="2024-12-26T15:57:35+00:00">2024-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ECMAScript2019（es10）新特性。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Array-prototype-flat"><a href="#Array-prototype-flat" class="headerlink" title="Array.prototype.flat"></a>Array.prototype.flat</h2><p>该函数可以帮助我们打平一个数组，即如果一个数组内存在数组元素，调用它就可以把该数组元素中的元素放到原数组内，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>]].<span class="title function_">flat</span>(); <span class="comment">// 输出 [1, 2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+<p>该方法不会修改原来的数组，在默认的情况下，它只会打平第一层的数组，即 <code>flat(1)</code> ，如果想要打平所有数组元素（无论多深），可以将参数设置为 <code>Number.MAX_SAFE_INTEGER</code> ，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>, [<span class="number">6</span>, <span class="number">7</span>, [<span class="number">8</span>, <span class="number">9</span>]]]].<span class="title function_">flat</span>(<span class="title class_">Number</span>.<span class="property">MAX_SAFE_INTEGER</span>); <span class="comment">// 输出 [1, 2, 3, 4, 5, 6, 7, 8, 9]</span></span><br></pre></td></tr></table></figure>
+
+<p>如果原数组内存在一些空值（empty 值），则 <code>flat</code> 会忽略这些值，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, , <span class="number">3</span>, , <span class="number">4</span>, [<span class="number">5</span>, , <span class="number">6</span>]].<span class="title function_">flat</span>(); <span class="comment">// 输出 [1, 3, 4, 5, 6]</span></span><br></pre></td></tr></table></figure>
+
+<p>这个忽略只会影响到打平的层数，比如默认打平一层，那么忽略这些空值只会在最外层和第一层，而第二层（即第一层内的数组元素）则不会受影响。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, , <span class="number">3</span>, , <span class="number">4</span>, [<span class="number">5</span>, , <span class="number">6</span>, [<span class="number">7</span>, , <span class="number">8</span>]]].<span class="title function_">flat</span>(); <span class="comment">// 输出 [1, 3, 4, 5, 6, [7, , 8]]</span></span><br></pre></td></tr></table></figure>
+
+<p>可以理解为<strong>浅拷贝</strong>了一个数组，如果某个数组元素不会被打平，那么它只会被简单地赋值过来，也就是原来是什么样的，结果里面就是什么样的。</p>
+<h2 id="Array-prototype-flatMap"><a href="#Array-prototype-flatMap" class="headerlink" title="Array.prototype.flatMap"></a>Array.prototype.flatMap</h2><p>这个函数为 <code>flat</code> 和 <code>map</code> 的结合。要注意，这里是先 <code>map</code> 再 <code>flat</code> ，而不是先 <code>flat</code> 再 <code>map</code> ，很容易被函数名给诱导到，它的参数和 <code>map</code> 一样，同时它的 <code>flat</code> 只打平一层，即 <code>[].flatMap()</code> 可以等效于 <code>[].map().flat()</code> 。例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="title function_">flatMap</span>(<span class="function"><span class="params">item</span> =&gt;</span> [item + item, item * item]); <span class="comment">// 输出 [2, 1, 4, 4, 6, 9, 8, 16]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上面的等效于下面</span></span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> [item + item, item * item]).<span class="title function_">flat</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// [1, 2, 3, 4].map(item =&gt; [item + item, item * item]) 的值为 [[2, 1], [4, 4], [6, 9], [8, 16]]</span></span><br><span class="line"><span class="comment">// 然后</span></span><br><span class="line"><span class="comment">// [[2, 1], [4, 4], [6, 9], [8, 16]].flat() 的值为 [2, 1, 4, 4, 6, 9, 8, 16]</span></span><br></pre></td></tr></table></figure>
+
+<p>PS： <code>Array</code> 上的迭代的方法，比如 <code>forEach</code> ， <code>map</code> ， <code>filter</code> 等，都存在第二个参数，这个参数可以指定回调的 this 的值，不过一般我们都是用箭头函数，所以这个参数基本用不到。</p>
+<h2 id="Object-fromEntries"><a href="#Object-fromEntries" class="headerlink" title="Object.fromEntries"></a>Object.fromEntries</h2><p>这个方法为 <code>Object.entries</code> 的逆操作，它的参数为一个可迭代的对象，可迭代对象的定义可以在 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Iteration_protocols#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%8D%8F%E8%AE%AE">MDN</a> 上查看。一般而言，我们基本上传入 map 或者数组，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="title function_">fromEntries</span>([[<span class="string">&quot;a&quot;</span>, <span class="number">1</span>], [<span class="string">&quot;b&quot;</span>, <span class="number">2</span>]]); <span class="comment">// 输出 &#123; a: 1, b: 2 &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line">map.<span class="title function_">set</span>(<span class="string">&quot;a&quot;</span>, <span class="number">1</span>);</span><br><span class="line">map.<span class="title function_">set</span>(<span class="string">&quot;b&quot;</span>, <span class="number">2</span>);</span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">fromEntries</span>(map); <span class="comment">// 输出 &#123; a: 1, b: 2 &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="String-prototype-trimStart-和-String-prototype-trimEnd"><a href="#String-prototype-trimStart-和-String-prototype-trimEnd" class="headerlink" title="String.prototype.trimStart 和 String.prototype.trimEnd"></a>String.prototype.trimStart 和 String.prototype.trimEnd</h2><p>这个方法为 <code>String.prototype.trim</code> 的细化，默认情况下， <code>trim</code> 会移除开头和结尾的空格，而 <code>trimStart</code> 为移除开头的空格， <code>trimEnd</code> 为移除结尾的空格，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;  1234   &quot;</span>.<span class="title function_">trim</span>(); <span class="comment">// 输出 &quot;1234&quot;</span></span><br><span class="line"><span class="string">&quot;  1234   &quot;</span>.<span class="title function_">trimStart</span>(); <span class="comment">// 输出 &quot;1234   &quot;</span></span><br><span class="line"><span class="string">&quot;  1234   &quot;</span>.<span class="title function_">trimEnd</span>(); <span class="comment">// 输出 &quot;   1234&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="try-catch-省略异常变量"><a href="#try-catch-省略异常变量" class="headerlink" title="try-catch 省略异常变量"></a>try-catch 省略异常变量</h2><p>这个特性可以忽略 <code>catch</code> 的参数，之前，我们必须声明异常变量，即：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// 一些可能产生异常的操作</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (e <span class="comment">/* 这里必须声明异常变量 */</span>) &#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而这个特性则可以让我们省略异常变量，即：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// 一些可能产生异常的操作</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">  <span class="comment">// 无需声明异常变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个特性只能说是聊胜于无，少写了几个字符，<del>按代码量考核的慎用</del>。</p>
+<h2 id="Function-prototype-toString-改进"><a href="#Function-prototype-toString-改进" class="headerlink" title="Function.prototype.toString 改进"></a>Function.prototype.toString 改进</h2><p>现在 <code>Function.prototype.toString</code> 方法会完整返回源码，包括注释，以及空格，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> fn <span class="comment">/* 函数名为 fn */</span> () &#123;</span><br><span class="line">  <span class="comment">// 函数的内容</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn.<span class="title function_">toString</span>(); <span class="comment">// 输出 &#x27;function fn /* 函数名为 fn */ () &#123;\n  // 函数的内容\n&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>又是一个看起来有点鸡肋的特性。和日常搬砖没什么关系。</p>
+<h2 id="Symbol-prototype-description"><a href="#Symbol-prototype-description" class="headerlink" title="Symbol.prototype.description"></a>Symbol.prototype.description</h2><p>通过 Symbol 对象的 <code>description</code> 属性，可以访问到该对象的描述。</p>
+<p>不过这里可能有小伙伴就有疑问了：不是哥们，这个属性放在 <code>prototype</code> 上，那不同的 Symbol 不就共享了同一个 <code>description</code> 吗🧐？</p>
+<p>没错，这也是我刚开始的疑问，经过一番查找后，我找到了官方的解释，其实这个 <code>Symbol.prototype.description</code> 它是一个访问器属性，也就是它是一个有 getter 但是没 setter 的属性。在规范上我们可以看到对他的定义：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/23/20241223150808316.avif"></p>
+<p>可以看到，它的取值是根据 this 来确定的，这样就可以正确区分不同的 Symbol 对象，对于一个 getter ，你可以理解为就是每当读取它的时候，它会执行一段逻辑来获取值，就有点类似调用函数，不过它看起来跟一个属性一样。</p>
+<p>在理解这个问题之后，使用它也会变得容易了，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> s1 = <span class="title class_">Symbol</span>(<span class="string">&quot;描述1&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> s2 = <span class="title class_">Symbol</span>(<span class="string">&quot;描述2&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1.<span class="property">description</span>; <span class="comment">// 输出 &quot;描述1&quot;</span></span><br><span class="line">s2.<span class="property">description</span>; <span class="comment">// 输出 &quot;描述2&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>它和 <code>Symbol.prototype.toString</code> 的区别就是不会被 <code>&quot;Symbol()&quot;</code> 包住，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> s1 = <span class="title class_">Symbol</span>(<span class="string">&quot;描述1&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1.<span class="property">description</span>; <span class="comment">// 输出 &quot;描述1&quot;</span></span><br><span class="line">s1.<span class="title function_">toString</span>(); <span class="comment">// 输出 &quot;Symbol(描述1)&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="优化-JSON-stringify-对非法-Unicode-字符的处理"><a href="#优化-JSON-stringify-对非法-Unicode-字符的处理" class="headerlink" title="优化 JSON.stringify 对非法 Unicode 字符的处理"></a>优化 JSON.stringify 对非法 Unicode 字符的处理</h2><p>这个特性是为了让 <code>JSON.stringify</code> 在遇到复杂字符，也就是超出 BMP （基本多文种）平面时，正确处理不合法的 Unicode 字符，比如单独的代理对。</p>
+<p>可以简单理解为更好地支持 Unicode 字符。比如可以在 node10 和 node23 下执行，下面的代码，可以发现 node10 输出会是乱码，而 node23 正确输出（node12 支持了 es2019 ）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 合法的 Unicode 代理对，下面两个是等价的。</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(<span class="string">&quot;𝌆&quot;</span>)); <span class="comment">// node10 乱码 node23 输出 &quot;𝌆&quot;</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(<span class="string">&quot;\uD834\uDF06&quot;</span>)); <span class="comment">// node10 乱码 node23 输出 &quot;𝌆&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 不合法的 Unicode 代理对</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(<span class="string">&quot;\uDF06\uD834&quot;</span>)); <span class="comment">// node10 乱码 node23 输出 &quot;\udf06\ud834&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>ECMAScript 规范的补全计划进行中…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/4b11a7a532aa" title="ECMAScript2019（es10）新特性">https://prohibitorum.top/4b11a7a532aa</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/b685130a8579" rel="prev" title="记录 uniapp 微信小程序获取定位流程">
+                  <i class="fa fa-angle-left"></i> 记录 uniapp 微信小程序获取定位流程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/52175647e20f" rel="next" title="ECMAScript2020（es11）新特性">
+                  ECMAScript2020（es11）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">422k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:34</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1734011336"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

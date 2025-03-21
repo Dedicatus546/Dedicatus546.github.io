@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Cloning Objects in JavaScript, the Modern Way">
+<meta property="og:type" content="article">
+<meta property="og:title" content="以现代的方式在JavaScript中进行深克隆（译）">
+<meta property="og:url" content="https://prohibitorum.top/96c76ddd3263">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Cloning Objects in JavaScript, the Modern Way">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F03f2036674724006ae64d9bc4d07ab6d?format=webp&width=1600">
+<meta property="og:image" content="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Faa5ab14fd21741bf8e327dd6e6fb68b1?format=webp&width=1600">
+<meta property="og:image" content="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F5dbbee190753414bb31b720059a501db?format=webp&width=2000">
+<meta property="og:image" content="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F1fdbc5b0826240e487a4980dfee69661?format=webp&width=2000">
+<meta property="article:published_time" content="2023-12-26T22:10:53.000Z">
+<meta property="article:modified_time" content="2023-12-26T22:10:53.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Deep Clone">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F03f2036674724006ae64d9bc4d07ab6d?format=webp&width=1600">
+
+
+<link rel="canonical" href="https://prohibitorum.top/96c76ddd3263.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/96c76ddd3263","path":"96c76ddd3263.html","title":"以现代的方式在JavaScript中进行深克隆（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>以现代的方式在JavaScript中进行深克隆（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8%E5%AF%B9%E8%B1%A1%E5%B1%95%E5%BC%80%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">为什么不用对象展开？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-JSON-parse-JSON-stringify-x-%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">为什么不用 JSON.parse(JSON.stringify(x)) ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8-cloneDeep-%EF%BC%9F"><span class="nav-number">2.3.</span> <span class="nav-text">为什么不用 _.cloneDeep ？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#structuredClone-%E4%B8%8D%E8%83%BD%E5%85%8B%E9%9A%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.4.</span> <span class="nav-text">structuredClone 不能克隆什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E6%97%A0%E6%B3%95%E8%A2%AB%E5%85%8B%E9%9A%86"><span class="nav-number">2.4.1.</span> <span class="nav-text">函数无法被克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM-%E8%8A%82%E7%82%B9%E6%97%A0%E6%B3%95%E8%A2%AB%E5%85%8B%E9%9A%86"><span class="nav-number">2.4.2.</span> <span class="nav-text">DOM 节点无法被克隆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E6%8F%8F%E8%BF%B0%E7%AC%A6%EF%BC%8C-setter-%E5%92%8C-getter"><span class="nav-number">2.4.3.</span> <span class="nav-text">属性描述符， setter 和 getter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%8E%9F%E5%9E%8B"><span class="nav-number">2.4.4.</span> <span class="nav-text">对象原型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%80%E6%9C%89%E6%94%AF%E6%8C%81%E5%85%8B%E9%9A%86%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.5.</span> <span class="nav-text">所有支持克隆的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#JS-%E5%86%85%E5%BB%BA%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.5.1.</span> <span class="nav-text">JS 内建类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.5.2.</span> <span class="nav-text">错误类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Web-API-%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.4.5.3.</span> <span class="nav-text">Web&#x2F;API 类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%92%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E6%94%AF%E6%8C%81%E6%83%85%E5%86%B5"><span class="nav-number">2.4.6.</span> <span class="nav-text">浏览器和运行时的支持情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">2.5.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E6%88%91"><span class="nav-number">2.6.</span> <span class="nav-text">关于我</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/96c76ddd3263">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="以现代的方式在JavaScript中进行深克隆（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          以现代的方式在JavaScript中进行深克隆（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-12-26 22:10:53" itemprop="dateCreated datePublished" datetime="2023-12-26T22:10:53+00:00">2023-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%91%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">译文</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://www.builder.io/blog/structured-cloneDeep">Cloning Objects in JavaScript, the Modern Way</a></p>
+<span id="more"></span>
+
+<p><img data-src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F03f2036674724006ae64d9bc4d07ab6d?format=webp&width=1600"></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>你知道现在在 JavaScript 中已经有一个原生的方法可以深度克隆对象了吗？</p>
+<p>没错， JavaScript 的运行时内建了这个方法，就是 <code>structuredClone</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> calendarEvent = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&quot;Builder.io Conf&quot;</span>,</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">123</span>),</span><br><span class="line">  <span class="attr">attendees</span>: [<span class="string">&quot;Steve&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 😍</span></span><br><span class="line"><span class="keyword">const</span> copied = <span class="title function_">structuredClone</span>(calendarEvent)</span><br></pre></td></tr></table></figure>
+
+<p>你可能留意到了在上面的例子中，我们不仅拷贝了一个对象，而且包含了嵌套的数组，甚至是一个 <code>Date</code> 对象。</p>
+<p>对这些类型的克隆也和预期一致：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">copied.<span class="property">attendees</span> <span class="comment">// [&quot;Steve&quot;]</span></span><br><span class="line">copied.<span class="property">date</span> <span class="comment">// Date: Wed Dec 31 1969 16:00:00</span></span><br><span class="line">cocalendarEvent.<span class="property">attendees</span> === copied.<span class="property">attendees</span> <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>没错，但 <code>structuredClone</code> 不仅能支持上面的情况，还能：</p>
+<ul>
+<li>克隆无限嵌套的对象或者数组。</li>
+<li>克隆循环引用。</li>
+<li>克隆各种各样的 JavaScript 类型，比如 <code>Date</code> ， <code>Set</code> ， <code>Map</code> ， <code>Error</code> ， <code>RegExp</code> ， <code>ArrayBuffer</code> ， <code>Blob</code> ， <code>File</code> ， <code>ImageData</code> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#supported_types">等等</a>。</li>
+<li>转移任何<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects">可以转移的对象</a>。</li>
+</ul>
+<p>所以，拷贝下面的例子的对象虽然有点疯狂，但 <code>structuredClone</code> 却能按预期工作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> kitchenSink = &#123;</span><br><span class="line">  <span class="attr">set</span>: <span class="keyword">new</span> <span class="title class_">Set</span>([<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>]),</span><br><span class="line">  <span class="attr">map</span>: <span class="keyword">new</span> <span class="title class_">Map</span>([[<span class="number">1</span>, <span class="number">2</span>]]),</span><br><span class="line">  <span class="attr">regex</span>: <span class="regexp">/foo/</span>,</span><br><span class="line">  <span class="attr">deep</span>: &#123; <span class="attr">array</span>: [ <span class="keyword">new</span> <span class="title class_">File</span>(someBlobData, <span class="string">&#x27;file.txt&#x27;</span>) ] &#125;,</span><br><span class="line">  <span class="attr">error</span>: <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Hello!&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line">kitchenSink.<span class="property">circular</span> = kitchenSink</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 完美，完全深度地复制</span></span><br><span class="line"><span class="keyword">const</span> clonedSink = <span class="title function_">structuredClone</span>(kitchenSink)</span><br></pre></td></tr></table></figure>
+
+<h2 id="为什么不用对象展开？"><a href="#为什么不用对象展开？" class="headerlink" title="为什么不用对象展开？"></a>为什么不用对象展开？</h2><p>要注意到我们谈论的是深度复制。如果你只是需要一个浅复制，及不用复制嵌套的对象或者数据，那我们就可以使用对象展开：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> simpleEvent = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&quot;Builder.io Conf&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ✅ 正常工作，这里并没有嵌套的对象或者数组</span></span><br><span class="line"><span class="keyword">const</span> shallowCopy = &#123; ...calendarEvent &#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者你更喜欢其他的方式：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> shallowCopy = <span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, simpleEvent)</span><br><span class="line"><span class="keyword">const</span> shallowCopy = <span class="title class_">Object</span>.<span class="title function_">create</span>(simpleEvent)</span><br></pre></td></tr></table></figure>
+
+<p>但是一旦我们需要复制嵌套的项的时候，我们就会遇到问题：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> calendarEvent = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&quot;Builder.io Conf&quot;</span>,</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">123</span>),</span><br><span class="line">  <span class="attr">attendees</span>: [<span class="string">&quot;Steve&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> shallowCopy = &#123; ...calendarEvent &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 🚩  &quot;Bob&quot; 添加到了复制的对象和原始的对象中，它们是同一个引用</span></span><br><span class="line">shallowCopy.<span class="property">attendees</span>.<span class="title function_">push</span>(<span class="string">&quot;Bob&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 🚩 更新了复制的对象和原始的对象的 date ，它们是同一个引用</span></span><br><span class="line">shallowCopy.<span class="property">date</span>.<span class="title function_">setTime</span>(<span class="number">456</span>)</span><br></pre></td></tr></table></figure>
+
+<p>就如你看到的那样，我们无法通过对象展开来完全拷贝一个这样的对象。</p>
+<p>嵌套的日期对象或者数据在两者间仍然是一个共享的引用，如果我们在编辑时认为这些操作只是更新了复制的 <code>calendarEvent</code> 对象的话，那么会带来严重的问题。</p>
+<h2 id="为什么不用-JSON-parse-JSON-stringify-x-？"><a href="#为什么不用-JSON-parse-JSON-stringify-x-？" class="headerlink" title="为什么不用 JSON.parse(JSON.stringify(x)) ？"></a>为什么不用 <code>JSON.parse(JSON.stringify(x))</code> ？</h2><p>是的，这种方式实际上是一个很棒的方式，它的性能出奇地好，但是存在一些 <code>structuredClone</code> 已经解决的问题。</p>
+<p>比如下面这个例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> calendarEvent = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&quot;Builder.io Conf&quot;</span>,</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">123</span>),</span><br><span class="line">  <span class="attr">attendees</span>: [<span class="string">&quot;Steve&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 🚩 JSON.stringify 把 date 转成一个字符串了</span></span><br><span class="line"><span class="keyword">const</span> problematicCopy = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(calendarEvent))</span><br></pre></td></tr></table></figure>
+
+<p>如果我们打印 <code>problematicCopy</code> ，我们会看到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  title: &quot;Builder.io Conf&quot;,</span><br><span class="line">  date: &quot;1970-01-01T00:00:00.123Z&quot;,</span><br><span class="line">  attendees: [&quot;Steve&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这不是我们想要的！ <code>date</code> 字段应该是一个 <code>Date</code> 对象，而不是一个字符串。</p>
+<p>出现这种情况的原因是 <code>JSON.stringify</code> 只能处理基本的对象、数组和基本的类型。任何其他的类型会以难以预测的方式进行处理。就比如 <code>Date</code> 会被转化成字符串，但一个 <code>Set</code> 对象就会被简单地转化为 <code>&#123;&#125;</code> 。</p>
+<p><code>JSON.stringify</code> 甚至会完全忽略某些东西，比如 <code>undefined</code> 或者函数。</p>
+<p>比如，如果我们使用 <code>JSON.stringify</code> 拷贝 <code>kitchenSink</code> 变量的话：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> kitchenSink = &#123;</span><br><span class="line">  <span class="attr">set</span>: <span class="keyword">new</span> <span class="title class_">Set</span>([<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>]),</span><br><span class="line">  <span class="attr">map</span>: <span class="keyword">new</span> <span class="title class_">Map</span>([[<span class="number">1</span>, <span class="number">2</span>]]),</span><br><span class="line">  <span class="attr">regex</span>: <span class="regexp">/foo/</span>,</span><br><span class="line">  <span class="attr">deep</span>: &#123; <span class="attr">array</span>: [ <span class="keyword">new</span> <span class="title class_">File</span>(someBlobData, <span class="string">&#x27;file.txt&#x27;</span>) ] &#125;,</span><br><span class="line">  <span class="attr">error</span>: <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Hello!&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> veryProblematicCopy = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(kitchenSink))</span><br></pre></td></tr></table></figure>
+
+<p>我们会得到：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;set&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;map&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;regex&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;deep&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;array&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>呃。</p>
+<p>哦对了，我们还必须删除我们最初需要的循环引用，因为 <code>JSON.stringify</code> 在遇到它们时会简单地抛出错误。</p>
+<p>所以，如果我们的需求符合它的功能，那么这种方式很棒。我们可以用 <code>structuredClone</code> 来做很多 <code>JSON.stringify</code> 做不到的事情。</p>
+<h2 id="为什么不用-cloneDeep-？"><a href="#为什么不用-cloneDeep-？" class="headerlink" title="为什么不用 _.cloneDeep ？"></a>为什么不用 <code>_.cloneDeep</code> ？</h2><p>如今， Lodash 的 <code>cloneDeep</code> 函数已经是解决该问题的一个非常常见的方法。</p>
+<p>事实上它也按预期工作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cloneDeep <span class="keyword">from</span> <span class="string">&#x27;lodash/cloneDeep&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> calendarEvent = &#123;</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&quot;Builder.io Conf&quot;</span>,</span><br><span class="line">  <span class="attr">date</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(<span class="number">123</span>),</span><br><span class="line">  <span class="attr">attendees</span>: [<span class="string">&quot;Steve&quot;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clonedEvent = <span class="title function_">cloneDeep</span>(calendarEvent)</span><br></pre></td></tr></table></figure>
+
+<p>但是这会有一个警告。根据 IDE 里的 <a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost">Import Cost</a> 插件打印的导入占用大小，这一个函数压缩后的大小为 17.4kb （压缩后为 5.3kb ）：</p>
+<p><img data-src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Faa5ab14fd21741bf8e327dd6e6fb68b1?format=webp&width=1600"></p>
+<p>假设你只是需要导入这个函数，如果你使用了更加常见的导入方式，那么你不会意识到 Tree-Shaking 并不总是按你的期望工作，你可能会在不经意间为这个函数导入多达 <a target="_blank" rel="noopener" href="https://bundlephobia.com/package/lodash@4.17.21">25kb</a> 的内容。</p>
+<p><img data-src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F5dbbee190753414bb31b720059a501db?format=webp&width=2000"></p>
+<p>虽然对任何人来说这都不算“世界末日”，但是在我们的例子中根本没有必要，因为浏览器早已内置了 <code>structuredClone</code> 了。</p>
+<h2 id="structuredClone-不能克隆什么？"><a href="#structuredClone-不能克隆什么？" class="headerlink" title="structuredClone 不能克隆什么？"></a><code>structuredClone</code> 不能克隆什么？</h2><h3 id="函数无法被克隆"><a href="#函数无法被克隆" class="headerlink" title="函数无法被克隆"></a>函数无法被克隆</h3><p>尝试克隆函数则会抛出一个 <code>DataCloneError</code> 异常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 🚩 错误！</span></span><br><span class="line"><span class="title function_">structuredClone</span>(&#123; <span class="attr">fn</span>: <span class="function">() =&gt;</span> &#123; &#125; &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="DOM-节点无法被克隆"><a href="#DOM-节点无法被克隆" class="headerlink" title="DOM 节点无法被克隆"></a>DOM 节点无法被克隆</h3><p>尝试克隆 DOM 节点也会抛出一个 <code>DataCloneError</code> 异常：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 🚩 错误！</span></span><br><span class="line"><span class="title function_">structuredClone</span>(&#123; <span class="attr">el</span>: <span class="variable language_">document</span>.<span class="property">body</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="属性描述符，-setter-和-getter"><a href="#属性描述符，-setter-和-getter" class="headerlink" title="属性描述符， setter 和 getter"></a>属性描述符， setter 和 getter</h3><p>类似元数据之类的特性都无法被克隆。</p>
+<p>比如，对于一个 getter ，克隆的是它的返回值，而不是 getter 函数自身（或者任何其他的属性元数据）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">structuredClone</span>(&#123; <span class="keyword">get</span> <span class="title function_">foo</span>() &#123; <span class="keyword">return</span> <span class="string">&#x27;bar&#x27;</span> &#125; &#125;)</span><br><span class="line"><span class="comment">// Becomes: &#123; foo: &#x27;bar&#x27; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="对象原型"><a href="#对象原型" class="headerlink" title="对象原型"></a>对象原型</h3><p>原型链不会被遍历或者是复制。所以如果你克隆一个 <code>MyClass</code> 的实例，克隆后的对象不再是 <code>MyClass</code> 的一个实例（但该类所有合法的属性都会被克隆）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> &#123; </span><br><span class="line">  foo = <span class="string">&#x27;bar&#x27;</span> </span><br><span class="line">  <span class="title function_">myMethod</span>(<span class="params"></span>) &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> myClass = <span class="keyword">new</span> <span class="title class_">MyClass</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> cloned = <span class="title function_">structuredClone</span>(myClass)</span><br><span class="line"><span class="comment">// Becomes: &#123; foo: &#x27;bar&#x27; &#125;</span></span><br><span class="line"></span><br><span class="line">cloned <span class="keyword">instanceof</span> myClass <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="所有支持克隆的类型"><a href="#所有支持克隆的类型" class="headerlink" title="所有支持克隆的类型"></a>所有支持克隆的类型</h3><p>简单地讲，任何未在下面列表的类型都无法被克隆：</p>
+<h4 id="JS-内建类型"><a href="#JS-内建类型" class="headerlink" title="JS 内建类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#javascript_types">JS 内建类型</a></h4><p><code>Array</code> ， <code>ArrayBuffer</code> ， <code>Boolean</code> ， <code>DataView</code> ， <code>Date</code> ， <code>Error</code> 类型 (下文有详细的列表)， <code>Map</code> ， <code>Object</code> 类型的简单对象 (比如，字面对象) ， <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#primitive_values">基本类型</a>，但要除去 <code>symbol</code> (也就是包括 <code>number</code> ， <code>string</code> ， <code>null</code> ， <code>undefined</code> ， <code>boolean</code> ， <code>BigInt</code>)， <code>RegExp</code> ， <code>Set</code> ， <code>TypedArray</code> 。</p>
+<h4 id="错误类型"><a href="#错误类型" class="headerlink" title="错误类型"></a>错误类型</h4><p><code>Error</code> ， <code>EvalError</code> ， <code>RangeError</code> ， <code>ReferenceError</code> ， <code>SyntaxError</code> ， <code>TypeError</code> ， <code>URIError</code> 。</p>
+<h4 id="Web-API-类型"><a href="#Web-API-类型" class="headerlink" title="Web&#x2F;API 类型"></a><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm#webapi_types">Web&#x2F;API 类型</a></h4><p><code>AudioData</code> ， <code>Blob</code> ， <code>CryptoKey</code> ， <code>DOMException</code> ， <code>DOMMatrix</code> ， <code>DOMMatrixReadOnly</code> ， <code>DOMPoint</code> ， <code>DomQuad</code> ， <code>DomRect</code> ， <code>File</code> ， <code>FileList</code> ， <code>FileSystemDirectoryHandle</code> ， <code>mFileHandle</code> ， <code>FileSystemHandle</code> ， <code>ImageBitmap</code> ， <code>ImageData</code> ， <code>RTCCertificate</code> ， <code>VideoFrame</code> 。</p>
+<h3 id="浏览器和运行时的支持情况"><a href="#浏览器和运行时的支持情况" class="headerlink" title="浏览器和运行时的支持情况"></a>浏览器和运行时的支持情况</h3><p>这一节就是大家最关心的部分了，主流的浏览器，以及 Node 和 Deno ，都支持 <code>structuredClone</code> 。</p>
+<p>不过要留意 Web Workers 中支持情况：</p>
+<p><img data-src="https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F1fdbc5b0826240e487a4980dfee69661?format=webp&width=2000"></p>
+<p>来源：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/structuredClone">MDN</a> 。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>虽然已经过去了很长的时间了，但我们最终有了 <code>structuredClone</code> ，可以在 JavaScript 中轻松地克隆对象。</p>
+<h2 id="关于我"><a href="#关于我" class="headerlink" title="关于我"></a>关于我</h2><p>我是 <a target="_blank" rel="noopener" href="https://twitter.com/Steve8708?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor">Steve</a> ， <a target="_blank" rel="noopener" href="https://www.builder.io/">Builder.io</a> 的 CEO 。</p>
+<p>我们提供了一种拖拽组件的方式，通过这种方式来在你的站点或者 APP 上创建页面和其他 CMS 内容。</p>
+<p>你可以<a target="_blank" rel="noopener" href="https://www.builder.io/blog/headless-cms-workflow">点击此处</a>详细了解如何改进你的工作流。</p>
+<p>你会觉得有趣或者有用的。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>深拷贝的话，我一般都用 <code>JSON.parse(JSON.stringify(obj))</code> ，很多时候对象的结构基本都是字面对象，这种方式基本上符合要求了，而且兼容性好，不用引入外部的包</p>
+<p><code>structuredClone</code> 一直没用过，因为我都不知道有这个 API ，以后可以在代码里用一用了~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/96c76ddd3263" title="以现代的方式在JavaScript中进行深克隆（译）">https://prohibitorum.top/96c76ddd3263</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Deep-Clone/" rel="tag"># Deep Clone</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d8804bf6ed5f" rel="prev" title="TypeScript 5.3（译）">
+                  <i class="fa fa-angle-left"></i> TypeScript 5.3（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/a72ebe7efc58" rel="next" title="TypeScript 5.4（译）">
+                  TypeScript 5.4（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">422k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:34</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1703599853"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
