@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="尝试配置webpack来编译项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="尝试配置webpack来编译项目">
+<meta property="og:url" content="https://prohibitorum.top/aa08a7e76fb8">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="尝试配置webpack来编译项目">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/zsxLIgkJSYojhZX.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/3Ss1vg7LDIq5xu4.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/DLU47gWtMroTlGP.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/xh8iRrynG3DS25K.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/dGQyzHqAuBpCFV3.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/MJa45x9TvrP6bIB.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/rEvu5yFk4C2LQNz.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/OqyPCBw3SgWzR2U.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/25/PXd1cqVglY6eQKp.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/AHoTnwLSY2GIuyO.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/FycMgfjRqCkGTuV.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/1ifwxKroYpAatuz.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/4zjdsZp2oKnuN8e.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/geRVMri9ytvdm5U.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/MbOrActZhipkS1E.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/mtnzJy9APc8RG6g.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/uRQ2dWvBKnXU1HY.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/26/A4Kamzi5xtIEDfH.png">
+<meta property="article:published_time" content="2020-11-25T15:09:09.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/25/zsxLIgkJSYojhZX.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/aa08a7e76fb8.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/aa08a7e76fb8","path":"aa08a7e76fb8.html","title":"尝试配置webpack来编译项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>尝试配置webpack来编译项目 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">1.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#entry"><span class="nav-number">1.1.</span> <span class="nav-text">entry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#output"><span class="nav-number">1.2.</span> <span class="nav-text">output</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#loader"><span class="nav-number">1.3.</span> <span class="nav-text">loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#plugin"><span class="nav-number">1.4.</span> <span class="nav-text">plugin</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/aa08a7e76fb8">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="尝试配置webpack来编译项目 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          尝试配置webpack来编译项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-25 15:09:09" itemprop="dateCreated datePublished" datetime="2020-11-25T15:09:09+00:00">2020-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>尝试配置webpack来编译项目</p>
+<span id="more"></span>
+
+<p>主要是之前的两个项目，后台管理那个用的<code>react-cli</code>，官网那个用的<code>vue-cli</code>，基本不用写到和<code>webpack</code>有关的配置。</p>
+<p>（官网那个写了点，不过是在<code>vue.config.js</code>文件内进行编写的，文件内其实也有属性可以直接编写原生的<code>webpack</code>配置）。</p>
+<p>本文主要简单写写<code>webpack</code>的一些常用的配置…，当然，这也是我第一次直接使用<code>webpack</code>来编译项目。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/">webpack 英文官网</a></p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.webpackjs.com/">webpack 中文官网</a></p>
+</blockquote>
+<p>可以选择直接在官网学习，英语 ok 的直接英文文档，像我这种英语半吊子的，两者结合着看，不懂翻一下，顺便学下英语…</p>
+<p>不过还是强烈建议英文文档，中文文档有些地方更新不及时好像…</p>
+<p><code>webpack</code>可以理解为一个打包器，可以把分散在不同位置的资源（<code>js</code>，<code>css</code>，<code>jpg</code>，<code>ts</code>等等）<code>bundle</code>成一个输出的文件，首页的图很好地表明了<code>webpack</code>的作用。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/zsxLIgkJSYojhZX.png"></p>
+<p>即使是顶破天的技术，归根结底基本是要编译成<code>js</code>，<code>html</code>，<code>css</code>以及其他的静态资源（<code>static assets</code>），因为浏览器就只认这个欸…</p>
+<p>目前 webpack 的版本在 5（2020 年 10 月 10 号发布的），下面的链接为关于新版<code>webpack</code>的一些描述。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://webpack.js.org/blog/2020-10-10-webpack-5-release/">Webpack 5 release (2020-10-10)</a></p>
+</blockquote>
+<p>似乎写的有点偏，ok，不多 bb，直接上代码就完事。</p>
+<p>首先，需要建一个<code>node</code>的项目，使用<code>yarn init</code>来创建（其实就是初始化个<code>package.json</code>文件）。</p>
+<p>创建完差不多是下面这样的（<code>index.js</code>文件是我自己添加的，现在是一个空的文件）。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/3Ss1vg7LDIq5xu4.png"></p>
+<p>现在我们全局装下<code>webpack</code>，使用<code>yarn global add webpack</code>就可以安装最新版的<code>webpack</code>了。</p>
+<p>可以用<code>webpack -v</code>看下版本，如果第一次装的话，<code>webpack</code>还会提示你安装<code>webpack-cli</code>，按照提示安装就可以了。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/DLU47gWtMroTlGP.png"></p>
+<p>接下来就正式开始编写代码了。</p>
+<p>我们现在<code>index.js</code>写个简单的<code>console.log</code>输出。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/xh8iRrynG3DS25K.png"></p>
+<p>接下来编写<code>webpack</code>的核心配置代码<code>webpack.config.js</code>。</p>
+<p>在编写配置代码之前，我们需要简单的理解 webpack 中的两个配置属性。</p>
+<h2 id="entry"><a href="#entry" class="headerlink" title="entry"></a><code>entry</code></h2><blockquote>
+<p>An entry point indicates which module <code>webpack</code> should use to begin building out its internal dependency graph. <code>webpack</code> will figure out which other modules and libraries that entry point depends on (directly and indirectly).<br>By default its value is <code>./src/index.js</code>, but you can specify a different (or multiple entry points) by setting an entry property in the webpack configuration. —— <a target="_blank" rel="noopener" href="https://webpack.js.org/concepts/#entry">entry - webpack</a></p>
+</blockquote>
+<p>一个入口节点表明<code>webpack</code>应该以哪个模块来开始建立它内部的依赖网，<code>webpack</code>会弄清楚入口节点依赖了哪些库或者模块（直接依赖或者间接依赖）<br>默认情况下的值为<code>./src/index.js</code>（也就是当前文件夹下的<code>src</code>目录下的<code>index.js</code>文件），但你也可以在<code>webpack</code>配置中通过设置 entry 属性来指定一个不同的（或者多个）入口点。</p>
+<p>简单点讲就是指定入口的文件，<code>webpack</code>就从这个文件开始，把这个文件依赖的其他文件打包进来，而其他文件可能又依赖了其他的文件，那么就会递归这个过程。</p>
+<h2 id="output"><a href="#output" class="headerlink" title="output"></a><code>output</code></h2><blockquote>
+<p>The output property tells <code>webpack</code> where to emit the bundles it creates and how to name these files. It defaults to <code>./dist/main.js</code> for the main output file and to the <code>./dist</code> folder for any other generated file. —— <a target="_blank" rel="noopener" href="https://webpack.js.org/concepts/#output">output - webpack</a></p>
+</blockquote>
+<p>output 属性告诉<code>webpack</code>在哪输出它创建的打包文件以及如何对这些文件命名。默认值为<code>./dist/main.js</code>为主要的输出文件，<code>./dist</code>文件夹存放其他任何生成的文件。</p>
+<p>结合上面这两个，可以写出一个简单的<code>webpack.config.js</code>文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// 入口</span></span><br><span class="line">  <span class="attr">entry</span>: <span class="string">&quot;./index.js&quot;</span>,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="comment">// 生成文件存放的文件夹</span></span><br><span class="line">    <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;dist&quot;</span>),</span><br><span class="line">    <span class="comment">// 主要输出的js文件</span></span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&quot;bundle.js&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以在<code>package.json</code>的<code>script</code>下新增一条命令。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// ...其他的配置</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;webpack -c webpack.config.js&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后通过<code>yarn build</code>来执行这条命令。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/dGQyzHqAuBpCFV3.png"></p>
+<p>可以发现打包成功了，没有出现什么错误，并且多了一个<code>dist</code>文件夹，里面有一个<code>bundle.js</code>。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/MJa45x9TvrP6bIB.png"></p>
+<p>生成的<code>bundle.js</code>内容如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>webpack</code>在默认情况下是<code>production</code>（生产）模式，这个模式是由配置中的<code>mode</code>指定的。</p>
+<p>可以查看该页面 <a target="_blank" rel="noopener" href="https://webpack.js.org/configuration/mode/">mode - webpack</a>。</p>
+<p>可以修改配置文件为。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;development&quot;</span>,</span><br><span class="line">  <span class="comment">// 入口</span></span><br><span class="line">  <span class="attr">entry</span>: <span class="string">&quot;./index.js&quot;</span>,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="comment">// 生成文件存放的文件夹</span></span><br><span class="line">    <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;dist&quot;</span>),</span><br><span class="line">    <span class="comment">// 主要输出的js文件</span></span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&quot;bundle.js&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>输出如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * ATTENTION: The &quot;eval&quot; devtool has been used (maybe by default in mode: &quot;development&quot;).</span></span><br><span class="line"><span class="comment"> * This devtool is not neither made for production nor for readable output files.</span></span><br><span class="line"><span class="comment"> * It uses &quot;eval()&quot; calls to create a separate source file in the browser devtools.</span></span><br><span class="line"><span class="comment"> * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)</span></span><br><span class="line"><span class="comment"> * or disable the default devtool with &quot;devtool: false&quot;.</span></span><br><span class="line"><span class="comment"> * If you are looking for production-ready output files, see mode: &quot;production&quot; (https://webpack.js.org/configuration/mode/).</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">/******/</span> (<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// webpackBootstrap</span></span><br><span class="line">  <span class="comment">/*!******************!*\</span></span><br><span class="line"><span class="comment">  !*** ./index.js ***!</span></span><br><span class="line"><span class="comment">  \******************/</span></span><br><span class="line">  <span class="comment">/*! unknown exports (runtime-defined) */</span></span><br><span class="line">  <span class="comment">/*! runtime requirements:  */</span></span><br><span class="line">  <span class="built_in">eval</span>(</span><br><span class="line">    <span class="string">&#x27;console.log(&quot;Hello World!&quot;);\r\n\n\n//# sourceURL=webpack://webpack-test/./index.js?&#x27;</span></span><br><span class="line">  );</span><br><span class="line">  <span class="comment">/******/</span></span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>可以发现<code>eval</code>中出现了<code>&quot;console.log(&quot;Hello World!&quot;);</code>这句代码，这句代码对应了我们<code>index.js</code>的内容。</p>
+<p>在顶部的多行注释中，提到了<code>The &quot;eval&quot; devtool has been used (maybe by default in mode: &quot;development&quot;).</code>，也就是在开发环境下会使用<code>eval</code>这个开发工具。</p>
+<p>在开发环境下<code>webpack</code>会默认启动一些配置，如下（这个表格可以在上面<code>mode</code>的网址里面找到，对应也有生产<code>mode</code>下默认的配置）。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">// webpack.development.config.js</span><br><span class="line">module.exports = &#123;</span><br><span class="line"><span class="addition">+ mode: &#x27;development&#x27;</span></span><br><span class="line"><span class="deletion">- devtool: &#x27;eval&#x27;,</span></span><br><span class="line"><span class="deletion">- cache: true,</span></span><br><span class="line"><span class="deletion">- performance: &#123;</span></span><br><span class="line"><span class="deletion">-   hints: false</span></span><br><span class="line"><span class="deletion">- &#125;,</span></span><br><span class="line"><span class="deletion">- output: &#123;</span></span><br><span class="line"><span class="deletion">-   pathinfo: true</span></span><br><span class="line"><span class="deletion">- &#125;,</span></span><br><span class="line"><span class="deletion">- optimization: &#123;</span></span><br><span class="line"><span class="deletion">-   moduleIds: &#x27;named&#x27;,</span></span><br><span class="line"><span class="deletion">-   chunkIds: &#x27;named&#x27;,</span></span><br><span class="line"><span class="deletion">-   mangleExports: false,</span></span><br><span class="line"><span class="deletion">-   nodeEnv: &#x27;development&#x27;,</span></span><br><span class="line"><span class="deletion">-   flagIncludedChunks: false,</span></span><br><span class="line"><span class="deletion">-   occurrenceOrder: false,</span></span><br><span class="line"><span class="deletion">-   concatenateModules: false,</span></span><br><span class="line"><span class="deletion">-   splitChunks: &#123;</span></span><br><span class="line"><span class="deletion">-     hidePathInfo: false,</span></span><br><span class="line"><span class="deletion">-     minSize: 10000,</span></span><br><span class="line"><span class="deletion">-     maxAsyncRequests: Infinity,</span></span><br><span class="line"><span class="deletion">-     maxInitialRequests: Infinity,</span></span><br><span class="line"><span class="deletion">-   &#125;,</span></span><br><span class="line"><span class="deletion">-   emitOnErrors: true,</span></span><br><span class="line"><span class="deletion">-   checkWasmTypes: false,</span></span><br><span class="line"><span class="deletion">-   minimize: false,</span></span><br><span class="line"><span class="deletion">-   removeAvailableModules: false</span></span><br><span class="line"><span class="deletion">- &#125;,</span></span><br><span class="line"><span class="deletion">- plugins: [</span></span><br><span class="line"><span class="deletion">-   new webpack.DefinePlugin(&#123; &quot;process.env.NODE_ENV&quot;: JSON.stringify(&quot;development&quot;) &#125;),</span></span><br><span class="line"><span class="deletion">- ]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回到生产环境下的打包，可以发现生成的文件非常的简单，简答地让人怀疑是不是没打包…，为了看出打包的效果，可以稍稍写多点代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello World!&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> el = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;app&quot;</span>);</span><br><span class="line"></span><br><span class="line">el.<span class="property">onclick</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>];</span><br><span class="line">  array.<span class="title function_">sort</span>();</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(array);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(a + b);</span><br></pre></td></tr></table></figure>
+
+<p>打包之后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello World!&quot;</span>),</span><br><span class="line">  (<span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;app&quot;</span>).<span class="property">onclick</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> o = [<span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>];</span><br><span class="line">    o.<span class="title function_">sort</span>(), <span class="variable language_">console</span>.<span class="title function_">log</span>(o);</span><br><span class="line">  &#125;),</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="number">3</span>);</span><br></pre></td></tr></table></figure>
+
+<p>可以发现缩进和没必要的空格全部没有了，并且也优化了变量，像<code>el</code>就被省略了，由于变量<code>a</code>和<code>b</code>都没被使用，输出直接生成了一个静态的语句<code>console.log(3)</code>，省略了这两个变量。</p>
+<p>除了<code>js</code>文件，<code>webpack</code>也支持导入其他的文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 导入样式</span></span><br><span class="line"><span class="keyword">import</span> style <span class="keyword">from</span> <span class="string">&quot;./css/style.css&quot;</span>;</span><br><span class="line"><span class="comment">// ...其他代码</span></span><br></pre></td></tr></table></figure>
+
+<p>当然这样子直接编译是会报错的。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/rEvu5yFk4C2LQNz.png"></p>
+<p>可以看到错误信息中有一句<code>Module parse failed</code>，也就是模块解析错误。</p>
+<p>下一句是<code>You may need an appropriate loader to handler this file type ...</code>，也就是提示我们需要一个适合的<code>loader</code>来处理这个文件。</p>
+<p>那么就要了解<code>webpack</code>中的<code>loader</code>了。</p>
+<h2 id="loader"><a href="#loader" class="headerlink" title="loader"></a><code>loader</code></h2><blockquote>
+<p><code>webpack</code> enables use of loaders to preprocess files. This allows you to bundle any static resource way beyond JavaScript.</p>
+</blockquote>
+<p><code>webpack</code>使用各种 loader 来预处理文件，这允许你在<code>JavaScript</code>上打包任何静态的资源。</p>
+<p>所以我们需要一个 loader 来处理<code>css</code>文件，使得<code>css</code>文件转成 js 能够理解的代码。</p>
+<p>这个 loader 就是<code>css-loader</code>。</p>
+<p>先通过<code>yarn add css-loader -D</code>来安装<code>css-loader</code>开发依赖，<code>-D</code>安装在开发依赖里面。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/OqyPCBw3SgWzR2U.png"></p>
+<p>修改<code>webpack</code>的配置文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;development&quot;</span>,</span><br><span class="line">  <span class="attr">entry</span>: <span class="string">&quot;./index.js&quot;</span>,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;dist&quot;</span>),</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&quot;bundle.js&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 验证规则，这里就是取到css文件，i（ignore）标志不区分大小写</span></span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css/i</span>,</span><br><span class="line">        <span class="comment">// 对这些css文件使用css-loader预处理，这里是一个数组，也就是可以使用多个loader</span></span><br><span class="line">        <span class="attr">use</span>: [<span class="string">&quot;css-loader&quot;</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们输出<code>style</code>这个变量看看是什么样子。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> style <span class="keyword">from</span> <span class="string">&quot;./css/style.css&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(style);</span><br></pre></td></tr></table></figure>
+
+<p>我们在<code>dist</code>目录下创建一个<code>html</code>文件来引用这个<code>js</code>文件，然后看看控制台的输出。</p>
+<p><img data-src="https://i.loli.net/2020/11/25/PXd1cqVglY6eQKp.png"></p>
+<p>可以看到导出了一个数组，也可以理解为<code>css</code>文件转换成了下面的<code>js</code>文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = [[<span class="string">&quot;./css/style.css&quot;</span>, <span class="string">&quot;.text &#123;↵  font-size: 18px;↵&#125;&quot;</span>, <span class="string">&quot;&quot;</span>]];</span><br><span class="line"></span><br><span class="line">o.<span class="property">i</span> = <span class="keyword">function</span> (<span class="params">modules, mediaQuery, dedup</span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">o.<span class="property">toString</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> o;</span><br></pre></td></tr></table></figure>
+
+<p>在使用 Vue 的时候，可能会发现开发环境下每个组件的样式会通过<code>style</code>标签来插入到<code>DOM</code>中，这就使用到了另一个<code>loader</code> - <code>style-loader</code>。</p>
+<p>可以安装这个<code>loader</code>，运行<code>yarn add style-loader -D</code>。</p>
+<p>然后修改配置文件如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;development&quot;</span>,</span><br><span class="line">  <span class="attr">entry</span>: <span class="string">&quot;./index.js&quot;</span>,</span><br><span class="line">  <span class="attr">output</span>: &#123;</span><br><span class="line">    <span class="attr">path</span>: path.<span class="title function_">resolve</span>(__dirname, <span class="string">&quot;dist&quot;</span>),</span><br><span class="line">    <span class="attr">filename</span>: <span class="string">&quot;bundle.js&quot;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 验证规则，这里就是取到css文件，i（ignore）标志不区分大小写</span></span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css/i</span>,</span><br><span class="line">        <span class="comment">// 对这些css文件使用css-loader预处理，这里是一个数组，也就是可以使用多个loader</span></span><br><span class="line">        <span class="attr">use</span>: [<span class="string">&quot;style-loader&quot;</span>, <span class="string">&quot;css-loader&quot;</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们运行打包，打开网页会发现在<code>head</code>中插入了对应的样式，并且<code>style</code>变量为一个空的对象。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/AHoTnwLSY2GIuyO.png"></p>
+<p><img data-src="https://i.loli.net/2020/11/26/FycMgfjRqCkGTuV.png"></p>
+<p>这里可能有疑问的就是<code>loader</code>的执行顺序问题。</p>
+<p>官方在<a target="_blank" rel="noopener" href="https://webpack.js.org/concepts/loaders/#configuration">Loader - Using Loader - Configuration</a>一节的文档中明确指出，<code>loader</code>是从右往左进行执行的。</p>
+<blockquote>
+<p>Loaders are evaluated&#x2F;executed from right to left (or from bottom to top).</p>
+</blockquote>
+<p>在<a target="_blank" rel="noopener" href="https://webpack.js.org/concepts/loaders/#loader-features">Loader Features</a>一节指出了<code>loader</code>的特性。</p>
+<p>每个<code>loader</code>也有自己的配置，在<code>use</code>中，我们可以以一个对象来表示一个<code>loader</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="comment">// 验证规则，这里就是取到css文件，i（ignore）标志不区分大小写</span></span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css/i</span>,</span><br><span class="line">        <span class="comment">// 对这些css文件使用css-loader预处理，这里是一个数组，也就是可以使用多个loader</span></span><br><span class="line">        <span class="attr">use</span>: [&#123; <span class="attr">loader</span>: <span class="string">&quot;style-loader&quot;</span> &#125;, &#123; <span class="attr">loader</span>: <span class="string">&quot;css-loader&quot;</span> &#125;],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>像<code>style-loader</code>，除了通过<code>style</code>标签注入之外，也有其他的一些注入方式。</p>
+<p><code>style-loader</code>的仓库地址<a target="_blank" rel="noopener" href="https://github.com/webpack-contrib/style-loader">webpack-contrib&#x2F;style-loader</a></p>
+<p>在<code>README</code>中，也为我们写明了这些配置。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/1ifwxKroYpAatuz.png"></p>
+<p>其中<code>injectType</code>为配置注入的方式。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/4zjdsZp2oKnuN8e.png"></p>
+<p>可以通过每个<code>loader</code>对象的<code>options</code>来配置，这里使用了<code>singletonStyleTag</code>，也就是只插入一个单独的<code>style</code>标签。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">module</span>: &#123;</span><br><span class="line">    <span class="attr">rules</span>: [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">test</span>: <span class="regexp">/\.css/i</span>,</span><br><span class="line">        <span class="attr">use</span>: [</span><br><span class="line">          &#123;</span><br><span class="line">            <span class="attr">loader</span>: <span class="string">&quot;style-loader&quot;</span>,</span><br><span class="line">            <span class="attr">options</span>: &#123;</span><br><span class="line">              <span class="attr">injectType</span>: <span class="string">&quot;singletonStyleTag&quot;</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123; <span class="attr">loader</span>: <span class="string">&quot;css-loader&quot;</span> &#125;,</span><br><span class="line">        ],</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后写另一个 css 文件</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> style <span class="keyword">from</span> <span class="string">&quot;./css/style.css&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> another <span class="keyword">from</span> <span class="string">&quot;./css/another.css&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(style);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(another);</span><br></pre></td></tr></table></figure>
+
+<p>然后打包，打开浏览器，发现<code>head</code>中只有一个<code>style</code>标签了。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/geRVMri9ytvdm5U.png"></p>
+<p>如果不加情况下（默认为<code>styleTag</code>），那么会是两个<code>style</code>标签，如下：</p>
+<p><img data-src="https://i.loli.net/2020/11/26/MbOrActZhipkS1E.png"></p>
+<p>到现在为止看起来很不错，webpack 发挥了他的功能，也就是<strong>打包</strong>。</p>
+<p>不过还有一点不够智能，我们希望<code>html</code>文件也可以自动的生成，那就非常完美了，我们只需在开启一个本地的服务器来绑定<code>dist</code>这个目录，然后每一次打包之后就可以直接打开浏览器就可以看到结果。</p>
+<p>这就需要用到<code>webpack</code>的另一个配置<code>plugin</code>（插件）了</p>
+<h2 id="plugin"><a href="#plugin" class="headerlink" title="plugin"></a><code>plugin</code></h2><p><a target="_blank" rel="noopener" href="https://webpack.js.org/concepts/#plugins">Plugins - webpack</a></p>
+<blockquote>
+<p>While loaders are used to transform certain types of modules, plugins can be leveraged to perform a wider range of tasks like bundle optimization, asset management and injection of environment variables.</p>
+</blockquote>
+<p>loader 用于转化某些模块的类型，而 plugin 被用来执行一些更广泛的任务，比如打包优化，资源管理以及环境变量的注入。</p>
+<p>可以简单理解为<code>plugin</code>的功能更加的强大，可以完成一些做不到的事情，而<code>loader</code>主要的功能就是转换文件类型。</p>
+<p>像为了可以自动生成一个<code>HTML</code>文件，可以使用<code>HtmlWebpackPlugin</code>。</p>
+<p>插件也要安装对应的<code>npm</code>包，执行<code>yarn add html-webpack-plugin -D</code>来安装插件。</p>
+<p>然后修改配置文件，新增<code>plugins</code>属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">HtmlWebpackPlugin</span> = <span class="built_in">require</span>(<span class="string">&quot;html-webpack-plugin&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">plugins</span>: [<span class="keyword">new</span> <span class="title class_">HtmlWebpackPlugin</span>()],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>不过这样子编译的话会出现错误，原因应该是插件需要用到项目的<code>webpack</code>，而不能使用全局的<code>webpack</code>。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/mtnzJy9APc8RG6g.png"></p>
+<p>这里解决办法可以装个项目的<code>webpack</code>依赖，<code>yarn add webpack -D</code>。</p>
+<p>或者链接下全局的<code>webpack</code>，<code>yarn link webpack -D</code>。</p>
+<p>这里我使用的是后面的方法。</p>
+<p>注意，在执行<code>yarn link webpack -D</code>，需要在<code>webpack</code>的包下面执行<code>yarn link</code>来注册<code>webpack</code>。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/uRQ2dWvBKnXU1HY.png"></p>
+<p>接着我们删除<code>dist</code>文件夹，然后打包。</p>
+<p><img data-src="https://i.loli.net/2020/11/26/A4Kamzi5xtIEDfH.png"></p>
+<p>发现打包成功了，而且也自动生成了<code>HTML</code>文件，并且引用了生成的<code>bundle.js</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/aa08a7e76fb8" title="尝试配置webpack来编译项目">https://prohibitorum.top/aa08a7e76fb8</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/webpack/" rel="tag"># webpack</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d21e99a5f57e" rel="prev" title="轮播图的简单实现3D版">
+                  <i class="fa fa-angle-left"></i> 轮播图的简单实现3D版
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/01194d4ee87a" rel="next" title="DOM Event Architecture（DOM-Level-3）译文">
+                  DOM Event Architecture（DOM-Level-3）译文 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1606288149"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

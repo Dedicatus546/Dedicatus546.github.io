@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言网上看到的，关于JavaScript的文章，感觉挺不错的，谷歌的一个工程师写的（应该），试着翻译学习下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的Tasks, microtasks, queues and schedules（译）">
+<meta property="og:url" content="https://prohibitorum.top/6da281009a11">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言网上看到的，关于JavaScript的文章，感觉挺不错的，谷歌的一个工程师写的（应该），试着翻译学习下">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-12T10:19:24.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/6da281009a11.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/6da281009a11","path":"6da281009a11.html","title":"JavaScript中的Tasks, microtasks, queues and schedules（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JavaScript中的Tasks, microtasks, queues and schedules（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%91%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">译文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tasks-microtasks-queues-and-schedules"><span class="nav-number">2.1.</span> <span class="nav-text">Tasks, microtasks, queues and schedules</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-this-happens-%EF%BC%88%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%8F%91%E7%94%9F%E5%91%A2%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">Why this happens （为什么会发生呢）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What-are-some-browsers-doing-differently-%EF%BC%88%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BC%9A%E6%9C%89%E4%B8%8D%E5%90%8C%E7%9A%84%E5%8F%8D%E5%BA%94%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">What are some browsers doing differently?（为什么浏览器会有不同的反应）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How-to-tell-if-something-uses-tasks-or-microtasks%EF%BC%88%E5%A6%82%E4%BD%95%E7%9F%A5%E9%81%93%E6%98%AF%E4%BD%BF%E7%94%A8%E4%BA%86%E4%BB%BB%E5%8A%A1%E8%BF%98%E6%98%AF%E5%BE%AE%E4%BB%BB%E5%8A%A1%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">How to tell if something uses tasks or microtasks（如何知道是使用了任务还是微任务）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Level-1-bossfight%EF%BC%88%E8%AF%91%E4%B8%8D%E5%87%BA%E6%9D%A5%E2%80%A6%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">Level 1 bossfight（译不出来…）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Who%E2%80%99s-right-%EF%BC%88%E8%B0%81%E6%98%AF%E6%AD%A3%E7%A1%AE%E7%9A%84%EF%BC%9F%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">Who’s right?（谁是正确的？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#What-did-browsers-get-wrong-%EF%BC%88%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%BA%E4%BA%86%E4%BB%80%E4%B9%88%E9%94%99%E8%AF%AF%EF%BC%9F%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">What did browsers get wrong?（浏览器出了什么错误？）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Level-1-boss%E2%80%99s-angry-older-brother%EF%BC%88%E4%B8%8D%E7%9F%A5%E9%81%93%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%E2%80%A6%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">Level 1 boss’s angry older brother（不知道什么意思…）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-is-it-different-%EF%BC%88%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E4%B8%8D%E5%90%8C%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">Why is it different?（为什么会不同）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Does-any-of-this-matter-%EF%BC%88%E8%BF%99%E4%BA%9B%E6%83%85%E5%86%B5%E6%9C%89%E9%97%AE%E9%A2%98%E5%90%97%EF%BC%89"><span class="nav-number">2.9.</span> <span class="nav-text">Does any of this matter?（这些情况有问题吗）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#You-made-it-%EF%BC%88%E4%BD%A0%E5%81%9A%E5%88%B0%E4%BA%86%EF%BC%81%EF%BC%89"><span class="nav-number">2.10.</span> <span class="nav-text">You made it!（你做到了！）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/6da281009a11">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JavaScript中的Tasks, microtasks, queues and schedules（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript中的Tasks, microtasks, queues and schedules（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 10:19:24" itemprop="dateCreated datePublished" datetime="2020-06-12T10:19:24+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%91%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">译文</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>18 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>网上看到的，关于JavaScript的文章，感觉挺不错的，谷歌的一个工程师写的（应该），试着翻译学习下</p>
+<span id="more"></span>
+
+<h1 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h1><h2 id="Tasks-microtasks-queues-and-schedules"><a href="#Tasks-microtasks-queues-and-schedules" class="headerlink" title="Tasks, microtasks, queues and schedules"></a>Tasks, microtasks, queues and schedules</h2><blockquote>
+<p>原文地址 <a target="_blank" rel="noopener" href="https://jakearchibald.com/2015/tasks-microtasks-queues-and-schedules/">Tasks, microtasks, queues and schedules</a><br>When I told my colleague <a target="_blank" rel="noopener" href="https://twitter.com/gauntface">Matt Gaunt</a> I was thinking of writing a piece on microtask queueing and execution within the browser’s event loop, he said “I’ll be honest with you Jake, I’m not going to read that”. Well, I’ve written it anyway, so we’re all going to sit here and enjoy it, ok?</p>
+</blockquote>
+<p>译：当我告诉我的同事Matt Gaunt我想写一篇关于微任务在浏览器事件循环内的队列和执行的文章时，他和我说：“老实讲，我不会去读这篇文章的”。emmm，反正我都写了，所以我们就坐下来（泡个茶）享受（<del>折磨自己</del>）下吧。</p>
+<p>上来就是一段吐槽，可以的，是我喜欢的程序员<del>男人</del>。</p>
+<blockquote>
+<p>Actually, if video’s more your thing, <a target="_blank" rel="noopener" href="https://twitter.com/philip_roberts">Philip Roberts</a> gave a great talk at <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">JSConf on the event loop</a> - microtasks aren’t covered, but it’s a great introduction to the rest. Anyway, on with the show…</p>
+</blockquote>
+<p>译：事实上，如果（你觉得）视频可以学到更多东西的话，Philip Rpberts提供了一段关于<strong>JSConf on event loop</strong>的很棒的演讲，虽然没有覆盖微任务，但是可以作为在休息时的一篇很好的读物。ok，接下来开始是正文…</p>
+<blockquote>
+<p>Take this little bit of JavaScript:</p>
+</blockquote>
+<p>译：观察这一小块的JavaScript代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;script start&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;setTimeout&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;promise1&#x27;</span>);</span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;promise2&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;script end&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>In what order should the logs appear?</p>
+</blockquote>
+<p>译：打印的文本将会以什么顺序展现呢？</p>
+<blockquote>
+<p>The correct answer: <code>script start</code>, <code>script end</code>, <code>promise1</code>, <code>promise2</code>, <code>setTimeout</code>, but it’s pretty wild out there in terms of browser support.</p>
+</blockquote>
+<p>译：正确的答案为<code>script start</code>，<code>script end</code>，<code>promise1</code>，<code>promise2</code>，<code>setTimeout</code><br>，但是在浏览器支持的方面来说，这是相当放荡的（应该是指这个结果不受控制，在不同浏览器中有不同的表现）。</p>
+<blockquote>
+<p>Microsoft Edge, Firefox 40, iOS Safari and desktop Safari 8.0.8 log <code>setTimeout</code> before <code>promise1</code> and <code>promise2</code> - although it appears to be a race condition. This is really weird, as Firefox 39 and Safari 8.0.7 get it consistently right.</p>
+</blockquote>
+<p>译：在Edge，火狐40和桌面的Safari8.0.8的版本下，<code>setTimeout</code>会在<code>promise1</code>和<code>promise2</code><br>之前打印，虽然似乎是一种竟态状况。这是相当奇怪的，因为火狐39和Safari8.0.7的版本下，对于这种行为却是一致正确的。</p>
+<h2 id="Why-this-happens-（为什么会发生呢）"><a href="#Why-this-happens-（为什么会发生呢）" class="headerlink" title="Why this happens （为什么会发生呢）"></a>Why this happens （为什么会发生呢）</h2><blockquote>
+<p>To understand this you need to know how the event loop handles tasks and microtasks. This can be a lot to get your head around the first time you encounter it. Deep breath…</p>
+</blockquote>
+<p>译：为了理解这个你需要知道eventloop（事件循环机制）如何处理tasks（任务）和microitasks（微任务）。第一次听到这个概念可能会让你头皮发麻，深呼吸（<del>我呼吸啦，还是看不懂，有什么好说哒</del>）。</p>
+<blockquote>
+<p>Each ‘thread’ gets its own event loop, so each web worker gets its own, so it can execute independently, whereas all windows on the same origin share an event loop as they can synchronously communicate. The event loop runs continually, executing any tasks queued. An event loop has multiple task sources which guarantees execution order within that source (specs <a target="_blank" rel="noopener" href="https://w3c.github.io/IndexedDB/#database-access-task-source">such as IndexedDB</a> define their own), but the browser gets to pick which source to take a task from on each turn of the loop. This allows the browser to give preference to performance sensitive tasks such as user-input. Ok ok, stay with me…</p>
+</blockquote>
+<p>译：每个线程都有自己的事件循环系统，所以每个web<br>worker（JavaScript下多线程的子线程）有自己的事件循环系统，他能独立地执行，鉴于所有的同源窗口共享一个事件循环，因此它们可以同步地通信。事件循环系统不断地运行，执行任何排进来的任务，一个事件循环有多个任务源，这些任务源保证了在该源中的执行顺序（就像IndexDB定义他们自己的（事件循环系统）规范），但是浏览器要去在每轮循环中选择哪一个源来获取任务。这允许了浏览器优先考虑表现敏感的任务，比如用户的输入。</p>
+<blockquote>
+<p><strong>Tasks</strong> are scheduled so the browser can get from its internals into JavaScript&#x2F;DOM land and ensures these actions happen sequentially. Between tasks, the browser may render updates. Getting from a mouse click to an event callback requires scheduling a task, as does parsing HTML, and in the above example, <code>setTimeout</code>.</p>
+</blockquote>
+<p>译：任务被安排进来，浏览器便可以从它的内部进入JavaScript&#x2F;DOM<br>并且确保这些行为可以按顺序执行。在任务之间，浏览器可能进行渲染更新。从一个鼠标的点击到一个事件的回调需要安排一个任务，就像解析html一样，对于以上的例子，对应<code>setTimeout</code>。</p>
+<blockquote>
+<p><code>setTimeout</code> waits for a given delay then schedules a new task for its callback. This is why <code>setTimeout</code> is logged after <code>script end</code>, as logging <code>script end</code> is part of the first task, and <code>setTimeout</code> is logged in a separate task. Right, we’re almost through this, but I need you to stay strong for this next bit…</p>
+</blockquote>
+<p>译：<code>setTimeout</code>函数等待一个指定的延迟后安排一个回调函数任务。这也就是为什么<code>setTimeout</code>打印在<code>script end</code>之后，因为打印<code>script end</code>是第一个任务的一部分，而打印<code>setTimeout</code><br>在一个独立的任务中。ok，我们基本理解了这个Task这个概念，但是我建议你对接下来的内容保持专注。</p>
+<blockquote>
+<p><strong>Microtasks</strong> are usually scheduled for things that should happen straight after the currently executing script, such as reacting to a batch of actions, or to make something async without taking the penalty of a whole new task. The microtask queue is processed after callbacks as long as no other JavaScript is mid-execution, and at the end of each task. Any additional microtasks queued during microtasks are added to the end of the queue and also processed. Microtasks include mutation observer callbacks, and as in the above example, promise callbacks.</p>
+</blockquote>
+<p>译：微任务通常用来安排那些应该在当前正在执行的脚本之后直接发生的事情，比如对一批操作作出反应，或者使得某些操作不以一个新的任务（也就是上一段说到的情况）为代价异步执行。微任务队列在每个任务的结束阶段触发回调后被处理，只要没有其他的JavaScript脚本在执行中。任何额外的微任务在被添加进队列尾端排队处理。微任务包括变动观察者回调，对于以上的例子，对应promise的回调。</p>
+<blockquote>
+<p>Once a promise settles, or if it has already settled, it queues a microtask for its reactionary callbacks. This ensures promise callbacks are async even if the promise has already settled. So calling <code>.then(yey, nay)</code> against a settled promise immediately queues a microtask. This is why <code>promise1</code>and <code>promise2</code> are logged after script end, as the currently running script must finish before microtasks are handled. promise1 and promise2 are logged before setTimeout, as microtasks always happen before the next task.</p>
+</blockquote>
+<p>译：一旦一个promise解决，或者如果它早已解决，它会以它的反应函数为一个微任务排进队列，这确保了promise的回调是异步，即使它是早已解决的。所以对一个已经解决的promise调用<code>.then(yey, nay)</code><br>会立即地排一个微任务。这就是为什么<code>promise1</code>和<code>promise2</code>打印在<code>script end</code>之后，因为当前正在执行地脚本必须在微任务被处理之前完成。<code>promise1</code>和<code>promise2</code>打印在<code>setTimeout</code><br>之后，因为微任务发生在下一个任务之前。</p>
+<h3 id="What-are-some-browsers-doing-differently-（为什么浏览器会有不同的反应）"><a href="#What-are-some-browsers-doing-differently-（为什么浏览器会有不同的反应）" class="headerlink" title="What are some browsers doing differently?（为什么浏览器会有不同的反应）"></a>What are some browsers doing differently?（为什么浏览器会有不同的反应）</h3><blockquote>
+<p>Some browsers log <code>script start</code>, <code>script end</code>, <code>setTimeout</code>, <code>promise1</code>, <code>promise2</code>. They’re running promise callbacks after <code>setTimeout</code>. It’s likely that they’re calling promise callbacks as part of a new task rather than as a microtask.</p>
+</blockquote>
+<p>译：一些浏览器打印<code>script start</code>, <code>script end</code>, <code>setTimeout</code>, <code>promise1</code>, <code>promise2</code>。它们在<code>setTimeout</code><br>之后执行promise的回调，这或许是以一个新的任务而不是以一个微任务来执行promise的回调。</p>
+<blockquote>
+<p>This is sort-of excusable, as promises come from ECMAScript rather than HTML. ECMAScript has the concept of “jobs” which are similar to microtasks, but the relationship isn’t explicit aside from <a target="_blank" rel="noopener" href="https://esdiscuss.org/topic/the-initialization-steps-for-web-browsers#content-16">vague mailing list discussions</a>. However, the general consensus is that promises should be part of the microtask queue, and for good reason.</p>
+</blockquote>
+<p>译：这是可以解释的，因为promise来自于ecma而不是html。ECMA中”job”的概念类似微任务，但是在vague mailing list<br>discussions的讨论中它们的关系是不是明确的在一边的。然而，一般的共识是promise是微任务队列的一部分，并且有充分的理由说明它。</p>
+<blockquote>
+<p>Treating promises as tasks leads to performance problems, as callbacks may be unnecessarily delayed by task-related things such as rendering. It also causes non-determinism due to interaction with other task sources, and can break interactions with other APIs, but more on that later.</p>
+</blockquote>
+<p>译：将promise视为任务会导致表现的问题，因为回调会被和任务有关的事情比如渲染造成不必要的延迟。由于和其他的任务源有相互作用，并且可以中断和其他api的相互作用，也造成了不确定性。之后会介绍更多。</p>
+<blockquote>
+<p>Here’s <a target="_blank" rel="noopener" href="https://connect.microsoft.com/IE/feedback/details/1658365">an Edge ticket</a> for making promises use microtasks. WebKit nightly is doing the right thing, so I assume Safari will pick up the fix eventually, and it appears to be fixed in Firefox 43.</p>
+</blockquote>
+<p>译：这是一个关于edge浏览器的ticket，关于让promise使用微任务的形式，WebKit不久便修复了它，所以我猜想Safari最终会修复（这个bug），它将在Firefox43被修复。</p>
+<blockquote>
+<p>Really interesting that both Safari and Firefox suffered a regression here that’s since been fixed. I wonder if it’s just a coincidence.</p>
+</blockquote>
+<p>译：有趣的是，Safari和Firefox都遭遇过这个bug并且已经修复了，我怀疑这不仅仅是一个巧合。</p>
+<h2 id="How-to-tell-if-something-uses-tasks-or-microtasks（如何知道是使用了任务还是微任务）"><a href="#How-to-tell-if-something-uses-tasks-or-microtasks（如何知道是使用了任务还是微任务）" class="headerlink" title="How to tell if something uses tasks or microtasks（如何知道是使用了任务还是微任务）"></a>How to tell if something uses tasks or microtasks（如何知道是使用了任务还是微任务）</h2><blockquote>
+<p>Testing is one way. See when logs appear relative to promises &amp; <code>setTimeout</code>, although you’re relying on the implementation to be correct.</p>
+</blockquote>
+<p>译：有一种方法可以测试，观察打印的日志对于promises和<code>setTimeout</code>的相对位置，不过应该依赖实现来判断才是正确的。</p>
+<blockquote>
+<p>The certain way, is to look up the spec. For instance, <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/webappapis.html#timer-initialisation-steps">step 14 of setTimeout</a> queues a task, whereas <a target="_blank" rel="noopener" href="https://dom.spec.whatwg.org/#queue-a-mutation-record">step 5 of queuing a mutation record</a> queues a microtask.</p>
+</blockquote>
+<p>译：另一种方式，可以去查阅文档，比如，setTimeout在第14步排队进一个任务。而排队一个变化的记录的第5步为排队进一个微任务。</p>
+<blockquote>
+<p>As mentioned, in ECMAScript land, they call microtasks “jobs”. In <a target="_blank" rel="noopener" href="https://www.ecma-international.org/ecma-262/6.0/#sec-performpromisethen">step 8.a of <code>PerformPromiseThen</code></a>, <code>EnqueueJob</code> is called to queue a microtask.</p>
+</blockquote>
+<p>译：就跟提及到的一样，在ecma的世界中，它们把微任务称为”jobs”。在<code>PerformPromiseThen</code>的第8.a步，<code>EnqueueJob</code>被称为排队一个微任务。</p>
+<blockquote>
+<p>Now, let’s look at a more complicated example. Cut to a concerned apprentice “No, they’re not ready!”. Ignore him, you’re ready. Let’s do this…</p>
+</blockquote>
+<p>译：现在，我们看一个更复杂的例子。你可能会说：“我前面的还没理解，我还没有准备好”，忘却他，你已经准备好了，让我们开始…</p>
+<h2 id="Level-1-bossfight（译不出来…）"><a href="#Level-1-bossfight（译不出来…）" class="headerlink" title="Level 1 bossfight（译不出来…）"></a>Level 1 bossfight（译不出来…）</h2><blockquote>
+<p>Before writing this post I’d have gotten this wrong. Here’s a bit of html:</p>
+</blockquote>
+<p>译：在写这篇文章之前，我弄错了一件事。这是一段html代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;outer&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;inner&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Given the following JS, what will be logged if I click <code>div.inner</code>?</p>
+</blockquote>
+<p>译：在下面这段js代码的执行下，当我点击<code>div.inner</code>的时候会打印什么？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Let&#x27;s get hold of those elements</span></span><br><span class="line"><span class="comment">// 先获取这些元素</span></span><br><span class="line"><span class="keyword">var</span> outer = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.outer&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> inner = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.inner&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Let&#x27;s listen for attribute changes on the</span></span><br><span class="line"><span class="comment">// outer element</span></span><br><span class="line"><span class="comment">// 监听outer element的属性值变化。</span></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">MutationObserver</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;mutate&#x27;</span>);</span><br><span class="line">&#125;).<span class="title function_">observe</span>(outer, &#123;</span><br><span class="line">    <span class="attr">attributes</span>: <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Here&#x27;s a click listener…</span></span><br><span class="line"><span class="comment">// 点击事件</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">onClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;click&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;timeout&#x27;</span>);</span><br><span class="line">    &#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;promise&#x27;</span>);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    outer.<span class="title function_">setAttribute</span>(<span class="string">&#x27;data-random&#x27;</span>, <span class="title class_">Math</span>.<span class="title function_">random</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// …which we&#x27;ll attach to both elements</span></span><br><span class="line"><span class="comment">// 将点击事件应用到这两个元素上。</span></span><br><span class="line">inner.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, onClick);</span><br><span class="line">outer.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, onClick);</span><br></pre></td></tr></table></figure>
+
+<p>PS:<br>我自己猜的顺序是</p>
+<p>click<br>mutate<br>promise<br>timeout<br>click<br>mutate<br>promise<br>timeout</p>
+<p>原文这里有个可以在线运行查看的框，有兴趣的可以自己去测试。</p>
+<p>我在chrome81下测试的结果是</p>
+<p>click<br>promise<br>mutate<br>click<br>promise<br>mutate<br>timeout<br>timeout</p>
+<blockquote>
+<p>Was your guess different? If so, you may still be right. Unfortunately the browsers don’t really agree here:</p>
+</blockquote>
+<p>译：和你想象的不同？如果是，你可能是对的。不幸的是，众多的浏览器可能不同意这种结果。</p>
+<table>
+<thead>
+<tr>
+<th>Chrome</th>
+<th>Firefox</th>
+<th>Safari</th>
+<th>EDGE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>click <br>  promise <br> mutate <br> click <br> promise <br> mutate <br> timeout <br> timeout</td>
+<td>click <br> mutate <br>  click <br> mutate <br> timeout <br> promise <br> promise <br>timeout</td>
+<td>click <br> mutate <br> click <br> mutate <br> promise <br> promise <br> timeout <br> timeout</td>
+<td>click <br> click <br> mutate <br> timeout <br> promise <br> timeout <br> promise</td>
+</tr>
+</tbody></table>
+<h2 id="Who’s-right-（谁是正确的？）"><a href="#Who’s-right-（谁是正确的？）" class="headerlink" title="Who’s right?（谁是正确的？）"></a><a href="#Who%E2%80%99s-right-%EF%BC%88%E8%B0%81%E6%98%AF%E6%AD%A3%E7%A1%AE%E7%9A%84%EF%BC%9F%EF%BC%89" title="Who’s right?（谁是正确的？）"></a>Who’s right?（谁是正确的？）</h2><blockquote>
+<p>Dispatching the ‘click’ event is a task. Mutation observer and promise callbacks are queued as microtasks. The <code>setTimeout</code> callback is queued as a task. So here’s how it goes:</p>
+</blockquote>
+<p>译：分发点击事件是任务。Mutation observer和promise回调是排进微任务队列。<code>setTimeout</code>回调排进任务队列。所以它的工作应该是这样的。</p>
+<p>这里有一个动画，有兴趣的可以去观看。结果为chrome的执行顺序。</p>
+<blockquote>
+<p>So it’s Chrome that gets it right. The bit that was ‘news to me’ is that microtasks are processed after callbacks (as long as no other JavaScript is mid-execution), I thought it was limited to end-of-task. This rule comes from the HTML spec for calling a callback:</p>
+</blockquote>
+<p>译：所以是chrome的结果是正确的。这一段对于我来说新的东西为微任务可以在回调之后被处理（只要没有其他的JavaScript代码在执行中），我认为这种情况仅限于任务队列的末尾。这个规则来自html规范中的调用一个回调。</p>
+<blockquote>
+<blockquote>
+<p>If <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/webappapis.html#stack-of-script-settings-objects">the stack of script settings objects</a> is now empty, <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint">perform a microtask checkpoint</a> — <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/multipage/webappapis.html#clean-up-after-running-a-callback">HTML: Cleaning up after a callback</a> step 3</p>
+</blockquote>
+</blockquote>
+<p>译：如果脚本设置对象的堆栈已经为空时，执行微任务检查点 - HTML：在会调用回调后进行清理的步骤3.</p>
+<blockquote>
+<p>…and a microtask checkpoint involves going through the microtask queue, unless we’re already processing the microtask queue. Similarly, ECMAScript says this of jobs:</p>
+</blockquote>
+<p>译：一个微任务检查点需要通过微任务队列，除非我们早已处理微任务队列。与之类似地，ECMAScript中把这个说成jobs：</p>
+<blockquote>
+<p>Execution of a Job can be initiated only when there is no running execution context and the execution context stack is empty… — <a target="_blank" rel="noopener" href="https://www.ecma-international.org/ecma-262/6.0/#sec-jobs-and-job-queues">ECMAScript: Jobs and Job Queues</a></p>
+</blockquote>
+<p>译：一个job的执行可以被发起，只有当没有正在执行的上下文并且执行上下文的堆栈为空… - ECMAScript：Jobs and Job Queues</p>
+<blockquote>
+<p>…although the “can be” becomes “must be” when in an HTML context.</p>
+</blockquote>
+<p>译：…尽管在HTML的上下文中“can be”变成了“must be”。</p>
+<h2 id="What-did-browsers-get-wrong-（浏览器出了什么错误？）"><a href="#What-did-browsers-get-wrong-（浏览器出了什么错误？）" class="headerlink" title="What did browsers get wrong?（浏览器出了什么错误？）"></a>What did browsers get wrong?（浏览器出了什么错误？）</h2><blockquote>
+<p>Firefox and Safari are correctly exhausting the microtask queue between click listeners, as shown by the mutation callbacks, but promises appear to be queued differently. This is sort-of excusable given that the link between jobs &amp; microtasks is vague, but I’d still expect them to execute between listener callbacks. <a target="_blank" rel="noopener" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1193394">Firefox ticket</a>. <a target="_blank" rel="noopener" href="https://bugs.webkit.org/show_bug.cgi?id=147933">Safari ticket</a>.</p>
+</blockquote>
+<p>译：Firefox和Safari正确地在点击事件用尽了微任务的队列，就跟mutation的回调一样，但是promise似乎有不同的排队顺序。这是稍微情有可原的，因为在jobs的定义和mircrotasks的定义之间的联系是模糊的，但我仍然期望在监听的回调之间执行。</p>
+<blockquote>
+<p>With Edge we’ve already seen it queue promises incorrectly, but it also fails to exhaust the microtask queue between click listeners, instead it does so after calling all listeners, which accounts for the single mutate log after both click logs. Bug ticket.</p>
+</blockquote>
+<p>译：对于Edge我们早已发现它对promise的排队不正确，但它是未能在点击事件之间处理完微任务队列，而是在调用完所有的监听之后在处理微任务队列，即在打印完两个点击的log之后接着一个mutate的log。</p>
+<h2 id="Level-1-boss’s-angry-older-brother（不知道什么意思…）"><a href="#Level-1-boss’s-angry-older-brother（不知道什么意思…）" class="headerlink" title="Level 1 boss’s angry older brother（不知道什么意思…）"></a>Level 1 boss’s angry older brother（不知道什么意思…）</h2><blockquote>
+<p>Ohh boy. Using the same example from above, what happens if we execute:</p>
+</blockquote>
+<p>译：使用上面同样的例子，如果我们执行下面的代码，会发生什么：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">inner.<span class="title function_">click</span>();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This will start the event dispatching as before, but using script rather than a real interaction.</p>
+</blockquote>
+<p>译：这会和之前一样开始事件的分发，但是使用脚本来执行而不是一个真实的互动。</p>
+<table>
+<thead>
+<tr>
+<th>Chrome</th>
+<th>Firefox</th>
+<th>Safari</th>
+<th>EDGE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>click <br> click <br> promise <br> mutate <br> promise <br> timeout <br> timeout</td>
+<td>click <br> click <br> mutate <br> timeout <br> promise <br> promise <br>timeout</td>
+<td>click <br> click <br> mutate <br> promise <br> promise <br> timeout <br> timeout</td>
+<td>click <br> click <br> mutate <br> timeout <br> promise <br> timeout <br> promise</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>And I swear I keep getting different results from Chrome, I’ve updated this chart a ton of times thinking I was testing Canary by mistake. If you get different results in Chrome, tell me which version in the comments.</p>
+</blockquote>
+<p>译：我发誓我从chrome得到了不同的结果。我已经更新了很多次这个表格，以为一直测试出错。如果你在chrome中得到了不同的结果，可以在评论中告诉我并附上chrome的版本号。</p>
+<h2 id="Why-is-it-different-（为什么会不同）"><a href="#Why-is-it-different-（为什么会不同）" class="headerlink" title="Why is it different?（为什么会不同）"></a>Why is it different?（为什么会不同）</h2><p>PS：这里原文有个可操作动画。</p>
+<blockquote>
+<p>So the correct order is: <code>click</code>, <code>click</code>, <code>promise</code>, <code>mutate</code>, <code>promise</code>, <code>timeout</code>, <code>timeout</code>, which Chrome seems to get right.</p>
+</blockquote>
+<p>译：所以正确的顺序是<code>click</code>, <code>click</code>, <code>promise</code>, <code>mutate</code>, <code>promise</code>, <code>timeout</code>, <code>timeout</code>，chrome似乎是正确的。</p>
+<blockquote>
+<p>After each listener callback is called…</p>
+</blockquote>
+<p>译：在每一个监听回调都被调用之后…</p>
+<blockquote>
+<blockquote>
+<p>If the stack of script settings objects is now empty, perform a microtask checkpoint — HTML: Cleaning up after a callback step 3</p>
+</blockquote>
+</blockquote>
+<p>译：如果脚本设置对象的堆栈已经为空时，执行微任务检查点 - HTML：在会调用回调后进行清理的步骤3.</p>
+<blockquote>
+<p>Previously, this meant that microtasks ran between listener callbacks, but <code>.click()</code> causes the event to dispatch synchronously, so the script that calls <code>.click()</code> is still in the stack between callbacks. The above rule ensures microtasks don’t interrupt JavaScript that’s mid-execution. This means we don’t process the microtask queue between listener callbacks, they’re processed after both listeners.</p>
+</blockquote>
+<p>译：之前，这意味着微任务在监听地回调之前运行，但是<code>.click()</code>这个操作造成了事件的同步分发，所以调用<code>.click()</code><br>在回调之前仍然存在堆栈中。上面的规则确保了微任务不会打断执行中的JavaScript。这意味着我们不能处理微任务队列在监听回调之间，它们得在两个监听回调之后才能被处理。</p>
+<h2 id="Does-any-of-this-matter-（这些情况有问题吗）"><a href="#Does-any-of-this-matter-（这些情况有问题吗）" class="headerlink" title="Does any of this matter?（这些情况有问题吗）"></a>Does any of this matter?（这些情况有问题吗）</h2><blockquote>
+<p>Yeah, it’ll bite you in obscure places (ouch). I encountered this while trying to create a simple wrapper library for IndexedDB that uses promises rather than weird <code>IDBRequest</code> objects. It almost makes IDB fun to use.</p>
+</blockquote>
+<p>译：emmm，可能会在晦涩的地方让你栽跟头。我遇到这种情况，当我尝试去创建一个简单包装的IndexedDB的js库，使用了promise而不是奇怪的IDBRequest对象。这几乎使得IDB使用起来很顺手。</p>
+<blockquote>
+<p>When IDB fires a success event, the related <a target="_blank" rel="noopener" href="https://w3c.github.io/IndexedDB/#fire-a-success-event">transaction object becomes inactive after dispatching</a> (step 4). If I create a promise that resolves when this event fires, the callbacks should run before step 4 while the transaction is still active, but that doesn’t happen in browsers other than Chrome, rendering the library kinda useless.</p>
+</blockquote>
+<p>译：当IDB发射一个成功的事件时，相关的事物对象在分发后会变得不活跃（在步骤4）。如果我创建一个promise，当这个事件发射的时候resolve它，回调可以在第4步之前执行，这时的事务对象仍然活跃。但是那不能在chrome以外的浏览器中发生，使得这个js库有点没用。</p>
+<blockquote>
+<p>You can actually work around this problem in Firefox, because promise polyfills such as <a target="_blank" rel="noopener" href="https://github.com/jakearchibald/es6-promise">es6-promise</a> use mutation observers for callbacks, which correctly use microtasks. Safari seems to suffer from race conditions with that fix, but that could just be their <a target="_blank" rel="noopener" href="http://www.raymondcamden.com/2014/09/25/IndexedDB-on-iOS-8-Broken-Bad">broken implementation of IDB</a>. Unfortunately, things consistently fail in IE&#x2F;Edge, as mutation events aren’t handled after callbacks.</p>
+</blockquote>
+<p>译：事实上你可以在Firefox中解决这个问题，因为promise的polyfills（低版本浏览器实现）使用了可变观察者作为回调，这个实现正确使用了微任务。对于这个修复，Safari好像会有竞争问题，但是那存在于它们的坏的IDB的实现中。不幸的是，这个修复在IE&#x2F;Edge中一致失败，因为可变的事件在回调之后不被处理。</p>
+<blockquote>
+<p>Hopefully we’ll start to see some interoperability here soon.</p>
+</blockquote>
+<p>译：希望我们可以很快找到这里面的一些互通性。</p>
+<h2 id="You-made-it-（你做到了！）"><a href="#You-made-it-（你做到了！）" class="headerlink" title="You made it!（你做到了！）"></a>You made it!（你做到了！）</h2><blockquote>
+<p>In summary:</p>
+<ul>
+<li>Tasks execute in order, and the browser may render between them</li>
+<li>Microtasks execute in order, and are executed:</li>
+</ul>
+</blockquote>
+<ul>
+<li>after every callback, as long as no other JavaScript is mid-execution</li>
+</ul>
+<blockquote>
+<ul>
+<li>at the end of each task</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<p>综上所属：</p>
+<ul>
+<li>任务按顺序执行，浏览器可能在它们之间渲染</li>
+<li>微任务按顺序执行<ul>
+<li>在每一个回调之后执行，只有没有其他的JavaScript在执行中时。</li>
+<li>在每一个任务的最后。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Hopefully you now know your way around the event loop, or at least have an excuse to go and have a lie down.</p>
+</blockquote>
+<p>译：希望你现在可以以你的方式理解事件循环，或者至少有一个借口去躺下（？？？）。</p>
+<blockquote>
+<p>Actually, is anyone still reading? Hello? Hello?</p>
+</blockquote>
+<p>译：实际上，有人读到这里了吗，hello？hello？</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>还是挺有意思的，虽然有些地方翻译起来怪怪的，并且有些指向链接已经失效了，但是单纯的在这篇文章还是能学到很多有趣的知识的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/6da281009a11" title="JavaScript中的Tasks, microtasks, queues and schedules（译）">https://prohibitorum.top/6da281009a11</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/be722bed23aa" rel="prev" title="JavaScript中的Proxy">
+                  <i class="fa fa-angle-left"></i> JavaScript中的Proxy
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/6e201f64d36b" rel="next" title="手写Promise笔记">
+                  手写Promise笔记 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591928364"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

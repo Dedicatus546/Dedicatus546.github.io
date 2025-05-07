@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言Vue的源码看的头大… 先看看Underscore的吧… 这个还看得懂。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Underscore.js源码学习">
+<meta property="og:url" content="https://prohibitorum.top/c730de415d10">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言Vue的源码看的头大… 先看看Underscore的吧… 这个还看得懂。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-12T12:13:47.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/c730de415d10.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/c730de415d10","path":"c730de415d10.html","title":"Underscore.js源码学习"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Underscore.js源码学习 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Underscore-js"><span class="nav-number">2.</span> <span class="nav-text">Underscore.js</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#forEach"><span class="nav-number">2.1.</span> <span class="nav-text">forEach</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#map"><span class="nav-number">2.2.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#filter"><span class="nav-number">2.3.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find"><span class="nav-number">2.4.</span> <span class="nav-text">find</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reduce-reduceRight"><span class="nav-number">2.5.</span> <span class="nav-text">reduce &amp;&amp; reduceRight</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/c730de415d10">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Underscore.js源码学习 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Underscore.js源码学习
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 12:13:47" itemprop="dateCreated datePublished" datetime="2020-06-12T12:13:47+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Vue的源码看的头大…</p>
+<p>先看看Underscore的吧…</p>
+<p>这个还看得懂。</p>
+<span id="more"></span>
+
+<h1 id="Underscore-js"><a href="#Underscore-js" class="headerlink" title="Underscore.js"></a>Underscore.js</h1><blockquote>
+<p>Underscore.js is a utility-belt library for JavaScript that provides support for the usual functional suspects (each, map, reduce, filter…) without extending any core JavaScript objects.</p>
+</blockquote>
+<p>一个提供常用函数，比如<code>forEach</code>，<code>map</code>，<code>filter</code>等，支持低版本的浏览器</p>
+<blockquote>
+<p>github地址 <a target="_blank" rel="noopener" href="https://github.com/jashkenas/underscore">underscore.js</a></p>
+</blockquote>
+<p>这次来学学一些关于数组的函数</p>
+<h2 id="forEach"><a href="#forEach" class="headerlink" title="forEach"></a><code>forEach</code></h2><p>内置的<code>forEach</code>的语法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[].<span class="title function_">forEach</span>(<span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定函数运行的上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在Underscore中为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.<span class="title function_">forEach</span>([], <span class="keyword">function</span>(<span class="params">v, i, a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定函数运行的上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>源代码如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">each</span>(<span class="params">obj, iteratee, context</span>) &#123;</span><br><span class="line">  iteratee = <span class="title function_">optimizeCb</span>(iteratee, context);</span><br><span class="line">  <span class="keyword">var</span> i, length;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isArrayLike</span>(obj)) &#123;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, length = obj.<span class="property">length</span>; i &lt; length; i++) &#123;</span><br><span class="line">      <span class="title function_">iteratee</span>(obj[i], i, obj);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> _keys = <span class="title function_">keys</span>(obj);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>, length = _keys.<span class="property">length</span>; i &lt; length; i++) &#123;</span><br><span class="line">      <span class="title function_">iteratee</span>(obj[_keys[i]], _keys[i], obj);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>流程其实很清晰</p>
+<ul>
+<li><code>optimizeCb</code> 先是对传进来的函数和上下文进行处理</li>
+<li><code>isArrayLike</code> 判断传进来的对象是数组，直接用索引取值来执行函数</li>
+<li>不是数组，视作为一个对象，获取键名，通过键名取值来执行函数</li>
+</ul>
+<p>接下来看下<code>optimizeCb</code>这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">optimizeCb</span>(<span class="params">func, context, argCount</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (context === <span class="built_in">void</span> <span class="number">0</span>) <span class="keyword">return</span> func;</span><br><span class="line">  <span class="keyword">switch</span> (argCount == <span class="literal">null</span> ? <span class="number">3</span> : argCount) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">value</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> func.<span class="title function_">call</span>(context, value);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// The 2-argument case is omitted because we’re not using it.</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">value, index, collection</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> func.<span class="title function_">call</span>(context, value, index, collection);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">accumulator, value, index, collection</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> func.<span class="title function_">call</span>(context, accumulator, value, index, collection);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> func.<span class="title function_">apply</span>(context, <span class="variable language_">arguments</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里函数根据参数<code>argCount</code>来决定返回函数的参数个数。</p>
+<p><code>switch</code>语句中<code>argCount</code>默认为3，也就是数组的函数方法中最常见的回调函数的参数，即<code>item,index,array</code>这种格式。</p>
+<p>接下来是<code>isArrayLike(obj)</code>这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isArrayLike = <span class="title function_">createSizePropertyCheck</span>(getLength);</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了<code>getLength</code>这个变量和<code>createSizePropertyCheck</code>这个函数。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> getLength = <span class="title function_">shallowProperty</span>(<span class="string">&#x27;length&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createSizePropertyCheck</span>(<span class="params">getSizeProperty</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">collection</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> sizeProperty = <span class="title function_">getSizeProperty</span>(collection);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">typeof</span> sizeProperty == <span class="string">&#x27;number&#x27;</span> &amp;&amp; sizeProperty &gt;= <span class="number">0</span> &amp;&amp; sizeProperty &lt;= <span class="variable constant_">MAX_ARRAY_INDEX</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">getLength</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]); <span class="comment">// 输出3（数组的长度）</span></span><br></pre></td></tr></table></figure>
+
+<p>又使用了<code>shallowProperty</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">shallowProperty</span>(<span class="params">key</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> obj == <span class="literal">null</span> ? <span class="built_in">void</span> <span class="number">0</span> : obj[key];</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>shallowProperty</code>这个函数也不复杂，就是对对象取属性值的操作，接收一个属性名，返回一个函数，这个函数接收一个对象，返回对应属性名的属性值。</p>
+<p><code>createSizePropertyCheck</code> 使用了我们创建的<code>getLength</code>出来的函数。这个函数又返回一个函数，用来检查传进来的参数的<code>length</code>属性值，这里返回的判断为<code>typeof sizeProperty == &amp;#39;number&amp;#39; &amp;amp;&amp;amp; sizeProperty &amp;gt;= 0 &amp;amp;&amp;amp; sizeProperty &amp;lt;= MAX_ARRAY_INDEX</code>，这里前两个判断还是挺好理解的，一个是判断类型是不是为<code>number</code>，一个判断长度是不是大于等于0，至于最后一个判断，<code>MAX_ARRAY_INDEX</code>这个变量对于的值为<code>Math.pow(2, 53) - 1</code>，这个值为JavaScript最大的整型数字，可以通过<code>Number.MAX_SAFE_INTEGER</code>来查看。但是我自己试了下，new不出来这么大的数组，可能是一种折中的解决方案吧。</p>
+<p>回到<code>each</code>函数，只差最后一个<code>keys</code>函数了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">keys</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isObject</span>(obj)) <span class="keyword">return</span> [];</span><br><span class="line">  <span class="keyword">if</span> (nativeKeys) <span class="keyword">return</span> <span class="title function_">nativeKeys</span>(obj);</span><br><span class="line">  <span class="keyword">var</span> _keys = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> key <span class="keyword">in</span> obj) <span class="keyword">if</span> (<span class="title function_">_has</span>(obj, key)) _keys.<span class="title function_">push</span>(key);</span><br><span class="line">  <span class="comment">// Ahem, IE &lt; 9.</span></span><br><span class="line">  <span class="keyword">if</span> (hasEnumBug) <span class="title function_">collectNonEnumProps</span>(obj, _keys);</span><br><span class="line">  <span class="keyword">return</span> _keys;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了<code>isObject(obj)</code>函数，<code>nativeKeys(obj)</code>函数 <code>_has</code>函数，<code>hasEnumBug</code>变量和<code>collectNonEnumProps(obj, keys)</code>函数</p>
+<p><code>isObject</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">isObject</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> <span class="keyword">type</span> = <span class="keyword">typeof</span> obj;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">type</span> === <span class="string">&#x27;function&#x27;</span> || <span class="keyword">type</span> === <span class="string">&#x27;object&#x27;</span> &amp;&amp; !!obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断入参是否为一个对象，判断了对象<code>typeof</code>后的值。</p>
+<p>除了<code>type === &amp;#39;object&amp;#39;</code>这个标准的判断之外，<code>!!obj</code>条件把<code>null</code>值给排除，<code>type === &amp;#39;function&amp;#39;</code>把函数也给归到对象里面。</p>
+<p><code>nativeKeys</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nativeKeys = <span class="title class_">Object</span>.<span class="property">keys</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这里为使用原生的方法，如果存在的话。</p>
+<p><code>_has</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">ObjProto</span> = <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>;</span><br><span class="line"><span class="keyword">var</span> hasOwnProperty = <span class="title class_">ObjProto</span>.<span class="property">hasOwnProperty</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_has</span>(<span class="params">obj, path</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> obj != <span class="literal">null</span> &amp;&amp; hasOwnProperty.<span class="title function_">call</span>(obj, path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里是使用了原生的<code>hasOwnProperty</code>方法</p>
+<p><code>hasEnumBug</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Keys in IE &lt; 9 that won&#x27;t be iterated by `for key in ...` and thus missed.</span></span><br><span class="line"><span class="keyword">var</span> hasEnumBug = !&#123;<span class="attr">toString</span>: <span class="literal">null</span>&#125;.<span class="title function_">propertyIsEnumerable</span>(<span class="string">&#x27;toString&#x27;</span>);</span><br><span class="line"><span class="keyword">var</span> nonEnumerableProps = [<span class="string">&#x27;valueOf&#x27;</span>, <span class="string">&#x27;isPrototypeOf&#x27;</span>, <span class="string">&#x27;toString&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;propertyIsEnumerable&#x27;</span>, <span class="string">&#x27;hasOwnProperty&#x27;</span>, <span class="string">&#x27;toLocaleString&#x27;</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这里在源代码中有注释，翻译过来大概是在IE9以下的版本某些属性名不能被<code>for-in</code>遍历（这里的某些属性名在<code>nonEnumerableProps</code>定义了），会忽略这个操作。</p>
+<p>我在IE11上用IE5的打开一个脚本测试发现可以遍历出属性，不知道是不是用的IE11的问题。</p>
+<p>这句话可能说的比较含糊，根据他这个语句，我觉得意思应该是重写了某些属性，但是该属性依然不可枚举这样的bug。</p>
+<p><code>collectNonEnumProps</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">collectNonEnumProps</span>(<span class="params">obj, _keys</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> nonEnumIdx = nonEnumerableProps.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">var</span> constructor = obj.<span class="property">constructor</span>;</span><br><span class="line">  <span class="comment">// 取原型</span></span><br><span class="line">  <span class="keyword">var</span> proto = <span class="title function_">isFunction</span>(constructor) &amp;&amp; constructor.<span class="property"><span class="keyword">prototype</span></span> || <span class="title class_">ObjProto</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Constructor is a special case.</span></span><br><span class="line">  <span class="comment">// constructor构造器特殊处理，这里不是很懂...</span></span><br><span class="line">  <span class="keyword">var</span> prop = <span class="string">&#x27;constructor&#x27;</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">_has</span>(obj, prop) &amp;&amp; !<span class="title function_">contains</span>(_keys, prop)) _keys.<span class="title function_">push</span>(prop);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (nonEnumIdx--) &#123;</span><br><span class="line">    prop = nonEnumerableProps[nonEnumIdx];</span><br><span class="line">    <span class="comment">// 属性在整个原型链中，但是对象和原型所拥有的不是同一个。</span></span><br><span class="line">    <span class="keyword">if</span> (prop <span class="keyword">in</span> obj &amp;&amp; obj[prop] !== proto[prop] &amp;&amp; !<span class="title function_">contains</span>(_keys, prop)) &#123;</span><br><span class="line">      _keys.<span class="title function_">push</span>(prop);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个方法就是对尝试对丢失的属性进行查找并添加到属性名的数组中。</p>
+<p>ok，把函数搞清楚之后，步骤就清晰了，对于<code>keys</code>方法</p>
+<ul>
+<li>判断不是对象，不是返回一个空的数组</li>
+<li>判断原生的<code>keys</code>方法可用，使用原生的方法</li>
+<li>原生的<code>keys</code>方法不可以，使用<code>for-in</code>遍历并存到数组中。</li>
+<li>存在IE遗失属性的bug，就尝试寻找丢失的属性名。</li>
+</ul>
+<p>对于<code>each</code>，基本上就是这样，最后返回了数组本身，方便链式调用。</p>
+<h2 id="map"><a href="#map" class="headerlink" title="map"></a><code>map</code></h2><p>内置的<code>map</code>的语法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[].<span class="title function_">map</span>(<span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在Underscore中为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.<span class="title function_">map</span>([], <span class="keyword">function</span>(<span class="params">v, i, a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>它的源码如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">map</span>(<span class="params">obj, iteratee, context</span>) &#123;</span><br><span class="line">  iteratee = <span class="title function_">cb</span>(iteratee, context);</span><br><span class="line">  <span class="keyword">var</span> _keys = !<span class="title function_">isArrayLike</span>(obj) &amp;&amp; <span class="title function_">keys</span>(obj),</span><br><span class="line">      length = (_keys || obj).<span class="property">length</span>,</span><br><span class="line">      results = <span class="title class_">Array</span>(length);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> index = <span class="number">0</span>; index &lt; length; index++) &#123;</span><br><span class="line">    <span class="keyword">var</span> currentKey = _keys ? _keys[index] : index;</span><br><span class="line">    results[index] = <span class="title function_">iteratee</span>(obj[currentKey], currentKey, obj);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过<code>each</code>中大部分函数的学习之后，看之后的函数就会简单很多了，</p>
+<p>首先通过<code>cb</code>函数来处理回调函数和上下文，这个<code>cb</code>和之前的<code>optimizeCb</code>不同</p>
+<p><code>cb</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The function we actually call internally. It invokes _.iteratee if</span></span><br><span class="line"><span class="comment">// overridden, otherwise baseIteratee.</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">cb</span>(<span class="params">value, context, argCount</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (_.<span class="property">iteratee</span> !== iteratee) <span class="keyword">return</span> _.<span class="title function_">iteratee</span>(value, context);</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">baseIteratee</span>(value, context, argCount);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的注释说明了一般情况下会使用内部的<code>baseIteratee</code>来处理回调函数和上下文，如果用户自己指定了<code>iteratee</code>，就使用用户自己定义的。</p>
+<p><code>baseIteratee</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Keep the identity function around for default iteratees.</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">identity</span>(<span class="params">value</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">baseIteratee</span>(<span class="params">value, context, argCount</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (value == <span class="literal">null</span>) <span class="keyword">return</span> identity;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isFunction</span>(value)) <span class="keyword">return</span> <span class="title function_">optimizeCb</span>(value, context, argCount);</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isObject</span>(value) &amp;&amp; !<span class="title function_">isArray</span>(value)) <span class="keyword">return</span> <span class="title function_">matcher</span>(value);</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">property</span>(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>baseIteratee</code>主要对回调进行处理，默认的<code>identity</code>回调，这样子在主函数，也就是<code>map</code>函数的内部就不用去判断回调函数是否为空了。</p>
+<p>这里前两个返回还是挺好理解的，重要的是后面两个返回，一个是在是对象但不是数组的情况下的<code>matcher</code>函数和最后返回的<code>property</code>函数</p>
+<p><code>matcher</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">matcher</span>(<span class="params">attrs</span>) &#123;</span><br><span class="line">  attrs = <span class="title function_">extendOwn</span>(&#123;&#125;, attrs);</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">isMatch</span>(obj, attrs);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里又用到了<code>extendOwn</code>和<code>isMatch</code>函数</p>
+<p><code>extendOwn</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> extendOwn = <span class="title function_">createAssigner</span>(keys);</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createAssigner</span>(<span class="params">keysFunc, defaults</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> length = <span class="variable language_">arguments</span>.<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">if</span> (defaults) obj = <span class="title class_">Object</span>(obj);</span><br><span class="line">    <span class="keyword">if</span> (length &lt; <span class="number">2</span> || obj == <span class="literal">null</span>) <span class="keyword">return</span> obj;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> index = <span class="number">1</span>; index &lt; length; index++) &#123;</span><br><span class="line">      <span class="keyword">var</span> source = <span class="variable language_">arguments</span>[index],</span><br><span class="line">          _keys = <span class="title function_">keysFunc</span>(source),</span><br><span class="line">          l = _keys.<span class="property">length</span>;</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; l; i++) &#123;</span><br><span class="line">        <span class="keyword">var</span> key = _keys[i];</span><br><span class="line">        <span class="keyword">if</span> (!defaults || obj[key] === <span class="built_in">void</span> <span class="number">0</span>) obj[key] = source[key];</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> obj;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例子</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">extendOwn</span>(&#123;&#125;, &#123;<span class="attr">a</span>: <span class="number">1</span>&#125;, &#123;<span class="attr">b</span>: <span class="number">2</span>&#125;); <span class="comment">// 输出&#123;a: 1, b: 2&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>createAssigner</code>接收一个获取keys的函数，返回了一个函数，这个函数的作用就是把第二个之后的参数都合并到第一个参数中，并返回第一个参数。</p>
+<p><code>isMatch</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">isMatch</span>(<span class="params"><span class="built_in">object</span>, attrs</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> _keys = <span class="title function_">keys</span>(attrs), length = _keys.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">object</span> == <span class="literal">null</span>) <span class="keyword">return</span> !length;</span><br><span class="line">  <span class="keyword">var</span> obj = <span class="title class_">Object</span>(<span class="built_in">object</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> key = _keys[i];</span><br><span class="line">    <span class="keyword">if</span> (attrs[key] !== obj[key] || !(key <span class="keyword">in</span> obj)) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>isMatch</code>就是判断传进的对象是否和<code>attr</code>中全部的属性名相等。</p>
+<p>例子</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">isMatch</span>(&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;, &#123;<span class="attr">a</span>: <span class="number">1</span>&#125;); <span class="comment">// 输出true</span></span><br><span class="line"><span class="title function_">isMatch</span>(&#123;<span class="attr">a</span>: <span class="number">1</span>&#125;, &#123;<span class="attr">a</span>: <span class="number">1</span>, <span class="attr">b</span>: <span class="number">2</span>&#125;); <span class="comment">// 输出false</span></span><br></pre></td></tr></table></figure>
+
+<p>最后一个返回就是<code>property</code>函数了</p>
+<p><code>property</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">property</span>(<span class="params">path</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isArray</span>(path)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">shallowProperty</span>(path);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">deepGet</span>(obj, path);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>shallowProperty</code>之前说过了就是取对象的属性值的，所以只要看<code>deepGet</code>函数就行</p>
+<p><code>deepGet</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">deepGet</span>(<span class="params">obj, path</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> length = path.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (obj == <span class="literal">null</span>) <span class="keyword">return</span> <span class="built_in">void</span> <span class="number">0</span>;</span><br><span class="line">    obj = obj[path[i]];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> length ? obj : <span class="built_in">void</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里传进来的<code>path</code>就是一个数组，通过迭代来取得层级属性的值。</p>
+<p>例子</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">deepGet</span>(&#123;<span class="attr">a</span>: &#123;<span class="attr">b</span>: <span class="number">1</span>&#125;&#125;, [<span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>]) <span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure>
+
+<p>回到<code>map</code>函数中</p>
+<p>接着<code>var _keys = !isArrayLike(obj) &amp;amp;&amp;amp; keys(obj)</code></p>
+<p>当传入的是对象的是否，<code>!isArrayLike(obj)</code>会是<code>true</code>，就会执行<code>keys</code>函数来返回<code>obj</code>的属性名数组，根据<code>&amp;amp;&amp;amp;</code>这个操作符，会返回后面的值，也就是<code>obj</code>的属性名数组。</p>
+<p>然后<code>length = (_keys || obj).length</code>，如果前一步确定是对象了，就会获取<code>_keys</code>数组的长度，否则就是正常的获取<code>obj</code>数组的长度</p>
+<p>接着便是很简单的遍历调用并存储结果，最后返回这个结果。</p>
+<h2 id="filter"><a href="#filter" class="headerlink" title="filter"></a><code>filter</code></h2><p>内置的<code>filter</code>的语法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[].<span class="title function_">filter</span>(<span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在Underscore中为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.<span class="title function_">filter</span>([], <span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>它的源代码为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">filter</span>(<span class="params">obj, predicate, context</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> results = [];</span><br><span class="line">  predicate = <span class="title function_">cb</span>(predicate, context);</span><br><span class="line">  <span class="title function_">each</span>(obj, <span class="keyword">function</span>(<span class="params">value, index, list</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">predicate</span>(value, index, list)) results.<span class="title function_">push</span>(value);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还是先通过<code>cb</code>来处理回调和上下文。</p>
+<p>然后可以看到，内部使用了<code>each</code>函数来遍历，在函数体内执行传进来的判定函数<code>predicate</code>来验证是否加入结果集中。</p>
+<h2 id="find"><a href="#find" class="headerlink" title="find"></a><code>find</code></h2><p>内置的<code>find</code>的语法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[].<span class="title function_">find</span>(<span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>在Underscore中</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.<span class="title function_">find</span>([], <span class="keyword">function</span>(<span class="params">v, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>它的源代码为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">find</span>(<span class="params">obj, predicate, context</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> keyFinder = <span class="title function_">isArrayLike</span>(obj) ? findIndex : findKey;</span><br><span class="line">  <span class="keyword">var</span> key = <span class="title function_">keyFinder</span>(obj, predicate, context);</span><br><span class="line">  <span class="keyword">if</span> (key !== <span class="built_in">void</span> <span class="number">0</span> &amp;&amp; key !== -<span class="number">1</span>) <span class="keyword">return</span> obj[key];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要的实现在<code>findIndex</code>和<code>findKey</code>中，一个是寻找数组索引，一个是寻找对象的键。</p>
+<p><code>findIndex</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> findIndex = <span class="title function_">createPredicateIndexFinder</span>(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createPredicateIndexFinder</span>(<span class="params">dir</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">array, predicate, context</span>) &#123;</span><br><span class="line">    predicate = <span class="title function_">cb</span>(predicate, context);</span><br><span class="line">    <span class="keyword">var</span> length = <span class="title function_">getLength</span>(array);</span><br><span class="line">    <span class="keyword">var</span> index = dir &gt; <span class="number">0</span> ? <span class="number">0</span> : length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (; index &gt;= <span class="number">0</span> &amp;&amp; index &lt; length; index += dir) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">predicate</span>(array[index], index, array)) <span class="keyword">return</span> index;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>createPredicateIndexFinder</code>来创建回调函数</p>
+<p>首先是<code>cb</code>处理上下文，然后<code>getLength</code>获取数组长度，然后通过入参<code>dir</code>来确定遍历的方向，然后就是遍历来找到第一个确定的索引，找不到就返回<code>-1</code>.</p>
+<p>这里要注意的一点是循环体中的<code>index += dir</code>，这里传入<code>1</code>就是正向查找，传入<code>-1</code>就是反向查找，也可以看到源码中也有一个<code>findLastIndex</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> findLastIndex = <span class="title function_">createPredicateIndexFinder</span>(-<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>findKey</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">findKey</span>(<span class="params">obj, predicate, context</span>) &#123;</span><br><span class="line">  predicate = <span class="title function_">cb</span>(predicate, context);</span><br><span class="line">  <span class="keyword">var</span> _keys = <span class="title function_">keys</span>(obj), key;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, length = _keys.<span class="property">length</span>; i &lt; length; i++) &#123;</span><br><span class="line">    key = _keys[i];</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">predicate</span>(obj[key], key, obj)) <span class="keyword">return</span> key;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>老样子，还是<code>cb</code>处理上下文，之后用<code>keys</code>来获取对象的所有的键，然后就是简单的遍历了。</p>
+<p>函数默认就是返回<code>undefined</code>，<code>findKey</code>没找到返回<code>undefined</code>，<code>void 0</code>返回的就是<code>undefined</code>，<code>findIndex</code>没找到就返回<code>-1</code>，所以最后判断是否找到了，找到了就通过<code>obj[property]</code>这种形式返回。如果没找到，没有返回，函数默认的返回就是<code>undefined</code>。</p>
+<h2 id="reduce-reduceRight"><a href="#reduce-reduceRight" class="headerlink" title="reduce &amp;&amp; reduceRight"></a><code>reduce</code> &amp;&amp; <code>reduceRight</code></h2><p>内置的<code>reduce</code>语法</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[].<span class="title function_">reduce</span>(<span class="keyword">function</span>(<span class="params">pre, cur, i, a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, &#123;&#125; <span class="comment">/*初始值*/</span> )</span><br></pre></td></tr></table></figure>
+
+<p>在Underscore中为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_.<span class="title function_">reduce</span>([], <span class="keyword">function</span>(<span class="params">pre, cur, i ,a</span>) &#123;</span><br><span class="line">  <span class="comment">// 函数内容</span></span><br><span class="line">&#125;, &#123;&#125; <span class="comment">/*初始值*/</span>, <span class="variable language_">window</span><span class="comment">/*指定上下文*/</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里可能有人没怎么使用过这个函数，对这个函数的作用不是特别清楚。MDN上对<code>reduce</code>的解释为</p>
+<blockquote>
+<p>reduce() 方法对数组中的每个元素执行一个由您提供的reducer函数(升序执行)，将其结果汇总为单个返回值。</p>
+</blockquote>
+<p>可以举个例子</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].<span class="title function_">reduce</span>(<span class="keyword">function</span>(<span class="params">pre, cur, i ,a</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> pre + cur;</span><br><span class="line">&#125;, <span class="number">0</span>);  <span class="comment">// 输出 10，即对数组的项进行累加</span></span><br></pre></td></tr></table></figure>
+
+<p>这个函数的四个参数分别为：</p>
+<ul>
+<li><code>pre</code> 累加器</li>
+<li><code>cur</code> 当前值</li>
+<li><code>i</code> 当前值在数组内的索引</li>
+<li><code>a</code> 原数组</li>
+</ul>
+<p>当传入第二个参数作为起始值时，会从第一个元素开始遍历，也就是第一次遍历时，<code>pre = 0</code>，<code>cur = 1</code><br>而如果不传入第二个参数，则函数第一项会作为起始值，跳过第一项，从第二项开始遍历，也就是第一次遍历时，<code>pre = 1</code>，<code>cur = 2</code></p>
+<p>它的源码为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> reduce = <span class="title function_">createReduce</span>(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这里主要的实现是通过<code>createReduce</code>这个函数，所以找到这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReduce</span>(<span class="params">dir</span>) &#123;</span><br><span class="line">  <span class="comment">// Wrap code that reassigns argument variables in a separate function than</span></span><br><span class="line">  <span class="comment">// the one that accesses `arguments.length` to avoid a perf hit. (#1991)</span></span><br><span class="line">  <span class="keyword">var</span> reducer = <span class="keyword">function</span>(<span class="params">obj, iteratee, memo, initial</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> _keys = !<span class="title function_">isArrayLike</span>(obj) &amp;&amp; <span class="title function_">keys</span>(obj),</span><br><span class="line">        length = (_keys || obj).<span class="property">length</span>,</span><br><span class="line">        index = dir &gt; <span class="number">0</span> ? <span class="number">0</span> : length - <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (!initial) &#123;</span><br><span class="line">      memo = obj[_keys ? _keys[index] : index];</span><br><span class="line">      index += dir;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (; index &gt;= <span class="number">0</span> &amp;&amp; index &lt; length; index += dir) &#123;</span><br><span class="line">      <span class="keyword">var</span> currentKey = _keys ? _keys[index] : index;</span><br><span class="line">      memo = <span class="title function_">iteratee</span>(memo, obj[currentKey], currentKey, obj);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">obj, iteratee, memo, context</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> initial = <span class="variable language_">arguments</span>.<span class="property">length</span> &gt;= <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">reducer</span>(obj, <span class="title function_">optimizeCb</span>(iteratee, context, <span class="number">4</span>), memo, initial);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数内部又定义了一个<code>reducer</code>函数，返回了一个函数，返回的函数中调用了这个<code>reducer</code>（并且通过<code>optimizeCb</code>做了上下文绑定）。</p>
+<p><code>reducer</code>做的事情其实很简单，就是根据<code>dir</code>和<code>initial</code>变量来确定整个运行过程。</p>
+<p>其中<code>dir</code>控制了遍历的方向。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index = dir &gt; <span class="number">0</span> ? <span class="number">0</span> : length - <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>而<code>initial</code>控制了是否设置第一个索引值作为默认值。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 无初始值</span></span><br><span class="line"><span class="keyword">if</span> (!initial) &#123;</span><br><span class="line">  <span class="comment">// memo设为第一个值</span></span><br><span class="line">  memo = obj[_keys ? _keys[index] : index];</span><br><span class="line">  <span class="comment">// 跳过该索引</span></span><br><span class="line">  index += dir;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>createReduce</code>返回的函数中，使用了函数内部的变量<code>arguments</code>的<code>length</code>属性来确定用户是否传入了memo变量。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> initial = <span class="variable language_">arguments</span>.<span class="property">length</span> &gt;= <span class="number">3</span>; <span class="comment">// 小于3，没有传入memo初始值，initial为false，反之为true</span></span><br></pre></td></tr></table></figure>
+
+<p>通过<code>createReduce</code>，也可以生成一个从右往左的<code>reduce</code>，也就是<code>reduceRight</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">var</span> reduceRight = <span class="title function_">createReduce</span>(-<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>感觉Underscore中大量使用了返回函数的形式来组织代码，看起来跳来跳去的，得耐心下来读。</p>
+<p>暂时就写这么多，学一学一些基本的<code>Polyfill</code>也是相当不错的。后续应该会接着更新~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/c730de415d10" title="Underscore.js源码学习">https://prohibitorum.top/c730de415d10</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/bb8ab1e3fdfa" rel="prev" title="Vue3.0Shared中那些小而美的函数">
+                  <i class="fa fa-angle-left"></i> Vue3.0Shared中那些小而美的函数
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/e245b6a116a9" rel="next" title="Redux源码解读 - createStore篇">
+                  Redux源码解读 - createStore篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591935227"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

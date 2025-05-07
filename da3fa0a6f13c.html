@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言一个替换 cdn 前缀的小工具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个替换 cdn 前缀的小工具">
+<meta property="og:url" content="https://prohibitorum.top/da3fa0a6f13c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言一个替换 cdn 前缀的小工具">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251623316.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251624556.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251631748.avif">
+<meta property="article:published_time" content="2022-07-25T15:40:52.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Node">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/da3fa0a6f13c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/da3fa0a6f13c","path":"da3fa0a6f13c.html","title":"一个替换 cdn 前缀的小工具"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>一个替换 cdn 前缀的小工具 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#getPostList-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">getPostList 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#replaceCdn-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">replaceCdn 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#writePostList-%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.3.</span> <span class="nav-text">writePostList 实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/da3fa0a6f13c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="一个替换 cdn 前缀的小工具 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          一个替换 cdn 前缀的小工具
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-25 15:40:52" itemprop="dateCreated datePublished" datetime="2022-07-25T15:40:52+00:00">2022-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>一个替换 <code>cdn</code> 前缀的小工具</p>
+<span id="more"></span> 
+
+<p>众所周知，人不会闲着蛋疼给自己找事干</p>
+<p>所以，做这个小工具是有原因的，原因如下</p>
+<p>目前博客的图床是丢在 <code>github</code> 仓库上的，然后通过 <code>jsdelivr</code> 来进行 <code>cdn</code> 代理的</p>
+<p>这个说实话非常的不错，最开始图床用的 <code>sm.ms</code> ，但是图片不在自己手里不是很放心，后面就使用 <code>github</code> 图床</p>
+<p>但是最近 <code>jsdelivr</code> 的 <code>cdn</code> 很容易出现连接不上的情况，可以说非常的操蛋，一下子整个站点的图片全挂了</p>
+<p><code>issue</code> 地址：<a target="_blank" rel="noopener" href="https://github.com/jsdelivr/jsdelivr/issues/18397">Jsdelivr have been DNS pollution and SNI block again in China. They are pointed to google, twitter and facebook IPs</a></p>
+<p>问题很明显：<code>cdn.jsdelivr.net</code> 被 <code>DNS</code> 污染了，所以无法访问了，但是另一个地址 <code>fastly.jsdelivr.net</code> 是没有问题的</p>
+<p>所以我们需要把全部的 <code>md</code> 文档里面的图片的 <code>cdn.jsdelivr.net</code> 链接替换成 <code>fastly.jsdelivr.net</code></p>
+<p>虽然可以直接 <code>ide</code> 搜索复制的，但是作为一个有梦想的咸鱼，额，不对，有梦想的程序员，借助 <code>node</code> 来替我们完成这项工作</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>首先我们需要拆解下处理的步骤</p>
+<ul>
+<li>读出文件的内容</li>
+<li>替换相关内容</li>
+<li>写入文件的内容</li>
+</ul>
+<p>所以我们可以写出下面的简单框架</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">POST_LIST_DIR</span> = <span class="string">&#x27;./source/_posts&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">SOURCE_CDN</span> = <span class="string">&#x27;fastly.jsdelivr.net&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">TARGET_CDN</span> = <span class="string">&#x27;cdn.jsdelivr.net&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REGEXP</span> = <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">`!\\[.*\\]\\(https?:\\/\\/<span class="subst">$&#123;SOURCE_CDN.replaceAll(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;\\.&quot;</span>)&#125;</span>.*\\)`</span>, <span class="string">&#x27;img&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPostList</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">replaceCdn</span> = (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// TODO </span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;void&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">writePostList</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// TODO</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = <span class="keyword">await</span> <span class="title function_">getPostList</span>();</span><br><span class="line">  <span class="keyword">const</span> newPostList = <span class="title function_">replaceCdn</span>(postList);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">writePostList</span>(newPostList);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里面我们使用了 <code>&#123; filepath: string; fileContent: string &#125;</code> 来作为中间的数据结构</p>
+<p>主要是为了让内容和文件对应，这样子处理完成之后，我们能够重新的写回去</p>
+<p>在替换部分我们使用了正则</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="variable constant_">REGEXP</span> = <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">`!\\[.*\\]\\(https?:\\/\\/<span class="subst">$&#123;SOURCE_CDN.replaceAll(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;\\.&quot;</span>)&#125;</span>.*\\)`</span>, <span class="string">&#x27;img&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>md</code> 中，图片的语法是 <code>![图片的简介](图片地址)</code></p>
+<p>在不处理地址的情况下，我们使用 <code>/!\[.*\]\(.*\)/mg</code> 即可匹配到对应的项</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif"></p>
+<p>加上地址的话只要在圆括号判断即可 <code>/!\[.*\]\(https?:\/\/fastly\.jsdelivr\.net.*\)/img</code></p>
+<p>这里加上地址判断的原因是之前还有一些图片使用的 <code>sm.ms</code> 的图床，排除掉它们</p>
+<p>接下来就可以实现每个函数了</p>
+<h2 id="getPostList-实现"><a href="#getPostList-实现" class="headerlink" title="getPostList 实现"></a>getPostList 实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">getPostList</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 读一个文件夹，会返回文件夹内的文件列表名字</span></span><br><span class="line">    fs.<span class="title function_">readdir</span>(<span class="variable constant_">POST_LIST_DIR</span>, <span class="function">(<span class="params">err, result</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(err);</span><br><span class="line">        <span class="title function_">reject</span>(err);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="title class_">Promise</span>.<span class="title function_">all</span>(result.<span class="title function_">map</span>(<span class="function"><span class="params">filename</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">          <span class="comment">// 构造文件的绝对路径</span></span><br><span class="line">          <span class="keyword">const</span> filepath = path.<span class="title function_">resolve</span>(<span class="variable constant_">POST_LIST_DIR</span>, filename)</span><br><span class="line">          <span class="comment">// 读取这个文件</span></span><br><span class="line">          fs.<span class="title function_">readFile</span>(filepath, <span class="function">(<span class="params">err, result</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (err) &#123;</span><br><span class="line">              <span class="title function_">reject</span>(err);</span><br><span class="line">              <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 把结果 resolve 出去</span></span><br><span class="line">            <span class="title function_">resolve</span>(&#123;</span><br><span class="line">              filepath, </span><br><span class="line">              <span class="attr">fileContent</span>: result.<span class="title function_">toString</span>(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">            &#125;);</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;)).<span class="title function_">then</span>(resolve, reject);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="replaceCdn-实现"><a href="#replaceCdn-实现" class="headerlink" title="replaceCdn 实现"></a>replaceCdn 实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">replaceCdn</span> = (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> postList.<span class="title function_">map</span>(<span class="function"><span class="params">post</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; filepath, fileContent &#125; = post;</span><br><span class="line">    <span class="comment">// 对每个文件内容进行正则替换</span></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      filepath, </span><br><span class="line">      <span class="attr">fileContent</span>: fileContent.<span class="title function_">replace</span>(<span class="variable constant_">REGEXP</span>, <span class="function">(<span class="params">match</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> match.<span class="title function_">replace</span>(<span class="variable constant_">SOURCE_CDN</span>, <span class="variable constant_">TARGET_CDN</span>);</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>replace</code> 使用了函数参数来替换对应内容，每匹配到一个结果，就会回调一次这个函数，将其返回结果作为新的字符串</p>
+<p>比如这里的 <code>fileContent</code> 为 <code>![](https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif)</code></p>
+<p>那么函数里的 <code>match</code> 参数就会是 <code>![](https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif)</code></p>
+<p>然后我们再简单地 <code>replace</code> 地址即可</p>
+<h2 id="writePostList-实现"><a href="#writePostList-实现" class="headerlink" title="writePostList 实现"></a>writePostList 实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">writePostList</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(postList.<span class="title function_">map</span>(<span class="function"><span class="params">post</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; filepath, fileContent &#125; = post;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 写入文件</span></span><br><span class="line">      fs.<span class="title function_">writeFile</span>(filepath, fileContent, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          <span class="title function_">reject</span>(err);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title function_">resolve</span>();</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>完成之后我们使用一个 <code>test.md</code> 来测试效果</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">![](<span class="link">https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif</span>)</span><br><span class="line"></span><br><span class="line">aa![](<span class="link">https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251608716.avif</span>)bb</span><br><span class="line"></span><br><span class="line">![](<span class="link">https://sm.ms/xx.avif</span>)</span><br><span class="line"></span><br><span class="line">https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202207251608716.avif</span><br><span class="line"></span><br><span class="line">https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202207251608716.avif</span><br><span class="line"></span><br><span class="line">aaahttps://fastly.jsdelivr.net/gh/Dedicatus546/image@main/202207251608716.avif</span><br></pre></td></tr></table></figure>
+
+<p>然后我们执行 <code>node ./replacePicCdn.js</code> </p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251623316.avif"></p>
+<p>然后我们就可以看见文件发生改变了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251624556.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>虽然是一个简单的小工具不过还是相当有趣的</p>
+<p>主要是在正则这一块，通过 <code>new RegExp</code>的正则，<code>\</code> 这个也需要转义</p>
+<p>比如字面量情况下 <code>/!\[.*\]\(.*\)/mg</code> 这样写即可</p>
+<p>但是 <code>new</code> 的话就要 <code>new RegExp(&quot;!\\[.*\\]&quot;, &quot;mg&quot;)</code> ，在这里卡了好一会了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/25/202207251631748.avif"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/da3fa0a6f13c" title="一个替换 cdn 前缀的小工具">https://prohibitorum.top/da3fa0a6f13c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Node/" rel="tag"># Node</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/b422e873674f" rel="prev" title="VSCode 远程调试 Node 程序 Rg 进程 CPU 占用过高问题">
+                  <i class="fa fa-angle-left"></i> VSCode 远程调试 Node 程序 Rg 进程 CPU 占用过高问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/7cc2c97a15b4" rel="next" title="解决 Gitalk 无法获取 Github Token 问题">
+                  解决 Gitalk 无法获取 Github Token 问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1658734852"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言说实话，老师拿着18年的视频19年来讲确实有点别扭还用着废弃的方法…小声的吐槽下">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0搭建一个基于Hibernate的Java项目">
+<meta property="og:url" content="https://prohibitorum.top/69e360236c6f">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言说实话，老师拿着18年的视频19年来讲确实有点别扭还用着废弃的方法…小声的吐槽下">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/JqOz4jeI5b8HXxV.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/UVTxRJmvfNZstyQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/joSW9BNFC5a6v4h.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/NMC6kzLTAdprUSO.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/LvBWdcEJrGwq5Ym.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/u3klnGPDNRtX5rI.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/A25qFJeb7RPLNgO.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/29/g9rNshPc457oDeL.png">
+<meta property="article:published_time" content="2020-06-11T22:54:47.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/29/JqOz4jeI5b8HXxV.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/69e360236c6f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/69e360236c6f","path":"69e360236c6f.html","title":"从0搭建一个基于Hibernate的Java项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从0搭建一个基于Hibernate的Java项目 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7"><span class="nav-number">2.</span> <span class="nav-text">工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AAJava%E9%A1%B9%E7%9B%AE"><span class="nav-number">3.</span> <span class="nav-text">新建一个Java项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5Jar%E5%8C%85"><span class="nav-number">4.</span> <span class="nav-text">导入Jar包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E6%98%A0%E5%B0%84%E6%96%87%E4%BB%B6%E7%BC%96%E5%86%99"><span class="nav-number">5.1.</span> <span class="nav-text">类的映射文件编写</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99Person%E7%B1%BB"><span class="nav-number">5.1.1.</span> <span class="nav-text">编写Person类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99Person-hbm-xml"><span class="nav-number">5.1.2.</span> <span class="nav-text">编写Person.hbm.xml</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BC%96%E5%86%99"><span class="nav-number">5.2.</span> <span class="nav-text">根配置文件编写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95Hibernate"><span class="nav-number">5.3.</span> <span class="nav-text">测试Hibernate</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">6.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/69e360236c6f">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从0搭建一个基于Hibernate的Java项目 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从0搭建一个基于Hibernate的Java项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-11 22:54:47" itemprop="dateCreated datePublished" datetime="2020-06-11T22:54:47+00:00">2020-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>说实话，老师拿着18年的视频19年来讲<br>确实有点别扭<br>还用着废弃的方法…<br><del>小声的吐槽下</del></p>
+<span id="more"></span>
+
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><ul>
+<li>IntelliJ IDEA 2019.02</li>
+<li>Hibernate 5.4.8<blockquote>
+<p>Hibernate 官网下载地址 <a target="_blank" rel="noopener" href="https://hibernate.org/orm/releases/5.4/">传送起飞</a></p>
+</blockquote>
+</li>
+</ul>
+<p>PS：拉到下面就可以看到下载项了，不过网有点卡…</p>
+<p><img data-src="https://i.loli.net/2019/10/29/JqOz4jeI5b8HXxV.png"></p>
+<p>所以想了想传到网盘了，网速不行的话试试百度网盘<br><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/13rfVOAUeum25y8V3q8_lsg">百度网盘 提取码：yxnb</a></p>
+<h1 id="新建一个Java项目"><a href="#新建一个Java项目" class="headerlink" title="新建一个Java项目"></a>新建一个Java项目</h1><p>首先 左上角 File -&gt; New -&gt; Project</p>
+<p><img data-src="https://i.loli.net/2019/10/29/UVTxRJmvfNZstyQ.png"></p>
+<p>然后一直next最后点finish就行了</p>
+<h1 id="导入Jar包"><a href="#导入Jar包" class="headerlink" title="导入Jar包"></a>导入Jar包</h1><p>找到我们先前下载的Hibernate的压缩包，需要引入的包在<br><code>hibernate-release-5.4.8.Final\lib\required</code>  </p>
+<p>我们先建一个lib的文件夹并把它设置为jar的文件夹</p>
+<p><img data-src="https://i.loli.net/2019/10/29/joSW9BNFC5a6v4h.png"></p>
+<p>详细的细节可以参考 从0搭建一个基于Struts2的web项目<br>这里就不啰嗦了，步骤都是一样的</p>
+<p>导入后目录是这样的</p>
+<p><img data-src="https://i.loli.net/2019/10/29/NMC6kzLTAdprUSO.png"></p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>为了简单使用Hibernate的话需要一个POJO类<br>所以我们建一个Person类作为实体类<br>建立一个Hibernate01来测试代码  </p>
+<p>建立一个实体类就需要一个<code>类名.hbm.xml</code>的配置文件  s<br>整个项目需要一个<code>hibernate.cfg.xml</code>的配置文件，位于<code>src/</code>下<br>都弄完之后差不多就是下面这样子</p>
+<p><img data-src="https://i.loli.net/2019/10/29/LvBWdcEJrGwq5Ym.png"></p>
+<h2 id="类的映射文件编写"><a href="#类的映射文件编写" class="headerlink" title="类的映射文件编写"></a>类的映射文件编写</h2><h3 id="编写Person类"><a href="#编写Person类" class="headerlink" title="编写Person类"></a>编写Person类</h3><p>这个可以随便写写，不一定要和我一样的  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> design.hibernate.pojo;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 16076</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">byte</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getUsername</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUsername</span><span class="params">(String username)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">byte</span> <span class="title function_">getAge</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAge</span><span class="params">(<span class="type">byte</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;id=&quot;</span> + id +</span><br><span class="line">                <span class="string">&quot;, username=&#x27;&quot;</span> + username + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, age=&quot;</span> + age +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="编写Person-hbm-xml"><a href="#编写Person-hbm-xml" class="headerlink" title="编写Person.hbm.xml"></a>编写Person.hbm.xml</h3><p>一打开，很蒙，XML约束都没有，不过无妨<br>还记得我们下载的压缩包吗？打开<br><code>hibernate-release-5.4.8.Final\project</code><br>然后搜索 <code>.hbm.xml</code><br>就能看到很多hbm.xml的文件了<br>我们随便打开一个  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">hibernate-mapping</span> <span class="keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">	<span class="string">&quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">	<span class="string">&quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span> <span class="attr">default-lazy</span>=<span class="string">&quot;false&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">&quot;org.hibernate.test.legacy.Custom&quot;</span> <span class="attr">persister</span>=<span class="string">&quot;org.hibernate.test.legacy.CustomPersister&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">type</span>=<span class="string">&quot;string&quot;</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">column</span>=<span class="string">&quot;id_&quot;</span> <span class="attr">length</span>=<span class="string">&quot;64&quot;</span> <span class="attr">unsaved-value</span>=<span class="string">&quot;null&quot;</span> <span class="attr">access</span>=<span class="string">&quot;field&quot;</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">&quot;uuid.hex&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;name&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>把一些不需要的无关的删掉<br>保留我们需要的  </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">hibernate-mapping</span> <span class="keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">	<span class="string">&quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">	<span class="string">&quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>根据我们的类来编写xml</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">hibernate-mapping</span> <span class="keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;-//Hibernate/Hibernate Mapping DTD 3.0//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hibernate-mapping</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里的name配置类的路径 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">&quot;design.hibernate.pojo.Person&quot;</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- id标签配置的是对象的唯一标识，对应数据库中的主键 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- name对应类中的属性 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- type对应属性的类型 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span> <span class="attr">name</span>=<span class="string">&quot;id&quot;</span> <span class="attr">type</span>=<span class="string">&quot;int&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 这里的generator是主键生成策略 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 我用的MySQL，所以选用identity，意思是使用MySQL的主键生成器 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">generator</span> <span class="attr">class</span>=<span class="string">&quot;identity&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- property配置其他的属性 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">type</span>=<span class="string">&quot;string&quot;</span> <span class="attr">length</span>=<span class="string">&quot;50&quot;</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;age&quot;</span> <span class="attr">type</span>=<span class="string">&quot;byte&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">class</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">hibernate-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="根配置文件编写"><a href="#根配置文件编写" class="headerlink" title="根配置文件编写"></a>根配置文件编写</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&#x27;1.0&#x27; encoding=&#x27;utf-8&#x27;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">hibernate-configuration</span> <span class="keyword">PUBLIC</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;-//Hibernate/Hibernate Configuration DTD//EN&quot;</span></span></span><br><span class="line"><span class="meta">        <span class="string">&quot;http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">hibernate-configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">session-factory</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 设置数据库连接属性 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.connection.driver_class&quot;</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.connection.url&quot;</span>&gt;</span>jdbc:mysql://localhost:3306/hibernate<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.connection.username&quot;</span>&gt;</span>root<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.connection.password&quot;</span>&gt;</span>root<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 设置Mysql8的方言 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.dialect&quot;</span>&gt;</span>org.hibernate.dialect.MySQL8Dialect<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 显示Sql语句 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.show_sql&quot;</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 设置每次生成数据库，如果原来存在同名的数据库，就删除原来的数据库，再新建一个 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.hbm2ddl.auto&quot;</span>&gt;</span>create<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 格式化SQL语句 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.format_sql&quot;</span>&gt;</span>true<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 设置事务不自动提交 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;hibernate.connection.autocommit&quot;</span>&gt;</span>false<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">&lt;!-- 加载映射文件,这里的分隔符不能用&#x27;.&#x27;,必须用&#x27;/&#x27; --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">mapping</span> <span class="attr">resource</span>=<span class="string">&quot;design/hibernate/pojo/Person.hbm.xml&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">session-factory</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">hibernate-configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>到这里我们的文件基本就都搞定了<br>接下来可以写一个类来测试下  </p>
+<h2 id="测试Hibernate"><a href="#测试Hibernate" class="headerlink" title="测试Hibernate"></a>测试Hibernate</h2><p>编写一个Hibernate01的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> design.hibernate.test;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> design.hibernate.pojo.Person;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.Session;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.SessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.Transaction;</span><br><span class="line"><span class="keyword">import</span> org.hibernate.cfg.Configuration;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 16076</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Hibernate01</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 加载配置文件，默认为根目录下面的src下的hibernate.cfg.xml</span></span><br><span class="line">        <span class="type">Configuration</span> <span class="variable">configuration</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Configuration</span>().configure();</span><br><span class="line">        <span class="comment">// 根据配置文件得到一个session工厂，工厂用来得到session对象</span></span><br><span class="line">        <span class="type">SessionFactory</span> <span class="variable">sessionFactory</span> <span class="operator">=</span> configuration.buildSessionFactory();</span><br><span class="line">        <span class="comment">// 获取session对象</span></span><br><span class="line">        <span class="type">Session</span> <span class="variable">session</span> <span class="operator">=</span> sessionFactory.openSession();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 新建一个对象</span></span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">        <span class="comment">// 设置属性</span></span><br><span class="line">        person.setUsername(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line">        person.setAge((<span class="type">byte</span>) <span class="number">11</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 开启事务</span></span><br><span class="line">        <span class="type">Transaction</span> <span class="variable">transaction</span> <span class="operator">=</span> session.beginTransaction();</span><br><span class="line">        <span class="comment">// 保存这个对象</span></span><br><span class="line">        session.save(person);</span><br><span class="line">        <span class="comment">// 事务提交</span></span><br><span class="line">        transaction.rollback();</span><br><span class="line">        <span class="comment">// 打印这个对象</span></span><br><span class="line">        System.out.println(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后<br>我们可以看到<br>Hibernate判断是否存在表，存在就删除</p>
+<p><img data-src="https://i.loli.net/2019/10/29/u3klnGPDNRtX5rI.png"></p>
+<p>然后Hibernate建立Person表</p>
+<p><img data-src="https://i.loli.net/2019/10/29/A25qFJeb7RPLNgO.png"></p>
+<p>根据代码Hibernate插入一条数据</p>
+<p><img data-src="https://i.loli.net/2019/10/29/g9rNshPc457oDeL.png">  </p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>全程没有使用到SQL，舒服的一塌糊涂<br><del>但是我喜欢MyBatis</del><br>之前也就视频学过一些<br>没有深入地学这个东西<br>学还是要学的<br>万一要用到呢 …</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/69e360236c6f" title="从0搭建一个基于Hibernate的Java项目">https://prohibitorum.top/69e360236c6f</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/37a965fdfb29" rel="prev" title="MYSQL的四种事务隔离级别">
+                  <i class="fa fa-angle-left"></i> MYSQL的四种事务隔离级别
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/de6b1aa1a009" rel="next" title="Hibernate中的一对一映射">
+                  Hibernate中的一对一映射 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591887287"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

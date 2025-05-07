@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言感觉好久没写帖子了，那篇 10 月的新番推荐现在还躺在我的草稿列表里面😂 双十一花了点钱搞了台主机，本以为现在终于可以不用背电脑上下班了，没想到来了疫情，不来回背等下工作就要没了… 刚好最近公司要我搞一个前端抠像的 demo ，给了我一些资料，觉得挺有意思，所以来写写 至于标题的机器学习，我只是一个合格的 api 调用，切图工程师，不写机器学习怎么能引诱你进来看？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次使用机器学习进行前端抠像以及叠加背景图">
+<meta property="og:url" content="https://prohibitorum.top/4626187c4f98">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言感觉好久没写帖子了，那篇 10 月的新番推荐现在还躺在我的草稿列表里面😂 双十一花了点钱搞了台主机，本以为现在终于可以不用背电脑上下班了，没想到来了疫情，不来回背等下工作就要没了… 刚好最近公司要我搞一个前端抠像的 demo ，给了我一些资料，觉得挺有意思，所以来写写 至于标题的机器学习，我只是一个合格的 api 调用，切图工程师，不写机器学习怎么能引诱你进来看？">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101107850.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101636174.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101640356.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101648803.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101825393.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/11/202211111045742.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101830577.avif">
+<meta property="article:published_time" content="2022-11-11T11:44:23.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="canvas">
+<meta property="article:tag" content="抠像">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101107850.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/4626187c4f98.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/4626187c4f98","path":"4626187c4f98.html","title":"记一次使用机器学习进行前端抠像以及叠加背景图"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次使用机器学习进行前端抠像以及叠加背景图 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/4626187c4f98">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次使用机器学习进行前端抠像以及叠加背景图 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次使用机器学习进行前端抠像以及叠加背景图
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-11-11 11:44:23" itemprop="dateCreated datePublished" datetime="2022-11-11T11:44:23+00:00">2022-11-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>感觉好久没写帖子了，那篇 <code>10</code> 月的新番推荐现在还躺在我的草稿列表里面😂</p>
+<p>双十一花了点钱搞了台主机，本以为现在终于可以不用背电脑上下班了，没想到来了疫情，不来回背等下工作就要没了…</p>
+<p>刚好最近公司要我搞一个前端抠像的 <code>demo</code> ，给了我一些资料，觉得挺有意思，所以来写写</p>
+<p>至于标题的机器学习，我只是一个合格的 <code>api</code> 调用，切图工程师，不写机器学习怎么能引诱你进来看？</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>这次我们使用的是谷歌的一个机器学习库 <code>MediaPipe Selfie Segmentation</code></p>
+<p>官方文档地址 <a target="_blank" rel="noopener" href="https://google.github.io/mediapipe/solutions/selfie_segmentation">MediaPipe Selfie Segmentation</a></p>
+<p>当然，怎么实现我肯定是不懂的，但是提供了 <code>api</code> ，我们可以为此写出一个差不多的 <code>demo</code> ，然后去给客户演示“赚”资金</p>
+<p>翻到 <code>javascript-solution-api</code> 标题，就可以看到 <code>js</code> 下的 <code>api</code> 了，官方还很贴心的给了一个 <code>demo</code></p>
+<p>当然，这里它额外用了一些其他的库 <code>drawing_utils</code> ，<code> camera_utils</code> 以及 <code>control_utils</code> </p>
+<p>看起来都是一些工具库，但在我们的 <code>demo</code> 中不会用到这些库</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101107850.avif"></p>
+<p>这个 <code>demo</code> 主要流程为 </p>
+<ul>
+<li>获取摄像头的流</li>
+<li>抠像叠背景处理</li>
+<li>导出一个处理过后的流</li>
+</ul>
+<p>首先我们要安装依赖，执行 <code>pnpm add @mediapipe/selfie_segmentation</code></p>
+<p>然后我们要到 <code>node_modules</code> 下找到这个包，把除了 <code>selfie_segmentation.js</code> 文件之外的其他文件放到 <code>public</code> 文件夹下（这里我使用的是 <code>vite</code> 创建的 <code>react</code> 项目）</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101636174.avif"></p>
+<p>放到 <code>public</code> 文件夹中</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101640356.avif"></p>
+<p>然后我们用下面的代码就可以初始化一个对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">SelfieSegmentation</span> &#125; <span class="keyword">from</span> <span class="string">&quot;@mediapipe/selfie_segmentation&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> selfieSegmentation = <span class="keyword">new</span> <span class="title class_">SelfieSegmentation</span>(&#123;</span><br><span class="line">  <span class="comment">// 这里的意思就是需要的文件从哪里获取</span></span><br><span class="line">  <span class="comment">// 由于我们放到 public 下了，直接绝对路径 / 即可</span></span><br><span class="line">  <span class="attr">locateFile</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`/<span class="subst">$&#123;file&#125;</span>`</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置为 landscape 模型</span></span><br><span class="line">selfieSegmentation.<span class="title function_">setOptions</span>(&#123;</span><br><span class="line">  <span class="attr">modelSelection</span>: <span class="number">1</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>modelSelection</code> 可填的值有两个，分为为 <code>0</code> 和 <code>1</code></p>
+<p>其中 <code>0</code> 代表 <code>general</code> 模型， <code>1</code> 代表 <code>landscape</code> 模型，默认是 <code>0</code></p>
+<p>我们只需要知道这两个模型都是基于 <code>MobileNetV3</code> 模型而来，并且 <code>landscape</code> 模型比 <code>general</code> 模型快即可</p>
+<p>文档中的相关解释</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101648803.avif"></p>
+<p>接着我们随手写一个 <code>UI</code> ，主要有设备的选择，以及把流喂给 <code>selfieSegmentation</code> 产生结果画到 <code>canvas</code> 上，以及 <code>canvas</code> 转 <code>mediaStream</code> 再喂给 <code>video</code> 标签</p>
+<p>代码我就不贴了，搞得版面不是很好看，丢仓库里了，地址 <a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/mediaPipe-selfie-segmentation-demo">Dedicatus546 &#x2F; mediaPipe-selfie-segmentation-demo</a></p>
+<p>跑起来之后我们就能看到如下界面</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101825393.avif"></p>
+<p>傻瓜式操作，选择设备，就会自动开启抠像了，选择图片，那么图片就会自动应用到抠像中，效果如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/11/202211111045742.avif"></p>
+<p>看起来效果还是挺不错的，但是对手的支持就不是很理想了，在我这台 <code>i7-7700HQ</code> 上吃的性能还是挺多的，风扇一直在叫</p>
+<p>这东西我也看了网上的其他文章，大部分到最后都是要服务端来抠像的，一方面兼容性有保证，一方面不会因为性能不足而导致抠像效果不佳</p>
+<p>坏处就是需要更多的服务器资源了，也就意味着更多的钱钱</p>
+<p>这里讲一下几个有趣的点</p>
+<p>首先是 <code>canvas</code> 转 <code>mediaStream</code> ，刚开始其实我也不知道要怎么办，因为官方的文档其实只是画到 <code>canvas</code> 上而已</p>
+<p>而我司的项目是要通过 <code>webRTC</code> 上传 <code>mediaStream</code> 的，这就很操蛋</p>
+<p>然后我就找啊找，终于找到了一个实验性质的 <code>api</code> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLCanvasElement/captureStream">HTMLCanvasElement.captureStream</a></p>
+<p>调用这个 <code>api</code> ，我们就能直接拿到一个 <code>mediaStream</code> 流，当然，这个 <code>api</code> 目前兼容性较低</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/11/10/202211101830577.avif"></p>
+<p>而且我看现在有提案好像是说要为每一个 <code>HTMLElement</code> 都添加一个 <code>captureStream</code> 方法，来生成视频流，这就非常的有趣好吧</p>
+<p>另一个是关于 <code>canvas</code> 的 <code>2d</code> 上下文下的 <code>globalCompositeOperation</code> 属性，即 <code>CanvasRenderingContext2D.globalCompositeOperation</code></p>
+<p>这个属性是能够在 <code>canvas</code> 上正确画出抠像的核心，<code>MDN</code> 文档地址：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">CanvasRenderingContext2D.globalCompositeOperation</a></p>
+<p>在默认情况下，这个值为 <code>source-over</code> ，即哪里都可以画</p>
+<p>我们需要把它设置为 <code>source-in</code> ，即新画的的东西只能画在画布上已绘制的区域，也就是两者取交集</p>
+<p>在经过抠像之后，会生成两个图片，一个是当前帧的图片，一个是当前帧对应抠像的一个遮罩</p>
+<p>这时我们先画遮罩，然后把 <code>globalCompositeOperation</code> 设为 <code>source-in</code> ，接下来画当前帧，那么就只能画在遮罩内了，而遮罩外就是透明的，从而完成抠像</p>
+<p>在 <code>demo</code> 中，我使用了两个 <code>canvas</code> 来完成抠像和背景的叠加，我也尝试过使用单个 <code>canvas</code> ，但最终都失败了</p>
+<p>我的思路是这样的，先绘制遮罩，然后设为 <code>source-in</code> ，再绘制视频帧，那么现在抠像就完成了，接着设置为 <code>source-out</code> ，绘制背景，此时我个人是认为背景是能绘制上去的</p>
+<p>事实上也是如此，但是此时的抠像部分就变成透明了，这应该是 <code>globalCompositeOperation</code> 的特性，在 <code>source-in</code> 和 <code>source-out</code> 下，非绘制的部分都会变得透明</p>
+<p>所以最终就使用了两个 <code>canvas</code> ，其中使用一个临时的 <code>canvas</code> 完成抠像，在主 <code>canvas</code> 上绘制背景，再绘制抠像的 <code>canvas</code> ，这样就可以实现叠加背景的效果</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>尝试使用了 <code>worker</code> 来接管某些过程，但是都失败了…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/4626187c4f98" title="记一次使用机器学习进行前端抠像以及叠加背景图">https://prohibitorum.top/4626187c4f98</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/canvas/" rel="tag"># canvas</a>
+              <a href="/tags/%E6%8A%A0%E5%83%8F/" rel="tag"># 抠像</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cc09bd22d963" rel="prev" title="2022年10月新番个人推荐">
+                  <i class="fa fa-angle-left"></i> 2022年10月新番个人推荐
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/b017b85d5141" rel="next" title="记一次 safari 下使用 css3 动画导致的动画穿透问题">
+                  记一次 safari 下使用 css3 动画导致的动画穿透问题 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1668138263"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

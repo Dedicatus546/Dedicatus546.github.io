@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言有师兄说MySQL挺重要的所以来谈谈我从网上所学习到的MYSQL的事务隔离级别希望各位能学到东西">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL的四种事务隔离级别">
+<meta property="og:url" content="https://prohibitorum.top/37a965fdfb29">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言有师兄说MySQL挺重要的所以来谈谈我从网上所学习到的MYSQL的事务隔离级别希望各位能学到东西">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/LUy8mS4obuVsOfE.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/YP79SERHkXU5QAc.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/uWNPG1F2ZItOyER.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/h3FIlJw9aiUer1Q.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/WsxKYwRTBOMrUuc.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/hUaursp5YNRvObQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/3xRtzO12YkPKCjV.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/oiayC5H8zd1kOjw.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/5tjWnbOaSeQA4cm.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/MCO6VEUgJwKkyap.png">
+<meta property="og:image" content="https://i.loli.net/2019/10/27/j1pYrZD7UcS4o9V.png">
+<meta property="article:published_time" content="2020-06-11T22:35:16.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/10/27/LUy8mS4obuVsOfE.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/37a965fdfb29.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/37a965fdfb29","path":"37a965fdfb29.html","title":"MYSQL的四种事务隔离级别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MYSQL的四种事务隔离级别 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">2.</span> <span class="nav-text">事务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">2.1.</span> <span class="nav-text">事务的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E7%89%B9%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">事务的特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E7%8E%AF%E5%A2%83%E4%B8%8B%E7%9A%84%E5%87%A0%E7%A7%8D%E7%8A%B6%E6%80%81"><span class="nav-number">3.</span> <span class="nav-text">并发环境下的几种状态</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%8F%E8%AF%BB"><span class="nav-number">3.1.</span> <span class="nav-text">脏读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB"><span class="nav-number">3.2.</span> <span class="nav-text">不可重复读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%BB%E8%AF%BB"><span class="nav-number">3.3.</span> <span class="nav-text">幻读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E5%92%8C%E5%B9%BB%E8%AF%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.4.</span> <span class="nav-text">不可重复读和幻读的区别</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">4.</span> <span class="nav-text">事务隔离级别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E6%8F%90%E4%BA%A4%E8%AF%BB%EF%BC%88READ-UNCOMMITTED%EF%BC%89"><span class="nav-number">4.1.</span> <span class="nav-text">未提交读（READ UNCOMMITTED）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2%E6%8F%90%E4%BA%A4%E8%AF%BB%EF%BC%88READ-COMMITTED%EF%BC%89"><span class="nav-number">4.2.</span> <span class="nav-text">已提交读（READ COMMITTED）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%EF%BC%88REPEATABLE-READ%EF%BC%89"><span class="nav-number">4.3.</span> <span class="nav-text">可重复读（REPEATABLE READ）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E4%B8%B2%E8%A1%8C%E5%8C%96%EF%BC%88SERIALIZABLE%EF%BC%89"><span class="nav-number">4.4.</span> <span class="nav-text">可串行化（SERIALIZABLE）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/37a965fdfb29">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MYSQL的四种事务隔离级别 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MYSQL的四种事务隔离级别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-11 22:35:16" itemprop="dateCreated datePublished" datetime="2020-06-11T22:35:16+00:00">2020-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有师兄说MySQL挺重要的<br>所以来谈谈我从网上所学习到的MYSQL的事务隔离级别<br>希望各位能学到东西  </p>
+<span id="more"></span>
+
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="事务的定义"><a href="#事务的定义" class="headerlink" title="事务的定义"></a>事务的定义</h2><blockquote>
+<p>事务是由一步或几步数据库操作序列组成逻辑执行单元，这系列操作要么全部执行，要么全部放弃执行。</p>
+</blockquote>
+<p>我举个例子：比如现在A要给B转账100，从数据库的角度看，步骤可以简化成这样的  </p>
+<ol>
+<li><code>UPDATE 账户表名 SET A的钱=A的钱-100 WHERE ID=A;</code></li>
+<li><code>INSERT INTO 转账记录表(转账人，收款人) VALUES(&amp;#39;A&amp;#39;,&amp;#39;B&amp;#39;);</code></li>
+<li><code>UPDATE 账户表名 SET B的钱=B的钱+100 WHERE ID=B;</code></li>
+</ol>
+<p>以上的语句都是抽象出来的<br>事务的意思就是说<br>假如发生了一次转账，就会有以上三条SQL语句的执行<br>但是假如在执行完第一条语句的时候，很不幸断电了<br>这时候A的账户并不会少100块<br>因为这是一个事务<br>要么完整地执行完三条语句<br>要么就是都失败（也就是所有在这个事务中修改的状态都会返回到开启这个事务前的状态）</p>
+<h2 id="事务的特性"><a href="#事务的特性" class="headerlink" title="事务的特性"></a>事务的特性</h2><p>事务具有四个特性：</p>
+<ul>
+<li>原子性（Atomicity）<blockquote>
+<p>原子性是指事务是一个不可再分割的工作单位，事务中的操作要么都发生，要么都不发生。</p>
+</blockquote>
+</li>
+</ul>
+<p>第一点很容易理解，对应事务的定义</p>
+<ul>
+<li>一致性（Consistency）<blockquote>
+<p>一致性是指在事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>事务开始之前和事务结束以后，数据库的完整性约束没有被破坏</strong><br>这句话很像原子性，但是原子性和一致性的侧重点是不同的<br><strong>原子性：</strong> 关注状态，要么全部成功，要么全部失败，不存在部分成功的状态。<br><strong>一致性：</strong> 关注数据的可见性，中间状态的数据对外部不可见，只有最初状态和最终状态的数据对外可见<br>以上面那个转账为例，当A给B转账100，事务要做的就是A的钱减少100，新增一条转账记录，B的钱增加100。<br>对于别的事务，要么看到A给B转账100成功，要么看到A给B转账100失败，并不会看到事务中A的钱减少100这个中间的状态</p>
+<ul>
+<li>隔离性（Isolation）<blockquote>
+<p>隔离性是指并发的事务是相互隔离的。即一个事务内部的操作及正在操作的数据必须封锁起来，不被企图进行修改的事务看到 。</p>
+</blockquote>
+</li>
+</ul>
+<p>还是以A给B转账100为例子，假设此时A有200<br>当A给B转账100的事务执行到第2条语句的时候(也就是A的钱在此事务中已经减少100，剩下100)<br>这时候C给A转账100的事务开始执行第一条语句的时候，得到A原始的钱应该是200，而不是100<br>即在C给A转账100的事务中读取不到A给B转账100的事务的数据(这里说的是这两个事务处于并行的状态)</p>
+<ul>
+<li>持续性（Durability）<blockquote>
+<p>持久性是指在事务完成以后，该事务所对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。 即使出现了任何事故比如断电等，事务一旦提交，则持久化保存在数据库中。</p>
+</blockquote>
+</li>
+</ul>
+<p>这四个特性也简称ACID性。</p>
+<h1 id="并发环境下的几种状态"><a href="#并发环境下的几种状态" class="headerlink" title="并发环境下的几种状态"></a>并发环境下的几种状态</h1><h2 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h2><blockquote>
+<p>事务A读取到了事务B未提交的数据</p>
+</blockquote>
+<p>这个怎么理解呢<br>我们可以列一个表格来表示<br>假设我们现在有一个表(user)如下所示  </p>
+<p>初始数据：  </p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+</tbody></table>
+<p>并且存在事务A和事务B操作这张表<br>那么</p>
+<table>
+<thead>
+<tr>
+<th>事务A</th>
+<th>事务B</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BEGIN</code></td>
+<td><code>BEGIN</code></td>
+<td>开启事务</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>INSERT INTO user(id,name) VALUES(2,&#39;lwx&#39;)</code></td>
+<td>事务B往user表添加一行</td>
+</tr>
+<tr>
+<td><code>SELECT * FROM user</code></td>
+<td>-</td>
+<td>事务A查询该表的数据</td>
+</tr>
+</tbody></table>
+<p><strong>注意：此时两个事务都没有提交</strong><br>但是这时候事务A读出来的数据就出现了事务B未提交的数据<br>结果也就是</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+<tr>
+<td>2</td>
+<td>lwx</td>
+</tr>
+</tbody></table>
+<p>这种情况就代表了脏读  </p>
+<p>我们可以实战代码演示下<br>为了模拟两个事务，我们开了两个cmd来连接mysql<br>我们修改当前连接的事务隔离级别(这里的内容是后面要讲的，我们的目的是重现这个场景)<br>首先两个窗口都执行<br><code>set session transaction isolation level read uncommitted; // 设置当前连接为读未提交</code><br><code>set autocommit=0; // 关闭自动commit</code><br><img data-src="https://i.loli.net/2019/10/27/LUy8mS4obuVsOfE.png"><br>先查询下有没有表的数据<br><img data-src="https://i.loli.net/2019/10/27/YP79SERHkXU5QAc.png"><br>右边的cmd插入数据，左边查询，发现查询出了右边没有提交的数据<br><img data-src="https://i.loli.net/2019/10/27/uWNPG1F2ZItOyER.png"></p>
+<h2 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h2><blockquote>
+<p>事务A读取到了事务B已提交的数据</p>
+</blockquote>
+<p>还是这个user表<br>初始数据：  </p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+</tbody></table>
+<p>还是两个事务操作这张表</p>
+<table>
+<thead>
+<tr>
+<th>事务A</th>
+<th>事务B</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BEGIN</code></td>
+<td><code>BEGIN</code></td>
+<td>开启事务</td>
+</tr>
+<tr>
+<td><code>SELECT * FROM user</code></td>
+<td>-</td>
+<td>事务A查询该表的数据</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>UPDATE user SET name=&#39;lwx&#39; WHERE id=1</code></td>
+<td>事务B修改id为1的行的name列为lwx</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>COMMIT</code></td>
+<td>事务B提交</td>
+</tr>
+<tr>
+<td><code>SELECT * FROM user</code></td>
+<td>-</td>
+<td>事务A查询该表的数据</td>
+</tr>
+</tbody></table>
+<p>事务A两次查询该表的数据不一样<br>第一次：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+</tbody></table>
+<p>第二次：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwx</td>
+</tr>
+</tbody></table>
+<p>这就是不可重复读</p>
+<p>我们演示下<br>初始的数据<br><img data-src="https://i.loli.net/2019/10/27/h3FIlJw9aiUer1Q.png"><br>我们先查询下数据，看看正不正确<br><img data-src="https://i.loli.net/2019/10/27/WsxKYwRTBOMrUuc.png"><br>左右两边同时BEGIN，右边的更新数据并提交<br><img data-src="https://i.loli.net/2019/10/27/hUaursp5YNRvObQ.png"><br>左边查询数据，发现数据改变了<br><img data-src="https://i.loli.net/2019/10/27/3xRtzO12YkPKCjV.png"></p>
+<h2 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h2><blockquote>
+<p>事务A读取到事务B新增的符合事务A查询条件的数据</p>
+</blockquote>
+<p>初始数据： </p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+</tbody></table>
+<p>两个事务操作这张表</p>
+<table>
+<thead>
+<tr>
+<th>事务A</th>
+<th>事务B</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>BEGIN</code></td>
+<td><code>BEGIN</code></td>
+<td>开启事务</td>
+</tr>
+<tr>
+<td><code>SELECT * FROM user WHERE id IN(1,2)</code></td>
+<td>-</td>
+<td>事务A查询该表id为1或者2的数据</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>INSERT INTO user(id,name) VALUES(2,&#39;lwx&#39;)</code></td>
+<td>事务B添加了一条数据</td>
+</tr>
+<tr>
+<td>-</td>
+<td><code>COMMIT</code></td>
+<td>事务B提交</td>
+</tr>
+<tr>
+<td><code>SELECT * FROM user WHERE id IN(1,2)</code></td>
+<td>-</td>
+<td>事务A查询该表id为1或者2的数据</td>
+</tr>
+</tbody></table>
+<p>事务A两次查询该表的数据数量不一样<br>第一次：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+</tbody></table>
+<p>第二次：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>lwf</td>
+</tr>
+<tr>
+<td>2</td>
+<td>lwx</td>
+</tr>
+</tbody></table>
+<p>这就是所谓的幻读</p>
+<p>我们也来演示下<br><img data-src="https://i.loli.net/2019/10/27/oiayC5H8zd1kOjw.png"><br>先查询下数据，看是不是正确的<br><img data-src="https://i.loli.net/2019/10/27/5tjWnbOaSeQA4cm.png"><br>左右两边开启事务，左边先查询，然后右边插入一条数据并提交<br><img data-src="https://i.loli.net/2019/10/27/MCO6VEUgJwKkyap.png"><br>左边查询，发现出现右边提交的数据<br><img data-src="https://i.loli.net/2019/10/27/j1pYrZD7UcS4o9V.png">  </p>
+<h2 id="不可重复读和幻读的区别"><a href="#不可重复读和幻读的区别" class="headerlink" title="不可重复读和幻读的区别"></a>不可重复读和幻读的区别</h2><p>有人可能会觉得不可重复读和幻读是是一个道理</p>
+<p>不可重复读侧重的是对同一条数据的改变(UPDATE操作)<br>也就是两次读取到同一条数据的内容不一样</p>
+<p>而幻读侧重查询数量的改变(INSERT操作)<br>也就是两次读取的数据数量不一样</p>
+<h1 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h1><p>mysql有四种事务的隔离级别，默认为<strong>可重复读（REPEATABLE READ）</strong>  </p>
+<h2 id="未提交读（READ-UNCOMMITTED）"><a href="#未提交读（READ-UNCOMMITTED）" class="headerlink" title="未提交读（READ UNCOMMITTED）"></a><a href="#%E6%9C%AA%E6%8F%90%E4%BA%A4%E8%AF%BB%EF%BC%88READ-UNCOMMITTED%EF%BC%89" title="未提交读（READ UNCOMMITTED）"></a>未提交读（READ UNCOMMITTED）</h2><blockquote>
+<p>一个事务可以读到一个事务未提交的数据</p>
+</blockquote>
+<h2 id="已提交读（READ-COMMITTED）"><a href="#已提交读（READ-COMMITTED）" class="headerlink" title="已提交读（READ COMMITTED）"></a><a href="#%E5%B7%B2%E6%8F%90%E4%BA%A4%E8%AF%BB%EF%BC%88READ-COMMITTED%EF%BC%89" title="已提交读（READ COMMITTED）"></a>已提交读（READ COMMITTED）</h2><blockquote>
+<p>一个事务可以读到一个事务已提交的数据。可以避免脏读</p>
+</blockquote>
+<h2 id="可重复读（REPEATABLE-READ）"><a href="#可重复读（REPEATABLE-READ）" class="headerlink" title="可重复读（REPEATABLE READ）"></a><a href="#%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%EF%BC%88REPEATABLE-READ%EF%BC%89" title="可重复读（REPEATABLE READ）"></a>可重复读（REPEATABLE READ）</h2><blockquote>
+<p>一个事务在执行过程中可以看到其他事务已经提交的新插入的记录，但是不能看到其他事务对已有记录的更新。可以避免脏读，不可重复读。</p>
+</blockquote>
+<h2 id="可串行化（SERIALIZABLE）"><a href="#可串行化（SERIALIZABLE）" class="headerlink" title="可串行化（SERIALIZABLE）"></a><a href="#%E5%8F%AF%E4%B8%B2%E8%A1%8C%E5%8C%96%EF%BC%88SERIALIZABLE%EF%BC%89" title="可串行化（SERIALIZABLE）"></a>可串行化（SERIALIZABLE）</h2><blockquote>
+<p>事务之间不存在并发，一个事务的运行，会阻塞其他事务的运行。可以避免脏读，不可重复读，幻读。</p>
+</blockquote>
+<p>这四个隔离级别从上往下的并发性越来越差，可串行化意味着丢掉并发性的优势<br>现实开发中基本用不到最后一个，基本都是使用Mysql默认的就行  </p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这篇文章主要是了解MySQL的四种隔离级别。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/37a965fdfb29" title="MYSQL的四种事务隔离级别">https://prohibitorum.top/37a965fdfb29</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/e573d7141b07" rel="prev" title="从0搭建一个基于Struts2的web项目">
+                  <i class="fa fa-angle-left"></i> 从0搭建一个基于Struts2的web项目
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/69e360236c6f" rel="next" title="从0搭建一个基于Hibernate的Java项目">
+                  从0搭建一个基于Hibernate的Java项目 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591886116"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言ECMAScript2015（es6）新特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript2015（es6）新特性">
+<meta property="og:url" content="https://prohibitorum.top/fb64e7798736">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言ECMAScript2015（es6）新特性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/08/17/71XSgvL4hcZGFwj.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/17/65IHEYGdmxg2qCJ.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/17/wMVEDqpNZkGKjmh.png">
+<meta property="og:image" content="https://i.loli.net/2020/08/17/jXmDAcINzfV7sCS.png">
+<meta property="article:published_time" content="2020-08-16T21:09:49.000Z">
+<meta property="article:modified_time" content="2024-12-26T15:57:35.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/08/17/71XSgvL4hcZGFwj.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/fb64e7798736.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/fb64e7798736","path":"fb64e7798736.html","title":"ECMAScript2015（es6）新特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ECMAScript2015（es6）新特性 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#let%E5%92%8Cconst"><span class="nav-number">2.1.</span> <span class="nav-text">let和const</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#class"><span class="nav-number">2.2.</span> <span class="nav-text">class</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extend%E5%92%8Csuper"><span class="nav-number">2.3.</span> <span class="nav-text">extend和super</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arrow-function-%EF%BC%88%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">arrow function （箭头函数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#default%EF%BC%88%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E9%BB%98%E8%AE%A4%E5%80%BC%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">default（函数参数默认值）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rest-arguments%EF%BC%88%E5%89%A9%E4%BD%99%E5%8F%82%E6%95%B0%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">rest arguments（剩余参数）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#destructuring%EF%BC%88%E8%A7%A3%E6%9E%84%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">destructuring（解构）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Enhanced-object-literals%EF%BC%88%E5%A2%9E%E5%BC%BA%E7%9A%84%E5%AF%B9%E8%B1%A1%E5%AD%97%E9%9D%A2%E9%87%8F%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">Enhanced object literals（增强的对象字面量）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Set-%E5%92%8C-Map"><span class="nav-number">2.9.</span> <span class="nav-text">Set 和 Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.10.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/fb64e7798736">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ECMAScript2015（es6）新特性 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript2015（es6）新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-08-16 21:09:49" itemprop="dateCreated datePublished" datetime="2020-08-16T21:09:49+00:00">2020-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-26 15:57:35" itemprop="dateModified" datetime="2024-12-26T15:57:35+00:00">2024-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ECMAScript2015（es6）新特性</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="let和const"><a href="#let和const" class="headerlink" title="let和const"></a><code>let</code>和<code>const</code></h2><p>在还没有<code>es6</code>的时候，定义变量都是用关键字<code>var</code>来进行定义。</p>
+<p><code>var</code>定义的变量是基于<strong>函数作用域</strong>的，变量会进行提升。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>();</span><br></pre></td></tr></table></figure>
+
+<p>运行之后输出了<code>0</code>，上面这段代码和下面这段等价。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> a;</span><br><span class="line">  &#123;</span><br><span class="line">    a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>();</span><br></pre></td></tr></table></figure>
+
+<p>而如果使用了<code>let</code>和<code>const</code>来定义变量的话。</p>
+<p>上面的代码就会报错，因为这两个关键字定义的变量是基于<strong>块级作用域</strong>的，变量不会提升。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>上面变量<code>a</code>的作用域就只有在离他最近的一对大括号里面，而外层其实是没有定义的，所以报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">let</span> a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// 输出1</span></span><br></pre></td></tr></table></figure>
+
+<p>内层的定义不会影响到外层，他们的作用域是不同的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>上面这段代码报错的原因是变量大括号内由<code>var</code>定义的<code>a</code>提升到函数的最顶端了。</p>
+<p>但是外层已经有<code>let</code>进行定义了，导致了变量的重复定义。</p>
+<p>上面的代码可以等效为下面这段：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> a;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">1</span>; <span class="comment">// 重复定义</span></span><br><span class="line">  &#123;</span><br><span class="line">    a = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>这也叫做暂时性死区（temporal dead zone，简称 TDZ），在同一个作用域中，<code>let</code>和<code>const</code>定义的变量之前都不能使用这个变量。</p>
+<p>对于<code>var</code>和<code>let</code>，也有另一个有趣的现象，这个现象出现在循环中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  fn[i] = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn[<span class="number">2</span>](); <span class="comment">//输出3</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的代码从我们人的角度看应该输出<code>2</code>的。</p>
+<p>输出<code>3</code>的原因就是变量<code>i</code>的作用域不是在<code>for</code>循环内的，而是在<code>for</code>循环外。</p>
+<p>这样函数内部输出的就是最外层同一个变量<code>i</code>了。</p>
+<p>如果使用了<code>let</code>，那么这个奇怪的现象就会消失。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fn = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  fn[i] = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn[<span class="number">2</span>](); <span class="comment">//输出2</span></span><br></pre></td></tr></table></figure>
+
+<p>使用了<code>let</code>，是的每次循环内的<code>i</code>都是不同的作用域，也就是每次循环都会生成一个新的<code>i</code>。</p>
+<p>当然如果不使用<code>let</code>，也可以通过闭包来解决这个问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  fn[i] = (<span class="keyword">function</span> (<span class="params">i</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)(i);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">fn[<span class="number">2</span>](); <span class="comment">//输出2</span></span><br></pre></td></tr></table></figure>
+
+<p>通过创建一个立即执行函数来创建一个新的作用域。</p>
+<p>从而保证函数内部输出的<code>i</code>不会是<code>for</code>外部的<code>i</code>。</p>
+<p>之前刚开始接触<code>js</code>的时候，被这种情况给坑过。</p>
+<p>场景就是对一组按钮进行点击事件的绑定，绑定的内部逻辑需要用到当前按钮的索引。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> buttons = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;...&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; buttons.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  buttons[i].<span class="property">onClick</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 使用i变量</span></span><br><span class="line">    <span class="comment">// 比如：</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的例子无论哪个按钮，点击获取的<code>i</code>都会是<code>buttons</code>的长度（因为在<code>i === buttons.length</code>的时候跳出了循环）。</p>
+<p>当然现在基本上都用<code>let</code>和<code>const</code>来定义变量进行使用了。</p>
+<p>只要遵循先定义，再使用的话，就基本不会出现类似的情况了。</p>
+<p><code>let</code>和<code>const</code>的区别就是<code>let</code>定义的变量可以被重新赋值，而<code>const</code>不行。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="number">1</span>;</span><br><span class="line">a = <span class="number">2</span>; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>如果<code>const</code>定义的是一个对象的话，那么是可以改变对象内部的属性值的。</p>
+<p>但是不能重新赋予一个新的对象。</p>
+<p>简单点理解就是变量指向对象的地址是不能改变的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">1</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">a.<span class="property">val</span> = <span class="number">2</span>; <span class="comment">// 可以</span></span><br><span class="line">a = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">2</span>,</span><br><span class="line">&#125;; <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><p>之前如果想要<code>new</code>一个对象的话，一般是通过编写一个函数，再在函数的原型式挂载方法来实现。</p>
+<p>es6 引入了<code>class</code>，类这个概念。</p>
+<p>可以以传统的面向对象的方式来编写代码，但是本质上还是一种语法糖，<code>js</code>的继承实现还是基于<strong>原型链</strong>的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">id, name</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">id</span> = id;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`I am a student named &#x27;<span class="subst">$&#123;<span class="variable language_">this</span>.name&#125;</span>&#x27;whose id is <span class="subst">$&#123;<span class="variable language_">this</span>.id&#125;</span>.`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> student = <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;10086&quot;</span>, <span class="string">&quot;Dedicatus545&quot;</span>);</span><br><span class="line">student.<span class="title function_">say</span>(); <span class="comment">// 输出  I am a student named &#x27;Dedicatus545&#x27; whose id is 10086.</span></span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用<code>babel</code>来看看对于低版本的浏览器，是如何进行编译的。</p>
+<p>这里以<code>Student</code>这个类来进行进行<code>babel</code>编译。</p>
+<p>在线的地址 <a target="_blank" rel="noopener" href="https://www.babeljs.cn/repl#?browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=MYGwhgzhAEDKAuBXAJgUwHb2gbwFDWmAHt0J4AnRYeI8gCgEtkAaadMAW1QEo8CD4ACwYQAdE2gBeaEwDc-fkJGj2XKW06p5BAL4KIYAJ51eCgsVJEQqUSCIBzOgAMAktE7voZFBiyrUyNAAJNhKYv460ADugkQQqDKBIsGhwmJMOqJO3Ap6OkA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=es2015%2Creact%2Cstage-2&prettier=false&targets=&version=7.11.1&externalPlugins=">Babel 中文网 · Babel - 下一代 JavaScript 语法的编译器</a></p>
+<p>编译之后发现，对于不同的类都有几段相同的代码，代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_instanceof</span>(<span class="params">left, right</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    right != <span class="literal">null</span> &amp;&amp;</span><br><span class="line">    <span class="keyword">typeof</span> <span class="title class_">Symbol</span> !== <span class="string">&quot;undefined&quot;</span> &amp;&amp;</span><br><span class="line">    right[<span class="title class_">Symbol</span>.<span class="property">hasInstance</span>]</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> !!right[<span class="title class_">Symbol</span>.<span class="property">hasInstance</span>](left);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> left <span class="keyword">instanceof</span> right;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_classCallCheck</span>(<span class="params">instance, Constructor</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">_instanceof</span>(instance, <span class="title class_">Constructor</span>)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&quot;Cannot call a class as a function&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_defineProperties</span>(<span class="params">target, props</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; props.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> descriptor = props[i];</span><br><span class="line">    descriptor.<span class="property">enumerable</span> = descriptor.<span class="property">enumerable</span> || <span class="literal">false</span>;</span><br><span class="line">    descriptor.<span class="property">configurable</span> = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="string">&quot;value&quot;</span> <span class="keyword">in</span> descriptor) descriptor.<span class="property">writable</span> = <span class="literal">true</span>;</span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(target, descriptor.<span class="property">key</span>, descriptor);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_createClass</span>(<span class="params">Constructor, protoProps, staticProps</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (protoProps) <span class="title function_">_defineProperties</span>(<span class="title class_">Constructor</span>.<span class="property"><span class="keyword">prototype</span></span>, protoProps);</span><br><span class="line">  <span class="keyword">if</span> (staticProps) <span class="title function_">_defineProperties</span>(<span class="title class_">Constructor</span>, staticProps);</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Constructor</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后主体的代码为下面这段：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Student</span> = <span class="comment">/*#__PURE__*/</span> (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">Student</span>(<span class="params">id, name</span>) &#123;</span><br><span class="line">    <span class="title function_">_classCallCheck</span>(<span class="variable language_">this</span>, <span class="title class_">Student</span>);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">id</span> = id;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">_createClass</span>(<span class="title class_">Student</span>, [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">key</span>: <span class="string">&quot;say&quot;</span>,</span><br><span class="line">      <span class="attr">value</span>: <span class="keyword">function</span> <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">          <span class="string">&quot;I am a student named &quot;</span></span><br><span class="line">            .<span class="title function_">concat</span>(<span class="variable language_">this</span>.<span class="property">name</span>, <span class="string">&quot; whose id is &quot;</span>)</span><br><span class="line">            .<span class="title function_">concat</span>(<span class="variable language_">this</span>.<span class="property">id</span>, <span class="string">&quot;.&quot;</span>)</span><br><span class="line">        );</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  ]);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Student</span>;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>主体代码通过一个立即执行函数来进行构造函数的初始化。</p>
+<p>首先在<code>Student</code>的构造函数中调用了<code>_classCallCheck</code>函数，也就是每次<code>new</code>一个新的对象都会执行这个函数。</p>
+<p><code>_classCallCheck</code>通过<code>_instanceof</code>来判断是否抛出错误。</p>
+<p><code>_instanceof</code>可以简单理解为关键字<code>instanceof</code>，只不过以函数的形式进行表示，并且内部也尝试使用<code>Symbol.hasInstance</code>这个静态的函数来判断。</p>
+<p>当然使用<code>instanceof</code>内部也是通过执行<code>Symbol.hasInstance</code>来判断的，但是<code>instanceof</code>可以兼容更低的版本。</p>
+<p>因为<code>Symbol</code>也是 es6 才提出来的。</p>
+<p>MDN 上显示，ie 现在完全不支持<code>Symbol</code>。</p>
+<p><img data-src="https://i.loli.net/2020/08/17/71XSgvL4hcZGFwj.png"></p>
+<p>而<code>instanceof</code>在<code>ie5</code>以上就支持了。</p>
+<p><img data-src="https://i.loli.net/2020/08/17/65IHEYGdmxg2qCJ.png"></p>
+<p>感觉微软都要放弃<code>ie</code>了，即使是<code>ie11</code>，感觉用的人也越来越少了，新版<code>edge</code>的内核还是用的谷歌的内核，以后兼容应该会越来越容易吧。</p>
+<p>回到<code>Student</code>构造函数，通过上面的分析可以总结出来，也就是不能通过直接调用<code>Student</code>函数，不然会报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Student</span>(); <span class="comment">// 可以</span></span><br><span class="line"><span class="title class_">Student</span>(); <span class="comment">// 报错 Cannot call a class as a function</span></span><br></pre></td></tr></table></figure>
+
+<p>因为此时的函数内部的<code>this</code>指向的不是一个<code>Student</code>的实例对象。</p>
+<p>既然不是<code>Student</code>的实例对象，那么就<code>this instanceof Student</code>一定返回<code>false</code>，而<code>false</code>情况就会触发函数<code>_classCallCheck</code>抛出错误。</p>
+<p>接下来就是通过<code>_createClass</code>来挂载方法了。</p>
+<p>挂载的方法分为原型上挂载和静态挂载，也就是对象方法和类方法。</p>
+<p>可以简单地写个静态方法测试下。</p>
+<p><img data-src="https://i.loli.net/2020/08/17/wMVEDqpNZkGKjmh.png"></p>
+<p><code>_createClass</code>传入构造器，对象方法描述符数组，类方法描述符数组，然后通过<code>_defineProperties</code>来完成挂载。</p>
+<h2 id="extend和super"><a href="#extend和super" class="headerlink" title="extend和super"></a><code>extend</code>和<code>super</code></h2><p><code>es6</code>的<code>class</code>也支持<code>extend</code>和<code>super</code>关键字。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">People</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">id, name</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">id</span> = id;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Student</span> <span class="keyword">extends</span> <span class="title class_ inherited__">People</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">id, name, age</span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>(id, name);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">age</span> = age;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同样，我们可以看看这段代码，经过<code>babel</code>编译成兼容<code>es5</code>的代码是怎么样的。</p>
+<p>公共函数部分</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">_typeof</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="string">&quot;@babel/helpers - typeof&quot;</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Symbol</span> === <span class="string">&quot;function&quot;</span> &amp;&amp; <span class="keyword">typeof</span> <span class="title class_">Symbol</span>.<span class="property">iterator</span> === <span class="string">&quot;symbol&quot;</span>) &#123;</span><br><span class="line">    _typeof = <span class="keyword">function</span> <span class="title function_">_typeof</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> obj;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    _typeof = <span class="keyword">function</span> <span class="title function_">_typeof</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> obj &amp;&amp;</span><br><span class="line">        <span class="keyword">typeof</span> <span class="title class_">Symbol</span> === <span class="string">&quot;function&quot;</span> &amp;&amp;</span><br><span class="line">        obj.<span class="property">constructor</span> === <span class="title class_">Symbol</span> &amp;&amp;</span><br><span class="line">        obj !== <span class="title class_">Symbol</span>.<span class="property"><span class="keyword">prototype</span></span></span><br><span class="line">        ? <span class="string">&quot;symbol&quot;</span></span><br><span class="line">        : <span class="keyword">typeof</span> obj;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">_typeof</span>(obj);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_inherits</span>(<span class="params">subClass, superClass</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> superClass !== <span class="string">&quot;function&quot;</span> &amp;&amp; superClass !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&quot;Super expression must either be null or a function&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  subClass.<span class="property"><span class="keyword">prototype</span></span> = <span class="title class_">Object</span>.<span class="title function_">create</span>(superClass &amp;&amp; superClass.<span class="property"><span class="keyword">prototype</span></span>, &#123;</span><br><span class="line">    <span class="attr">constructor</span>: &#123; <span class="attr">value</span>: subClass, <span class="attr">writable</span>: <span class="literal">true</span>, <span class="attr">configurable</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">if</span> (superClass) <span class="title function_">_setPrototypeOf</span>(subClass, superClass);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_setPrototypeOf</span>(<span class="params">o, p</span>) &#123;</span><br><span class="line">  _setPrototypeOf =</span><br><span class="line">    <span class="title class_">Object</span>.<span class="property">setPrototypeOf</span> ||</span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">_setPrototypeOf</span>(<span class="params">o, p</span>) &#123;</span><br><span class="line">      o.<span class="property">__proto__</span> = p;</span><br><span class="line">      <span class="keyword">return</span> o;</span><br><span class="line">    &#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">_setPrototypeOf</span>(o, p);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_createSuper</span>(<span class="params">Derived</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> hasNativeReflectConstruct = <span class="title function_">_isNativeReflectConstruct</span>();</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">_createSuperInternal</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="title class_">Super</span> = <span class="title function_">_getPrototypeOf</span>(<span class="title class_">Derived</span>),</span><br><span class="line">      result;</span><br><span class="line">    <span class="keyword">if</span> (hasNativeReflectConstruct) &#123;</span><br><span class="line">      <span class="keyword">var</span> <span class="title class_">NewTarget</span> = <span class="title function_">_getPrototypeOf</span>(<span class="variable language_">this</span>).<span class="property">constructor</span>;</span><br><span class="line">      result = <span class="title class_">Reflect</span>.<span class="title function_">construct</span>(<span class="title class_">Super</span>, <span class="variable language_">arguments</span>, <span class="title class_">NewTarget</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      result = <span class="title class_">Super</span>.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">_possibleConstructorReturn</span>(<span class="variable language_">this</span>, result);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_possibleConstructorReturn</span>(<span class="params">self, call</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (call &amp;&amp; (<span class="title function_">_typeof</span>(call) === <span class="string">&quot;object&quot;</span> || <span class="keyword">typeof</span> call === <span class="string">&quot;function&quot;</span>)) &#123;</span><br><span class="line">    <span class="keyword">return</span> call;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">_assertThisInitialized</span>(self);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_assertThisInitialized</span>(<span class="params">self</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (self === <span class="keyword">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ReferenceError</span>(</span><br><span class="line">      <span class="string">&quot;this hasn&#x27;t been initialised - super() hasn&#x27;t been called&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_isNativeReflectConstruct</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Reflect</span> === <span class="string">&quot;undefined&quot;</span> || !<span class="title class_">Reflect</span>.<span class="property">construct</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Reflect</span>.<span class="property">construct</span>.<span class="property">sham</span>) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Proxy</span> === <span class="string">&quot;function&quot;</span>) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="title class_">Date</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(<span class="title class_">Reflect</span>.<span class="title function_">construct</span>(<span class="title class_">Date</span>, [], <span class="keyword">function</span> (<span class="params"></span>) &#123;&#125;));</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_getPrototypeOf</span>(<span class="params">o</span>) &#123;</span><br><span class="line">  _getPrototypeOf = <span class="title class_">Object</span>.<span class="property">setPrototypeOf</span></span><br><span class="line">    ? <span class="title class_">Object</span>.<span class="property">getPrototypeOf</span></span><br><span class="line">    : <span class="keyword">function</span> <span class="title function_">_getPrototypeOf</span>(<span class="params">o</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> o.<span class="property">__proto__</span> || <span class="title class_">Object</span>.<span class="title function_">getPrototypeOf</span>(o);</span><br><span class="line">      &#125;;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">_getPrototypeOf</span>(o);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_instanceof</span>(<span class="params">left, right</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    right != <span class="literal">null</span> &amp;&amp;</span><br><span class="line">    <span class="keyword">typeof</span> <span class="title class_">Symbol</span> !== <span class="string">&quot;undefined&quot;</span> &amp;&amp;</span><br><span class="line">    right[<span class="title class_">Symbol</span>.<span class="property">hasInstance</span>]</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span> !!right[<span class="title class_">Symbol</span>.<span class="property">hasInstance</span>](left);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> left <span class="keyword">instanceof</span> right;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">_classCallCheck</span>(<span class="params">instance, Constructor</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">_instanceof</span>(instance, <span class="title class_">Constructor</span>)) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&quot;Cannot call a class as a function&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中<code>_classCallCheck</code>和<code>_instanceof</code>之前讲过了（这里由于没有编写方法，所以没有<code>_createClass</code>和<code>_defineProperties</code>这两个函数）。</p>
+<p><code>_getPrototypeOf</code>和<code>_setPrototypeOf</code>和<code>_typeof</code>都是简单的进行兼容处理而已。</p>
+<p>剩下的有<code>_inherits</code>，<code>_createSuper</code>，<code>_possibleConstructorReturn</code>，<code>_assertThisInitialized</code>以及<code>_isNativeReflectConstruct</code>这几个函数。</p>
+<p>可以先看两个类经过编译后是什么样子的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">People</span> = <span class="keyword">function</span> <span class="title function_">People</span>(<span class="params">id, name</span>) &#123;</span><br><span class="line">  <span class="title function_">_classCallCheck</span>(<span class="variable language_">this</span>, <span class="title class_">People</span>);</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">id</span> = id;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> <span class="title class_">Student</span> = <span class="comment">/*#__PURE__*/</span> (<span class="keyword">function</span> (<span class="params">_People</span>) &#123;</span><br><span class="line">  <span class="title function_">_inherits</span>(<span class="title class_">Student</span>, _People);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> _super = <span class="title function_">_createSuper</span>(<span class="title class_">Student</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">Student</span>(<span class="params">id, name, age</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> _this;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">_classCallCheck</span>(<span class="variable language_">this</span>, <span class="title class_">Student</span>);</span><br><span class="line"></span><br><span class="line">    _this = _super.<span class="title function_">call</span>(<span class="variable language_">this</span>, id, name);</span><br><span class="line">    _this.<span class="property">age</span> = age;</span><br><span class="line">    <span class="keyword">return</span> _this;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Student</span>;</span><br><span class="line">&#125;)(<span class="title class_">People</span>);</span><br></pre></td></tr></table></figure>
+
+<p>先调用了<code>_inherits</code>，传入了两个构造函数。</p>
+<p>然后在<code>_inherits</code>函数中有下面这段代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">subClass.<span class="property"><span class="keyword">prototype</span></span> = <span class="title class_">Object</span>.<span class="title function_">create</span>(superClass &amp;&amp; superClass.<span class="property"><span class="keyword">prototype</span></span>, &#123;</span><br><span class="line">  <span class="attr">constructor</span>: &#123; <span class="attr">value</span>: subClass, <span class="attr">writable</span>: <span class="literal">true</span>, <span class="attr">configurable</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>没错，这就是之前在继承那一篇帖子说过的原型式继承，不必通过<code>new</code>来创建父类的对象，而是只需要一个指向父类原型的对象即可。</p>
+<p>然后紧接着下面这句：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (superClass) <span class="title function_">_setPrototypeOf</span>(subClass, superClass);</span><br></pre></td></tr></table></figure>
+
+<p>这句使得父类的静态方法也能够通过子类进行调用了，因为函数本质上也是一个对象。</p>
+<p>接下来执行了<code>_createSuper</code>。</p>
+<p>先通过<code>_isNativeReflectConstruct</code>判断当前环境下能否使用<code>Reflect</code>。</p>
+<p>然后返回了一个<code>_createSuperInternal</code>函数。</p>
+<p>内部先获取了父类构造器，然后以当前的上下文来执行这个构造器，这对应我们之前在继承中说到的借用构造方法，把父类上绑定的属性绑定在子类上。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">result = <span class="title class_">Reflect</span>.<span class="title function_">construct</span>(<span class="title class_">Super</span>, <span class="variable language_">arguments</span>, <span class="title class_">NewTarget</span>);</span><br><span class="line">result = <span class="title class_">Super</span>.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>);</span><br></pre></td></tr></table></figure>
+
+<p>最后返回了<code>_possibleConstructorReturn</code>，这个函数目的是检查构造函数是否返回了某些东西。</p>
+<p>如果父类的构造器已经返回了一个函数或者对象的时候，那么直接返回这个函数或者对象，如果不是，那就要检查<code>this</code>。</p>
+<p>也就是执行<code>_assertThisInitialized</code>这个函数。</p>
+<p>如果<code>this</code> 为 <code>void 0</code>（<code>void 0</code>为<code>undefined</code>），抛出错误<code>&quot;this hasn&#39;t been initialised - super() hasn&#39;t been called&quot;</code>。</p>
+<p>这个报错的意思就是子类没有调用<code>super</code>初始化父类。</p>
+<p>需要指出，子类继承父类，必须在子类构造函数的开头调用<code>super</code>，不然报错。</p>
+<p><img data-src="https://i.loli.net/2020/08/17/jXmDAcINzfV7sCS.png"></p>
+<p>那么，<code>babel</code>是如何做到这一点的呢，把<code>super</code>去掉再编译之后。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="title class_">Student</span> = <span class="comment">/*#__PURE__*/</span> (<span class="keyword">function</span> (<span class="params">_People</span>) &#123;</span><br><span class="line">  <span class="title function_">_inherits</span>(<span class="title class_">Student</span>, _People);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> _super = <span class="title function_">_createSuper</span>(<span class="title class_">Student</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">Student</span>(<span class="params">id, name, age</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> _this;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">_classCallCheck</span>(<span class="variable language_">this</span>, <span class="title class_">Student</span>);</span><br><span class="line"></span><br><span class="line">    _this.<span class="property">age</span> = age;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">_possibleConstructorReturn</span>(_this);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Student</span>;</span><br><span class="line">&#125;)(<span class="title class_">People</span>);</span><br></pre></td></tr></table></figure>
+
+<p>发现少了一句：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">_this = _super.<span class="title function_">call</span>(<span class="variable language_">this</span>, id, name);</span><br></pre></td></tr></table></figure>
+
+<p>并且结尾<code>return _this</code>变成<code>return _possibleConstructorReturn(_this)</code>。</p>
+<p>此时就很明朗了，没有调用<code>super</code>，此时的<code>_this</code>都不是一个对象，传入<code>_possibleConstructorReturn</code></p>
+<p>由于没有第二个参数，从而判断了<code>self</code>，<code>self</code>此时明显就是<code>undefined</code>，所以报错了。</p>
+<h2 id="arrow-function-（箭头函数）"><a href="#arrow-function-（箭头函数）" class="headerlink" title="arrow function （箭头函数）"></a>arrow function （箭头函数）</h2><p>箭头函数解决了<code>this</code>变量的绑定问题。</p>
+<p>之前，使用到<code>this</code>的地方要格外的小心，比如下面<code>setTimeout</code>的回调函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">val</span>);</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>此时的打印的输出为<code>undefined</code>，因为传进<code>setTimeout</code>参数的函数中的<code>this</code>已经不指向<code>o</code>了。</p>
+<p>在没出现箭头函数的时候，可以使用变量<code>self</code>指向<code>this</code>来保持函数内<code>this</code>的指向。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> self = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(self.<span class="property">val</span>); <span class="comment">//输出1</span></span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>或者可以通过<code>bind</code>来绑定函数的上下文。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(</span><br><span class="line">      <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">val</span>); <span class="comment">//输出1</span></span><br><span class="line">      &#125;.<span class="title function_">bind</span>(<span class="variable language_">this</span>),</span><br><span class="line">      <span class="number">1000</span></span><br><span class="line">    );</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如果使用箭头函数那么问题就会消失。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> o = &#123;</span><br><span class="line">  <span class="attr">val</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="title function_">say</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">val</span>); <span class="comment">// 输出1</span></span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>箭头函数可以让代码更加简介易读。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">array.<span class="title function_">map</span>(<span class="function">(<span class="params">v</span>) =&gt;</span> v + <span class="number">1</span>); <span class="comment">// 如果只需简单的处理，只要写成一行，默认就是返回值了。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="default（函数参数默认值）"><a href="#default（函数参数默认值）" class="headerlink" title="default（函数参数默认值）"></a>default（函数参数默认值）</h2><p>之前如果想要设置函数的默认参数，一般是使用<code>||</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">a, b</span>) &#123;</span><br><span class="line">  a = a || <span class="number">1</span>;</span><br><span class="line">  b = b || <span class="literal">true</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么做的问题就是如果传入了假值就会使用到默认值，但是不符合实际的逻辑。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fn</span>(<span class="number">0</span>, <span class="literal">false</span>); <span class="comment">// a 为 1， b 为 true</span></span><br></pre></td></tr></table></figure>
+
+<p>现在只需要在参数列表顺便指定默认值即可，并且符合实际逻辑。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">a = <span class="number">1</span>, b = <span class="literal">true</span></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(a);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(b);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>(<span class="number">0</span>, <span class="literal">false</span>); <span class="comment">// a = 0 , b = false</span></span><br><span class="line"><span class="title function_">fn</span>(); <span class="comment">// a = 1 , b = true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="rest-arguments（剩余参数）"><a href="#rest-arguments（剩余参数）" class="headerlink" title="rest arguments（剩余参数）"></a>rest arguments（剩余参数）</h2><p>之前如果想对函数参数进行分割，一般使用函数内部变量<code>arguments</code>配合数组<code>slice</code>方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> sliceFn = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>;</span><br><span class="line">  <span class="keyword">var</span> firstArg = sliceFn.<span class="title function_">call</span>(<span class="variable language_">arguments</span>, <span class="number">0</span>, <span class="number">1</span>)[<span class="number">0</span>];</span><br><span class="line">  <span class="keyword">var</span> restArgs = sliceFn.<span class="title function_">call</span>(<span class="variable language_">arguments</span>, <span class="number">1</span>);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(firstArg);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(restArgs);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>); <span class="comment">// 输出 1 [2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+<p>现在只需要使用<code>...</code>展开符号即可分割参数数组。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">firstArg, ...restArgs</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(firstArg);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(restArgs);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>); <span class="comment">// 输出 1 [2, 3, 4, 5]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="destructuring（解构）"><a href="#destructuring（解构）" class="headerlink" title="destructuring（解构）"></a>destructuring（解构）</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> [first, second] = array; <span class="comment">// first 为 1， second 为 2</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> [first, , second] = array; <span class="comment">// 中间隔开了一个元素，first 为 1， second 为 3</span></span><br></pre></td></tr></table></figure>
+
+<p>配合展开符号使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="keyword">const</span> [first, ...rest] = array; <span class="comment">// first 为 1， rest 为 [2, 3]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Enhanced-object-literals（增强的对象字面量）"><a href="#Enhanced-object-literals（增强的对象字面量）" class="headerlink" title="Enhanced object literals（增强的对象字面量）"></a>Enhanced object literals（增强的对象字面量）</h2><p>之前如果想往对象的属性赋值的话，一个是以 <code>属性名:属性名对应值的变量</code>。</p>
+<p>在属性名和变量名一样的情况下写起来非常的繁琐。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = &#123; <span class="attr">val</span>: <span class="number">1</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> b = &#123; <span class="attr">age</span>: <span class="number">22</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> val = a.<span class="property">val</span>;</span><br><span class="line"><span class="keyword">const</span> age = b.<span class="property">age</span>;</span><br><span class="line"><span class="keyword">const</span> c = &#123;</span><br><span class="line">  <span class="attr">val</span>: val, <span class="comment">// 重复的变量名</span></span><br><span class="line">  <span class="attr">age</span>: age, <span class="comment">// 重复的变量名</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>而现在就可以省略相同名字的字段了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = &#123; <span class="attr">val</span>: <span class="number">1</span> &#125;;</span><br><span class="line"><span class="keyword">const</span> b = &#123; <span class="attr">age</span>: <span class="number">22</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> val = a.<span class="property">val</span>;</span><br><span class="line"><span class="keyword">const</span> age = b.<span class="property">age</span>;</span><br><span class="line"><span class="keyword">const</span> c = &#123;</span><br><span class="line">  val, <span class="comment">// 省略了，表示属性名是val且值为变量名为val的值</span></span><br><span class="line">  age,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Set-和-Map"><a href="#Set-和-Map" class="headerlink" title="Set 和 Map"></a>Set 和 Map</h2><p><code>es6</code>内置了两个经典的数据结构。<br><code>Set</code>可以看成没有重复元素的数组。<br><code>Map</code>可以看成元素是键值对的数组。</p>
+<p>之前可以用字面对象来模拟<code>Map</code>，但是键只能是数字或者字符串，而<code>es6</code>的<code>Map</code>没有这个限制了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> map = &#123; <span class="attr">a</span>: <span class="number">1</span>, <span class="number">2</span>: <span class="number">3</span>, <span class="attr">true</span>: <span class="number">1</span> &#125;; <span class="comment">// 这里的true也是字符串，不要被迷惑了</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> map = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"><span class="keyword">var</span> key = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> val = &#123; <span class="attr">b</span>: <span class="number">2</span> &#125;;</span><br><span class="line">map.<span class="title function_">set</span>(key, val); <span class="comment">//  对象作为键</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(map.<span class="title function_">get</span>(key)); <span class="comment">//  输出 &#123;b: 2&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><code>es6</code>还要很多新特性，比如</p>
+<ul>
+<li><code>Promise</code></li>
+<li><code>Proxy</code></li>
+<li><code>Reflect</code></li>
+<li><code>Symbol</code></li>
+<li>模板字符串</li>
+<li>模块化<code>import</code>和<code>export</code></li>
+<li><code>...</code></li>
+</ul>
+<p>这些都可以在 阮一峰写的<a target="_blank" rel="noopener" href="https://es6.ruanyifeng.com/#docs/string">ECMAScript 6 入门</a> 上查看</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/fb64e7798736" title="ECMAScript2015（es6）新特性">https://prohibitorum.top/fb64e7798736</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/72f7d17ccbf9" rel="prev" title="JavaScript中的继承">
+                  <i class="fa fa-angle-left"></i> JavaScript中的继承
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d8a339cfe28a" rel="next" title="ECMAScript2016（es7）新特性">
+                  ECMAScript2016（es7）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1597583389"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

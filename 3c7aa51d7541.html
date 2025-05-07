@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Spring中Aop的配置方式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring中Aop的配置方式">
+<meta property="og:url" content="https://prohibitorum.top/3c7aa51d7541">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="Spring中Aop的配置方式">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/fDCVry2SU5GKsEQ.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/iZnpvQ9I5ft8XJD.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/I4lC5h2ptjBk6SY.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/8BiD9vjAgmLr7wt.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/BXAUvGLsDphk2Mi.png">
+<meta property="og:image" content="https://i.loli.net/2019/11/23/2DutEKliIcTgY53.png">
+<meta property="article:published_time" content="2020-06-11T23:45:51.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2019/11/23/fDCVry2SU5GKsEQ.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/3c7aa51d7541.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/3c7aa51d7541","path":"3c7aa51d7541.html","title":"Spring中Aop的配置方式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Spring中Aop的配置方式 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AOP-%E6%9C%AF%E8%AF%AD"><span class="nav-number">2.</span> <span class="nav-text">AOP 术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%9A%E7%9F%A5%EF%BC%88Advice%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">通知（Advice）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E7%82%B9%EF%BC%88JoinPoint%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">连接点（JoinPoint）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E5%85%A5%E7%82%B9%EF%BC%88Pointcut%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">切入点（Pointcut）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%87%E9%9D%A2%EF%BC%88Aspect%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">切面（Aspect）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%EF%BC%88Target%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">目标（Target）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AOP-%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">AOP 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#XML%E9%85%8D%E7%BD%AE"><span class="nav-number">3.1.</span> <span class="nav-text">XML配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E9%85%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">注解配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/3c7aa51d7541">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Spring中Aop的配置方式 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Spring中Aop的配置方式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-11 23:45:51" itemprop="dateCreated datePublished" datetime="2020-06-11T23:45:51+00:00">2020-06-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>Spring</code>中<code>Aop</code>的配置方式</p>
+<span id="more"></span>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>一个 Spring 的 java 项目。</p>
+<h1 id="AOP-术语"><a href="#AOP-术语" class="headerlink" title="AOP 术语"></a>AOP 术语</h1><p>几个重要<code>AOP</code>的术语</p>
+<ul>
+<li>通知（<code>Advice</code>）</li>
+<li>连接点（<code>JoinPoint</code>）</li>
+<li>切入点（<code>Pointcut</code>）</li>
+<li>切面（<code>Aspect</code>）</li>
+<li>目标（<code>target</code>）</li>
+</ul>
+<h2 id="通知（Advice）"><a href="#通知（Advice）" class="headerlink" title="通知（Advice）"></a>通知（<code>Advice</code>）</h2><p>需要织入的一段逻辑代码。</p>
+<p>比如我们需要检查某个函数的参数是否合法。</p>
+<p>就需要在方法体之前织入一段逻辑来判断参数。</p>
+<p>这段逻辑一般为一个函数。</p>
+<p>这个函数就叫做通知。</p>
+<h2 id="连接点（JoinPoint）"><a href="#连接点（JoinPoint）" class="headerlink" title="连接点（JoinPoint）"></a>连接点（<code>JoinPoint</code>）</h2><p>连接点的意思是允许我们在哪些地方可以织入一段逻辑。</p>
+<p>在<code>Spring</code>中，可以织入的方式有<strong>5</strong>种。</p>
+<ul>
+<li><code>Before</code> - 前置通知（方法前）</li>
+<li><code>After</code> - 后置通知（方法后）</li>
+<li><code>Around</code> - 环绕通知（方法前后）</li>
+<li><code>AfterReturning</code> - 返回通知（方法返回值之后）</li>
+<li><code>AfterThrowing</code> - 异常通知（方法抛出异常之后）</li>
+</ul>
+<h2 id="切入点（Pointcut）"><a href="#切入点（Pointcut）" class="headerlink" title="切入点（Pointcut）"></a>切入点（<code>Pointcut</code>）</h2><p>每个方法都可以有五个连接点。</p>
+<p>但是实际上我们可能只需在某些地方织入一段逻辑。</p>
+<p>这个织入的连接点就叫做切入点。</p>
+<p>即连接点是告诉你哪些地方可以织入。</p>
+<p>而切入点是实际需要织入的地方。</p>
+<h2 id="切面（Aspect）"><a href="#切面（Aspect）" class="headerlink" title="切面（Aspect）"></a>切面（<code>Aspect</code>）</h2><p>通常为一个类。</p>
+<p>里面包括了若干的通知（方法）和对应的切入点。</p>
+<h2 id="目标（Target）"><a href="#目标（Target）" class="headerlink" title="目标（Target）"></a>目标（<code>Target</code>）</h2><p>需要被通知的对象。</p>
+<p>真正的业务逻辑不会感知到我们的切入。</p>
+<p>一切织入都是透明的，不可见的。</p>
+<h1 id="AOP-配置"><a href="#AOP-配置" class="headerlink" title="AOP 配置"></a>AOP 配置</h1><p>为了模拟服务。</p>
+<p>这里建立三个类来测试。</p>
+<p>一个是<code>POJO</code>的<code>Person</code>类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> id;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="comment">// 省略getter和setter方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个是<code>Service</code>的<code>PersonService</code>类来模拟对<code>Person</code>的服务操作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonService</span> &#123;</span><br><span class="line">    <span class="comment">// 若干的服务</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个是切面类（<code>Aspect</code>）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="comment">// 一些切入点和对应的通知</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="XML配置"><a href="#XML配置" class="headerlink" title="XML配置"></a><code>XML</code>配置</h2><p>这里我们在<code>PersonService</code>里面增加一个方法。</p>
+<p>模拟获取一个<code>Person</code>对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">findPersonById</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        <span class="comment">// 模拟取出一条数据</span></span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">        person.setId(id);</span><br><span class="line">        person.setName(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;查询中...&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> person;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们需要先把切面(<code>Aop</code>)类，服务(<code>PersonService</code>)类。</p>
+<p>配置为<code>Bean</code>，让<code>Spring</code>管理它们。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在我们想在<code>findPersonById</code>这个服务前打印日志。</p>
+<p>输出查询的<code>id</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">before</span><span class="params">(JoinPoint joinPoint)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Object[] args = joinPoint.getArgs();</span><br><span class="line">        <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> (<span class="type">int</span>) args[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: &quot;</span> + id + <span class="string">&quot;的Person开始查询&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>写完通知之后需要在<code>xml</code>配置这个通知织入<code>findPersonById</code>这个服务。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- aop的配置 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 配置一个切面 --&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- ref引用一个bean --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;aop&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 配置一个切点 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- method指定通知 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- pointcut指定目标 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">method</span>=<span class="string">&quot;before&quot;</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">pointcut</span>=<span class="string">&quot;execution(public * service.PersonService.findPersonById(int))&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:before</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>写个测试类来测试下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test01</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ClassPathXmlApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">PersonService</span> <span class="variable">personService</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;personService&quot;</span>, PersonService.class);</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> personService.findPersonById(<span class="number">100</span>);</span><br><span class="line">        System.out.println(person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后，可以看见确实在方法调用之前织入了日志的通知：</p>
+<p><img data-src="https://i.loli.net/2019/11/23/fDCVry2SU5GKsEQ.png"></p>
+<p>上面配置了前置通知。</p>
+<p>后置通知和前置通知差不多。</p>
+<p>只需要改变下参数就行。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;aop&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 省略其他配置 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:before</span> <span class="attr">method</span>=<span class="string">&quot;after&quot;</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">pointcut</span>=<span class="string">&quot;execution(public * service.PersonService.findPersonById(int))&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:before</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="comment">// 省略其他通知</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">after</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        Object[] args = joinPoint.getArgs();</span><br><span class="line">        <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> (<span class="type">int</span>) args[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: &quot;</span> + id + <span class="string">&quot;的Person查询完成&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之前的<code>test01</code>之后可以看到在服务之后织入了逻辑。</p>
+<p><img data-src="https://i.loli.net/2019/11/23/iZnpvQ9I5ft8XJD.png"></p>
+<p>现在来配置下<code>afterReturning</code>和<code>afterThrowing</code>。</p>
+<p>看名字很容易看出，就是在返回值或者抛出异常之后运行。</p>
+<p>先配置<code>afterReturning</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;aop&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 省略其他配置 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- returning设置入参的名字，通知的参数名必须和这里的名字一致 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:after-returning</span> <span class="attr">method</span>=<span class="string">&quot;afterReturning&quot;</span></span></span><br><span class="line"><span class="tag">                                 <span class="attr">pointcut</span>=<span class="string">&quot;execution(public * service.PersonService.findPersonById(int))&quot;</span></span></span><br><span class="line"><span class="tag">                                 <span class="attr">returning</span>=<span class="string">&quot;person&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:after-returning</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="comment">// 省略其他通知</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterReturning</span><span class="params">(Person person)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 返回了Person对象: &quot;</span> + person);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行<code>test01</code>，可以看到织入成功：</p>
+<p><img data-src="https://i.loli.net/2019/11/23/I4lC5h2ptjBk6SY.png"></p>
+<p>再来配置<code>afterThrowing</code>。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;aop&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 省略其他配置 --&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- throwing设置异常参数的名字，通知的参数名必须和这里的名字一致 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:after-throwing</span> <span class="attr">method</span>=<span class="string">&quot;afterThrowing&quot;</span></span></span><br><span class="line"><span class="tag">                                <span class="attr">pointcut</span>=<span class="string">&quot;execution(public * service.PersonService.findPersonById(int))&quot;</span></span></span><br><span class="line"><span class="tag">                                <span class="attr">throwing</span>=<span class="string">&quot;ex&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:after-throwing</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="comment">// 省略其他通知</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterThrowing</span><span class="params">(Exception ex)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 捕捉到异常: &quot;</span> + ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>为了查看异常通知的效果。</p>
+<p>我们在<code>findPersonById</code>模拟。</p>
+<p>如果<code>id</code>为<code>0</code>就抛出一个异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> Person <span class="title function_">findPersonById</span><span class="params">(<span class="type">int</span> id)</span> &#123;</span><br><span class="line">        <span class="comment">// 模拟取出一条数据</span></span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>();</span><br><span class="line">        person.setId(id);</span><br><span class="line">        person.setName(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;查询中...&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (id == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Exception</span>(<span class="string">&quot;出错了，没查到~~&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> person;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们修改下<code>test01</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpringTest</span> &#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test01</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">ClassPathXmlApplicationContext</span> <span class="variable">applicationContext</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassPathXmlApplicationContext</span>(<span class="string">&quot;spring.xml&quot;</span>);</span><br><span class="line">        <span class="type">PersonService</span> <span class="variable">personService</span> <span class="operator">=</span> applicationContext.getBean(<span class="string">&quot;personService&quot;</span>, PersonService.class);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> personService.findPersonById(<span class="number">0</span>);</span><br><span class="line">            System.out.println(person);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行之后可以看到确实捕获到了异常</p>
+<p><img data-src="https://i.loli.net/2019/11/23/8BiD9vjAgmLr7wt.png"></p>
+<p>接下来是环绕通知的配置。</p>
+<p>环绕通知的配置和其他的有所不同。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;personService&quot;</span> <span class="attr">class</span>=<span class="string">&quot;service.PersonService&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">&quot;aop&quot;</span> <span class="attr">class</span>=<span class="string">&quot;aop.Aop&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:config</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">aop:aspect</span> <span class="attr">ref</span>=<span class="string">&quot;aop&quot;</span>&gt;</span></span><br><span class="line">            <span class="comment">&lt;!-- 省略其他配置 --&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">aop:around</span> <span class="attr">method</span>=<span class="string">&quot;around&quot;</span></span></span><br><span class="line"><span class="tag">                        <span class="attr">pointcut</span>=<span class="string">&quot;execution(public * service.PersonService.findPersonById(int))&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">aop:around</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">aop:aspect</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="comment">// 省略其他通知</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">around</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 环绕通知的前置&quot;</span>);</span><br><span class="line">        <span class="comment">// 这里调用真正的逻辑处理</span></span><br><span class="line">        <span class="comment">// 在这前面，在这之后都可以织入的逻辑</span></span><br><span class="line">        <span class="type">Object</span> <span class="variable">proceed</span> <span class="operator">=</span> joinPoint.proceed();</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 环绕通知的后置&quot;</span>);</span><br><span class="line">        <span class="comment">// 一定要返回proceed()函数返回的值</span></span><br><span class="line">        <span class="comment">// 因为生成的对象是代理对象，这样代理对象才能拿到值</span></span><br><span class="line">        <span class="keyword">return</span> proceed;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行<code>test01</code></p>
+<p><img data-src="https://i.loli.net/2019/11/23/BXAUvGLsDphk2Mi.png"></p>
+<p>发现环绕的后置没有执行。</p>
+<p>原因是在目标中抛出了异常，函数就终止运行了。</p>
+<p>我们可以把<code>id</code>改为大于<code>0</code>的数。</p>
+<p>这样子就可以看到效果了：</p>
+<p><img data-src="https://i.loli.net/2019/11/23/2DutEKliIcTgY53.png"></p>
+<h2 id="注解配置"><a href="#注解配置" class="headerlink" title="注解配置"></a>注解配置</h2><p>注解的话其实都差不多：</p>
+<ul>
+<li><code>@Aspect</code> 配置切面</li>
+<li><code>@Before</code> 前置通知</li>
+<li><code>@After</code> 后置通知</li>
+<li><code>@AfterReturning</code> 返回通知</li>
+<li><code>@AfterThrowing</code> 异常通知</li>
+</ul>
+<p>先在<code>xml</code>配置开启<code>bean</code>注解和<code>aop</code>注解：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span> ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.springframework.org/schema/beans&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:aop</span>=<span class="string">&quot;http://www.springframework.org/schema/aop&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">&quot;http://www.springframework.org/schema/context&quot;</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">&quot;http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/context/spring-context.xsd</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/aop</span></span></span><br><span class="line"><span class="string"><span class="tag">                           http://www.springframework.org/schema/aop/spring-aop.xsd&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置bean注解 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">&quot;pojo,aop&quot;</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置aop注解 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在<code>PersonService</code>上配置<code>@Component</code>。</p>
+<p>然后在<code>Aop</code>类上标注相应的注解就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Aop</span> &#123;</span><br><span class="line">    <span class="meta">@Before(&quot;execution(public * service.PersonService.findPersonById(int))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">before</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        Object[] args = joinPoint.getArgs();</span><br><span class="line">        <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> (<span class="type">int</span>) args[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: &quot;</span> + id + <span class="string">&quot;的Person开始查询&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After(&quot;execution(public * service.PersonService.findPersonById(int))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">after</span><span class="params">(JoinPoint joinPoint)</span> &#123;</span><br><span class="line">        Object[] args = joinPoint.getArgs();</span><br><span class="line">        <span class="type">int</span> <span class="variable">id</span> <span class="operator">=</span> (<span class="type">int</span>) args[<span class="number">0</span>];</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: &quot;</span> + id + <span class="string">&quot;的Person查询完成&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around(&quot;execution(public * service.PersonService.findPersonById(int))&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">around</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 环绕通知的前置&quot;</span>);</span><br><span class="line">        <span class="type">Object</span> <span class="variable">proceed</span> <span class="operator">=</span> joinPoint.proceed();</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 环绕通知的后置&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> proceed;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterReturning(</span></span><br><span class="line"><span class="meta">            pointcut = &quot;execution(public * service.PersonService.findPersonById(int))&quot;,</span></span><br><span class="line"><span class="meta">            returning = &quot;person&quot;</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterReturning</span><span class="params">(Person person)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 返回了Person对象: &quot;</span> + person);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@AfterThrowing(</span></span><br><span class="line"><span class="meta">            pointcut = &quot;execution(public * service.PersonService.findPersonById(int))&quot;,</span></span><br><span class="line"><span class="meta">            throwing = &quot;ex&quot;</span></span><br><span class="line"><span class="meta">    )</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">afterThrowing</span><span class="params">(Exception ex)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;logger: 捕捉到异常: &quot;</span> + ex.getMessage());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行<code>test01</code>的结果和<code>xml</code>配置的一样。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>一个目标也可以织入多个通知。</p>
+<p>这时候就可以用<code>@Order</code>注解来配置先后顺序。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/3c7aa51d7541" title="Spring中Aop的配置方式">https://prohibitorum.top/3c7aa51d7541</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2e2de6627a5c" rel="prev" title="JavaScript中的Promise">
+                  <i class="fa fa-angle-left"></i> JavaScript中的Promise
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/5882a36e807b" rel="next" title="Spring中Bean的配置方式">
+                  Spring中Bean的配置方式 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591890351"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

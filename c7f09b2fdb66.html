@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.1（译）">
+<meta property="og:url" content="https://prohibitorum.top/c7f09b2fdb66">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditingJsx-5.1-1.gif">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditing-5.1-vscode-ui-1.png">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/paramTagSnippets-5-1-1.gif">
+<meta property="article:published_time" content="2023-06-05T17:11:47.000Z">
+<meta property="article:modified_time" content="2023-06-05T17:19:23.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditingJsx-5.1-1.gif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/c7f09b2fdb66.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/c7f09b2fdb66","path":"c7f09b2fdb66.html","title":"TypeScript 5.1（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.1（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94-Beta-%E5%92%8C-RC-%E7%89%88%E6%9C%AC%E5%A4%9A%E5%93%AA%E4%BA%9B%E6%96%B0%E4%B8%9C%E8%A5%BF%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">比 Beta 和 RC 版本多哪些新东西？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E7%AE%80%E5%8D%95%E5%9C%B0%E9%9A%90%E5%BC%8F%E8%BF%94%E5%9B%9E-undefined-%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">更简单地隐式返回 undefined 的函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Getter-%E5%92%8C-Setter-%E7%9A%84%E7%B1%BB%E5%9E%8B%E4%B8%8D%E5%86%8D%E7%9B%B8%E5%85%B3%E8%81%94"><span class="nav-number">2.3.</span> <span class="nav-text">Getter 和 Setter 的类型不再相关联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E8%80%A6-JSX-%E5%85%83%E7%B4%A0%E5%92%8C-JSX-%E6%A0%87%E7%AD%BE%E4%B9%8B%E9%97%B4%E7%9A%84%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5"><span class="nav-number">2.4.</span> <span class="nav-text">解耦 JSX 元素和 JSX 标签之间的类型检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSX-%E5%B1%9E%E6%80%A7%E6%94%AF%E6%8C%81%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">2.5.</span> <span class="nav-text">JSX 属性支持命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E8%A7%A3%E6%9E%90%E4%BC%9A%E5%8F%82%E8%80%83-typeRoots-%E5%AD%97%E6%AE%B5"><span class="nav-number">2.6.</span> <span class="nav-text">模块解析会参考 typeRoots 字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSX-%E6%A0%87%E7%AD%BE%E6%94%AF%E6%8C%81%E9%93%BE%E6%8E%A5%E6%B8%B8%E6%A0%87"><span class="nav-number">2.7.</span> <span class="nav-text">JSX 标签支持链接游标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JSDoc-%E7%9A%84-param-%E6%94%AF%E6%8C%81%E7%89%87%E6%AE%B5%E8%A1%A5%E5%85%A8"><span class="nav-number">2.8.</span> <span class="nav-text">JSDoc 的 @param 支持片段补全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96"><span class="nav-number">2.9.</span> <span class="nav-text">其他优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%AE%89%E8%A3%85%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.9.1.</span> <span class="nav-text">避免安装不必要的类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E5%AD%97%E9%9D%A2%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E7%9A%84%E8%B4%9F%E9%9D%A2%E6%83%85%E5%86%B5"><span class="nav-number">2.9.2.</span> <span class="nav-text">联合字面类型检查的负面情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%8F%E5%B0%91-JSDoc-%E8%A7%A3%E6%9E%90%E5%B8%A6%E6%9D%A5%E7%9A%84%E5%AF%B9%E6%89%AB%E6%8F%8F%E5%99%A8%E7%9A%84%E8%B0%83%E7%94%A8%E6%AC%A1%E6%95%B0"><span class="nav-number">2.9.3.</span> <span class="nav-text">减少 JSDoc 解析带来的对扫描器的调用次数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%B4%E5%9D%8F%E6%80%A7%E5%8F%98%E6%9B%B4"><span class="nav-number">2.10.</span> <span class="nav-text">破坏性变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ES2020-%E4%BB%A5%E5%8F%8A%E4%BD%BF%E7%94%A8-Node-js-14-17-%E4%BD%9C%E4%B8%BA%E6%9C%80%E5%B0%8F%E7%9A%84%E8%BF%90%E8%A1%8C%E6%97%B6%E8%A6%81%E6%B1%82%E3%80%82"><span class="nav-number">2.10.1.</span> <span class="nav-text">ES2020 以及使用 Node.js 14.17 作为最小的运行时要求。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5"><span class="nav-number">2.11.</span> <span class="nav-text">下一步</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/c7f09b2fdb66">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.1（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.1（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-06-05 17:11:47 / 修改时间：17:19:23" itemprop="dateCreated datePublished" datetime="2023-06-05T17:11:47+00:00">2023-06-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>14 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-1/">Announcing TypeScript 5.1</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>今天我们激动地宣布：Typescript 5.1 正式发布。</p>
+<p>如果你还不熟悉 TypeScript 的话，可以简单地理解为， TypeScript 是一门建立在 JavaScript 上的语言，TypeScript 通过添加类型语法来进行类型检查。类型为程序描述了一些细节，然后 TypeScript 在编译之前根据这些类型进行检查以捕获可能的拼写错误，逻辑 BUG 等等。 TypeScript 还能根据这些类型来提供编辑器工具，比如代码完成，代码重构等等。实际上，如果你使用像 VS 或者 VS Code 这样的编辑器， TypeScript 已经提供了这种体验。你可以阅读关于 TypeScript 的文档 <a target="_blank" rel="noopener" href="https://typescriptlang.org/">https://typescriptlang.org</a> 来了解更多信息。</p>
+<p>为了开始使用 TypeScript ，可以通过 <a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild">NuGet</a> 获取，或者通过执行如下的 npm 命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D typescript</span><br></pre></td></tr></table></figure>
+
+<p>以下是 TypeScript 5.1 新增的功能列表！</p>
+<ul>
+<li>更简单地隐式返回 <code>undefined</code> 的函数</li>
+<li>Getter 和 Setter 的类型不再相关联</li>
+<li>解耦 JSX 元素和 JSX 标签之间的类型检查</li>
+<li>JSX 属性支持命名空间</li>
+<li>模块解析会参考 <code>typeRoots</code> 字段</li>
+<li>JSX 标签支持链接游标</li>
+<li>JSDoc 的 <code>@param</code> 支持片段补全</li>
+<li>其他优化</li>
+<li>破坏性变更</li>
+</ul>
+<h2 id="比-Beta-和-RC-版本多哪些新东西？"><a href="#比-Beta-和-RC-版本多哪些新东西？" class="headerlink" title="比 Beta 和 RC 版本多哪些新东西？"></a>比 Beta 和 RC 版本多哪些新东西？</h2><p>在 Beta 版本的时候，由于调整了提案的行为，所以我们修正了一些在装饰器中初始化钩子的行为。我们也修改了 <code>isolatedModules</code> 下的构建行为，确保脚本文件不会被重写成模块。这也意味着 <code>transpileModule</code> 接口 API 的使用也会确保脚本不被解释为模块，因为它假定使用了 <code>isolatedModules</code> 选项。</p>
+<p>在 RC 版本的时候，我们稍微对内部进行了重构，移动了一些声明到现存的其他文件中；但是，我们相信这些操作仍然需要改进，因此，目前你可能无法在大多数的编辑器中看见这些变更。你只能通过使用 TypeScript 的夜间版本来选择加入。我们预计在 TypeScript 5.2 或者在未来通过一个 TypeScript 5.1 的补丁来重新引入这些重构项。</p>
+<h2 id="更简单地隐式返回-undefined-的函数"><a href="#更简单地隐式返回-undefined-的函数" class="headerlink" title="更简单地隐式返回 undefined 的函数"></a>更简单地隐式返回 <code>undefined</code> 的函数</h2><p>在 JavaScript 中，如果一个函数在执行过程没有返回一个 <code>return</code> 语句，那么它返回的值就是 <code>undefined</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 没有返回</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// x = undefined</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="title function_">foo</span>();</span><br></pre></td></tr></table></figure>
+
+<p>然而，在先前的 TypeScript 版本中，唯一可以没有返回语句的函数是 <code>void</code> 函数和返回 <code>any</code> 的函数。这意味着即使你明确地说明 “这个函数返回了 <code>undefined</code> ” ，你也被迫至少需要一个返回语句。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 正确 - 这里推断 f1 返回了 void</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f1</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 没有返回语句</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确 - void 不需要一个返回语句</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f2</span>(<span class="params"></span>): <span class="built_in">void</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回语句</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确 - any 不需要一个返回语句</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f3</span>(<span class="params"></span>): <span class="built_in">any</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回语句</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误</span></span><br><span class="line"><span class="comment">// 一个类型既不是 void 和 any 的函数必须返回一个语句</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f4</span>(<span class="params"></span>): <span class="literal">undefined</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回语句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果有些 API 期望一个返回 <code>undefined</code> 的函数的话，这可能会令人痛苦。你至少需要一个明确返回 <code>undefined</code> 的函数或者带有一个返回语句和明确注解的函数。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">function</span> <span class="title function_">takesFunction</span>(<span class="params"><span class="attr">f</span>: () =&gt; <span class="literal">undefined</span></span>): <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误!</span></span><br><span class="line"><span class="comment">// () =&gt; void 类型的参数不能分配给类型 () =&gt; undefined 的参数</span></span><br><span class="line"><span class="title function_">takesFunction</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// no returns</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误!</span></span><br><span class="line"><span class="comment">// 一个类型既不是 void 也不是 any 的函数必须返回一个值。</span></span><br><span class="line"><span class="title function_">takesFunction</span>((): <span class="function"><span class="params">undefined</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误!</span></span><br><span class="line"><span class="comment">// () =&gt; void 类型的参数不能分配给类型 () =&gt; undefined 的参数</span></span><br><span class="line"><span class="title function_">takesFunction</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正常工作</span></span><br><span class="line"><span class="title function_">takesFunction</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">undefined</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正常工作</span></span><br><span class="line"><span class="title function_">takesFunction</span>((): <span class="function"><span class="params">undefined</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这个行为令人泄气并且沮丧，特别是当调用一个不受控制的函数时。理解推断成 <code>void</code> 和 <code>undefined</code> 间的相互作用，一个返回 <code>undefined</code> 的函数是否需要一个返回 <code>return</code> 语句等等情况都令人分心。</p>
+<p>现在， TypeScript 5.1 现在允许一个返回 <code>undefined</code> 的函数无需存在返回语句。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 在 TypeScript 5.1 上正常工作</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f4</span>(<span class="params"></span>): <span class="literal">undefined</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 在 TypeScript 5.1 上正常工作</span></span><br><span class="line"><span class="title function_">takesFunction</span>((): <span class="function"><span class="params">undefined</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 没有返回</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>其次，如果一个函数没有返回表达式并且传递给一些期望一个返回 <code>undefined</code> 的函数的时候， TypeScript 会推断那个函数的返回类型为 <code>undefined</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 在 TypeScript 5.1 上正常工作</span></span><br><span class="line"><span class="title function_">takesFunction</span>(<span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">//                 ^ 返回类型为 undefined</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 没有返回</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 在 TypeScript 5.1 上正常工作</span></span><br><span class="line"><span class="title function_">takesFunction</span>(<span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">//                 ^ 返回类型为 undefined</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>为了解决另一个相似的痛点，在 TypeScript 的 <code>--noImplicitReturns</code> 选项下，只返回 <code>undefined</code> 的函数现在会有一个相似的例外情况，在这个情况下不是每个单独的代码路径都需要以一个显式的返回语句来结束。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 在 TypeScript 5.1 开启 --noImplicitReturns 上正常工作</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>): <span class="literal">undefined</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Math</span>.<span class="title function_">random</span>()) &#123;</span><br><span class="line">    <span class="comment">// 进行一些操作</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多的信息可以阅读原始的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/36288">issue</a> 和实现的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53607">PR</a> 。</p>
+<h2 id="Getter-和-Setter-的类型不再相关联"><a href="#Getter-和-Setter-的类型不再相关联" class="headerlink" title="Getter 和 Setter 的类型不再相关联"></a>Getter 和 Setter 的类型不再相关联</h2><p>从 TypeScript 4.3 开始，可以为一对 get&#x2F;set 访问器指定两个不同的类型。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Serializer</span> &#123;</span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params"><span class="attr">v</span>: <span class="built_in">string</span> | <span class="built_in">number</span> | <span class="built_in">boolean</span></span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">value</span>(): <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">declare</span> <span class="keyword">let</span> <span class="attr">box</span>: <span class="title class_">Serializer</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 允许写入一个 boolean 值</span></span><br><span class="line">box.<span class="property">value</span> = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 以 string 类型读取</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(box.<span class="property">value</span>.<span class="title function_">toUpperCase</span>());</span><br></pre></td></tr></table></figure>
+
+<p>最初我们需要 get 访问器的类型必须要 set 访问器类型的一个子类型。这意味如下的写法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">box.<span class="property">value</span> = box.<span class="property">value</span>;</span><br></pre></td></tr></table></figure>
+
+<p>应该总是合法的。</p>
+<p>然而，有许多存在和提议的 API 需要在它们的 get&#x2F;set 访问器中拥有完全无关的类型。比如，考虑一个非常普遍的例子， 在 DOM 中的 <code>style</code> 属性和 <code>CSSStyleRule</code> 接口。每一个样式规则有一个样式属性，即 <code>CSSStyleDeclaration</code> 。然而，如果你尝试写入这个属性，那么只有字符串才能正常地工作！</p>
+<p>TypeScript 5.1 现在允许 get&#x2F;set 访问器属性拥有完全无关的类型，前提是它们具有显式的类型注解。虽然这个版本的 TypeScript 还没有改变这些内置接口的类型，但现在可以以如下的方式定义 <code>CSSStyleRule</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">CSSStyleRule</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 总是以一个 CSSStyleDeclaration 类型读取 */</span></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">style</span>(): <span class="title class_">CSSStyleDeclaration</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** 只能写入一个 string 类型 */</span></span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">style</span>(<span class="params"><span class="attr">newValue</span>: <span class="built_in">string</span></span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这也允许类似 set 访问器只需要合法的值，但是指定 get 访问器在未被初始化情况下可能返回 <code>undefined</code> 的情况。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SafeBox</span> &#123;</span><br><span class="line">  #<span class="attr">value</span>: <span class="built_in">string</span> | <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 只接收 string 类型</span></span><br><span class="line">  <span class="keyword">set</span> <span class="title function_">value</span>(<span class="params"><span class="attr">newValue</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 必须对值进行 undefined 检查</span></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">value</span>(): <span class="built_in">string</span> | <span class="literal">undefined</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.#value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实际上，这类似于在开启 <code>--exactOptionalProperties</code> 下如何对可选属性进行检查的情况。</p>
+<p>可以在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53417">PR</a> 查看更多的信息。</p>
+<h2 id="解耦-JSX-元素和-JSX-标签之间的类型检查"><a href="#解耦-JSX-元素和-JSX-标签之间的类型检查" class="headerlink" title="解耦 JSX 元素和 JSX 标签之间的类型检查"></a>解耦 JSX 元素和 JSX 标签之间的类型检查</h2><p>在 TypeScript 中使用 JSX 的一个痛点是每个 JSX 元素的标签都需要类型。这个版本的 TypeScript 对 JSX 库提供了更准确描述，即“ JSX 组件可以返回什么内容”。对很多人来说，这具体是指能够使用在 React 中异步服务端组件（ asynchronous server component ）。</p>
+<p>在一些上下文和背景中，一个 JSX 元素可能是如下之一：</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一个自闭和的标签</span></span><br><span class="line">&lt;<span class="title class_">Foo</span>/&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个带有开标签和闭标签的正常的标签</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">Bar</span>&gt;</span><span class="tag">&lt;/<span class="name">Bar</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>当对 <code>&lt;Foo /&gt;</code> 和  <code>&lt;Bar&gt;&lt;/Bar&gt;</code> 进行类型检查时， TypeScript 总是寻找一个名叫 <code>JSX</code> 的命名空间，然后从中寻找一个名叫 <code>Element</code> 的类型，换句话说，就是寻找 <code>JSX.Element</code> 的类型。</p>
+<p>但是为了检查 <code>Foo</code> 和 <code>Bar</code> 自身是否是合法的标签名称， TypeScript 会粗略地获取 <code>Foo</code> 或 <code>Bar</code> 返回或构造的类型，然后检查是否兼容 <code>JSX.Element</code> （或者如果标签的类型是可构造的话，和另一个名叫 <code>JSX.ElementClass</code> 的类型进行兼容性检查）。</p>
+<p>这里的限制意味着如果组件返回或者“渲染”了一个比 <code>JSX.Element</code> 更广泛的类型，那么组件无法被使用。比如，一个 JSX 库可能能接受返回 <code>string</code> 或者 <code>Promise</code> 的组件。</p>
+<p>作为一个更具体的例子，未来 React 的版本提议有限的支持返回 <code>Promise</code> 的组件。但现存的 TypeScript 版本无法在没有彻底放宽 <code>JSX.Element</code> 的类型下表达这一点。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="title class_">React</span></span><br><span class="line">  <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">Foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> element = &lt;Foo / &gt;;</span><br><span class="line">//             ~~~</span><br><span class="line">// Foo 无法作为一个 JSX 组件使用</span><br><span class="line">// 返回的 Promise&lt;Element&gt; 不是一个合法的 JSX 元素</span><br></pre></td></tr></table></figure>
+
+<p>为了给库提供一种方式来表示上面的情况， TypeScript 5.1 现在会寻找一个名叫 <code>JSX.ElementType</code> 的类型。 <code>ElementType</code> 精确指定了在 JSX 元素中使用什么类型的标签是合法的。所以现在它的类型定义看起来如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">JSX</span> &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">ElementType</span> =</span><br><span class="line">  <span class="comment">// 所有合法的小写标签</span></span><br><span class="line">    keyof <span class="title class_">IntrinsicAttributes</span></span><br><span class="line">  <span class="comment">// 函数组件</span></span><br><span class="line">  (<span class="attr">props</span>: <span class="built_in">any</span>) =&gt; <span class="title class_">Element</span></span><br><span class="line">  <span class="comment">// 类组件</span></span><br><span class="line">  <span class="title function_">new</span> (<span class="attr">props</span>: <span class="built_in">any</span>) =&gt; <span class="title class_">ElementClass</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">IntrinsictAttributes</span> <span class="keyword">extends</span> /*...*/ &#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">Element</span> = <span class="comment">/*...*/</span>;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">ClassElement</span> = <span class="comment">/*...*/</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/eps1lon">Sebastian Silbermann</a> 贡献了这一<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/51328">变更</a>。</p>
+<h2 id="JSX-属性支持命名空间"><a href="#JSX-属性支持命名空间" class="headerlink" title="JSX 属性支持命名空间"></a>JSX 属性支持命名空间</h2><p>TypeScript 现在支持在 JSX 中使用命名空间属性。</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="title class_">React</span> <span class="keyword">from</span> <span class="string">&quot;react&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 两个都是等价的</span></span><br><span class="line"><span class="keyword">const</span> x = <span class="language-xml"><span class="tag">&lt;<span class="name">Foo</span> <span class="attr">a:b</span>=<span class="string">&quot;hello&quot;</span> /&gt;</span></span>;</span><br><span class="line"><span class="keyword">const</span> y = <span class="language-xml"><span class="tag">&lt;<span class="name">Foo</span> <span class="attr">a</span> <span class="attr">:</span> <span class="attr">b</span> = <span class="string">&quot;hello&quot;</span> /&gt;</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">FooProps</span> &#123;</span><br><span class="line">  <span class="string">&quot;a:b&quot;</span>: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Foo</span>(<span class="params"><span class="attr">props</span>: <span class="title class_">FooProps</span></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;props[&quot;a:b&quot;]&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当命名空间的标签的第一部分为小写的时候，它看起来和 <code>JSX.IntrinsicAttributes</code> 相似。</p>
+<figure class="highlight tsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">JSX</span> &#123;</span><br><span class="line">  <span class="keyword">interface</span> <span class="title class_">IntrinsicElements</span> &#123;</span><br><span class="line">    [<span class="string">&quot;a:b&quot;</span>]: &#123;</span><br><span class="line">      <span class="attr">prop</span>: <span class="built_in">string</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 代码中</span></span><br><span class="line"><span class="keyword">let</span> x = <span class="language-xml"><span class="tag">&lt;<span class="name">a:b</span> <span class="attr">prop</span>=<span class="string">&quot;hello!&quot;</span> /&gt;</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/a-tarasyuk">Oleksandr Tarasiuk</a> 的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53799">贡献</a>。</p>
+<h2 id="模块解析会参考-typeRoots-字段"><a href="#模块解析会参考-typeRoots-字段" class="headerlink" title="模块解析会参考 typeRoots 字段"></a>模块解析会参考 <code>typeRoots</code> 字段</h2><p>当 TypeScript 指定的模块查找路径无法解析一个路径的时候，现在它会解析相关包指定的 <code>typeRoots</code> 字段。</p>
+<p>更多细节查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/51715">PR</a> 。</p>
+<h2 id="JSX-标签支持链接游标"><a href="#JSX-标签支持链接游标" class="headerlink" title="JSX 标签支持链接游标"></a>JSX 标签支持链接游标</h2><p>TypeScript 现在支持链接编辑 JSX 标签名称。链接编辑（有时称为“镜像游标”）允许编辑器在同一时间自动编辑多个位置。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditingJsx-5.1-1.gif"></p>
+<p>这个新的特性可以在 TypeScript 和 JavaScript 中使用，可以在 VS Code 预览版中开启。在 VS Code 中，你可以在设置界面中编辑 <code>Editor: Linked Editing</code> 选项。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/linkedEditing-5.1-vscode-ui-1.png"></p>
+<p>或者在 JSON 设置文件中配置 <code>editor.linkedEditing</code> ：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;editor.linkedEditing&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这个特性也在 Visual Studio 17.7 Preview 1 中支持。</p>
+<p>你可以在<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53284">这里</a>查看连接编辑的相关实现。</p>
+<h2 id="JSDoc-的-param-支持片段补全"><a href="#JSDoc-的-param-支持片段补全" class="headerlink" title="JSDoc 的 @param 支持片段补全"></a>JSDoc 的 <code>@param</code> 支持片段补全</h2><p>在 TypeScript 和 JavaScript 文件中， TypeScript 现在提供了对 <code>@param</code> 标签的片段补全。当你使用 JavaScript 来记录代码或者添加 JSDoc 类型的时候，这可以帮助减少一些输入以及文字间的跳转。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/04/paramTagSnippets-5-1-1.gif"></p>
+<p>可以在 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53260">Github</a> 上查看这个新特性是如何实现的。</p>
+<h2 id="其他优化"><a href="#其他优化" class="headerlink" title="其他优化"></a>其他优化</h2><h3 id="避免安装不必要的类型"><a href="#避免安装不必要的类型" class="headerlink" title="避免安装不必要的类型"></a>避免安装不必要的类型</h3><p>TypeScript 5.1 现在在已知不包含对外部类型参数引用的情况下会避免执行类型安装。这 减少许多不必要的计算，在 <code>material-ui</code> 的文档<a target="_blank" rel="noopener" href="https://github.com/mui/material-ui/tree/b0351248fb396001a30330daac86d0e0794a0c1d/docs">目录</a>中减少了 50% 的类型检查时间。</p>
+<p>可以在 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53246">Github</a> 上查看涉及这个的变更。</p>
+<h3 id="联合字面类型检查的负面情况"><a href="#联合字面类型检查的负面情况" class="headerlink" title="联合字面类型检查的负面情况"></a>联合字面类型检查的负面情况</h3><p>当对一个联合类型的一部分的类型进行检查时， TypeScript 首先会对源码使用内部的类型标识符进行快速查找。如果查找失败， TypeScript 会对联合类型中的每种类型进行兼容性检查。</p>
+<p>当关联一个字面类型和一个包含纯字面类型的联合类型的时候， TypeScript 现在可以避免完全遍历联合类型。这个假设是安全的，因为 TypeScript 总是保留&#x2F;缓存了字面类型，尽管在处理关联“新鲜”字面类型的时候存在一些边缘情况。</p>
+<p>这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53192">优化</a>能够减少在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/53191">issue</a> 的代码的类型检查的时间，从 45 秒减少到 0.4 秒。</p>
+<p>译者注：关于这里的“新鲜”字面类型（ “fresh” literal types ），可以在这个<a target="_blank" rel="noopener" href="https://basarat.gitbook.io/typescript/type-system/freshness">链接</a>查看相关解释。</p>
+<h3 id="减少-JSDoc-解析带来的对扫描器的调用次数"><a href="#减少-JSDoc-解析带来的对扫描器的调用次数" class="headerlink" title="减少 JSDoc 解析带来的对扫描器的调用次数"></a>减少 JSDoc 解析带来的对扫描器的调用次数</h3><p>在老版本的 TypeScript 中，解析一个 JSDoc 的注释会使用扫描器和分词器来把注释分成细粒度的单词再把这些内容拼起来。这有助于规范化注释文本，以便把多个空格折叠成一个空格。但是它相当地“健谈”，即解析器和扫描器会经常地来回跳转，这会增加 JSDoc 解析的开销。</p>
+<p>TypeScript 5.1 移动了很多关于把 JSDoc 注释分成扫描器和分词器的逻辑。扫描器现在会直接给解析器返回更多的内容，以便需要的时候使用。</p>
+<p>这些变更降低了一些 10 Mb 的大多是散文格式的注释的 JavaScript 大约一半的解析时间。一个更加真实的例子是，性能套件 <a target="_blank" rel="noopener" href="https://github.com/statelyai/xstate">xstate</a> 的快照减少了 300 毫秒的解析时间，能够更快地加载以及分析。</p>
+<h2 id="破坏性变更"><a href="#破坏性变更" class="headerlink" title="破坏性变更"></a>破坏性变更</h2><h3 id="ES2020-以及使用-Node-js-14-17-作为最小的运行时要求。"><a href="#ES2020-以及使用-Node-js-14-17-作为最小的运行时要求。" class="headerlink" title="ES2020 以及使用 Node.js 14.17 作为最小的运行时要求。"></a>ES2020 以及使用 Node.js 14.17 作为最小的运行时要求。</h3><p>TypeScript 5.1 现在包含了 ECMAScript 2020 引入的功能。因此， TypeScript 至少运行再一个相当现代的运行时上。对于大多数用户来说，这意味着 TypeScript 现在只能运行在 Node.js 14.17 及其之后的版本上了。</p>
+<p>如果你尝试在比如 Node 10 或者 Node 12 的老版本的 Node.js 上使用时，你可能在执行 <code>tsc.js</code> 或者 <code>tsserver.js</code> 时会看到如下的一个错误：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">node_modules/typescript/lib/tsserver.js:2406</span><br><span class="line">  for (let i = startIndex ?? 0; i &lt; array.length; i++) &#123;</span><br><span class="line">                           ^</span><br><span class="line"> </span><br><span class="line">SyntaxError: Unexpected token &#x27;?&#x27;</span><br><span class="line">    at wrapSafe (internal/modules/cjs/loader.js:915:16)</span><br><span class="line">    at Module._compile (internal/modules/cjs/loader.js:963:27)</span><br><span class="line">    at Object.Module._extensions..js (internal/modules/cjs/loader.js:1027:10)</span><br><span class="line">    at Module.load (internal/modules/cjs/loader.js:863:32)</span><br><span class="line">    at Function.Module._load (internal/modules/cjs/loader.js:708:14)</span><br><span class="line">    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:60:12)</span><br><span class="line">    at internal/main/run_main_module.js:17:47</span><br></pre></td></tr></table></figure>
+
+<p>另外，如果你尝试安装 TypeScript ，你会从 npm 那儿得到如下的错误信息：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm WARN EBADENGINE Unsupported engine &#123;</span><br><span class="line">npm WARN EBADENGINE   package: &#x27;typescript@5.1.3&#x27;,</span><br><span class="line">npm WARN EBADENGINE   required: &#123; node: &#x27;&gt;=14.17&#x27; &#125;,</span><br><span class="line">npm WARN EBADENGINE   current: &#123; node: &#x27;v12.22.12&#x27;, npm: &#x27;8.19.2&#x27; &#125;</span><br><span class="line">npm WARN EBADENGINE &#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者是 yarn ：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">error typescript@5.1.3: The engine &quot;node&quot; is incompatible with this module. Expected version &quot;&gt;=14.17&quot;. Got &quot;12.22.12&quot;</span><br><span class="line">error Found incompatible module.</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53291">在此</a>查看此变更的更多信息。</p>
+<p>先前，当在 tsconfig.json 中指定 <code>typeRoots</code> 选项但是所有的 <code>typeRoots</code> 文件夹都解析失败时， TypeScript 会仍然继续搜索父目录，在每个父目录的 <code>node_modules/@types</code> 文件夹中尝试解析这个包。</p>
+<p>这个行为会导致过多的查找，在 TypeScript 5.1 中已被禁止。因此，基于 tsconfig.json 的 <code>type</code> 选项或者 <code>/// &lt;reference &gt;</code> 指令你可能会开始看到如下的错误。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">error TS2688: Cannot find type definition file for &#x27;node&#x27;.</span><br><span class="line">error TS2688: Cannot find type definition file for &#x27;mocha&#x27;.</span><br><span class="line">error TS2688: Cannot find type definition file for &#x27;jasmine&#x27;.</span><br><span class="line">error TS2688: Cannot find type definition file for &#x27;chai-http&#x27;.</span><br><span class="line">error TS2688: Cannot find type definition file for &#x27;webpack-env&quot;&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>解决方法通常是给 <code>typeRoots</code> 属性添加指定的 <code>node_modules/@types</code> 的入口。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;types&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;node&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="string">&quot;mocha&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;typeRoots&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="comment">// Keep whatever you had around before.</span></span><br><span class="line">      <span class="string">&quot;./some-custom-types/&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="comment">// You might need your local &#x27;node_modules/@types&#x27;.</span></span><br><span class="line">      <span class="string">&quot;./node_modules/@types&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="comment">// You might also need to specify a shared &#x27;node_modules/@types&#x27;</span></span><br><span class="line">      <span class="comment">// if you&#x27;re using a &quot;monorepo&quot; layout.</span></span><br><span class="line">      <span class="string">&quot;../../node_modules/@types&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>更多的信息可以查看原始的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/51715">issue</a> 。</p>
+<h2 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h2><p>我们的团队已经开始努力开发 TypeScript 5.2 了。你可以查看 TypeScript 5.2 的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/54298">迭代计划</a>的具体细节。除了计划的工作项之外，迭代计划还说明了发布时间，你也可以在你自己的计划中使用。体验新特性的最好的方式是使用 TypeScript 的“夜间”版本和它的编辑体验。</p>
+<p>不用基于回退到先前的版本！我们希望你可以享受 Typescript 5.1 ，让你享受编码带来的乐趣。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/c7f09b2fdb66" title="TypeScript 5.1（译）">https://prohibitorum.top/c7f09b2fdb66</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d174a34ab7a5" rel="prev" title="TypeScript 5.0（译）">
+                  <i class="fa fa-angle-left"></i> TypeScript 5.0（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d684ff491ab8" rel="next" title="jQuery 入门使用">
+                  jQuery 入门使用 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1685956307"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

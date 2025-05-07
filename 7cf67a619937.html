@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：When You Should Prefer Map Over Object In JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 JavaScript 中什么时候应该选择 Map 而不是 Object">
+<meta property="og:url" content="https://prohibitorum.top/7cf67a619937">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：When You Should Prefer Map Over Object In JavaScript">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271538869.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271539289.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271544191.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271545948.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271546195.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271546757.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271547623.avif">
+<meta property="article:published_time" content="2023-02-17T18:01:10.000Z">
+<meta property="article:modified_time" content="2023-02-27T15:48:30.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Object">
+<meta property="article:tag" content="Map">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271538869.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/7cf67a619937.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/7cf67a619937","path":"7cf67a619937.html","title":"在 JavaScript 中什么时候应该选择 Map 而不是 Object"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在 JavaScript 中什么时候应该选择 Map 而不是 Object | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="nav-number">2.1.</span> <span class="nav-text">总结：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88-Object-%E4%B8%8D%E7%AC%A6%E5%90%88%E5%93%88%E5%B8%8C%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="nav-number">2.2.</span> <span class="nav-text">为什么 Object 不符合哈希测试用例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%BD%99%E7%9A%84%E7%BB%A7%E6%89%BF"><span class="nav-number">2.2.1.</span> <span class="nav-text">多余的继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8D%E7%A7%B0%E5%86%B2%E7%AA%81"><span class="nav-number">2.2.2.</span> <span class="nav-text">名称冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AC%A1%E4%BC%98%E7%9A%84%E4%BA%BA%E4%BD%93%E5%B7%A5%E7%A8%8B%E5%AD%A6"><span class="nav-number">2.2.3.</span> <span class="nav-text">次优的人体工程学</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3"><span class="nav-number">2.2.3.2.</span> <span class="nav-text">迭代</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B8%85%E9%99%A4"><span class="nav-number">2.2.3.3.</span> <span class="nav-text">清除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%9E%E6%80%A7%E5%AD%98%E5%9C%A8%E6%A3%80%E6%B5%8B"><span class="nav-number">2.2.3.4.</span> <span class="nav-text">属性存在检测</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E8%A1%A8-Map"><span class="nav-number">2.3.</span> <span class="nav-text">哈希表 Map</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E7%8C%9C%E6%83%B3"><span class="nav-number">2.4.</span> <span class="nav-text">性能猜想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">2.5.</span> <span class="nav-text">基准测试实现细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%94%AE"><span class="nav-number">2.5.1.</span> <span class="nav-text">字符串键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E6%95%B0%E9%94%AE"><span class="nav-number">2.5.2.</span> <span class="nav-text">整数键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E5%AD%97%E9%94%AE"><span class="nav-number">2.5.3.</span> <span class="nav-text">数字键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8"><span class="nav-number">2.5.4.</span> <span class="nav-text">内存使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">2.6.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E5%A3%B0%E6%98%8E"><span class="nav-number">2.7.</span> <span class="nav-text">浏览器兼容性声明</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/7cf67a619937">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在 JavaScript 中什么时候应该选择 Map 而不是 Object | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 JavaScript 中什么时候应该选择 Map 而不是 Object
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-17 18:01:10" itemprop="dateCreated datePublished" datetime="2023-02-17T18:01:10+00:00">2023-02-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-27 15:48:30" itemprop="dateModified" datetime="2023-02-27T15:48:30+00:00">2023-02-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%91%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">译文</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>19 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://www.zhenghao.io/posts/object-vs-map">When You Should Prefer Map Over Object In JavaScript</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>在 JavaScript 中，缺乏一种“指导”来选择 <code>Map</code> 还是 <code>Object</code></p>
+<blockquote>
+<p>reddit 上对此的<a target="_blank" rel="noopener" href="https://www.reddit.com/r/javascript/comments/vgs7y1/why_you_should_prefer_map_over_object_in/">讨论</a> </p>
+</blockquote>
+<p>在 JavaScript 中，对象非常常见，我们可以很方便的将数据的多个部分组合起来。在 ES6 之后，增加了 <code>Map</code> 这一特性。从很多方面来看， <code>Map</code> 似乎是一个实现了有点复杂接口的，功能更加强大的 <code>Object</code> 。然而，很多人在需要哈希表这种特性时仍然会使用 <code>Object</code> 对象 ，只有在意识到哈希表的键在当前的用例下不能为字符串的时候才去使用 <code>Map</code> 。因此，在当下的 JavaScript 社区中， <code>Map</code> 仍然是<strong>未被充分利用的</strong>。</p>
+<p>在这篇文章中，我会告诉你什么情况下更应该考虑使用 <code>Map</code> ，以及在这种情况下的基准性能。</p>
+<blockquote>
+<p>在 JavaScript 中 ，对象是一个非常广义的术语，几乎所有的东西都可以是对象，除了 <code>null</code> 和 <code>undefined</code>，在这篇文章中，对象只表示普通对象，即这个对象由一对左右括号 <code>&#123;&#125;</code> 分隔。</p>
+</blockquote>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ul>
+<li>在编码时就明确需要记录固定、有限的字段或者属性时，使用 <code>Object</code>，比如一个配置对象。以及通常情况下所有只使用一次的对象。</li>
+<li>在键值对数量可变，需要频繁地更新，编码时无法确定键的名称时，使用 <code>Map</code> ，比如一个事件发射器（ <code>event emitter</code> ）。</li>
+<li>从我的基准测试来看，除非键是小整数的字符串，其他情况下 <code>Map</code> 在插入，删除，迭代速度上都要好于 <code>Object</code> ，并且在相同键值对数量下 <code>Map</code> 使用的内存会更小。</li>
+</ul>
+<h2 id="为什么-Object-不符合哈希测试用例"><a href="#为什么-Object-不符合哈希测试用例" class="headerlink" title="为什么 Object 不符合哈希测试用例"></a>为什么 Object 不符合哈希测试用例</h2><p>使用对象作为哈希表，最明显的缺点可能是键只能是字符串或者符号（ <code>Symbol</code> ）类型，其他类型会通过 <code>toString</code> 方法隐式转化为字符串类型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> foo = []</span><br><span class="line"><span class="keyword">const</span> bar = &#123;&#125;</span><br><span class="line"><span class="keyword">const</span> obj = &#123; [foo]: <span class="string">&#x27;foo&#x27;</span>, [bar]: <span class="string">&#x27;bar&#x27;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj) <span class="comment">// &#123; &quot;&quot;: &#x27;foo&#x27;, [object Object]: &#x27;bar&#x27; &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>更重要的是，将对象作为哈希表可能会造成一些令人迷惑的安全隐患。</p>
+<h3 id="多余的继承"><a href="#多余的继承" class="headerlink" title="多余的继承"></a>多余的继承</h3><p>在 ES6 之前，创建一个哈希表只能通过创建一个空的对象来实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hashMap = &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然而，在创建的时候，这个对象就不再是空的了。尽管 <code>hashMap</code> 变量是一个空的对象字面量，但是他自动继承了 <code>Object.prototype</code> 。这也是我们能在 <code>hashMap</code> 对象上执行 <code>hasOwnProperty</code> ， <code>toString</code> ，<code>constructor</code> 的原因，尽管我们从未明确定义这些方法。</p>
+<p>由于存在原型继承，现在我们有了两种类型的属性：对象本身的属性，比如，它自身的属性；原型链上的属性，比如，继承的属性。因此，我们需要一个额外的检查（比如 <code>hasOwnProperty</code> ）来确保给定的属性确实是用户提供的，而不是从原型链继承过来的。</p>
+<p>除此之外，由于 JavaScript 的属性解析机制，在运行时任何对 <code>Object.prototype</code> 的改变都会链式影响到所有对象，这会引发<a target="_blank" rel="noopener" href="https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf">原型污染攻击</a>，这种攻击会对一个庞大复杂的 JavaScript 应用造成严重的安全问题。</p>
+<p>幸运地是，我们可以通过使用 <code>Object.create(null)</code> 来创建一个不从 <code>Object.prototype</code> 继承的对象，从而解决原型污染攻击问题。</p>
+<h3 id="名称冲突"><a href="#名称冲突" class="headerlink" title="名称冲突"></a>名称冲突</h3><p>当一个对象自身和它的原型链上存在一个同名的属性时，它的执行结果可能和预期不符，从而使程序发生崩溃。</p>
+<p>比如，我们有一个函数 <code>foo</code> ，这个函数接收一个对象作为参数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="keyword">if</span> (obj.<span class="title function_">hasOwnProperty</span>(key)) &#123;</span><br><span class="line">			</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>obj.hasOwnProperty(key)</code> 这行代码中有一处风险：前文我们知道了 JavaScript 中的属性解析机制，如果此时 <code>obj</code> 包含了一个用户提供的属性，这个属性的名称和 <code>hasOwnProperty</code> 相同，这会导致 <code>Object.prototype.hasOwnProperty</code> 被重写。因此，我们无法准确地知道哪个方法会在执行中被调用。</p>
+<p>使用一些防御性的编程可以防止这种情况，比如我们可以从 <code>Object.prototype</code> 上“借用真正的” <code>hasOwnProperty</code> 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">hasOwnProperty</span>.<span class="title function_">call</span>(obj, key)) &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以以一种简短的方式来完成上述的功能，即通过字面对象来调用方法 <code>&#123;&#125;.hasOwnProperty.call(key)</code> 。但是它看起来仍然相当的冗长，这也是为什么后来添加了 <code>Object.hasOwn</code> 这个静态方法。</p>
+<h3 id="次优的人体工程学"><a href="#次优的人体工程学" class="headerlink" title="次优的人体工程学"></a>次优的人体工程学</h3><p>当 <code>Object</code> 作为一个哈希表的时候，不符合人体工程学。许多常见的任务无法以直观的方式执行。</p>
+<h4 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h4><p><code>Object</code> 没有提供一个方便的方法来获取大小，即属性的数量。并且对象的大小构成也存在细微的差别。</p>
+<ul>
+<li>如果你只在意可枚举的字符串的键，可以使用 <code>Object.keys</code> 来把这些键转为一个数组，然后取这个数组的 <code>length</code> 属性。</li>
+<li>如果你还想要知道不可枚举的字符串的键，可以使用 <code>Object.getOwnPropertyNames</code> 来获得键的列表，然后取它的 <code>length</code> 属性。</li>
+<li>如果你对符号类型的键感兴趣，那么可以使用 <code>getOwnPropertySymbols</code> 来获取符号类型的键，或者也可以使用 <code>Reflect.ownKeys</code> 来一次性获取所有的字符串键和符号键，无论这些键是否可以枚举。</li>
+</ul>
+<p>上述的选项的复杂度都是 <code>O(n)</code> ，因为我们必须首先构建一个键的数组，然后我们才能拿到它的 <code>length</code> 属性。</p>
+<h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><p>对象的循环也有一些相似的复杂性。</p>
+<p>我们可以用旧的 <code>for...in</code> 来遍历对象，但它会包含继承的可枚举属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">foo</span> = <span class="string">&#x27;bar&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> obj = &#123;<span class="attr">id</span>: <span class="number">1</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> obj) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(key) <span class="comment">// &#x27;id&#x27;, &#x27;foo&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们不能对一个对象使用 <code>for...of</code> ，因为默认情况下对象是不可迭代的，除非我们在它上面显示地定义了 <code>Symbol.iterator</code> 方法。</p>
+<p>我们可以使用 <code>Object.keys</code> ， <code>Object.values</code> 以及 <code>Object.entries</code> 来获取可枚举的字符串属性列表，值列表，键值对列表，然后对这个列表进行迭代，这引入了额外的步骤开销。</p>
+<p>其次，插入的顺序也无法保证。在大多数浏览器下，整数键会按升序排列并且放在字符串键之前，尽管这个字符串键先于这个整数键被添加到对象中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;&#125;</span><br><span class="line"></span><br><span class="line">obj.<span class="property">foo</span> = <span class="string">&#x27;first&#x27;</span></span><br><span class="line">obj[<span class="number">2</span>] = <span class="string">&#x27;second&#x27;</span></span><br><span class="line">obj[<span class="number">1</span>] = <span class="string">&#x27;last&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(obj) <span class="comment">// &#123;1: &#x27;last&#x27;, 2: &#x27;second&#x27;, foo: &#x27;first&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="清除"><a href="#清除" class="headerlink" title="清除"></a>清除</h4><p>对于对象来说，没有一种简单的方式来移除所有的属性，必须通过 <code>delete</code> 操作符来删除掉一个个的属性，这种方式是<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/43594092/slow-delete-of-object-properties-in-js-in-v8">公认缓慢的</a>。但是在我的基准测试中，它的性能实际上比 <code>Map.prototype.delete</code> 慢了不到一个数量级而已。详细的数据会在后面展示。</p>
+<h4 id="属性存在检测"><a href="#属性存在检测" class="headerlink" title="属性存在检测"></a>属性存在检测</h4><p>我们无法依赖对象的 <code>.</code> 或 <code>[]</code> 方式来判断一个属性是否存在，因为属性可能会被设为 <code>undefined</code> ，我们可以使用 <code>Object.prototype.hasOwnProperty</code> 或者 <code>Object.hasOwn</code> 来进行判断。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123;<span class="attr">a</span>: <span class="literal">undefined</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">hasOwn</span>(obj, <span class="string">&#x27;a&#x27;</span>) <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="哈希表-Map"><a href="#哈希表-Map" class="headerlink" title="哈希表 Map"></a>哈希表 Map</h2><p>ES6 带来了 <code>Map</code> ，它更加适合哈希表的用例。</p>
+<p>首先，与只支持字符串和符号作为的键的 <code>Object</code> 不同的是， <code>Map</code> 支持任何数据类型的键。</p>
+<blockquote>
+<p>然而，如果你使用 <code>Map</code> 来存储对象的元数据的话，那么你应该使用 <code>WeakMap</code> 而不是 <code>Map</code> ，使用 <code>WeakMap</code> 可以防止发生内存泄露。</p>
+</blockquote>
+<p>但更重要的是， <code>Map</code> 在用户定义数据和内建程序数据之间做了清晰的分隔，代价就是我们需要额外通过 <code>Map.prototype.get</code> 来获取键值。</p>
+<p><code>Map</code> 更符合人体工程学，具体表现在： <code>Map</code> 默认情况下就是可迭代的，即可以用 <code>for...of</code> 来对 <code>Map</code> 对象进行迭代，或者使用嵌套解构的方式来得到 <code>Map</code> 对象的第一个键值对数据。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [[firstKey, firstValue]] = map</span><br></pre></td></tr></table></figure>
+
+<p><code>Map</code> 提供了专门的方法来应对各种各样的普通的任务：</p>
+<ul>
+<li><code>Map.prototype.has</code> 用来检查一个键值对是否存在，这比在 <code>Object</code> 对象上使用 <code>Object.prototype.hasOwnProperty</code> 或者 <code>Object.hasOwn</code> 更容易让人理解。</li>
+<li><code>Map.prototype.get</code> 返回给定键相对应的值。可能有人会觉得使用 <code>get</code> 比在 <code>Object</code> 对象上使用 <code>.</code> 或者 <code>[]</code> 语法来取值更笨重，然而这样子的方式却很好的分隔了用户数据和内建方法。</li>
+<li><code>Map.prototype.size</code> 返回了 <code>Map</code> 对象所包含的键值对的数量，从设计上就赢过了上文说过的获取 <code>Object</code> 对象大小的方式，并且，这个方法的执行速度更快。</li>
+<li><code>Map.prototype.clear</code> 删除了 <code>Map</code> 对象里所有的键值对，相比 <code>delete</code> 操作符，<code>clear</code> 的执行速度要快得多。</li>
+</ul>
+<h2 id="性能猜想"><a href="#性能猜想" class="headerlink" title="性能猜想"></a>性能猜想</h2><p>在 JavaScript 社区中似乎有这么一个共识，那就是在大多数情况下 <code>Map</code> 都要快于 <code>Object</code> 。<a target="_blank" rel="noopener" href="https://twitter.com/diegohaz/status/1534888291732013058">有的人</a>还是断言从 <code>Object</code> 切换到 <code>Map</code> 后可以看到明显的性能提升。</p>
+<p>从我在 LeetCode 上的刷题经验来看，似乎可以肯定这个观点：每当你提交的代码之后，LeetCode 会使用一份巨大的测试用例数据来测试你的代码，如果执行时间过长，那么会提示超时。比如像<a target="_blank" rel="noopener" href="https://leetcode.com/problems/random-pick-with-weight/solutions/671804/Javascript-with-explanation-and-very-interesting-find-regarding-vs-Map/">这道题</a>，如果使用 <code>Object</code> 会出现超时，而使用 <code>Map</code> 则不会。</p>
+<p>然而，我相信 “ <code>Map</code> 比 <code>Object</code> 快” 只是一种简化的说法。我想找出其中的一些细微的差别。因此，我创建了一些<a target="_blank" rel="noopener" href="https://csb-yuu1dm.netlify.app/">简单的应用</a>来执行一些基准测试。</p>
+<details>
+<summary>重要声明</summary>
+尽管我做了许多的尝试，比如翻阅其他人的文章，浏览一些引擎的 C++ 的源码，但我依然无法说自己完全理解 V8 在底层是如何对 <code>Map</code> 进行优化的。构建具有完美鲁棒性的基准测试是很困难的，因为许多人都没有经历过关于基准测试或者结果分析的任何形式的训练。基准测试做的越多，就越觉得在<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Blind_men_and_an_elephant">盲人摸象</a>。所以请以质疑的态度来看待我这里说的所有有关性能的话。你需要在生产环境上用你的应用来测试从 <code>Object</code> 改为 <code>Map</code> 来确定是否有实际的性能提升。
+</details>
+
+<h2 id="基准测试实现细节"><a href="#基准测试实现细节" class="headerlink" title="基准测试实现细节"></a>基准测试实现细节</h2><p><a target="_blank" rel="noopener" href="https://csb-yuu1dm.netlify.app/">这个应用</a>带有一个表格，测量了 <code>Object</code> 和 <code>Map</code> 在插入，迭代和删除操作上的速度。</p>
+<p>插入和迭代的性能的测量单位为 op&#x2F;s （每秒完成的操作数）。我编写了一个工具函数 <code>measureFor</code> ，这个函数重复执行传入的目标函数，直到达到了指定的最小时间阈值（即界面上的 <code>duration</code> 输入框的值）。这个函数返回了每秒内传入函数执行的平均次数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">measureFor</span>(<span class="params">f, duration</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> iterations = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> now = performance.<span class="title function_">now</span>();</span><br><span class="line">  <span class="keyword">let</span> elapsed = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (elapsed &lt; duration) &#123;</span><br><span class="line">    <span class="title function_">f</span>();</span><br><span class="line">    elapsed = performance.<span class="title function_">now</span>() - now;</span><br><span class="line">    iterations++;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> ((iterations / elapsed) * <span class="number">1000</span>).<span class="title function_">toFixed</span>(<span class="number">4</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于删除操作，我通过测量在 <code>Object</code> 上使用 <code>delete</code> 操作符删除所有属性所花费的时间，和在相同大小下使用 <code>Map</code> 的 <code>delete</code> 方法删除所有属性所花费的时间来作比较。我可以使用 <code>Map</code> 的 <code>clear</code> 方法，但是它违背了基准测试的目的，并且我确定 <code>clear</code> 是相当快的。</p>
+<p>在这三种操作中，我更在意插入操作，因为它往往是我日常工作中最常用到的操作。对于迭代性能，很难去提出一个能够囊括所有情况的基准测试，因为我们有太多的方式来对一个对象进行迭代，所以这里我只是单单测量 <code>for...in</code> 这个循环。</p>
+<p>在测试中我使用了三种类型的键：</p>
+<ul>
+<li>字符串键，比如 <code>yekwl7caqejth7aawelo4</code> 。</li>
+<li>整数键，比如 <code>123</code> 。</li>
+<li>由 <code>Math.random().toString()</code> 生成的数字字符串，比如 <code>0.4024025689756525</code> 。</li>
+</ul>
+<p>所有的键都是随机产生的，所以并不会触发 V8 的内联缓存，并且在把这些键添加到对象前，显式地使用 <code>toString</code> 方法来把整数和小数转为字符串，以此来避免隐式类型转换而产生开销。</p>
+<p>最后，在基准测试开始之前，进行一个至少 100 毫秒的预热阶段，在预热阶段内，我们反复地创建 <code>Object</code> 和 <code>Map</code> 对象，然后释放他们。</p>
+<p>如果你想执行的话，相关代码被我放到了 <a target="_blank" rel="noopener" href="https://codesandbox.io/s/still-glitter-yuu1dm">CodeSandbox</a> 中。</p>
+<p>开始时<code>Object</code> 和 <code>Map</code> 对象的属性或键值对为 100 个，然后增加到 500 万个。每种操作持续执行 10000 毫秒，然后观察它们彼此间的执行情况。以下是我观察到的结果：</p>
+<details>
+<summary>为什么在键值对数量达到 500 万的时候就停止增加？ </summary>
+因为这大概是一个 JavaScript 对象能够达到的大小。根据 StackOverflow 论坛上一位活跃的 V8 引擎工程师 <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/54452896/maximum-number-of-entries-in-node-js-map#comment127492362_72149605">@jmrk</a> 的说法，如果键为字符串，那么一个正常的对象在键值对大小超过大约 8.3m 之后会慢到无法使用（这里其实是一个技术上的原因：某位的字段超过23位宽时执行中会采取非常慢的回退路径）。
+</details>
+
+<h3 id="字符串键"><a href="#字符串键" class="headerlink" title="字符串键"></a>字符串键</h3><p>一般来说，当键是非数字字符串时，<code>Map</code> 在所有的操作上都要赢过 <code>Object</code>。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271538869.avif"></p>
+<p>但是要注意一个细节，当键值对的数量在不是特别巨大时（少于 10 万），<code>Map</code> 在插入速度上是 <code>Object</code> 的两倍，一旦键值对的数量大于 10 万，性能差距就开始减小了。</p>
+<p>我做了些图表来更好地说明我的研究</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271539289.avif"></p>
+<p>上面的图表展示了插入速率（ y 轴）随着键值对数量（ x 轴）的增加而下降。然而，由于 x 轴展开的太宽了（从 100 到 100 万），就很难理解这两条线之间的差距。</p>
+<p>所以我使用了对数尺度来处理这些数据，然后做成了如下的表格。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271544191.avif"></p>
+<p>你可以很清晰地看出两条线是会相交于某一点的。</p>
+<p>我做了另一个图表，用来展现在插入速度上 <code>Map</code> 对于 <code>Object</code> 究竟快了多少。你可以看到刚开始时 <code>Map</code> 的速度是 <code>Object</code> 的两倍。然后随着时间的推移性能差距开始减小。最终在大小增加到 500 万时 <code>Map</code> 只比 <code>Object</code> 快了 30% 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271545948.avif"></p>
+<p>不过大多数人基本都不会在一个 <code>Object</code> 对象或者 <code>Map</code> 对象中存放超过 100 万个键值对。在几百或者几千的大小下，相比于 <code>Object</code> ，<code>Map</code> 至少有两倍的性能提升。因此，我们是否应该到此为止，然后开始在所有地方都使用 <code>Map</code> 来重构我们的代码库？</p>
+<p>当然不是，至少不应该期望应用的性能能够翻倍。目前我们还没有探究其他类型的键的情况。我们先来看下整数键的情况。</p>
+<h3 id="整数键"><a href="#整数键" class="headerlink" title="整数键"></a>整数键</h3><p>我特地在 <code>Object</code> 对象上执行整数键的基准测试的原因是 V8 引擎内部优化了<a target="_blank" rel="noopener" href="https://v8.dev/blog/fast-properties#named-properties-vs.-elements">整数索引属性</a>，并且把它们储存到了一个额外的数组中，这样取值的时候就能线性并且连续地访问。但在 <code>Map</code> 上我并没有找到任何信息，能够确定引擎也对 <code>Map</code> 执行了同样的优化。</p>
+<p>首先我们把整数键的范围设为 0 到 1000</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271546195.avif"></p>
+<p>如我所料， <code>Object</code> 在这种情况下赢过了 <code>Map</code> 。<code>Object</code> 在插入上比 <code>Map</code> 快 65% ，在迭代上快 16%。</p>
+<p>接着我们加大取值的范围，把最大的整数键设为 1200 .</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271546757.avif"></p>
+<p>似乎在插入速度上 <code>Map</code> 开始略微超过了 <code>Object</code> ，而迭代速度上 <code>Map</code> 已经是 <code>Object</code> 的 5 倍了。</p>
+<p>现在我们只是增加了键的范围，而不是 <code>Object</code> 和 <code>Map</code> 对象的实际大小。我们可以提高大小来看看对性能的影响。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/02/27/202302271547623.avif"></p>
+<p>当达到 1000 个属性的大小时， <code>Object</code> 比 <code>Map</code> 在插入速度上快了 70% ，在迭代速度上就只有原来的一半了。</p>
+<p>我试了许多不同大小和键范围的组合，但都没法提出一个清晰的规律。但我观察到的整体趋势是，在占用变大时，对于一些相对较小的整数键， <code>Object</code> 在插入上会有更好的性能，删除性能上大体相同，而迭代性能只有 <code>Map</code> 的 20% 到 25%。插入速度开始变慢的最大的整形键的阈值会随着 <code>Object</code> 的变大而变大。例如，当一个 <code>Object</code> 只有 100 个键值对的时候，阈值是 1200 ；而当包含 1200 个键值对时，阈值似乎就达到了 24000 左右。</p>
+<h3 id="数字键"><a href="#数字键" class="headerlink" title="数字键"></a>数字键</h3><p>最后，我们来看看最后一种类型的键——数字键。</p>
+<p>严格上讲，前文讲到的整数键其实也是数字键。这里的数字键特指通过 <code>Math.random().toString()</code> 生成的数字字符串。</p>
+<p>数字键的结果和字符串的相似：刚开始的时候 <code>Map</code> 远远快于 <code>Object</code>（在插入和删除上是 <code>Object</code> 的两倍，在迭代上是 <code>Object</code> 的 4 到 5 倍），但是当占用变大时它们之间的性能又会趋于统一。</p>
+<details>
+<summary>嵌套的 <code>Object</code> 或者 嵌套的 <code>Map</code> 的情况呢？</summary>
+你可能会注意到我只提及了只有一层的扁平的 <code>Object</code> 和 <code>Map</code> 。 我也尝试过嵌套，但是我发现只要键值对的数量相同，性能特征基本保持相同，无论我们嵌套了多少层。
+<p></p>
+比如，当我们把 <code>width</code> 设为 100 ，把 <code>depth</code> 设为 3 时，这时键值对数量达到 10 万（ 100 * 100 * 100 ）。而结果和把 <code>width</code> 设为 100000 ，把 <code>depth</code> 设为 1 几乎一样。
+</details>
+
+<h3 id="内存使用"><a href="#内存使用" class="headerlink" title="内存使用"></a>内存使用</h3><p>内存使用情况也是测试的另一个重要的方面。</p>
+<p>因为在浏览器环境中无法控制垃圾收集器，所以我决定在 Node 环境下来进行测试。</p>
+<p>我创建了一个<a target="_blank" rel="noopener" href="https://gist.github.com/zhenghaohe/b496dcffe3a9a6217eba90776dc2cafe">小脚本</a>来测量他们各自的内存使用，在每个测量前都会手动触发完整的垃圾回收机制。可以使用 <code>node --expose-gc</code> 来执行这个脚本。以下是我得到的结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">object</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;string-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">3.390625</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">19.765625</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">16.265625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">71.265625</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">142.015625</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;numeric-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">1.65625</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">8.265625</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">16.765625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">72.265625</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">143.515625</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;integer-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">0.25</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">2.828125</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">4.90625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">25.734375</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">59.203125</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">map</span>: &#123;</span><br><span class="line">    <span class="string">&#x27;string-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">1.703125</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">6.765625</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">14.015625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">61.765625</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">122.015625</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;numeric-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">0.703125</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">3.765625</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">7.265625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">33.265625</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">67.015625</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&#x27;integer-key&#x27;</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;10000&#x27;</span>: <span class="number">0.484375</span>,</span><br><span class="line">      <span class="string">&#x27;50000&#x27;</span>: <span class="number">1.890625</span>,</span><br><span class="line">      <span class="string">&#x27;100000&#x27;</span>: <span class="number">3.765625</span>,</span><br><span class="line">      <span class="string">&#x27;500000&#x27;</span>: <span class="number">22.515625</span>,</span><br><span class="line">      <span class="string">&#x27;1000000&#x27;</span>: <span class="number">43.515625</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以很清晰地看出 <code>Map</code> 在任何情况下都比 <code>Object</code> 要消耗更少的内存（ 20% - 50% ），这并不意外，因为 <code>Map</code> 并不像 <code>Object</code> 一样存储诸如 <code>writable</code> 、 <code>enumerable</code> 、 <code>configurable</code> 这些<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties">属性描述符</a>。</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>我们能从上面的分析中得到什么？</p>
+<ul>
+<li><code>Map</code> 比 <code>Object</code> 快，除非键类型为小整数的数组索引键。<code>Map</code> 在内存占用上是更高效的。</li>
+<li>在需要对一个哈希表频繁更新时，使用 <code>Map</code>；如果只想存储固定的键值对集合，使用 <code>Object</code> ，不过要小心原型继承陷阱。</li>
+</ul>
+<blockquote>
+<p>如果你确定知道 V8 优化 <code>Map</code> 的细节或者是简单地想指出基准测试中的错误，欢迎联系我，我很乐意根据你提供的信息来更新这篇文章。</p>
+</blockquote>
+<h2 id="浏览器兼容性声明"><a href="#浏览器兼容性声明" class="headerlink" title="浏览器兼容性声明"></a>浏览器兼容性声明</h2><p><code>Map</code> 是一个 ES6 的特性，但现在基本不需要担心它的兼容性，除非你需要服务一些使用老旧浏览器的用户。在我看来“老旧”就是比 IE11 更老，因为即使是 IE11 也支持了 <code>Map</code> ，并且目前 IE11 已被<a target="_blank" rel="noopener" href="https://twitter.com/swyx/status/1536353949132853248">废弃</a>。默认情况下我们不应该盲目地转换代码以及添加垫片来把我们的代码转化到 ES5，因为这不仅会增加打包体积，而且执行速度要慢于现代的 JavaScript 代码。更重要的是， 99.999% 的用户使用了现代浏览器，这会对他们产生不利影响。</p>
+<p>我们不必放弃对过时浏览器的支持。通过 <code>nomodule</code> 特性来提供一些备选的代码段从而支持过时的浏览器，这样我们可以避免降低使用现代浏览器用户的访问体验。如果你需要更多的有说服力的理由，可以浏览 <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=cLxNdLK--yI">Transitioning to modern JavaScript</a> 这篇文章。</p>
+<p>JavaScript 语言正在不断进化，浏览器平台在优化现代 JavaScript 代码上也在不断进步。我们不应该把浏览器的兼容性当作接口，而去忽略它们已取得的进步。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/7cf67a619937" title="在 JavaScript 中什么时候应该选择 Map 而不是 Object">https://prohibitorum.top/7cf67a619937</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Object/" rel="tag"># Object</a>
+              <a href="/tags/Map/" rel="tag"># Map</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/12bd0d1ba9bb" rel="prev" title="browserslist 学习">
+                  <i class="fa fa-angle-left"></i> browserslist 学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2fbccc5e3b09" rel="next" title="为什么 Async/Await 不只是语法糖">
+                  为什么 Async/Await 不只是语法糖 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1676628070"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

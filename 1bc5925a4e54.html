@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言RxJS 源码解读之 Subscription 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJS 源码解读之 Subscription">
+<meta property="og:url" content="https://prohibitorum.top/1bc5925a4e54">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言RxJS 源码解读之 Subscription 。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/10/19/202310191711972.avif">
+<meta property="article:published_time" content="2023-10-18T18:20:28.000Z">
+<meta property="article:modified_time" content="2023-10-20T09:46:12.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="RxJS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/10/19/202310191711972.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/1bc5925a4e54.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/1bc5925a4e54","path":"1bc5925a4e54.html","title":"RxJS 源码解读之 Subscription"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxJS 源码解读之 Subscription | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-number">2.1.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-number">2.2.</span> <span class="nav-text">源码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/1bc5925a4e54">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RxJS 源码解读之 Subscription | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxJS 源码解读之 Subscription
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-18 18:20:28" itemprop="dateCreated datePublished" datetime="2023-10-18T18:20:28+00:00">2023-10-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-10-20 09:46:12" itemprop="dateModified" datetime="2023-10-20T09:46:12+00:00">2023-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>RxJS 源码解读之 <code>Subscription</code> 。</p>
+<span id="more"></span>
+
+<p>在上篇中，我们讲了关于 <code>Subscriber</code> 类的相关实现，当时我们忽略了它所继承的 <code>Subscription</code> 类，以一个订阅者的角度来介绍了 Subscriber 。</p>
+<p>本篇我们会讲 Subscription ，他处理了 RxJS 很重要的操作，即 unsubscribe 取消订阅的操作。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>在前两篇中，我们讲到了 Observable 和 Subscriber ，它们之间彼此对应 ，如果我们的 Observable 很简单，那么我们基本不会使用到 Subscription 。而如果我们使用了诸如文件、网络、定时器等逻辑的话，那么在 Observable 调用 <code>complete</code> 方法或者对 Observable 对应的 Subscription 调用 <code>unsubscribe</code> 方法之后，所使用的资源就应该被释放掉，防止内存泄露。</p>
+<p>比如如果我们使用 <code>setInterval</code> 定时器的话，我们会写成如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> observable$ = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(++count);</span><br><span class="line">    <span class="comment">// 执行 10 次就完成这个 Observable</span></span><br><span class="line">    <span class="keyword">if</span> (count &gt;= <span class="number">10</span>) &#123;</span><br><span class="line">      subscriber.<span class="title function_">complete</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 清理逻辑</span></span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = observable$.<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">  <span class="title function_">next</span>(<span class="params">value</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;next = &quot;</span> + value);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">complete</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;complete&quot;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">error</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&quot;error: &quot;</span> + e);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 会执行返回的函数，清除定时器</span></span><br><span class="line">subscription.<span class="title function_">unsubscribe</span>();</span><br></pre></td></tr></table></figure>
+
+<p>我们会在传入的函数内返回一个新的函数，这个函数定义了我们应该如何执行一些清理操作来保证释放资源。</p>
+<p>这里在内部如果我们调用了 <code>complete</code> 实际上也是会执行返回的函数。</p>
+<p>简而言之，Subscription 维护了 Observable 和 Subscriber 之间的关系，当 Subscriber 调用了 <code>complete</code> 时，这时 Subscription 会“通知” Observable 结束订阅，执行相应的清理逻辑，而当 Subscription 手动要求取消 Observable 订阅的时候，那么取消完成之后所有的订阅操作都会失效，不会预期的执行诸如 <code>next</code> ， <code>complete</code> ，<code>error</code> 函数。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p>我们先看一下 Subscription 类长什么样。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// packages/rxjs/src/internal/Subscription.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">SubscriptionLike</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里实现了一个 <code>SubscriptionLike</code> 的接口。而 <code>SubscriptionLike</code> 又继承了 <code>Unsubscribable</code> 接口，这两个分别如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">SubscriptionLike</span> <span class="keyword">extends</span> <span class="title class_">Unsubscribable</span> &#123;</span><br><span class="line">  <span class="title function_">unsubscribe</span>(): <span class="built_in">void</span>;</span><br><span class="line">  <span class="keyword">readonly</span> <span class="attr">closed</span>: <span class="built_in">boolean</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">Unsubscribable</span> &#123;</span><br><span class="line">  <span class="title function_">unsubscribe</span>(): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里看起来有点啰嗦，可能是由于某些地方只希望传入一个 <code>Unsubscribable</code> 类型的对象，尽量不暴露其他的属性（比如 <code>closed</code> ）</p>
+<p>Subscription 会有一个 <code>closed</code> 属性和 <code>unsubscribe</code> 方法，其中 <code>closed</code> 的作用是来辨别这个 Subscription 是否已经执行过清理逻辑了，在 <code>unsubscribe</code> 的实现里有体现，我们看一下 <code>unsubscribe</code> 的实现。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">SubscriptionLike</span> &#123;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">unsubscribe</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="comment">// 收集错误</span></span><br><span class="line">    <span class="keyword">let</span> <span class="attr">errors</span>: <span class="built_in">any</span>[] | <span class="literal">undefined</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 标志位，只处理一次</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">closed</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">closed</span> = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 在所有清理逻辑前的一段逻辑</span></span><br><span class="line">      <span class="keyword">const</span> &#123; <span class="attr">initialTeardown</span>: initialFinalizer &#125; = <span class="variable language_">this</span>;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isFunction</span>(initialFinalizer)) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="title function_">initialFinalizer</span>();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">          errors = e <span class="keyword">instanceof</span> <span class="title class_">UnsubscriptionError</span> ? e.<span class="property">errors</span> : [e];</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 执行所有的清理逻辑</span></span><br><span class="line">      <span class="keyword">const</span> &#123; _finalizers &#125; = <span class="variable language_">this</span>;</span><br><span class="line">      <span class="keyword">if</span> (_finalizers) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">_finalizers</span> = <span class="literal">null</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> finalizer <span class="keyword">of</span> _finalizers) &#123;</span><br><span class="line">          <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="title function_">execFinalizer</span>(finalizer);</span><br><span class="line">          &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">            errors = errors ?? [];</span><br><span class="line">            <span class="keyword">if</span> (err <span class="keyword">instanceof</span> <span class="title class_">UnsubscriptionError</span>) &#123;</span><br><span class="line">              errors.<span class="title function_">push</span>(...err.<span class="property">errors</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              errors.<span class="title function_">push</span>(err);</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 统一抛出错误</span></span><br><span class="line">      <span class="keyword">if</span> (errors) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">UnsubscriptionError</span>(errors);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>unsubscribe</code> 的逻辑分为三段：</p>
+<ul>
+<li>判断是否已经处理过了，未处理则往下执行。</li>
+<li>判断是否有初始化的逻辑，这段初始化的逻辑会在所有清理过程前执行。</li>
+<li>执行所有清理逻辑。</li>
+</ul>
+<div class="note warning"><p><strong>注意：</strong>这里 <code>unsubscribe</code> 使用 <code>try-catch</code> 包裹了每一个函数，这意味着某个注册的函数的报错并不会影响其他注册的函数的执行。在通过 <code>catch</code> 块中把错误收集起来之后，再在最后统一抛出。</p>
+</div>
+
+<p>这里的 <code>initialTeardown</code> 为在构造函数内初始化的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">SubscriptionLike</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="keyword">private</span> initialTeardown?: () =&gt; <span class="built_in">void</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>_finalizers</code> 是挂载在自身的一个 Set ，用来保存清理函数：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">SubscriptionLike</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">private</span> <span class="attr">_finalizers</span>: <span class="title class_">Set</span>&lt;<span class="title class_">Exclude</span>&lt;<span class="title class_">TeardownLogic</span>, <span class="built_in">void</span>&gt;&gt; | <span class="literal">null</span> = <span class="literal">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>既然有了 Set ，那么就肯定得有接口来把逻辑添加到这个 <code>_finalizers</code> 里面。在 Subscription 中，提供了 <code>add</code> 和 <code>remove</code> 方法来供使用。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">SubscriptionLike</span> &#123;</span><br><span class="line">  <span class="title function_">add</span>(<span class="attr">teardown</span>: <span class="title class_">TeardownLogic</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (teardown &amp;&amp; teardown !== <span class="variable language_">this</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">closed</span>) &#123;</span><br><span class="line">        <span class="title function_">execFinalizer</span>(teardown);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (teardown &amp;&amp; <span class="string">&#x27;add&#x27;</span> <span class="keyword">in</span> teardown) &#123;</span><br><span class="line">          teardown.<span class="title function_">add</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">remove</span>(teardown);</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">_finalizers</span> ??= <span class="keyword">new</span> <span class="title class_">Set</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">_finalizers</span>.<span class="title function_">add</span>(teardown);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">remove</span>(<span class="attr">teardown</span>: <span class="title class_">Exclude</span>&lt;<span class="title class_">TeardownLogic</span>, <span class="built_in">void</span>&gt;): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_finalizers</span>?.<span class="title function_">delete</span>(teardown);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>remove</code> 其实很简单，就是从 <code>_finalizers</code> 中删除而已，需要注意的是 <code>add</code> 函数，有几个点我们要理解：</p>
+<p>首先是 Subscription 和 Subscriber 其实有点像，在 Subscription 的 <code>_finalizers</code> 中也是可以放 Subscription 类型的对象。这意味着一个 Subscription 也可以持有另一个 Subscription ，当执行 <code>unsubscribe</code> 时，如果发现在 <code>_finalizers</code> 存在其他的 Subscription ，那么会调用它的 <code>unsubscribe</code> ，这可以在 <code>execFinalizer</code> 的实现中可以看到：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">execFinalizer</span>(<span class="params"><span class="attr">finalizer</span>: <span class="title class_">Unsubscribable</span> | (() =&gt; <span class="built_in">void</span>)</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isFunction</span>(finalizer)) &#123;</span><br><span class="line">    <span class="title function_">finalizer</span>();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    finalizer.<span class="title function_">unsubscribe</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于是一个链条，所以包含自己是没有意义的。</p>
+<p>其次，如果一个 Subscription 已经执行过 <code>unsubscribe</code> 之后（即 <code>closed</code> 置为 <code>true</code> ），那么再通过 <code>add</code> 添加的话会直接执行，这对应 <code>if (this.closed) &#123; execFinalizer(teardown); &#125;</code> 这段代码。</p>
+<p>以及，如果一个 Subscription（s1） 持有了另一个 Subscription（s2），即在 s1 的 <code>_finalizers</code> 中有 s2 ，如果 s2 调用了 <code>unsubscribe</code> 的话，那么应该通知 s1 删除这个 Subscription（s2），这对应 <code>teardown.add(() =&gt; &#123; this.remove(teardown); &#125;);</code> 这段代码。</p>
+<p>Subscription 就像一个函数收集器，通过 <code>add</code> 和 <code>remove</code> 收集函数，执行 <code>unsubscribe</code> 函数时内部把收集的函数执行一遍，它的核心逻辑就是这样简单。</p>
+<p>在上篇中，我们并没有对 Subscriber 继承 Subscription 作解释，而现在我们就可以回过头来看看这部分的实现了。</p>
+<p>我们先看 Subscriber 的实现， Subscriber 继承了 Subscription ，所以 Subscriber 本质上也是一个 Subscription ，在 Subscriber 中，它只重写了 <code>unsubscribe</code> 方法，并且多了一个标志位 <code>isStopped</code> ：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscriber</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">Observer</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="title function_">unsubscribe</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">closed</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isStopped</span> = <span class="literal">true</span>;</span><br><span class="line">      <span class="comment">// 执行父类的方法</span></span><br><span class="line">      <span class="variable language_">super</span>.<span class="title function_">unsubscribe</span>();</span><br><span class="line">      <span class="comment">// 额外的逻辑，再所有清理函数执行完成之后执行</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">_onFinalize</span>?.();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段函数其实功能上的本质就是多添加了一个在所有收集的函数执行完成之后，再执行一个 <code>_onFinalize</code> 函数，这个 <code>_onFinalize</code> 则是在构造函数中传入并初始化的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscriber</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">Observer</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span></span><br><span class="line"><span class="params">    destination?: <span class="title class_">Subscriber</span>&lt;T&gt; | <span class="title class_">Partial</span>&lt;<span class="title class_">Observer</span>&lt;T&gt;&gt; | ((value: T) =&gt; <span class="built_in">void</span>) | <span class="literal">null</span>,</span></span><br><span class="line"><span class="params">    overrides?: <span class="title class_">SubscriberOverrides</span>&lt;T&gt;</span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_onFinalize</span> = overrides?.<span class="property">finalize</span> ?? <span class="literal">null</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么它是在哪里把逻辑加入到 Subscription 的 Set 集合中的呢？我们回到 Observable 的 <code>subscribe</code> 实现中：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Observable</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Subscribable</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="title function_">subscribe</span>(observerOrNext?: <span class="title class_">Partial</span>&lt;<span class="title class_">Observer</span>&lt;T&gt;&gt; | (<span class="function">(<span class="params"><span class="attr">value</span>: T</span>) =&gt;</span> <span class="built_in">void</span>) | <span class="literal">null</span>): <span class="title class_">Subscription</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> subscriber = observerOrNext <span class="keyword">instanceof</span> <span class="title class_">Subscriber</span> ? observerOrNext : <span class="keyword">new</span> <span class="title class_">Subscriber</span>(observerOrNext);</span><br><span class="line">    <span class="comment">// 添加到 _finalizers 中</span></span><br><span class="line">    subscriber.<span class="title function_">add</span>(<span class="variable language_">this</span>.<span class="title function_">_trySubscribe</span>(subscriber));</span><br><span class="line">    <span class="keyword">return</span> subscriber;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span> <span class="title function_">_trySubscribe</span>(<span class="attr">sink</span>: <span class="title class_">Subscriber</span>&lt;T&gt;): <span class="title class_">TeardownLogic</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// _subscribe 函数就是我们外部传入地</span></span><br><span class="line">      <span class="comment">// 这里返回了执行完之后的逻辑，即清理函数</span></span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="title function_">_subscribe</span>(sink);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">      <span class="comment">// We don&#x27;t need to return anything in this case,</span></span><br><span class="line">      <span class="comment">// because it&#x27;s just going to try to `add()` to a subscription</span></span><br><span class="line">      <span class="comment">// above.</span></span><br><span class="line">      sink.<span class="title function_">error</span>(err);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>还记得我们之前说过的吗， Subscriber 也是一个 Subscription ，所以这里 <code>subscriber.add</code> 就是添加了 <code>_subscribe</code> 函数返回的清理函数。在 <code>complete</code> 中，我们可以看到它会调用 <code>unsubscribe</code> 方法，这样就会执行 Subscription 的 <code>unsubscribe</code> ，进而就是把收集的清理函数拿出来执行了：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscriber</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">Observer</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">protected</span> <span class="title function_">_complete</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">destination</span>.<span class="title function_">complete</span>();</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">unsubscribe</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意，如果我们在 Subscriber 的 complete 方法未调用之前，就使用 Subscription 来执行 unsubscribe 方法的话，那么接下来的操作都会失效：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Subscriber</span>&lt;T&gt; <span class="keyword">extends</span> <span class="title class_">Subscription</span> <span class="keyword">implements</span> <span class="title class_">Observer</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="title function_">complete</span>(): <span class="built_in">void</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">isStopped</span>) &#123;</span><br><span class="line">      <span class="comment">// 已经取消订阅了，不应该再发值了</span></span><br><span class="line">      <span class="comment">// handleStoppedNotification 是一个处理错误的逻辑</span></span><br><span class="line">      <span class="title function_">handleStoppedNotification</span>(<span class="variable constant_">COMPLETE_NOTIFICATION</span>, <span class="variable language_">this</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">isStopped</span> = <span class="literal">true</span>;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">_complete</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>在我们实际使用中，当我们对 Observable 调用 <code>subscribe</code> 之后，其实我们拿到的就是代理了传入 Observer 的一个 Subscriber ，不过由于 TypeScript 类型定义通过缩限使得它看起来只是一个 Subscription 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/10/19/202310191711972.avif"></p>
+<p>还记得我们在 TypeScript 5.2 中提到的 <code>using</code> 关键字吗， Subscription 支持了这个特性：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> <span class="title class_">Subscription</span> &#123;</span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="property">dispose</span>](): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Symbol</span>.<span class="property">dispose</span> === <span class="string">&#x27;symbol&#x27;</span>) &#123;</span><br><span class="line">  <span class="title class_">Subscription</span>.<span class="property"><span class="keyword">prototype</span></span>[<span class="title class_">Symbol</span>.<span class="property">dispose</span>] = <span class="title class_">Subscription</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">unsubscribe</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>它的实现原理其实就是把 <code>Symbol.dispose</code> 指定想了 <code>unsubscribe</code> 函数。</p>
+<p>这意味着我们直接可以通过 <code>using</code> 关键字来调用 Observable 的 <code>subscribe</code> 方法了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">using subscription = observable$.<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">  <span class="title function_">complete</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;complete&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>至此，RxJS 的核心基本上就讲完了，操作符，管道等都可以通过这些核心扩展出来。</p>
+<p>下篇我们要讲 Observable 的扩展，即 Subject ，一类既可被订阅又可以订阅别人的 Observable 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/1bc5925a4e54" title="RxJS 源码解读之 Subscription">https://prohibitorum.top/1bc5925a4e54</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/RxJS/" rel="tag"># RxJS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/f6ad22f1ee95" rel="prev" title="RxJS 源码解读之 Subscriber 、 Observer">
+                  <i class="fa fa-angle-left"></i> RxJS 源码解读之 Subscriber 、 Observer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/b718420d5b68" rel="next" title="RxJS 源码解读之 Subject">
+                  RxJS 源码解读之 Subject <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1697624428"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

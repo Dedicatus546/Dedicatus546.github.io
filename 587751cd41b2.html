@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言使用 husky 来为 Hexo 帖子增加更新时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 husky 来为帖子增加更新时间">
+<meta property="og:url" content="https://prohibitorum.top/587751cd41b2">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言使用 husky 来为 Hexo 帖子增加更新时间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207280948585.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207280958069.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281000922.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281035982.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281434119.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281443275.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281521524.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281529837.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281530825.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281546317.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281552526.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281557231.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281601390.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281611407.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281739808.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281741025.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207290932798.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207290936429.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291012738.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291037819.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291040787.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291042325.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291531076.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291601767.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291609686.avif">
+<meta property="article:published_time" content="2022-07-28T09:38:01.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="Next">
+<meta property="article:tag" content="Nodejs">
+<meta property="article:tag" content="Husky">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207280948585.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/587751cd41b2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/587751cd41b2","path":"587751cd41b2.html","title":"使用 husky 来为帖子增加更新时间"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 husky 来为帖子增加更新时间 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-updated-%E5%AD%97%E6%AE%B5"><span class="nav-number">2.1.</span> <span class="nav-text">添加 updated 字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-husky-%E6%9D%A5%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0%E5%B8%96%E5%AD%90"><span class="nav-number">2.2.</span> <span class="nav-text">使用 husky 来自动更新帖子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#extra"><span class="nav-number">2.3.</span> <span class="nav-text">extra</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/587751cd41b2">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 husky 来为帖子增加更新时间 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 husky 来为帖子增加更新时间
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-28 09:38:01" itemprop="dateCreated datePublished" datetime="2022-07-28T09:38:01+00:00">2022-07-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>18 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>使用 <code>husky</code> 来为 <code>Hexo</code> 帖子增加更新时间</p>
+<span id="more"></span>
+
+<p>本文都是建立在 <code>Hexo</code> 的 <code>Next</code> 主题下的，其他的主题可能会不兼容</p>
+<p>在 <code>Next</code> 主题下，其实有配置可以让我们开启帖子更新时间的，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207280948585.avif"></p>
+<p>默认情况下，<code>Next</code> 应该是会去读取文件的最后修改时间来作为更新时间的</p>
+<p>但是这会出现一个问题，那就是我们使用的 <code>Github Action</code> 自动部署的</p>
+<p>每次都会重新拉取仓库，这样子每个文件的最后修改时间都会变成创建时间</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>为了解决上面提到的问题，有两种解决办法</p>
+<ul>
+<li>直接关闭更新时间，眼不见为敬（<del>推荐</del></li>
+<li>增加 <code>updated</code> 字段手动更新帖子更新时间</li>
+</ul>
+<p>这里我个人思考了下，决定还是得手动更新帖子时间，原因如下：</p>
+<ul>
+<li>我想开启这个功能但我又想通过 <code>Github Action</code> 部署</li>
+<li>万一换电脑了，重新拉取仓库，那更新时间就全乱了</li>
+<li><del>为了学习</del></li>
+</ul>
+<h2 id="添加-updated-字段"><a href="#添加-updated-字段" class="headerlink" title="添加 updated 字段"></a>添加 updated 字段</h2><p>在每个帖子 <code>md</code> 文件的顶部， 我们可以通过增加 <code>updated</code> 字段来指定更新时间</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207280958069.avif"></p>
+<p>首先我们可以更改模板，加上 <code>updated</code> ，这样每一次 <code>hexo new</code> 就会带上 <code>updated</code> 字段了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281000922.avif"></p>
+<p>接下来我们要给之前的帖子加上更新时间</p>
+<p>我们依然使用 <code>js</code> 来写个脚本来批量修改文章内容</p>
+<p>在这之前，我们首先要做个表格来保存帖子的最后修改时间，至于原因，后面会讲</p>
+<p>在 <code>Node</code> 上，我们可以使用 <code>fs.stat</code> 来获取文件的信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&#x27;fs/promises&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> dayjs = <span class="built_in">require</span>(<span class="string">&#x27;dayjs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">POST_LIST_DIR</span> = path.<span class="title function_">resolve</span>(<span class="string">&#x27;./source/_posts&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> filenameList = <span class="keyword">await</span> fsPromise.<span class="title function_">readdir</span>(<span class="variable constant_">POST_LIST_DIR</span>);</span><br><span class="line">  <span class="keyword">const</span> fileHandler = <span class="keyword">await</span> fsPromise.<span class="title function_">open</span>(<span class="string">&quot;./updated.json&quot;</span>, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line">  <span class="keyword">const</span> infoList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filename <span class="keyword">of</span> filenameList) &#123;</span><br><span class="line">    <span class="keyword">const</span> filepath = path.<span class="title function_">resolve</span>(<span class="variable constant_">POST_LIST_DIR</span>, filename);</span><br><span class="line">    <span class="keyword">const</span> fileStat = <span class="keyword">await</span> fsPromise.<span class="title function_">stat</span>(filepath);</span><br><span class="line">    <span class="comment">// 把 mtime 转成需要的格式</span></span><br><span class="line">    <span class="keyword">const</span> updated = <span class="title function_">dayjs</span>(fileStat.<span class="property">mtime</span>).<span class="title function_">format</span>(<span class="string">&quot;YYYY-MM-DD HH:mm:ss&quot;</span>);</span><br><span class="line">    infoList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      updated</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 写入文件</span></span><br><span class="line">  <span class="keyword">await</span> fileHandler.<span class="title function_">write</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(infoList));</span><br><span class="line">  <span class="keyword">await</span> fileHandler.<span class="title function_">close</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
+
+<p>执行之后我们就能发现项目根目录下有个 <code>updated.json</code> 文件，打开它格式化下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281035982.avif"></p>
+<p>这样子我们就保存了文件的更新日期</p>
+<p>有人可能疑问了，你这更新时间怎么一个样</p>
+<p>因为之后的操作会写入文件，会导致 <code>mtime</code> 发生改变，而我当时又没有备份，留下了悔恨的泪水…</p>
+<p><code>ok</code> ，有了数据备份之后我们就可以开始折腾了，和之前处理 <code>CDN</code> 前缀一样，我们依然分为三个步骤</p>
+<ul>
+<li>读取帖子列表</li>
+<li>加上 <code>updated</code> 字段</li>
+<li>把新的帖子内容写回文件</li>
+</ul>
+<p>代码如下，由于 <code>getPostList</code> 和 <code>writePostList</code> 和之前是一样的，所以这里直接抽成公共函数引入了</p>
+<p>不清楚实现的可以去 <a href="/da3fa0a6f13c" title="一个替换 cdn 前缀的小工具">一个替换 cdn 前缀的小工具</a> 这个帖子查看</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;getPostList, writePostList&#125; = <span class="built_in">require</span>(<span class="string">&#x27;./util&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&quot;fs/promises&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> dayjs = <span class="built_in">require</span>(<span class="string">&#x27;dayjs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 非贪婪</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REGEXP</span> = <span class="regexp">/---(?&lt;frontMatter&gt;(\S|\s)*?)---/</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepath &#123;string&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;string&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getFileLastModifyDate</span> = <span class="keyword">async</span> (<span class="params">filepath</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 通过 stat 获取修改时间</span></span><br><span class="line">  <span class="keyword">const</span> fileStat = <span class="keyword">await</span> fsPromise.<span class="title function_">stat</span>(filepath);</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">dayjs</span>(fileStat.<span class="property">mtime</span>).<span class="title function_">format</span>(<span class="string">&quot;YYYY-MM-DD HH:mm:ss&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">addPostUpdated</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 过滤掉不符合正则的文件</span></span><br><span class="line">  postList = postList.<span class="title function_">filter</span>(<span class="function"><span class="params">post</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;fileContent&#125; = post;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable constant_">REGEXP</span>.<span class="title function_">test</span>(fileContent);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> newPostList = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> post <span class="keyword">of</span> postList) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;filepath, fileContent&#125; = post;</span><br><span class="line">    <span class="keyword">const</span> updated = <span class="keyword">await</span> <span class="title function_">getFileLastModifyDate</span>(filepath);</span><br><span class="line">    <span class="keyword">const</span> &#123;frontMatter&#125; = fileContent.<span class="title function_">match</span>(<span class="variable constant_">REGEXP</span>).<span class="property">groups</span>;</span><br><span class="line">    <span class="keyword">const</span> infoList = frontMatter</span><br><span class="line">      .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">      .<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> !!item.<span class="title function_">trim</span>());</span><br><span class="line">    <span class="comment">// 找 date 字段</span></span><br><span class="line">    <span class="keyword">const</span> dateInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;date&quot;</span>));</span><br><span class="line">    <span class="comment">// 找 updated 字段</span></span><br><span class="line">    <span class="keyword">const</span> updatedInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;updated&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span> (updatedInfoIndex &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="comment">// 有 updated 字段就跳过</span></span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 在 date 字段后插入 updated 字段</span></span><br><span class="line">    infoList.<span class="title function_">splice</span>(dateInfoIndex + <span class="number">1</span>, <span class="number">0</span>, <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>);</span><br><span class="line">    <span class="comment">// 替换内容并 push 到新的 newPostList 中，用于写回文件</span></span><br><span class="line">    newPostList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: fileContent.<span class="title function_">replace</span>(<span class="variable constant_">REGEXP</span>, <span class="string">`---\n<span class="subst">$&#123;infoList.join(<span class="string">&#x27;\n&#x27;</span>)&#125;</span>\n---`</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newPostList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = <span class="keyword">await</span> <span class="title function_">getPostList</span>();</span><br><span class="line">  <span class="keyword">const</span> newPostList = <span class="keyword">await</span> <span class="title function_">addPostUpdated</span>(postList);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">writePostList</span>(newPostList);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
+
+<p>这里依然用到了我们的老朋友正则，使用 <code>/---(?&lt;frontMatter&gt;(\S|\s)*?)---/</code> 来匹配开头的帖子元数据</p>
+<p>注意到这里使用了具名捕获组，这样方便我们拿到数据，以及非贪婪匹配 <code>*?</code> </p>
+<p>默认贪婪匹配的情况下，我发现有点问题，主要是表格的语法里面也会出现 <code>---</code> 三个横杠的情况，会修改到其他的地方，所以要使用非贪婪</p>
+<p>以及使用 <code>(\S|\s)*?</code> 而不是 <code>.*?</code> ，因为 <code>.</code> 不匹配换行符号</p>
+<p><strong>重要：这个工具只有在第一次才能获取正确的修改时间，因为存在重新写入文件，会导致 <code>mtime</code> 变化！！</strong></p>
+<p><strong>重要：这个工具只有在第一次才能获取正确的修改时间，因为存在重新写入文件，会导致 <code>mtime</code> 变化！！</strong></p>
+<p><strong>重要：这个工具只有在第一次才能获取正确的修改时间，因为存在重新写入文件，会导致 <code>mtime</code> 变化！！</strong></p>
+<p>如果不小心搞错了，也不用担心，因为前文我们提前存了个 <code>updated.json</code> ，读出来，然后不用 <code>fs.stat</code> 了，而是根据 <code>json</code> 文件里的映射一一对应重新 <code>patch</code> 一下即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;getPostList, writePostList&#125; = <span class="built_in">require</span>(<span class="string">&#x27;./util&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&quot;fs/promises&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> dayjs = <span class="built_in">require</span>(<span class="string">&#x27;dayjs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 非贪婪</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REGEXP</span> = <span class="regexp">/---(?&lt;frontMatter&gt;(\S|\s)*?)---/</span>;</span><br><span class="line"><span class="keyword">let</span> updatedMap = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getUpdatedJsonMap</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> string = (<span class="keyword">await</span> fsPromise.<span class="title function_">readFile</span>(path.<span class="title function_">resolve</span>(<span class="string">&#x27;./updated.json&#x27;</span>))).<span class="title function_">toString</span>(<span class="string">&#x27;utf-8&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> array = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(string);</span><br><span class="line">  <span class="comment">// 根据 json 文件生成 map</span></span><br><span class="line">  updatedMap = array.<span class="title function_">reduce</span>(<span class="function">(<span class="params">map, item</span>) =&gt;</span> &#123;</span><br><span class="line">    map[item.<span class="property">filepath</span>] = item.<span class="property">updated</span>;</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">addPostUpdated</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  postList = postList.<span class="title function_">filter</span>(<span class="function"><span class="params">post</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;fileContent&#125; = post;</span><br><span class="line">    <span class="keyword">return</span> <span class="variable constant_">REGEXP</span>.<span class="title function_">test</span>(fileContent);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> newPostList = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> post <span class="keyword">of</span> postList) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;filepath, fileContent&#125; = post;</span><br><span class="line">    <span class="comment">// const updated = await getFileLastModifyDate(filepath);</span></span><br><span class="line">    <span class="comment">// 拿到对应文件的 updated 值</span></span><br><span class="line">    <span class="keyword">const</span> updated = updatedMap[filepath];</span><br><span class="line">    <span class="keyword">if</span> (!updated) &#123;</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> &#123;frontMatter&#125; = fileContent.<span class="title function_">match</span>(<span class="variable constant_">REGEXP</span>).<span class="property">groups</span>;</span><br><span class="line">    <span class="keyword">const</span> infoList = frontMatter</span><br><span class="line">      .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">      .<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> !!item.<span class="title function_">trim</span>());</span><br><span class="line">    <span class="keyword">const</span> dateInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;date&quot;</span>));</span><br><span class="line">    <span class="keyword">const</span> updatedInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;updated&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span> (updatedInfoIndex &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="comment">// 原地更新</span></span><br><span class="line">      infoList[updatedInfoIndex] = <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 在 date 字段后插入 updated 字段</span></span><br><span class="line">      infoList.<span class="title function_">splice</span>(dateInfoIndex + <span class="number">1</span>, <span class="number">0</span>, <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    newPostList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: fileContent.<span class="title function_">replace</span>(<span class="variable constant_">REGEXP</span>, <span class="string">`---\n<span class="subst">$&#123;infoList.join(<span class="string">&#x27;\n&#x27;</span>)&#125;</span>\n---`</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newPostList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = <span class="keyword">await</span> <span class="title function_">getPostList</span>();</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">getUpdatedJsonMap</span>();</span><br><span class="line">  <span class="keyword">const</span> newPostList = <span class="keyword">await</span> <span class="title function_">addPostUpdated</span>(postList);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">writePostList</span>(newPostList);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
+
+<p>到这里我们就完成了对所有的 <code>md</code> 文件添加上 <code>updated</code> 字段了</p>
+<p>但是还有个问题，难道我每次修改帖子提交，我都要自己去改 <code>updated</code> 字段吗</p>
+<p>这也太不优雅了，作为一个爱搞事的人，绝不会去做没意义的事，所以我们要让帖子自己更新</p>
+<h2 id="使用-husky-来自动更新帖子"><a href="#使用-husky-来自动更新帖子" class="headerlink" title="使用 husky 来自动更新帖子"></a>使用 husky 来自动更新帖子</h2><p>刚开始也有在网络上查找相应的办法，但是关于这个问题还是太少解决方案了</p>
+<p>最后我决定使用 <code>husky</code> 来解决这个问题</p>
+<p><code>husky</code> 是一个工具，可以让我们在 <code>git</code> 操作上 <code>hook</code> 一些逻辑</p>
+<p>我们主要使用 <code>husky</code> 在 <code>commit</code> 前检测 <code>add</code> 的文件中是否含有帖子，如果有，读取这个帖子，把 <code>updated</code> 字段置为当前的时间，然后重新 <code>add</code> 进去</p>
+<p><code>husky</code> 的官网 <a target="_blank" rel="noopener" href="https://typicode.github.io/husky/#/">Husky - Git hooks</a></p>
+<p>首先我们要安装 <code>husky</code> ，这里我用的是 <code>pnpm</code>， 如果你用的是 <code>npm</code> ，那么使用 <code>npm install husky --save-dev</code> </p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add husky -D</span><br></pre></td></tr></table></figure>
+
+<p>安装完依赖之后，我们还要开启 <code>git hooks</code> 功能，执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpx husky install</span><br></pre></td></tr></table></figure>
+
+<p>然后项目根目录下就会出现一个 <code>.husky</code> 的文件夹</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281434119.avif"></p>
+<p>接着我们添加一个 <code>pre-commit</code> 的 <code>hook</code></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpx husky add .husky/pre-commit &quot;pnpm run flushPostUpdated&quot;</span><br></pre></td></tr></table></figure>
+
+<p>这里这个 <code>flushPostUpdated</code> 命令我们要注册到 <code>package.json</code> 中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  // ...</span><br><span class="line">  &quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;build&quot;: &quot;hexo generate&quot;,</span><br><span class="line">    &quot;clean&quot;: &quot;hexo clean&quot;,</span><br><span class="line">    &quot;deploy&quot;: &quot;hexo deploy&quot;,</span><br><span class="line">    &quot;server&quot;: &quot;hexo server&quot;,</span><br><span class="line">    &quot;flushPostUpdated&quot;: &quot;node flushPostUpdated.js&quot;</span><br><span class="line">  &#125;</span><br><span class="line">  // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以在 <code>flushPostUpdated.js</code> 里面写个 <code>hello world</code> ，然后随便 <code>add</code> 一个文件 <code>commit</code> 一下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281443275.avif"></p>
+<p>可以看到文件被执行了，打印了 <code>hello world</code></p>
+<p>接下来我们的目标就是在 <code>flushPostUpdated</code> 这个文件实现功能了</p>
+<p>首先我们要获取当前 <code>git add</code> 的文件列表</p>
+<p>这里我们使用 <code>shelljs</code> 配置 <code>git status</code> 命令来进行解析</p>
+<p>一般我们都是直接使用 <code>git status</code> 来查看当前文件的追踪情况的，如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281521524.avif"></p>
+<p>但是这个格式不利于我们做解析，所以我们要配合一些参数来简化这些信息</p>
+<p>我们可以打开 <a target="_blank" rel="noopener" href="https://git-scm.com/docs/git-status">Git - git-status Documentation</a> 查看文档</p>
+<p>其中 <code>--porcelain</code> 以便于解析的格式输出相应的信息，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281529837.avif"></p>
+<p>这个格式我们就非常喜欢了，只要按行处理即可</p>
+<p>当然，在这之前，我们需要明白每个文件之前的符号代表的意义</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281530825.avif"></p>
+<p>我们依然查看上面的文档，拉下来在 <code>Output</code> 中，详细的为我们介绍了符号的意义</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281546317.avif"></p>
+<p>可以看到两个 <code>?</code> 代表文件未被跟踪，到时我们解析可以直接跳过这些行</p>
+<p><code>M</code> 代表文件被修改，而根据我们输出的图来看， <code>M</code> 可能在第一个字符（上图中的 <code>X</code> 位置），也可能在第二个字符（上图中的 <code>Y</code> 位置），这又是什么意思呢</p>
+<p>这里我们要搞明白 <code>X</code> 和 <code>Y</code> 代表的意思，在这段文档的上面，解释了 <code>X</code> 和 <code>Y</code> 的意义，这里我们直接关注圈出来的部分</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281552526.avif"></p>
+<p><code>X</code> 代表了 <code>index</code> 索引区的情况，而 <code>Y</code> 代表了工作区的情况，每当我们把文件 <code>add</code> 之后，实际上是把工作区的文件复制到索引区</p>
+<p>根据我们上图的输出的信息，此时 <code>package.json</code> 文件应该是在 <code>index</code> 区里面的，我们把它从 <code>index</code> 区删除再输出信息看看</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281557231.avif"></p>
+<p>这时 <code>M</code> 标记在 <code>Y</code> 位置展示了，表示工作区和索引区的 <code>package.json</code> 不一致，被标记为修改了</p>
+<p>其实更容易的理解是： <code>X</code> 代表了 <code>index</code> 区和当前版本库的差异，而 <code>Y</code> 代表了工作区和 <code>index</code> 区的差异</p>
+<p>我们可以重新添加 <code>package.json</code> ，然后再修改 <code>package.json</code> 的内容</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281601390.avif"></p>
+<p>这时会出现两个 <code>M</code> ，意味着 <code>index</code> 区和当前的版本库文件不一致，工作区和当前的 <code>index</code> 区文件不一致</p>
+<p>ok ，明白了之后，我们其实要处理的行就很明确了，即 <strong>X 列为 M 状态的帖子文件</strong></p>
+<p>有没有办法不输出这些未追踪的文件呢？</p>
+<p><code>git status</code> 提供了 <code>--untracked-files[=&lt;mode&gt;]</code> 来让我们能够选择是否输出为追踪的文件，其中 <code>mode</code> 为 <code>no</code> 的情况下即可不输出未追踪的文件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281611407.avif"></p>
+<p>这样子就非常 nice 了，非常好操作，但是这个帖子的中文被转义了，而且还出现了引号，有点不适</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281739808.avif"></p>
+<p>使用 <code>git config --global core.quotepath false</code> 关掉 <code>git</code> 的自动转义功能，记得控制台保持 <code>utf-8</code> 编码，不然会乱码</p>
+<p>再输出一次命令看看</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/28/202207281741025.avif"></p>
+<p>现在中文直接显示，那么我们就能很好的解析了</p>
+<p>接下来我们尝试使用 <code>shelljs</code> 来解析</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> shelljs = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&#x27;fs/promises&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">POST_LIST_DIR</span> = path.<span class="title function_">resolve</span>(<span class="string">&#x27;./source/_posts&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">CODE</span> = &#123;</span><br><span class="line">  <span class="attr">SUCCESS</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">FAILURE</span>: <span class="number">101</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">string[]</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getMdFilepathList</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> result = shelljs.<span class="title function_">exec</span>(<span class="string">&quot;git status --porcelain --untracked-files=no&quot;</span>, &#123;</span><br><span class="line">    <span class="comment">// 控制台不输出</span></span><br><span class="line">    <span class="attr">silent</span>: <span class="literal">true</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (result.<span class="property">code</span> !== <span class="variable constant_">CODE</span>.<span class="property">SUCCESS</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> result.<span class="property">stderr</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result.<span class="property">stdout</span></span><br><span class="line">    .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">    <span class="comment">// 以 M 开头</span></span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">line</span> =&gt;</span> line.<span class="title function_">startsWith</span>(<span class="string">&quot;M&quot;</span>))</span><br><span class="line">    <span class="comment">// 提取文件路径</span></span><br><span class="line">    .<span class="title function_">map</span>(<span class="function"><span class="params">line</span> =&gt;</span> path.<span class="title function_">resolve</span>(line.<span class="title function_">substring</span>(<span class="number">3</span>)))</span><br><span class="line">    <span class="comment">// 过滤非目标下文件</span></span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">filepath</span> =&gt;</span> filepath.<span class="title function_">startsWith</span>(<span class="variable constant_">POST_LIST_DIR</span>))</span><br><span class="line">    <span class="comment">// 过滤非 md 后缀文件</span></span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">filepath</span> =&gt;</span> path.<span class="title function_">extname</span>(filepath) === <span class="string">&#x27;.md&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">getMdFilepathList</span>());</span><br></pre></td></tr></table></figure>
+
+<p>执行之后，就可以看到输出的文件列表了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207290932798.avif"></p>
+<p>得到文件路径列表之后，我们要做的就是和之前脚本增加 <code>updated</code> 字段的逻辑</p>
+<p>首先我们要创建一个当前的 <code>updated</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dayjs = <span class="built_in">require</span>(<span class="string">&#x27;dayjs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">string</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">createCurrentUpdated</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">dayjs</span>().<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用它，就能获取 <code>commit</code> 时的时间字符串了，把它 <code>patch</code> 到 <code>updated</code> 字段即可</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207290936429.avif"></p>
+<p>接着我们根据前面获取的 <code>mdFilepathList</code> 来获取文件内容</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPostList</span> = <span class="keyword">async</span> (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">const</span> buffer = <span class="keyword">await</span> fsPromise.<span class="title function_">readFile</span>(filepath);</span><br><span class="line">    postList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: buffer.<span class="title function_">toString</span>(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> postList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数和之前的 <code>getPostList</code> 逻辑是一样的，不过我们使用了参数来获取特定的文件</p>
+<p>接着我们依然使用正则来替换 <code>updated</code> 字段</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="variable constant_">REGEXP</span> = <span class="regexp">/---(?&lt;frontMatter&gt;(\S|\s)*?)---/</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">flushPostUpdated</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> newPostList = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> updated = <span class="title function_">createCurrentUpdated</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> post <span class="keyword">of</span> postList) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;filepath, fileContent&#125; = post;</span><br><span class="line">    <span class="keyword">const</span> &#123;frontMatter&#125; = fileContent.<span class="title function_">match</span>(<span class="variable constant_">REGEXP</span>).<span class="property">groups</span>;</span><br><span class="line">    <span class="keyword">const</span> infoList = frontMatter</span><br><span class="line">      .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">      .<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> !!item.<span class="title function_">trim</span>());</span><br><span class="line">    <span class="keyword">const</span> dateInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;date&quot;</span>));</span><br><span class="line">    <span class="keyword">const</span> updatedInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;updated&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span> (updatedInfoIndex &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="comment">// 原地更新</span></span><br><span class="line">      infoList[updatedInfoIndex] = <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 在 date 字段后插入 updated 字段</span></span><br><span class="line">      infoList.<span class="title function_">splice</span>(dateInfoIndex + <span class="number">1</span>, <span class="number">0</span>, <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    newPostList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: fileContent.<span class="title function_">replace</span>(<span class="variable constant_">REGEXP</span>, <span class="string">`---\r\n<span class="subst">$&#123;infoList.join(<span class="string">&#x27;\r\n&#x27;</span>)&#125;</span>\r\n---`</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newPostList;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>patch</code> 完成之后我们使用之前的 <code>writePostList</code> 重新写回去</p>
+<p>然后我们要重新把这些文件 <code>add</code> 进 <code>index</code> 区</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">reGitAdd</span> = (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">let</span> result;</span><br><span class="line">    <span class="keyword">if</span> ((result = shelljs.<span class="title function_">exec</span>(<span class="string">`git add <span class="subst">$&#123;filepath&#125;</span>`</span>)).<span class="property">code</span> !== <span class="variable constant_">CODE</span>.<span class="property">SUCCESS</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> result.<span class="property">stderr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样子我们就完成了整个逻辑的编写</p>
+<p>然后我们来测试一下效果，我们先把文件的 <code>updated</code> 字段改成 <code>1999-01-01 00:00:00</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291012738.avif"></p>
+<p>注意，这里我们先不使用 <code>pre-commit</code> 钩子，可以先注释掉，如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291037819.avif"></p>
+<p>然后我们 <code>add</code> 进去，然后提交一个 <code>commit</code> ，确保我们的版本库里面的日期是 <code>1999-01-01 00:00:00</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291040787.avif"></p>
+<p>然后我们打开 <code>pre-commit</code> 钩子，随便更改一下内容，再次提交</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291042325.avif"></p>
+<p>成功的变为当前的时间，并且此时是已经 <code>commit</code> 的了</p>
+<hr>
+<p>到这里我们基本完成了整个流程，现在我们只管更新文章的内容，更新 <code>updated</code> 字段交给了脚本</p>
+<p>大大地减少了心智负担，又可以愉快地写帖子了</p>
+<p>但是到这里就结束了吗，不一定</p>
+<h2 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h2><p>当然以下部分为扩展部分，我觉得大部分人用上面的方式即可，没必要搞太复杂</p>
+<p>现在我们来复现一下一个场景</p>
+<p>小林正在写一篇帖子，帖子名为 <code>使用 husky 来为帖子增加更新时间</code> </p>
+<p>写完了帖子，小林开心的把帖子 <code>add</code> 到 <code>index</code> 区，准备 <code>commit</code> 然后 <code>push</code> 到 <code>Github</code> 上</p>
+<p>这时候小林的老妈大喊了一声：“孩儿，去把洗好的衣服凉一下”</p>
+<p>小林想着，既然 <code>add</code> 了，晚点 <code>commit</code> 也没事，就去晾衣服了</p>
+<p>回来的时候，小林把一些额外的部分写进了帖子，还没写完突然想起之前的版本忘记了 <code>commit</code></p>
+<p>试问：如果这个时候 <code>commit</code> ，会出现什么情况</p>
+<p>没错，还没 <code>add</code> 进 <code>index</code> 区的部分会被一同提交到版本库</p>
+<p>因为在钩子中，我们的逻辑就是 <code>patch</code> 头部的 <code>updated</code> 字段，然后重新 <code>git add</code></p>
+<p>也就是说，如果此时文件的 <code>X</code> 和 <code>Y</code> 都是 <code>M</code> 标志的话，会出现一些矛盾</p>
+<p>即我们 <code>git add</code> 的文件是当前工作区的文件，而工作区的文件存在另外的更新</p>
+<p>那我们改如何解决这个问题呢？</p>
+<p>刚开始的时候我是想像 <code>VSCode</code> 那样，选中某些行来进行局部 <code>add</code> 的，但是实在是没搞懂</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291531076.avif"></p>
+<p>之后，我就想了一个比较笨的办法，这个笨方法的步骤是：</p>
+<ul>
+<li>把当前工作区的文件备份</li>
+<li>对当前工作区的备份文件 <code>patch</code> 它的 <code>updated</code> 字段</li>
+<li>把 <code>index</code> 区的文件写回工作区</li>
+<li>对当前工作区的文件 <code>patch</code> 它的 <code>updated</code> 字段</li>
+<li><code>git add</code> 当前工作区的文件</li>
+<li>把备份文件写回原来的位置</li>
+<li>删除备份文件</li>
+</ul>
+<p>其中有一个非常重要的步骤是：<strong>把 <code>index</code> 区的文件写回工作区</strong></p>
+<p>这意味着我们必须知道当前在 <code>index</code> 区的文件长什么样</p>
+<p>这里可以使用 <code>git show &quot;:文件名&quot;</code> 这个命令查看（<del>别问我怎么知道的，我百度的</del></p>
+<p>这样我们就可以用 <code>shelljs</code> 执行然后获取内容了</p>
+<p>其他的步骤其实很简单，文件拷来拷去而已</p>
+<p>这里放下完整的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// flushPostUpdated.js</span></span><br><span class="line"><span class="keyword">const</span> shelljs = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&#x27;fs/promises&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123;</span><br><span class="line">  writePostList, </span><br><span class="line">  gitAdd, </span><br><span class="line">  createCurrentUpdated, </span><br><span class="line">  <span class="variable constant_">POST_META_REGEXP</span>, </span><br><span class="line">  <span class="variable constant_">POST_LIST_DIR</span>, </span><br><span class="line">  <span class="variable constant_">SHELLJS_CODE</span></span><br><span class="line">&#125; = <span class="built_in">require</span>(<span class="string">&quot;./util&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 根据 index 区的信息解析需要处理的文件列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Array&lt;&#123; X: string, Y: string; path: string; filepath: string </span>&#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getMdFilepathList</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> result = shelljs.<span class="title function_">exec</span>(<span class="string">&quot;git status --porcelain --untracked-files=no&quot;</span>, &#123;</span><br><span class="line">    <span class="comment">// 控制台不输出</span></span><br><span class="line">    <span class="attr">silent</span>: <span class="literal">true</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (result.<span class="property">code</span> !== <span class="variable constant_">SHELLJS_CODE</span>.<span class="property">SUCCESS</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> result.<span class="property">stderr</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> result.<span class="property">stdout</span></span><br><span class="line">    .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function"><span class="params">line</span> =&gt;</span> line.<span class="title function_">startsWith</span>(<span class="string">&quot;M&quot;</span>))</span><br><span class="line">    .<span class="title function_">map</span>(<span class="function"><span class="params">line</span> =&gt;</span> (&#123;</span><br><span class="line">      <span class="attr">X</span>: line[<span class="number">0</span>],</span><br><span class="line">      <span class="attr">Y</span>: line[<span class="number">1</span>],</span><br><span class="line">      <span class="attr">path</span>: line.<span class="title function_">substring</span>(<span class="number">3</span>),</span><br><span class="line">      <span class="attr">filepath</span>: path.<span class="title function_">resolve</span>(line.<span class="title function_">substring</span>(<span class="number">3</span>))</span><br><span class="line">    &#125;))</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function">(<span class="params">&#123;filepath&#125;</span>) =&gt;</span> filepath.<span class="title function_">startsWith</span>(<span class="variable constant_">POST_LIST_DIR</span>))</span><br><span class="line">    .<span class="title function_">filter</span>(<span class="function">(<span class="params">&#123;filepath&#125;</span>) =&gt;</span> path.<span class="title function_">extname</span>(filepath) === <span class="string">&#x27;.md&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取在 index 区指定路径的文件列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPostListInIndex</span> = <span class="keyword">async</span> (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">const</span> result = shelljs.<span class="title function_">exec</span>(<span class="string">`git show &quot;:<span class="subst">$&#123;filepath&#125;</span>&quot;`</span>, &#123;</span><br><span class="line">      <span class="attr">silent</span>: <span class="literal">true</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">if</span> (result.<span class="property">code</span> !== <span class="variable constant_">SHELLJS_CODE</span>.<span class="property">SUCCESS</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> result.<span class="property">stderr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    postList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: result.<span class="property">stdout</span>,</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> postList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 获取工作区区指定路径的文件列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPostList</span> = <span class="keyword">async</span> (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> postList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">const</span> buffer = <span class="keyword">await</span> fsPromise.<span class="title function_">readFile</span>(filepath);</span><br><span class="line">    postList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: buffer.<span class="title function_">toString</span>(<span class="string">&quot;utf-8&quot;</span>),</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> postList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 拷贝文件列表，返回拷贝后的文件名列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> mdFilepathList &#123;Array&lt;&#123;filepath: string&#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;string&gt;&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">backupMdFile</span> = <span class="keyword">async</span> (<span class="params">mdFilepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> list = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> &#123;filepath&#125; <span class="keyword">of</span> mdFilepathList) &#123;</span><br><span class="line">    <span class="keyword">const</span> dir = path.<span class="title function_">dirname</span>(filepath);</span><br><span class="line">    <span class="keyword">const</span> destFilename = path.<span class="title function_">basename</span>(filepath) + <span class="string">&#x27;.pre-commit&#x27;</span> + path.<span class="title function_">extname</span>(filepath);</span><br><span class="line">    <span class="keyword">const</span> destFilepath = path.<span class="title function_">resolve</span>(dir, destFilename)</span><br><span class="line">    <span class="keyword">await</span> fsPromise.<span class="title function_">copyFile</span>(filepath, destFilepath);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`backup md, source file: <span class="subst">$&#123;filepath&#125;</span>, backup file: <span class="subst">$&#123;destFilepath&#125;</span>`</span>);</span><br><span class="line">    list.<span class="title function_">push</span>(destFilepath);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 更新帖子元数据区域的 updated 字段， updated 值为当前时间，主要用于 pre-commit 钩子</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">flushPostUpdated</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> newPostList = [];</span><br><span class="line">  <span class="keyword">const</span> updated = <span class="title function_">createCurrentUpdated</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> post <span class="keyword">of</span> postList) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;filepath, fileContent&#125; = post;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`patching filepath: <span class="subst">$&#123;filepath&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">const</span> &#123;frontMatter&#125; = fileContent.<span class="title function_">match</span>(<span class="variable constant_">POST_META_REGEXP</span>).<span class="property">groups</span>;</span><br><span class="line">    <span class="keyword">const</span> infoList = frontMatter</span><br><span class="line">      .<span class="title function_">split</span>(<span class="regexp">/\r|\n|\r\n/</span>)</span><br><span class="line">      .<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> !!item.<span class="title function_">trim</span>());</span><br><span class="line">    <span class="keyword">const</span> dateInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;date&quot;</span>));</span><br><span class="line">    <span class="keyword">const</span> updatedInfoIndex = infoList.<span class="title function_">findIndex</span>(<span class="function"><span class="params">item</span> =&gt;</span> item.<span class="title function_">startsWith</span>(<span class="string">&quot;updated&quot;</span>));</span><br><span class="line">    <span class="keyword">if</span> (updatedInfoIndex &gt; -<span class="number">1</span>) &#123;</span><br><span class="line">      <span class="comment">// 原地更新</span></span><br><span class="line">      infoList[updatedInfoIndex] = <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 在 date 字段后插入 updated 字段</span></span><br><span class="line">      infoList.<span class="title function_">splice</span>(dateInfoIndex + <span class="number">1</span>, <span class="number">0</span>, <span class="string">`updated: <span class="subst">$&#123;updated&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    newPostList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath,</span><br><span class="line">      <span class="attr">fileContent</span>: fileContent.<span class="title function_">replace</span>(<span class="variable constant_">POST_META_REGEXP</span>, <span class="string">`---\n<span class="subst">$&#123;infoList.join(<span class="string">&#x27;\n&#x27;</span>)&#125;</span>\n---`</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newPostList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 备份的文件覆盖到原文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;void&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">recoveryMdList</span> = <span class="keyword">async</span> (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">const</span> dir = path.<span class="title function_">dirname</span>(filepath);</span><br><span class="line">    <span class="keyword">const</span> backupFilepath = path.<span class="title function_">resolve</span>(dir, path.<span class="title function_">basename</span>(filepath) + <span class="string">&#x27;.pre-commit&#x27;</span> + path.<span class="title function_">extname</span>(filepath));</span><br><span class="line">    <span class="keyword">const</span> sourceFilepath = filepath;</span><br><span class="line">    <span class="keyword">await</span> fsPromise.<span class="title function_">copyFile</span>(backupFilepath, sourceFilepath);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 删除备份文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;void&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">deleteBackupMdList</span> = <span class="keyword">async</span> (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">await</span> fsPromise.<span class="title function_">rm</span>(filepath);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">main</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> mdFileList = <span class="title function_">getMdFilepathList</span>();</span><br><span class="line">  <span class="keyword">if</span> (mdFileList.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;no md file need to patch.&#x27;</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;will patch count: &#x27;</span>, mdFileList.<span class="property">length</span>);</span><br><span class="line">  <span class="comment">// 拷贝一份备份文件，patch 头部的 updated 字段</span></span><br><span class="line">  <span class="keyword">const</span> backupMdList = <span class="keyword">await</span> <span class="title function_">backupMdFile</span>(mdFileList);</span><br><span class="line">  <span class="keyword">const</span> backupPostList = <span class="keyword">await</span> <span class="title function_">getPostList</span>(backupMdList);</span><br><span class="line">  <span class="keyword">const</span> newBackupPostList = <span class="keyword">await</span> <span class="title function_">flushPostUpdated</span>(backupPostList);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">writePostList</span>(newBackupPostList);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;backup success.&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 提取索引区内的文件，patch 头部的 updated，写回工作区，然后 add</span></span><br><span class="line">  <span class="keyword">const</span> postList = <span class="keyword">await</span> <span class="title function_">getPostListInIndex</span>(mdFileList.<span class="title function_">map</span>(<span class="function"><span class="params">file</span> =&gt;</span> file.<span class="property">path</span>));</span><br><span class="line">  <span class="keyword">const</span> newPostList = <span class="keyword">await</span> <span class="title function_">flushPostUpdated</span>(postList);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">writePostList</span>(newPostList);</span><br><span class="line">  <span class="title function_">gitAdd</span>(newPostList.<span class="title function_">map</span>(<span class="function">(<span class="params">post</span>) =&gt;</span> post.<span class="property">filepath</span>));</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;patch success.&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add 之后，把备份文件重新放到工作区中</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">recoveryMdList</span>(newPostList.<span class="title function_">map</span>(<span class="function">(<span class="params">post</span>) =&gt;</span> post.<span class="property">filepath</span>))</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;recovery md success.&#x27;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">deleteBackupMdList</span>(backupMdList);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;delete backup success.&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">main</span>();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// util.js</span></span><br><span class="line"><span class="keyword">const</span> shelljs = <span class="built_in">require</span>(<span class="string">&#x27;shelljs&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fsPromise = <span class="built_in">require</span>(<span class="string">&#x27;fs/promises&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> dayjs = <span class="built_in">require</span>(<span class="string">&#x27;dayjs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 帖子存放文件夹路径</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@type</span> &#123;<span class="type">string</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">POST_LIST_DIR</span> = path.<span class="title function_">resolve</span>(<span class="string">&#x27;./source/_posts&#x27;</span>);</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 帖子顶部元数据区域正则</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@type</span> &#123;<span class="type">RegExp</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">POST_META_REGEXP</span> = <span class="regexp">/---(?&lt;frontMatter&gt;(\S|\s)*?)---/</span>;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * shelljs 返回码</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@type</span> &#123;<span class="type">&#123;SUCCESS: number, FAILURE: number</span>&#125;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">SHELLJS_CODE</span> = &#123;</span><br><span class="line">  <span class="attr">SUCCESS</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">FAILURE</span>: <span class="number">101</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 读取帖子列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;Array&lt;&#123; filepath: string; fileContent: string </span>&#125;&gt;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getPostList</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> filenameList = <span class="keyword">await</span> fsPromise.<span class="title function_">readdir</span>(<span class="variable constant_">POST_LIST_DIR</span>);</span><br><span class="line">  <span class="keyword">const</span> postList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filename <span class="keyword">of</span> filenameList) &#123;</span><br><span class="line">    <span class="keyword">const</span> filepath = path.<span class="title function_">join</span>(<span class="variable constant_">POST_LIST_DIR</span>, filename);</span><br><span class="line">    <span class="keyword">const</span> buffer = <span class="keyword">await</span> fsPromise.<span class="title function_">readFile</span>(filepath);</span><br><span class="line">    postList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath, <span class="attr">fileContent</span>: buffer.<span class="title function_">toString</span>(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> postList;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 写入帖子列表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> postList &#123;Array&lt;&#123; filepath: string; fileContent: string &#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;void&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">writePostList</span> = <span class="keyword">async</span> (<span class="params">postList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> post <span class="keyword">of</span> postList) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;filepath, fileContent&#125; = post;</span><br><span class="line">    <span class="keyword">await</span> fsPromise.<span class="title function_">writeFile</span>(filepath, fileContent);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 得到项目根目录下的 updated.json ，转为 map(filepath -&gt; updated)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;&#123;[filepath: string]: string</span>&#125;&gt;&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">getUpdatedJsonMap</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> filepath = path.<span class="title function_">resolve</span>(<span class="string">&#x27;./updated.json&#x27;</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> fsPromise.<span class="title function_">access</span>(filepath);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    <span class="comment">// 文件不存在</span></span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> string = (<span class="keyword">await</span> fsPromise.<span class="title function_">readFile</span>(filepath)).<span class="title function_">toString</span>(<span class="string">&#x27;utf-8&#x27;</span>);</span><br><span class="line">  <span class="keyword">const</span> array = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(string);</span><br><span class="line">  <span class="keyword">return</span> array.<span class="title function_">reduce</span>(<span class="function">(<span class="params">map, item</span>) =&gt;</span> &#123;</span><br><span class="line">    map[item.<span class="property">filepath</span>] = item.<span class="property">updated</span>;</span><br><span class="line">    <span class="keyword">return</span> map;</span><br><span class="line">  &#125;, &#123;&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 保存帖子的最后一次修改日期到项目根目录的 updated.json 文件</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">Promise&lt;void&gt;</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">saveUpdatedJson</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> filenameList = <span class="keyword">await</span> fsPromise.<span class="title function_">readdir</span>(<span class="variable constant_">POST_LIST_DIR</span>);</span><br><span class="line">  <span class="keyword">const</span> fileHandler = <span class="keyword">await</span> fsPromise.<span class="title function_">open</span>(<span class="string">&quot;./updated.json&quot;</span>, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line">  <span class="keyword">const</span> infoList = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filename <span class="keyword">of</span> filenameList) &#123;</span><br><span class="line">    <span class="keyword">const</span> filepath = path.<span class="title function_">resolve</span>(<span class="variable constant_">POST_LIST_DIR</span>, filename);</span><br><span class="line">    <span class="keyword">const</span> fileStat = <span class="keyword">await</span> fsPromise.<span class="title function_">stat</span>(filepath);</span><br><span class="line">    <span class="keyword">const</span> updated = <span class="title function_">dayjs</span>(fileStat.<span class="property">mtime</span>).<span class="title function_">format</span>(<span class="string">&quot;YYYY-MM-DD HH:mm:ss&quot;</span>);</span><br><span class="line">    infoList.<span class="title function_">push</span>(&#123;</span><br><span class="line">      filepath, updated</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">await</span> fileHandler.<span class="title function_">write</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(infoList));</span><br><span class="line">  <span class="keyword">await</span> fileHandler.<span class="title function_">close</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filepathList &#123;string[]&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">gitAdd</span> = (<span class="params">filepathList</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> filepath <span class="keyword">of</span> filepathList) &#123;</span><br><span class="line">    <span class="keyword">let</span> result;</span><br><span class="line">    <span class="keyword">if</span> ((result = shelljs.<span class="title function_">exec</span>(<span class="string">`git add <span class="subst">$&#123;filepath&#125;</span>`</span>, &#123;</span><br><span class="line">      <span class="attr">silent</span>: <span class="literal">true</span></span><br><span class="line">    &#125;)).<span class="property">code</span> !== <span class="variable constant_">SHELLJS_CODE</span>.<span class="property">SUCCESS</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> result.<span class="property">stderr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 创建一个当前时间的 updated 值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@returns</span> &#123;<span class="type">string</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">createCurrentUpdated</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">dayjs</span>().<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD HH:mm:ss&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  getPostList,</span><br><span class="line">  writePostList,</span><br><span class="line">  getUpdatedJsonMap,</span><br><span class="line">  gitAdd,</span><br><span class="line">  createCurrentUpdated,</span><br><span class="line">  saveUpdatedJson,</span><br><span class="line">  <span class="variable constant_">POST_META_REGEXP</span>,</span><br><span class="line">  <span class="variable constant_">POST_LIST_DIR</span>,</span><br><span class="line">  <span class="variable constant_">SHELLJS_CODE</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>虽然过程曲折，但终究实现了自动更新帖子 <code>updated</code> 字段的功能，单单依靠文件的信息确实不是很准确</p>
+<p>想了下，做备份的话，感觉可以用 <code>stash</code> 来搞，部分文件 <code>stash push</code> ，然后部分文件 <code>stash pop</code></p>
+<p>也可以使用 <code>git</code> 操作指定撤销 <code>index</code> 区的文件，如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291601767.avif"></p>
+<p>这样看起来似乎更简单一点</p>
+<p>还有优化空间，但是…</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/07/29/202207291609686.avif"></p>
+<p>虽然解决了问题，可是我之前帖子的更新时间都不见了，我 TM …</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/587751cd41b2" title="使用 husky 来为帖子增加更新时间">https://prohibitorum.top/587751cd41b2</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/Next/" rel="tag"># Next</a>
+              <a href="/tags/Nodejs/" rel="tag"># Nodejs</a>
+              <a href="/tags/Husky/" rel="tag"># Husky</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/7cc2c97a15b4" rel="prev" title="解决 Gitalk 无法获取 Github Token 问题">
+                  <i class="fa fa-angle-left"></i> 解决 Gitalk 无法获取 Github Token 问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/992fb248bc26" rel="next" title="2022年7月新番个人推荐">
+                  2022年7月新番个人推荐 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1658972281"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

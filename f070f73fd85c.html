@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言开始来写一些关于Vue3的reactivity包源码的理解了，可能某些地方会有错误，希望可以指出，感激不尽~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3.0Reactivity之reactive">
+<meta property="og:url" content="https://prohibitorum.top/f070f73fd85c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言开始来写一些关于Vue3的reactivity包源码的理解了，可能某些地方会有错误，希望可以指出，感激不尽~">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/04/27/qdIn4zOsF6NZMKk.png">
+<meta property="og:image" content="https://i.loli.net/2020/04/28/ElmtjcoKY94AZnD.gif">
+<meta property="article:published_time" content="2020-06-12T11:12:41.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/04/27/qdIn4zOsF6NZMKk.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/f070f73fd85c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/f070f73fd85c","path":"f070f73fd85c.html","title":"Vue3.0Reactivity之reactive"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vue3.0Reactivity之reactive | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#reactive"><span class="nav-number">2.</span> <span class="nav-text">reactive</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/f070f73fd85c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vue3.0Reactivity之reactive | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue3.0Reactivity之reactive
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 11:12:41" itemprop="dateCreated datePublished" datetime="2020-06-12T11:12:41+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>14 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>开始来写一些关于Vue3的reactivity包源码的理解了，可能某些地方会有错误，希望可以指出，感激不尽~</p>
+<span id="more"></span>
+
+<p>因为这个包中其实是没有<code>watchEffect</code>和<code>watch</code>这两个API的，这两个API在别的包中，所以可能在后面再讲，因为我还没看…</p>
+<p>对于这个包，主要的API为<code>reactive</code>，<code>readonly</code>，<code>ref</code>，<code>computed</code>以及没有在全局Vue对象暴露的<code>effect</code>。</p>
+<h1 id="reactive"><a href="#reactive" class="headerlink" title="reactive"></a><code>reactive</code></h1><p>首先，需要去单独的把这个包编译成一个在浏览器端可以引入的文件，这里可以看这个包下面的<code>README.md</code>，</p>
+<p>可以结合之前的帖子 Vue3.0尝鲜这个帖子。</p>
+<p>直接在vue-next下直接运行<code>yarn build reactivity --types</code>就可以编译出文件，选择<code>reactivity.global.js</code>即可。</p>
+<p><img data-src="https://i.loli.net/2020/04/27/qdIn4zOsF6NZMKk.png"></p>
+<p>这次讲下<code>reactive</code>方法。在前面关于Reactivity主要API的翻译可以知道，<code>reactive</code>这个函数主要是包装一个对象，返回一个响应式的对象。</p>
+<p>在Reactivity的包中的src下，可以找到reactive的ts文件，其中对<code>reactive</code>的定义如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span></span>) &#123;</span><br><span class="line">  <span class="comment">// if trying to observe a readonly proxy, return the readonly version.</span></span><br><span class="line">  <span class="comment">// 如果尝试去观察一个只读的代理，直接返回只读的版本即可</span></span><br><span class="line">  <span class="keyword">if</span> (readonlyToRaw.<span class="title function_">has</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createReactiveObject</span>(</span><br><span class="line">    target,</span><br><span class="line">    rawToReactive,</span><br><span class="line">    reactiveToRaw,</span><br><span class="line">    mutableHandlers,</span><br><span class="line">    mutableCollectionHandlers</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到，主要的创建逻辑是<code>createReactiveObject</code>这个方法，但是这个<code>readonlyToRaw</code>是什么东西呢</p>
+<p>可以在前面的定义中，发现有四个WeakMap的定义</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// WeakMaps that store &#123;raw &lt;-&gt; observed&#125; pairs.</span></span><br><span class="line"><span class="comment">// 存储原生对象（raw） &lt;-&gt; 观察者对象（observed）</span></span><br><span class="line"><span class="keyword">const</span> rawToReactive = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;()</span><br><span class="line"><span class="keyword">const</span> reactiveToRaw = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;()</span><br><span class="line"><span class="keyword">const</span> rawToReadonly = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;()</span><br><span class="line"><span class="keyword">const</span> readonlyToRaw = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;()</span><br></pre></td></tr></table></figure>
+
+<p>根据官方的注释和变量的名字不难看出，这四个WeakMap用来存储原生对象和观察者对象之间的_双向关系_</p>
+<p>其中</p>
+<ul>
+<li><code>rawToReactive</code>： 原生对象 -&gt; 响应式对象</li>
+<li><code>reactiveToRaw</code>： 响应式对象 -&gt; 原生对象</li>
+<li><code>rawToReadonly</code>： 原生对象 -&gt; 只读对象</li>
+<li><code>readonlyToRaw</code>： 只读对象 -&gt; 原生对象</li>
+</ul>
+<p>可以猜测，每创建一个代理，就会通过这些WeakMap建立代理与源对象的双向关系。</p>
+<p>ok，我们继续看<code>createReactiveObject</code>这个方法，这个方法传入了五个参数，分别是target（源对象），两个关于响应式对象的WeakMap，以及两个handlers，</p>
+<p>这两个handlers又是什么东西呢，可以看到头部引用了另一个文件的好几个不同的handlers</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  mutableHandlers,</span><br><span class="line">  readonlyHandlers,</span><br><span class="line">  shallowReactiveHandlers,</span><br><span class="line">  shallowReadonlyHandlers</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;./baseHandlers&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  mutableCollectionHandlers,</span><br><span class="line">  readonlyCollectionHandlers</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;./collectionHandlers&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>从文件名来看，<code>baseHandlers</code>应该是基础的一种handlers，而<code>collectionHandlers</code>应该是关于集合的一种handlers，</p>
+<p>然后从引入的handlers名字来看，</p>
+<ul>
+<li><code>mutableHandlers</code>：可变handlers</li>
+<li><code>readonlyHandlers</code>：只读handlers</li>
+<li><code>shallowReactiveHandlers</code>：浅响应handlers</li>
+<li><code>shallowReadonlyHandlers</code>：浅只读handlers</li>
+<li><code>mutableCollectionHandlers</code>：可变集合handlers</li>
+<li><code>readonlyCollectionHandlers</code>：只读集合handlers</li>
+</ul>
+<p>这里我们可以看到<code>mutableHandlers</code>的定义</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">mutableHandlers</span>: <span class="title class_">ProxyHandler</span>&lt;<span class="built_in">object</span>&gt; = &#123;</span><br><span class="line">  get,</span><br><span class="line">  set,</span><br><span class="line">  deleteProperty,</span><br><span class="line">  has,</span><br><span class="line">  ownKeys</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>是不是很熟悉，就是Proxy第二个参数中可以配置的拦截函数。</p>
+<p>对于这个handler，先不讲那么深，只要知道，这个handlers就拦截了操作</p>
+<p>先看之前说的<code>createReactiveObject</code>函数，它的定义为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">target</span>: <span class="built_in">unknown</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">toProxy</span>: <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;,</span></span><br><span class="line"><span class="params">  <span class="attr">toRaw</span>: <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;,</span></span><br><span class="line"><span class="params">  <span class="attr">baseHandlers</span>: <span class="title class_">ProxyHandler</span>&lt;<span class="built_in">any</span>&gt;,</span></span><br><span class="line"><span class="params">  <span class="attr">collectionHandlers</span>: <span class="title class_">ProxyHandler</span>&lt;<span class="built_in">any</span>&gt;</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isObject</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`value cannot be made reactive: <span class="subst">$&#123;<span class="built_in">String</span>(target)&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// target already has corresponding Proxy</span></span><br><span class="line">  <span class="keyword">let</span> observed = toProxy.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (observed !== <span class="built_in">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> observed</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// target is already a Proxy</span></span><br><span class="line">  <span class="keyword">if</span> (toRaw.<span class="title function_">has</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// only a whitelist of value types can be observed.</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">canObserve</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> handlers = collectionTypes.<span class="title function_">has</span>(target.<span class="property">constructor</span>)</span><br><span class="line">    ? collectionHandlers</span><br><span class="line">    : baseHandlers</span><br><span class="line">  observed = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handlers)</span><br><span class="line">  toProxy.<span class="title function_">set</span>(target, observed)</span><br><span class="line">  toRaw.<span class="title function_">set</span>(observed, target)</span><br><span class="line">  <span class="keyword">return</span> observed</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先是第一段</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isObject</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">if</span> (__DEV__) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">`value cannot be made reactive: <span class="subst">$&#123;<span class="built_in">String</span>(target)&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显，根据函数名就可以判断，如果不是对象的话，直接返回源对象，也就是不能对基本类型进行响应式包装。</p>
+<p><code>__DEV__</code>是一个开发环境的变量，如果在开发环境下，就会打印一则警告来提醒用户。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// target already has corresponding Proxy</span></span><br><span class="line">  <span class="comment">// 目标早已有相应的代理</span></span><br><span class="line">  <span class="keyword">let</span> observed = toProxy.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (observed !== <span class="built_in">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> observed</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// target is already a Proxy</span></span><br><span class="line">  <span class="comment">// 目标本身就是一个代理</span></span><br><span class="line">  <span class="keyword">if</span> (toRaw.<span class="title function_">has</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果源对象存在代理对象或者源对象已是一个代理时，就直接返回，防止创建多个响应式对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// only a whitelist of value types can be observed.</span></span><br><span class="line">  <span class="comment">// 只要在白名单中的类型才可以被观察</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">canObserve</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这句不难理解，判断对象是否可以被观察，这个函数的定义为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> canObserve = (<span class="attr">value</span>: <span class="built_in">any</span>): <span class="function"><span class="params">boolean</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    !value.<span class="property">_isVue</span> &amp;&amp;</span><br><span class="line">    !value.<span class="property">_isVNode</span> &amp;&amp;</span><br><span class="line">    <span class="title function_">isObservableType</span>(<span class="title function_">toRawType</span>(value)) &amp;&amp;</span><br><span class="line">    !rawValues.<span class="title function_">has</span>(value) &amp;&amp;</span><br><span class="line">    !<span class="title class_">Object</span>.<span class="title function_">isFrozen</span>(value)</span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据变量名可以读出，这个对象必须</p>
+<ul>
+<li>不是<code>Vue</code>对象</li>
+<li>不是<code>VNode</code>对象</li>
+<li>在可响应式的类型中</li>
+<li>没被冻结</li>
+<li>原生对象Map不含这个对象</li>
+</ul>
+<p>转到<code>isObservableType</code>的实现，可以确定可观察的类型只有<br><code>Object</code>,<code>Array</code>,<code>Map</code>,<code>Set</code>,<code>WeakMap</code>,<code>WeakSet</code>这几种类型</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isObservableType = <span class="comment">/*#__PURE__*/</span> <span class="title function_">makeMap</span>(</span><br><span class="line">  <span class="string">&#x27;Object,Array,Map,Set,WeakMap,WeakSet&#x27;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>最后一段，便是创建代理对象了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createReactiveObject</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">const</span> handlers = collectionTypes.<span class="title function_">has</span>(target.<span class="property">constructor</span>)</span><br><span class="line">    ? collectionHandlers</span><br><span class="line">    : baseHandlers</span><br><span class="line">  observed = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handlers)</span><br><span class="line">  toProxy.<span class="title function_">set</span>(target, observed)</span><br><span class="line">  toRaw.<span class="title function_">set</span>(observed, target)</span><br><span class="line">  <span class="keyword">return</span> observed</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先是判断源对象的类型，用构造器去判断，然后使用对应的handlers创建Proxy代理对象。然后保存代理对象和源对象的关系（通过前文说到的WeakMap），最后返回这个响应式对象。</p>
+<p>至此，对于响应式对象创建的基本流程已经明朗</p>
+<p>回过头来，为什么返回的这个代理对象就是响应式的呢？</p>
+<p>这需要我们去看创建响应式的handlers的内容了</p>
+<p>我们在前面有说到，这个文件引入了多个handlers，其中一个为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">mutableHandlers</span>: <span class="title class_">ProxyHandler</span>&lt;<span class="built_in">object</span>&gt; = &#123;</span><br><span class="line">  get,</span><br><span class="line">  set,</span><br><span class="line">  deleteProperty,</span><br><span class="line">  has,</span><br><span class="line">  ownKeys</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，我们就从这里入手，探究何为响应式。</p>
+<p>我们可以去看Vue的RFC文档</p>
+<p><a target="_blank" rel="noopener" href="https://vue-composition-api-rfc.netlify.app/#api-introduction">Composition API RFC | Vue Composition API</a></p>
+<p>里面关于Detailed Design（详细设计）中的API Introduction（API介绍）有一段我觉得很好的解释了关于响应式这个含义</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; reactive, watchEffect &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">count</span>: <span class="number">0</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="property">body</span>.<span class="property">innerHTML</span> = <span class="string">`count is <span class="subst">$&#123;state.count&#125;</span>`</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这一段话中我觉得下面这句话（以及简短的代码段）间接明了地解释了响应式</p>
+<blockquote>
+<p>Thanks to dependency tracking, the view automatically updates when reactive state changes.</p>
+</blockquote>
+<p>这句话大意是：多亏了依赖的收集，视图可以自动地在响应式状态的值发生改变时而更新。</p>
+<p>对应到代码中，就是当<code>state.count</code>发生改变时，使用到<code>state.count</code>的函数便会自动的重新执行。</p>
+<p>那么现在其实问题就很明了了，如何收集依赖？也就是收集变量改变的函数？<br>如何触发依赖？也就是在变量改变时重新执行跟它有关的函数？</p>
+<p>这里我用<code>effect</code>代替<code>watchEffect</code>（<code>watchEffect</code>就是在<code>effect</code>上扩展的，包中是没有<code>watchEffect</code>的），测试的动图如下：</p>
+<p><img data-src="https://i.loli.net/2020/04/28/ElmtjcoKY94AZnD.gif"></p>
+<p>ok，我们开始来看<code>mutableHandlers</code>中的<code>get</code>属性，发现它的定义为</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> get = <span class="comment">/*#__PURE__*/</span> <span class="title function_">createGetter</span>()</span><br></pre></td></tr></table></figure>
+
+<p>我们接着看<code>createGetter</code>这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createGetter</span>(<span class="params">isReadonly = <span class="literal">false</span>, shallow = <span class="literal">false</span></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">get</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span>, <span class="attr">key</span>: <span class="built_in">string</span> | <span class="built_in">symbol</span>, <span class="attr">receiver</span>: <span class="built_in">object</span></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> targetIsArray = <span class="title function_">isArray</span>(target)</span><br><span class="line">    <span class="keyword">if</span> (targetIsArray &amp;&amp; <span class="title function_">hasOwn</span>(arrayInstrumentations, key)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(arrayInstrumentations, key, receiver)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isSymbol</span>(key) &amp;&amp; builtInSymbols.<span class="title function_">has</span>(key)) &#123;</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (shallow) &#123;</span><br><span class="line">      !isReadonly &amp;&amp; <span class="title function_">track</span>(target, <span class="title class_">TrackOpTypes</span>.<span class="property">GET</span>, key)</span><br><span class="line">      <span class="keyword">return</span> res</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">isRef</span>(res)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (targetIsArray) &#123;</span><br><span class="line">        !isReadonly &amp;&amp; <span class="title function_">track</span>(target, <span class="title class_">TrackOpTypes</span>.<span class="property">GET</span>, key)</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// ref unwrapping, only for Objects, not for Arrays.</span></span><br><span class="line">        <span class="keyword">return</span> res.<span class="property">value</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    !isReadonly &amp;&amp; <span class="title function_">track</span>(target, <span class="title class_">TrackOpTypes</span>.<span class="property">GET</span>, key)</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">isObject</span>(res)</span><br><span class="line">      ? isReadonly</span><br><span class="line">        ? <span class="comment">// need to lazy access readonly and reactive here to avoid</span></span><br><span class="line">          <span class="comment">// circular dependency</span></span><br><span class="line">          <span class="title function_">readonly</span>(res)</span><br><span class="line">        : <span class="title function_">reactive</span>(res)</span><br><span class="line">      : res</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>哇，这么长，我看不懂啊啊啊啊</p>
+<p>其实，现在并不需要全部都看，我们可以发现函数中除了一个<code>track</code>函数</p>
+<p>也就是所谓的收集依赖函数，我们可以点进去看，发现这个函数定义在<code>effect.ts</code>文件中</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">track</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span>, <span class="attr">type</span>: <span class="title class_">TrackOpTypes</span>, <span class="attr">key</span>: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!shouldTrack || activeEffect === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, (depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, (dep = <span class="keyword">new</span> <span class="title class_">Set</span>()))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!dep.<span class="title function_">has</span>(activeEffect)) &#123;</span><br><span class="line">    dep.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">    activeEffect.<span class="property">deps</span>.<span class="title function_">push</span>(dep)</span><br><span class="line">    <span class="keyword">if</span> (__DEV__ &amp;&amp; activeEffect.<span class="property">options</span>.<span class="property">onTrack</span>) &#123;</span><br><span class="line">      activeEffect.<span class="property">options</span>.<span class="title function_">onTrack</span>(&#123;</span><br><span class="line">        <span class="attr">effect</span>: activeEffect,</span><br><span class="line">        target,</span><br><span class="line">        <span class="keyword">type</span>,</span><br><span class="line">        key</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里出现几个全局定义的变量，分别是<code>shouldTrack</code>，<code>activeEffect</code>，<code>targetMap</code></p>
+<p>我们可以往前找，找到这三个的定义</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Dep</span> = <span class="title class_">Set</span>&lt;<span class="title class_">ReactiveEffect</span>&gt;</span><br><span class="line"><span class="keyword">type</span> <span class="title class_">KeyToDepMap</span> = <span class="title class_">Map</span>&lt;<span class="built_in">any</span>, <span class="title class_">Dep</span>&gt;</span><br><span class="line"><span class="keyword">const</span> targetMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>&lt;<span class="built_in">any</span>, <span class="title class_">KeyToDepMap</span>&gt;()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="attr">effectStack</span>: <span class="title class_">ReactiveEffect</span>[] = []</span><br><span class="line"><span class="keyword">let</span> <span class="attr">activeEffect</span>: <span class="title class_">ReactiveEffect</span> | <span class="literal">undefined</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> shouldTrack = <span class="literal">true</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">trackStack</span>: <span class="built_in">boolean</span>[] = []</span><br></pre></td></tr></table></figure>
+
+<p>根据变量的语义不难推出意思，</p>
+<p>其中<code>targetMap</code>存储：对象 -&gt; 属性，而这个属性也是一个Map，存储 属性 -&gt; ReactiveEffect，这个ReactiveEffect是一个Set。</p>
+<p><code>activeEffect</code>表示当前的活动Effect。</p>
+<p><code>shouldTrack</code>表示应不应该收集依赖。</p>
+<p>ok，接着我们分析这个函数，</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">track</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span>, <span class="attr">type</span>: <span class="title class_">TrackOpTypes</span>, <span class="attr">key</span>: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!shouldTrack || activeEffect === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>开头先判断如果不应该收集，或者当前活动的Effect为<code>undefined</code>，直接返回</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">track</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span>, <span class="attr">type</span>: <span class="title class_">TrackOpTypes</span>, <span class="attr">key</span>: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">let</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    <span class="comment">// 第一次为空，就初始化</span></span><br><span class="line">    targetMap.<span class="title function_">set</span>(target, (depsMap = <span class="keyword">new</span> <span class="title class_">Map</span>()))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> dep = depsMap.<span class="title function_">get</span>(key)</span><br><span class="line">  <span class="keyword">if</span> (!dep) &#123;</span><br><span class="line">    <span class="comment">// 第一次为空，就初始化</span></span><br><span class="line">    depsMap.<span class="title function_">set</span>(key, (dep = <span class="keyword">new</span> <span class="title class_">Set</span>()))</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一段，找出对象的依赖Map，也就是 <code>Map&amp;lt;属性名,Set&amp;lt;Effect&amp;gt;&amp;gt;</code>，</p>
+<p>再找出对应属性名的Set，也就是<code>Set&amp;lt;Effect&amp;gt;</code></p>
+<p>并且对这两个做了空判断并初始化。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">track</span>(<span class="params"><span class="attr">target</span>: <span class="built_in">object</span>, <span class="attr">type</span>: <span class="title class_">TrackOpTypes</span>, <span class="attr">key</span>: <span class="built_in">unknown</span></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">if</span> (!dep.<span class="title function_">has</span>(activeEffect)) &#123;</span><br><span class="line">    dep.<span class="title function_">add</span>(activeEffect)</span><br><span class="line">    activeEffect.<span class="property">deps</span>.<span class="title function_">push</span>(dep)</span><br><span class="line">    <span class="keyword">if</span> (__DEV__ &amp;&amp; activeEffect.<span class="property">options</span>.<span class="property">onTrack</span>) &#123;</span><br><span class="line">      activeEffect.<span class="property">options</span>.<span class="title function_">onTrack</span>(&#123;</span><br><span class="line">        <span class="attr">effect</span>: activeEffect,</span><br><span class="line">        target,</span><br><span class="line">        <span class="keyword">type</span>,</span><br><span class="line">        key</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，判断如果当前的effect不在<code>Set&amp;lt;Effect&amp;gt;</code>中，就把这个effect存进去，并且在当前effect上的deps上把拥有自己的Set也给存进去。然后就是在开发模式下调用用户传入的<code>onTrack</code>函数了。</p>
+<p>这里可能会疑问，如何知道当前的effect就是这个target的key的依赖呢？</p>
+<p>这里需要把目光先转向<code>effect</code>函数</p>
+<p>在前面的一个浏览器跑的例子，我们知道</p>
+<p>往<code>effect</code>传入一个函数，函数内部使用响应式变量就能收集这个函数作为依赖。</p>
+<p>在同一个文件内可以找到</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> effect&lt;T = <span class="built_in">any</span>&gt;(</span><br><span class="line">  <span class="attr">fn</span>: <span class="function">() =&gt;</span> T,</span><br><span class="line">  <span class="attr">options</span>: <span class="title class_">ReactiveEffectOptions</span> = <span class="variable constant_">EMPTY_OBJ</span></span><br><span class="line">): <span class="title class_">ReactiveEffect</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">isEffect</span>(fn)) &#123;</span><br><span class="line">    fn = fn.<span class="property">raw</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> effect = <span class="title function_">createReactiveEffect</span>(fn, options)</span><br><span class="line">  <span class="keyword">if</span> (!options.<span class="property">lazy</span>) &#123;</span><br><span class="line">    <span class="title function_">effect</span>()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> effect</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>发现<code>effect</code>的实现不难，主要的逻辑在<code>createReactiveEffect</code>函数中。找到它</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> createReactiveEffect&lt;T = <span class="built_in">any</span>&gt;(</span><br><span class="line">  <span class="attr">fn</span>: <span class="function">(<span class="params">...<span class="attr">args</span>: <span class="built_in">any</span>[]</span>) =&gt;</span> T,</span><br><span class="line">  <span class="attr">options</span>: <span class="title class_">ReactiveEffectOptions</span></span><br><span class="line">): <span class="title class_">ReactiveEffect</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> effect = <span class="keyword">function</span> <span class="title function_">reactiveEffect</span>(<span class="params">...<span class="attr">args</span>: <span class="built_in">unknown</span>[]</span>): <span class="built_in">unknown</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!effect.<span class="property">active</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> options.<span class="property">scheduler</span> ? <span class="literal">undefined</span> : <span class="title function_">fn</span>(...args)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!effectStack.<span class="title function_">includes</span>(effect)) &#123;</span><br><span class="line">      <span class="title function_">cleanup</span>(effect)</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="title function_">enableTracking</span>()</span><br><span class="line">        effectStack.<span class="title function_">push</span>(effect)</span><br><span class="line">        activeEffect = effect</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">fn</span>(...args)</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        effectStack.<span class="title function_">pop</span>()</span><br><span class="line">        <span class="title function_">resetTracking</span>()</span><br><span class="line">        activeEffect = effectStack[effectStack.<span class="property">length</span> - <span class="number">1</span>]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">as</span> <span class="title class_">ReactiveEffect</span></span><br><span class="line">  effect.<span class="property">id</span> = uid++</span><br><span class="line">  effect.<span class="property">_isEffect</span> = <span class="literal">true</span></span><br><span class="line">  effect.<span class="property">active</span> = <span class="literal">true</span></span><br><span class="line">  effect.<span class="property">raw</span> = fn</span><br><span class="line">  effect.<span class="property">deps</span> = []</span><br><span class="line">  effect.<span class="property">options</span> = options</span><br><span class="line">  <span class="keyword">return</span> effect</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于这么长的代码，只需关注最重要的一部分</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> createReactiveEffect&lt;T = <span class="built_in">any</span>&gt;(</span><br><span class="line">  <span class="attr">fn</span>: <span class="function">(<span class="params">...<span class="attr">args</span>: <span class="built_in">any</span>[]</span>) =&gt;</span> T,</span><br><span class="line">  <span class="attr">options</span>: <span class="title class_">ReactiveEffectOptions</span></span><br><span class="line">): <span class="title class_">ReactiveEffect</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> effect = <span class="keyword">function</span> <span class="title function_">reactiveEffect</span>(<span class="params">...<span class="attr">args</span>: <span class="built_in">unknown</span>[]</span>): <span class="built_in">unknown</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">if</span> (!effectStack.<span class="title function_">includes</span>(effect)) &#123;</span><br><span class="line">      <span class="title function_">cleanup</span>(effect)</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="title function_">enableTracking</span>()</span><br><span class="line">        effectStack.<span class="title function_">push</span>(effect)</span><br><span class="line">        activeEffect = effect</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">fn</span>(...args)</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        effectStack.<span class="title function_">pop</span>()</span><br><span class="line">        <span class="title function_">resetTracking</span>()</span><br><span class="line">        activeEffect = effectStack[effectStack.<span class="property">length</span> - <span class="number">1</span>]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">as</span> <span class="title class_">ReactiveEffect</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先判断自己是不是在effect的栈中，如果在栈中，要对这个effect进行清理初始化，</p>
+<p>然后<code>enableTracking()</code>，保存上一个<code>shouldTrack</code>的状态，并把当前<code>shouldTrack</code>置为true，然后把自己保存到effect栈的栈顶，并将<code>activeEffect</code>指向自身。</p>
+<p>接着，直接运行这个传进来的函数</p>
+<p>注意，还记得吗，这里运行就会触发响应式对象<code>get</code>拦截方法中的<code>track</code>方法，而<code>track</code>方法会将当前的effect与对应对象的属性名进行关联，</p>
+<p>最后在finally块中将当前的effect弹出，重置<code>shouldTrack</code>为上一次的状态的，把当前的effect指向栈的倒数第二个effect。恢复了上一次的状态。</p>
+<p>为什么要保存历史的<code>shouldTrack</code>状态，因为在一个函数中，可能会触发多个响应式变量属性的<code>get</code>。</p>
+<p>所以，对于前面的如何知道当前的effect就是这个target的key的依赖呢？这个问题，到这里基本就解决了。</p>
+<p>接着，我们需要理明白如何在改变响应式对象的值之后，触发依赖（也就是执行对应的函数）</p>
+<p>我们回到<code>mutableHandlers</code>，这次我们看下<code>set</code>的实现</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> set = <span class="comment">/*#__PURE__*/</span> <span class="title function_">createSetter</span>()</span><br></pre></td></tr></table></figure>
+
+<p>发现他也是运行一个函数，我们转到这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createSetter</span>(<span class="params">shallow = <span class="literal">false</span></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">set</span>(<span class="params"></span></span><br><span class="line"><span class="params">    <span class="attr">target</span>: <span class="built_in">object</span>,</span></span><br><span class="line"><span class="params">    <span class="attr">key</span>: <span class="built_in">string</span> | <span class="built_in">symbol</span>,</span></span><br><span class="line"><span class="params">    <span class="attr">value</span>: <span class="built_in">unknown</span>,</span></span><br><span class="line"><span class="params">    <span class="attr">receiver</span>: <span class="built_in">object</span></span></span><br><span class="line"><span class="params">  </span>): <span class="built_in">boolean</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> oldValue = (target <span class="keyword">as</span> <span class="built_in">any</span>)[key]</span><br><span class="line">    <span class="keyword">if</span> (!shallow) &#123;</span><br><span class="line">      value = <span class="title function_">toRaw</span>(value)</span><br><span class="line">      <span class="keyword">if</span> (!<span class="title function_">isArray</span>(target) &amp;&amp; <span class="title function_">isRef</span>(oldValue) &amp;&amp; !<span class="title function_">isRef</span>(value)) &#123;</span><br><span class="line">        oldValue.<span class="property">value</span> = value</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// in shallow mode, objects are set as-is regardless of reactive or not</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> hadKey = <span class="title function_">hasOwn</span>(target, key)</span><br><span class="line">    <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver)</span><br><span class="line">    <span class="comment">// don&#x27;t trigger if target is something up in the prototype chain of original</span></span><br><span class="line">    <span class="keyword">if</span> (target === <span class="title function_">toRaw</span>(receiver)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!hadKey) &#123;</span><br><span class="line">        <span class="title function_">trigger</span>(target, <span class="title class_">TriggerOpTypes</span>.<span class="property">ADD</span>, key, value)</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="title function_">hasChanged</span>(value, oldValue)) &#123;</span><br><span class="line">        <span class="title function_">trigger</span>(target, <span class="title class_">TriggerOpTypes</span>.<span class="property">SET</span>, key, value, oldValue)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码中，我们注意到一个<code>trigger</code>的函数，根据英文知道它的意思是触发的意思。可以判断它应该就是触发依赖的函数。我们转到这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">trigger</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">target</span>: <span class="built_in">object</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">type</span>: <span class="title class_">TriggerOpTypes</span>,</span></span><br><span class="line"><span class="params">  key?: <span class="built_in">unknown</span>,</span></span><br><span class="line"><span class="params">  newValue?: <span class="built_in">unknown</span>,</span></span><br><span class="line"><span class="params">  oldValue?: <span class="built_in">unknown</span>,</span></span><br><span class="line"><span class="params">  oldTarget?: <span class="title class_">Map</span>&lt;<span class="built_in">unknown</span>, <span class="built_in">unknown</span>&gt; | <span class="title class_">Set</span>&lt;<span class="built_in">unknown</span>&gt;</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> depsMap = targetMap.<span class="title function_">get</span>(target)</span><br><span class="line">  <span class="keyword">if</span> (!depsMap) &#123;</span><br><span class="line">    <span class="comment">// never been tracked</span></span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> effects = <span class="keyword">new</span> <span class="title class_">Set</span>&lt;<span class="title class_">ReactiveEffect</span>&gt;()</span><br><span class="line">  <span class="keyword">const</span> computedRunners = <span class="keyword">new</span> <span class="title class_">Set</span>&lt;<span class="title class_">ReactiveEffect</span>&gt;()</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">add</span> = (<span class="params"><span class="attr">effectsToAdd</span>: <span class="title class_">Set</span>&lt;<span class="title class_">ReactiveEffect</span>&gt; | <span class="literal">undefined</span></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (effectsToAdd) &#123;</span><br><span class="line">      effectsToAdd.<span class="title function_">forEach</span>(<span class="function"><span class="params">effect</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (effect !== activeEffect || !shouldTrack) &#123;</span><br><span class="line">          <span class="keyword">if</span> (effect.<span class="property">options</span>.<span class="property">computed</span>) &#123;</span><br><span class="line">            computedRunners.<span class="title function_">add</span>(effect)</span><br><span class="line">          &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            effects.<span class="title function_">add</span>(effect)</span><br><span class="line">          &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// the effect mutated its own dependency during its execution.</span></span><br><span class="line">          <span class="comment">// this can be caused by operations like foo.value++</span></span><br><span class="line">          <span class="comment">// do not trigger or we end in an infinite loop</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">type</span> === <span class="title class_">TriggerOpTypes</span>.<span class="property">CLEAR</span>) &#123;</span><br><span class="line">    <span class="comment">// collection being cleared</span></span><br><span class="line">    <span class="comment">// trigger all effects for target</span></span><br><span class="line">    depsMap.<span class="title function_">forEach</span>(add)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key === <span class="string">&#x27;length&#x27;</span> &amp;&amp; <span class="title function_">isArray</span>(target)) &#123;</span><br><span class="line">    depsMap.<span class="title function_">forEach</span>(<span class="function">(<span class="params">dep, key</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (key === <span class="string">&#x27;length&#x27;</span> || key &gt;= (newValue <span class="keyword">as</span> <span class="built_in">number</span>)) &#123;</span><br><span class="line">        <span class="title function_">add</span>(dep)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// schedule runs for SET | ADD | DELETE</span></span><br><span class="line">    <span class="keyword">if</span> (key !== <span class="built_in">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">add</span>(depsMap.<span class="title function_">get</span>(key))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// also run for iteration key on ADD | DELETE | Map.SET</span></span><br><span class="line">    <span class="keyword">const</span> isAddOrDelete =</span><br><span class="line">      <span class="keyword">type</span> === <span class="title class_">TriggerOpTypes</span>.<span class="property">ADD</span> ||</span><br><span class="line">      (<span class="keyword">type</span> === <span class="title class_">TriggerOpTypes</span>.<span class="property">DELETE</span> &amp;&amp; !<span class="title function_">isArray</span>(target))</span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      isAddOrDelete ||</span><br><span class="line">      (<span class="keyword">type</span> === <span class="title class_">TriggerOpTypes</span>.<span class="property">SET</span> &amp;&amp; target <span class="keyword">instanceof</span> <span class="title class_">Map</span>)</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="title function_">add</span>(depsMap.<span class="title function_">get</span>(<span class="title function_">isArray</span>(target) ? <span class="string">&#x27;length&#x27;</span> : <span class="variable constant_">ITERATE_KEY</span>))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isAddOrDelete &amp;&amp; target <span class="keyword">instanceof</span> <span class="title class_">Map</span>) &#123;</span><br><span class="line">      <span class="title function_">add</span>(depsMap.<span class="title function_">get</span>(<span class="variable constant_">MAP_KEY_ITERATE_KEY</span>))</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">run</span> = (<span class="params"><span class="attr">effect</span>: <span class="title class_">ReactiveEffect</span></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (__DEV__ &amp;&amp; effect.<span class="property">options</span>.<span class="property">onTrigger</span>) &#123;</span><br><span class="line">      effect.<span class="property">options</span>.<span class="title function_">onTrigger</span>(&#123;</span><br><span class="line">        effect,</span><br><span class="line">        target,</span><br><span class="line">        key,</span><br><span class="line">        <span class="keyword">type</span>,</span><br><span class="line">        newValue,</span><br><span class="line">        oldValue,</span><br><span class="line">        oldTarget</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (effect.<span class="property">options</span>.<span class="property">scheduler</span>) &#123;</span><br><span class="line">      effect.<span class="property">options</span>.<span class="title function_">scheduler</span>(effect)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="title function_">effect</span>()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Important: computed effects must be run first so that computed getters</span></span><br><span class="line">  <span class="comment">// can be invalidated before any normal effects that depend on them are run.</span></span><br><span class="line">  computedRunners.<span class="title function_">forEach</span>(run)</span><br><span class="line">  effects.<span class="title function_">forEach</span>(run)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这么长的函数，只需关注重要的地方即可。</p>
+<p>我们发现开头就是把对象的属性Map给取了出来。</p>
+<p>然后我们只需注意<code>add</code>函数和<code>run</code>函数，<code>add</code>函数把传进来的依赖添加到<code>effects</code>和<code>computedRunners</code>（这个是计算属性，也是由<code>effect</code>实现，之后会将），</p>
+<p>然后中间是一大堆的if判断，我们只需看其中的一句</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">trigger</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="comment">/* ... */</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="comment">/* ... */</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// schedule runs for SET | ADD | DELETE</span></span><br><span class="line">    <span class="keyword">if</span> (key !== <span class="keyword">void</span> <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="title function_">add</span>(depsMap.<span class="title function_">get</span>(key))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们发现，这里把获取了传进来属性名（<code>key</code>）的<code>Set&lt;Effect&gt;</code>，并且添加在上面说到的两个数组中。</p>
+<p>然后定义了一个<code>run</code>函数，这个函数开头处理了开发模式下的<code>onTrigger</code>函数，最后，执行了传进来的effect</p>
+<p>最后遍历两个前面说到的数组，执行了全部和<code>target</code>的<code>key</code>有关的effect。</p>
+<p>至此，响应式的原理基本上已经明了了。</p>
+<p>我们可以用一段很简单的代码来梳理整个流程</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123;reactive, effect&#125; = <span class="title class_">VueReactivity</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  <span class="attr">count</span>: <span class="number">0</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">effect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(state.<span class="property">count</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>首先我们通过<code>reactive</code>函数创建一个响应式对象，这个响应式对象代理了源对象，它的<code>set</code>和<code>get</code>中分别有<code>track</code>（收集依赖）和<code>trigger</code>（触发依赖）这两个操作。</p>
+<p>然后我们通过<code>effect</code>来执行我们的函数，在执行中，会标记这个函数，也就是<code>activeEffect</code>，然后运行它，</p>
+<p>一运行，如果使用了响应式的变量，就会触发代理对象的<code>get</code>，执行了<code>track</code>函数</p>
+<p>就把当前运行的函数和这个响应式对象建立一个双向的连接。</p>
+<p>当我们修改响应式变量，比如执行<code>state.count++</code>时，会触发代理对象的<code>set</code>，执行了<code>trigger</code>函数，</p>
+<p><code>trigger</code>函数会通过之前建立的连接，找到和自己相关的effect，然后执行。</p>
+<p>我感觉如果明白了基本的流程，那源代码看起来应该不难，因为知道下一步要干什么，剩下的就是一些判断之类的代码了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>第一次写这么长的笔记，如果哪里写的不好希望提出来，非常感谢！</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/f070f73fd85c" title="Vue3.0Reactivity之reactive">https://prohibitorum.top/f070f73fd85c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a7ffec850800" rel="prev" title="Vue3.0的Reactivity-APIs（译）">
+                  <i class="fa fa-angle-left"></i> Vue3.0的Reactivity-APIs（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/f2ce2a5d2fc0" rel="next" title="Vue3.0Reactivity之ref">
+                  Vue3.0Reactivity之ref <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591931561"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

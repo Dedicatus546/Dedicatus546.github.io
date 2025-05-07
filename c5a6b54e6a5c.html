@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记一次使用 uniapp 开发微信小程序遇到的疑难杂症">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次使用 uniapp 开发微信小程序遇到的疑难杂症">
+<meta property="og:url" content="https://prohibitorum.top/c5a6b54e6a5c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次使用 uniapp 开发微信小程序遇到的疑难杂症">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/09/20240809073524093.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812064135686.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812064923042.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812065445508.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812065702903.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812071205214.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812073144480.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812073902771.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080510672.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080815082.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080848889.avif">
+<meta property="article:published_time" content="2024-08-08T18:32:17.000Z">
+<meta property="article:modified_time" content="2024-08-20T11:07:37.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="uniapp">
+<meta property="article:tag" content="微信小程序">
+<meta property="article:tag" content="sard-uniapp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/09/20240809073524093.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/c5a6b54e6a5c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/c5a6b54e6a5c","path":"c5a6b54e6a5c.html","title":"记一次使用 uniapp 开发微信小程序遇到的疑难杂症"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次使用 uniapp 开发微信小程序遇到的疑难杂症 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#swiper-%E6%BB%9A%E5%8A%A8%E5%BC%82%E5%B8%B8"><span class="nav-number">2.1.</span> <span class="nav-text">swiper 滚动异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scroll-view-%E5%86%85-fixed-%E5%B8%83%E5%B1%80%E7%9A%84%E5%86%85%E5%AE%B9%E5%9C%A8-IOS-%E4%B8%8B%E5%87%BA%E7%8E%B0%E9%81%AE%E6%8C%A1%E5%BC%82%E5%B8%B8"><span class="nav-number">2.2.</span> <span class="nav-text">scroll-view 内 fixed 布局的内容在 IOS 下出现遮挡异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%A4%B4%E5%83%8F%E5%92%8C%E6%98%B5%E7%A7%B0"><span class="nav-number">2.3.</span> <span class="nav-text">获取头像和昵称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%89%8B%E6%9C%BA%E5%8F%B7%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">获取手机号码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%86%E5%88%AB-html-%E4%BB%A3%E7%A0%81"><span class="nav-number">2.5.</span> <span class="nav-text">识别 html 代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue3-%E4%B8%AD%E9%80%9A%E8%BF%87-import-%E5%AF%BC%E5%85%A5%E7%BB%84%E4%BB%B6%E6%8A%A5%E9%94%99"><span class="nav-number">2.6.</span> <span class="nav-text">vue3 中通过 import 导入组件报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E9%AB%98%E5%BA%A6"><span class="nav-number">2.7.</span> <span class="nav-text">键盘高度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E9%AB%98%E5%BA%A6"><span class="nav-number">2.8.</span> <span class="nav-text">安全高度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#input-%E5%BC%B9%E5%87%BA%E9%94%AE%E7%9B%98%E9%A1%B5%E9%9D%A2%E4%B8%8A%E7%A7%BB%E9%97%AE%E9%A2%98"><span class="nav-number">2.9.</span> <span class="nav-text">input 弹出键盘页面上移问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/c5a6b54e6a5c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次使用 uniapp 开发微信小程序遇到的疑难杂症 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次使用 uniapp 开发微信小程序遇到的疑难杂症
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-08 18:32:17" itemprop="dateCreated datePublished" datetime="2024-08-08T18:32:17+00:00">2024-08-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-20 11:07:37" itemprop="dateModified" datetime="2024-08-20T11:07:37+00:00">2024-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次使用 uniapp 开发微信小程序遇到的疑难杂症</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="swiper-滚动异常"><a href="#swiper-滚动异常" class="headerlink" title="swiper 滚动异常"></a>swiper 滚动异常</h2><p>在做列表的时候，很多情况下都是把类型放在顶部成为一个 tab ，然后左右滑动来切换列表。</p>
+<p>在 uniapp 中，提供了一个 swiper 组件，它其实就是微信小程序中的 swiper 。</p>
+<p>在使用 swiper 的时候，如果需要记录当前的 tab 值，则需要绑定 <code>current</code> 属性和 <code>change</code> 事件。</p>
+<p>这里如果使用 <code>change</code> 事件，在开启 <code>autoplay</code> 或者连续快速滑动的情况下有很大概率在滑动的时候会出现 UI 错误。具体表现为晃动闪烁，相关的问题有</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/00044c85a401705da8c601f2256400">swiper 出现闪烁混乱</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/000ae8b6370930f4ca50bacc661400?_at=1723188365601">ios16.0.3系统，苹果13pro-max机型，swiper组件滑动时，会出现内容来回滑动？</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/000042f32686b0fd2369839ff51400">swiper组件快速滑动会抖动是怎么会是？</a></li>
+</ul>
+<p>原因在微信小程序的<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/component/swiper.html#Bug-Tip">文档</a>里有说明：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/09/20240809073524093.avif"></p>
+<p>解决方法是不要使用 <code>change</code> 事件，而是 <code>animationfinish</code> 事件来更新 <code>current</code> 的值</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> current = <span class="title function_">ref</span>(<span class="number">0</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">animationfinish</span> = (<span class="params">e</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  currentAdIndex.<span class="property">value</span> = e.<span class="property">detail</span>.<span class="property">current</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">swiper</span> <span class="attr">:current</span>=<span class="string">&quot;current&quot;</span> @<span class="attr">animationfinish</span>=<span class="string">&quot;animationfinish&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 其他代码 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">swiper</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者用第三个帖子中有个老哥回复的方法：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> current = <span class="title function_">ref</span>(<span class="number">0</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 使用 setTimeout 确保不会多次调用 setData</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> swiperCurrentTimeout = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">change</span> = (<span class="params">e</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (swiperCurrentTimeout) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="built_in">clearTimeout</span>(swiperCurrentTimeout);</span></span><br><span class="line"><span class="language-javascript">    swiperCurrentTimeout = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">  swiperCurrentTimeout = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    current.<span class="property">value</span> = e.<span class="property">detail</span>.<span class="property">current</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">swiper</span> <span class="attr">:current</span>=<span class="string">&quot;current&quot;</span> @<span class="attr">change</span>=<span class="string">&quot;change&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 其他代码 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">swiper</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>目前用的第一个解决方法，看起来似乎没有出现闪烁的情况了。</p>
+<p>操蛋的开发者工具不会出现这个 bug ，只有真机的情况下有概率出现，麻了。</p>
+<h2 id="scroll-view-内-fixed-布局的内容在-IOS-下出现遮挡异常"><a href="#scroll-view-内-fixed-布局的内容在-IOS-下出现遮挡异常" class="headerlink" title="scroll-view 内 fixed 布局的内容在 IOS 下出现遮挡异常"></a>scroll-view 内 fixed 布局的内容在 IOS 下出现遮挡异常</h2><p>如果要实现一个滚动列表，那么 uniapp 有一个 scroll-view 的组件可以作为滚动的容器，它在微信小程序中就是 scroll-view 。</p>
+<p>在 IOS 中，如果在 scroll-view 中出现 <code>position: fixed</code> 布局（ 一般为弹出层 ）的元素的话，那么可能会出现遮挡异常的问题。</p>
+<p>相关的问题有：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/0000667484c96844b83ac9c7651809?highLine=scroll-view%2520ios">IOS scroll-view中的自定义组件fixed问题</a></li>
+<li><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/0004aeafeccb789ac219e474756000">scroll-view包含的自定义组件中fixed元素层级问题？</a></li>
+</ul>
+<p>原因是 IOS 对添加了 <code>-webkit-overflow-scrolling: touch</code> （滚动惯性）样式，他会和 <code>position: fixed</code> 发生冲突。</p>
+<p>解决方法是将 <code>-webkit-overflow-scrolling: touch</code> 改为 <code>-webkit-overflow-scrolling: auto !important</code> ，如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* App.vue 内添加 */</span></span><br><span class="line"><span class="comment">/* 给 scroll-view 加上 scroll class */</span></span><br><span class="line"><span class="selector-class">.scroll</span> <span class="selector-class">.wx-scroll-view</span> &#123;</span><br><span class="line">  -webkit-<span class="attribute">overflow</span>-scrolling: auto <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个用了之后确实有效果，弹出层不会被遮挡了。至于什么滚动惯性，体验更好，去他妈的，等客户提出来再说。</p>
+<p>除了这个方法，也可以使用微信小程序的 root-portal 来模拟 <code>position: fixed</code> 。这样的话就不会被影响。</p>
+<p>不过我用的组件库 sard-uniapp 似乎用的是 css fixed 的方案，并且我想还是尽量不使用一些特定平台的特性，所以我就直接用第一种方式了。</p>
+<h2 id="获取头像和昵称"><a href="#获取头像和昵称" class="headerlink" title="获取头像和昵称"></a>获取头像和昵称</h2><p>当前的微信小程序已经不支持通过 <code>wx.getUserInfo</code> 来获取用户的头像和昵称了，调用 <code>wx.getUserInfo</code> 会返回统一的灰色头像和统一的昵称（微信用户），相关的链接为：<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/000cacfa20ce88df04cb468bc52801">小程序登录、用户信息相关接口调整说明</a> 。</p>
+<p>如果需要使用微信头像和昵称的话，需要通过 button 指定的 <code>open-type</code> 和事件来触发：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">chooseAvatar</span> = (<span class="params">e</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 头像</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> &#123; avatarUrl &#125; = e.<span class="property">detail</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">open-type</span>=<span class="string">&quot;chooseAvatar&quot;</span> @<span class="attr">chooseavatar</span>=<span class="string">&quot;chooseAvatar&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 弹出键盘的上端会有微信昵称，可以点击直接填入  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;nickname&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果图可以在微信的文档中看到：<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/userProfile.html">开放能力&#x2F;用户信息&#x2F;获取头像昵称</a> 。</p>
+<h2 id="获取手机号码"><a href="#获取手机号码" class="headerlink" title="获取手机号码"></a>获取手机号码</h2><p>一般小程序会通过用户 unionID 或者手机号来区分唯一用户，在我这次做的小程序中，我们使用的是手机号。</p>
+<p>在微信小程序中，需要通过 button 指定的 <code>open-type</code> 和事件来触发：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">getPhoneNumber</span> = (<span class="params">e</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 把这个 code 给后端，消费后就能拿到用户的手机号，根据这个手机号</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 如果没注册的情况下进行注册，然后返回 token 表示已登录</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 如果已注册，直接返回 token 表示已登录</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> &#123; code &#125; = e.<span class="property">detail</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">open-type</span>=<span class="string">&quot;getPhoneNumber&quot;</span> @<span class="attr">getphonenumber</span>=<span class="string">&quot;getPhoneNumber&quot;</span>&gt;</span>&gt;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的是，可能组件库并没有将 <code>open-type</code> 作为 prop 传入，这时候要么自己用原生的 button 来写，要么就要把 button 当作 view 来使用。</p>
+<p>这里我使用的是后面的方法，写成代码看起来如下（这里以登录为例子）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 这个 checked 是比如说我们要同意协议的步骤</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> checked = <span class="title function_">ref</span>(<span class="literal">false</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- button 套 button --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-if</span>=<span class="string">&quot;checked&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">class</span>=<span class="string">&quot;loginButton&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">open-type</span>=<span class="string">&quot;getPhoneNumber&quot;</span></span></span><br><span class="line"><span class="tag">    @<span class="attr">getphonenumber</span>=<span class="string">&quot;getPhoneNumber&quot;</span></span></span><br><span class="line"><span class="tag">  &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sar-button</span> <span class="attr">:loading</span>=<span class="string">&quot;loading&quot;</span> <span class="attr">round</span>&gt;</span>手机号一键登录<span class="tag">&lt;/<span class="name">sar-button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">sar-button</span> <span class="attr">v-else</span> <span class="attr">:loading</span>=<span class="string">&quot;loading&quot;</span> <span class="attr">round</span> @<span class="attr">click</span>=<span class="string">&quot;loginNoPermission&quot;</span>&gt;</span></span><br><span class="line">    手机号一键登录</span><br><span class="line">  <span class="tag">&lt;/<span class="name">sar-button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里要注意的是 button 在微信小程序里面的默认样式的边框是通过伪类 <code>::after</code> 来设置的，这里覆盖要从 <code>::after</code> 覆盖：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">lang</span>=<span class="string">&quot;scss&quot;</span> <span class="attr">scoped</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.loginButton</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">padding</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">margin</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">font-size</span>: inherit;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">appearance</span>: none;</span></span><br><span class="line"><span class="language-css"></span></span><br><span class="line"><span class="language-css">  <span class="comment">/* 下面的样式可以去掉 button 的边框 */</span></span></span><br><span class="line"><span class="language-css">  &amp;<span class="selector-pseudo">::after</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">border</span>: none;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>看起来不是很 nice ，但确实解决了所需的功能，如果你有其他的写法，欢迎评论！</p>
+<h2 id="识别-html-代码"><a href="#识别-html-代码" class="headerlink" title="识别 html 代码"></a>识别 html 代码</h2><p>在 H5 中，如果要识别一段 html 代码，一般我们使用 <code>v-html</code> ，或者直接通过 dom 操作（ <code>innerHTML</code> ） </p>
+<p>在 uniapp 中，我们依然可以用 <code>v-html</code> ，它在微信小程序中会被编译为 <code>rich-text</code> ，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812064135686.avif"></p>
+<p>在什么情况下我们会要使用到这个特性呢，最常见的应该就是编写用户协议的页面。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 后端通过接口把 html 内容发给前端，前端赋给 content 即可显示</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> content = <span class="title function_">ref</span>(<span class="string">&quot;&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">v-html</span>=<span class="string">&quot;content&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的 <code>v-html</code> 在微信小程序中会被编译为一个 rich-text 子元素：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812064923042.avif"></p>
+<p>注意，如果需要识别 <code>\n</code> 之类的，需要使用 text 标签而不是 view 标签，在 view 标签中， <code>\n</code> 只会被识别为空格，而 text 才会识别为换行，例子如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span>&gt;</span>你好\n世界<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">text</span>&gt;</span>你好\n世界<span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812065445508.avif"></p>
+<p><code>rich-text</code> 无法识别 <code>\n</code> ，会报错，如果 html 代码中混入了 <code>\n</code> ，则需要 <code>replace</code> 转化一下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">v-html</span>=<span class="string">&quot;&#x27;你好\n世界&#x27;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>报错如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812065702903.avif"></p>
+<h2 id="vue3-中通过-import-导入组件报错"><a href="#vue3-中通过-import-导入组件报错" class="headerlink" title="vue3 中通过 import 导入组件报错"></a>vue3 中通过 import 导入组件报错</h2><p>在 uniapp 中，项目的目录几乎固定，在 <code>components</code> 中编写公共组件，在 <code>pages</code> 编写页面组件，这样子写不需要写 import 语句。</p>
+<p>但某些时候我们需要对一个很长的页面需要拆开为一些局部的组件，这些局部的组件只会被一个页面使用，这时候如果我们使用 import 导入，则会报错：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- pages/test/index.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">HelloWorld</span> <span class="keyword">from</span> <span class="string">&quot;./hello-world.vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">HelloWorld</span>&gt;</span><span class="tag">&lt;/<span class="name">HelloWorld</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- pages/test/hello-world.vue --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span>&gt;</span>hello world<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这时执行 <code>npm run dev:mp-weixin</code> 之后，控制台就会显示一个报错：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812071205214.avif"></p>
+<p>这个问题目前看起来是 uniapp 的问题，相关 issue 为 <a target="_blank" rel="noopener" href="https://github.com/dcloudio/uni-app/issues/4952">#4952</a> 。</p>
+<p>解决方法有两个：</p>
+<ul>
+<li>降低 uniapp 版本。</li>
+<li>添加一个临时的 vite 插件。</li>
+</ul>
+<p>依赖的版本这种基本不会乱改，所以这里我们用第二种方法，代码如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> uni <span class="keyword">from</span> <span class="string">&quot;@dcloudio/vite-plugin-uni&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;vite&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// https://vitejs.dev/config/</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="title function_">uni</span>(),</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">// 修复微信小程序无法导入组件</span></span><br><span class="line">      <span class="comment">// https://github.com/dcloudio/uni-app/issues/4952</span></span><br><span class="line">      <span class="comment">// 自定义插件禁用vite:vue插件的devToolsEnabled，强制编译 vue 模板时 inline 为 true</span></span><br><span class="line">      <span class="comment">// 不然在 setup 中导入组件会报错</span></span><br><span class="line">      <span class="attr">name</span>: <span class="string">&quot;fix-vite-plugin-vue&quot;</span>,</span><br><span class="line">      <span class="title function_">configResolved</span>(<span class="params">config</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> plugin = config.<span class="property">plugins</span>.<span class="title function_">find</span>(<span class="function">(<span class="params">p</span>) =&gt;</span> p.<span class="property">name</span> === <span class="string">&quot;vite:vue&quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (plugin &amp;&amp; plugin.<span class="property">api</span> &amp;&amp; plugin.<span class="property">api</span>.<span class="property">options</span>) &#123;</span><br><span class="line">          plugin.<span class="property">api</span>.<span class="property">options</span>.<span class="property">devToolsEnabled</span> = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>重新执行 <code>npm run dev:mp-weixin</code> 之后代码就不报错了。</p>
+<h2 id="键盘高度"><a href="#键盘高度" class="headerlink" title="键盘高度"></a>键盘高度</h2><p>当需要使用 input 弹出键盘的时候，我们需要注意键盘高度。</p>
+<p>关于键盘高度有两个相关的属性：</p>
+<ul>
+<li>adjust-position</li>
+</ul>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812073144480.avif"></p>
+<ul>
+<li>cursor-spacing</li>
+</ul>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812073902771.avif"></p>
+<p>一般而言只需要设置一下 <code>cursor-spacing</code> 即可，在我的项目中这个值为 <code>40rpx</code> 。</p>
+<h2 id="安全高度"><a href="#安全高度" class="headerlink" title="安全高度"></a>安全高度</h2><p>在安卓和 iPhone 中，全面屏会有一个底部的线，这部分在正常情况下我们应该通过 css 来抬高相关的内容，避免和遮挡到内容</p>
+<p>通过 css 的 <code>env</code> 来获取安全高度</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.safeHeight</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="built_in">env</span>(safe-area-inset-bottom); // ios &gt;= <span class="number">11.2</span></span><br><span class="line">  <span class="attribute">height</span>: <span class="built_in">constant</span>(safe-area-inset-bottom); // ios &lt; <span class="number">11.2</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>safe-area-inset-bottom</code> 就是底部的应该排除的高度</p>
+<p>在模拟器中，可以切换机型来查看，比如切换成 iPhone X</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080510672.avif"></p>
+<p>当然，这个样式只在需要自定义底部样式的时候才有用，如果使用配置文件来生成 tabBar ，那么会自动抬高，就跟如上截图一样，</p>
+<p>自定义底部的情况下，没有设置安全高度，则会出现下面的情况：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080815082.avif"></p>
+<p>当你设置安全高度后：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/08/12/20240812080848889.avif"></p>
+<p>在安卓手机中，似乎安全高度是系统层面会直接抬高，所以设不设置都没关系。</p>
+<h2 id="input-弹出键盘页面上移问题"><a href="#input-弹出键盘页面上移问题" class="headerlink" title="input 弹出键盘页面上移问题"></a>input 弹出键盘页面上移问题</h2><p>在前面键盘高度一节，提及了两个属性 <code>adjust-position</code> 和 <code>cursor-spacing</code> 。</p>
+<p>想象一下此时你正在编写一个聊天的界面，此时一般的布局是，使用纵向 flex ，顶部和底部固定，中间 <code>flex-grow</code> 设为 1 ，底部放置一个 input ，中间能够滚动查看消息。这时代码一般长下面这样子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;top&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scroll-view</span> <span class="attr">scroll-y</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 聊天消息列表 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">scroll-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;footer&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span>&gt;</span>发送<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span> <span class="attr">lang</span>=<span class="string">&quot;scss&quot;</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.page</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">    </span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.top</span>,</span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.footer</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">flex-shrink</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.content</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">flex-grow</span>: <span class="number">1</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果此时点击这个底部的 input 弹出键盘的时候，此时页面可能会造成整体上移，顶部会被上移到屏幕之外。</p>
+<p>这时的解决办法是，将 <code>adjust-position</code> 设置为 false ，然后通过 input 的 <code>keyboardheightchange</code> 事件来获取键盘的高度， </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">  </span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> height = <span class="title function_">ref</span>(<span class="number">0</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onBlur</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  height.<span class="property">value</span> = <span class="number">0</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onKeyboardHeightChange</span> = (<span class="params">e</span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  height.<span class="property">value</span> = e.<span class="property">detail</span>.<span class="property">height</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;page&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;top&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scroll-view</span> <span class="attr">scroll-y</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 聊天消息列表 --&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">scroll-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">view</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">class</span>=<span class="string">&quot;footer&quot;</span> </span></span><br><span class="line"><span class="tag">      <span class="attr">:style</span>=<span class="string">&quot;&#123;</span></span></span><br><span class="line"><span class="string"><span class="tag">        paddingBottom: `$&#123;height&#125;px`</span></span></span><br><span class="line"><span class="string"><span class="tag">      &#125;&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">input</span> </span></span><br><span class="line"><span class="tag">        <span class="attr">:adjust-position</span>=<span class="string">&quot;false&quot;</span> </span></span><br><span class="line"><span class="tag">        @<span class="attr">keyboardheightchange</span>=<span class="string">&quot;onKeyboardHeightChange&quot;</span></span></span><br><span class="line"><span class="tag">        @<span class="attr">blur</span>=<span class="string">&quot;onBlur&quot;</span></span></span><br><span class="line"><span class="tag">      /&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">button</span>&gt;</span>发送<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span> <span class="attr">scoped</span> <span class="attr">lang</span>=<span class="string">&quot;scss&quot;</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-class">.page</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">display</span>: flex;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">flex-direction</span>: column;</span></span><br><span class="line"><span class="language-css">    </span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.top</span>,</span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.footer</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">flex-shrink</span>: <span class="number">0</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">  <span class="selector-class">.content</span> &#123;</span></span><br><span class="line"><span class="language-css">    <span class="attribute">flex-grow</span>: <span class="number">1</span>;</span></span><br><span class="line"><span class="language-css">  &#125;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意要在 <code>blur</code> 事件里面重置 height ，不然某些情况下键盘收起后 <code>keyboardheightchange</code> 不触发导致 UI 异常。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>不得不说，uniapp 和微信开发者工具的配合真的很差，很多时候都是 uniapp 项目更改了某些文件，但是没有识别出来，导致微信开发者工具没法更新，有时又是 uniapp 改了某些文件，而微信开发者工具卡住，这时候就只能重启微信开发者工具。</p>
+<p>只能说开发的感受真的让他发狂…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/c5a6b54e6a5c" title="记一次使用 uniapp 开发微信小程序遇到的疑难杂症">https://prohibitorum.top/c5a6b54e6a5c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/uniapp/" rel="tag"># uniapp</a>
+              <a href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/" rel="tag"># 微信小程序</a>
+              <a href="/tags/sard-uniapp/" rel="tag"># sard-uniapp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/497a0dff9256" rel="prev" title="使用 hexo-robots 来生成 robots.txt 文件">
+                  <i class="fa fa-angle-left"></i> 使用 hexo-robots 来生成 robots.txt 文件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/202da2aab6d1" rel="next" title="记一次分析某漫接口密钥">
+                  记一次分析某漫接口密钥 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1723113138"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

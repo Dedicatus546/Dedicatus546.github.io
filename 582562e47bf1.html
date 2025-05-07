@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言git SSH 连接使用代理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git SSH 连接使用代理">
+<meta property="og:url" content="https://prohibitorum.top/582562e47bf1">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言git SSH 连接使用代理。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128130549353.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128130715127.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128143111932.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128143427326.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128144920381.avif">
+<meta property="article:published_time" content="2024-11-26T21:19:41.000Z">
+<meta property="article:modified_time" content="2024-11-28T15:07:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="ssh">
+<meta property="article:tag" content="proxy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128130549353.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/582562e47bf1.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/582562e47bf1","path":"582562e47bf1.html","title":"git SSH 连接使用代理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>git SSH 连接使用代理 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#window-%E4%B8%8A%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">window 上设置代理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linux-%E4%B8%8A%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86"><span class="nav-number">2.2.</span> <span class="nav-text">linux 上设置代理</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/582562e47bf1">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="git SSH 连接使用代理 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          git SSH 连接使用代理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-26 21:19:41" itemprop="dateCreated datePublished" datetime="2024-11-26T21:19:41+00:00">2024-11-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-28 15:07:45" itemprop="dateModified" datetime="2024-11-28T15:07:45+00:00">2024-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>git SSH 连接使用代理。</p>
+<span id="more"></span>
+
+<p>众所周知， github 在国内属于时能访问，时而gg 。</p>
+<p>在 git 官方的配置中，已经支持对 http 和 https 的代理了，这里我们以 V2rayN 为例， V2rayN 默认的 http 代理为 <code>http://localhost:10809</code> ，然后执行以下脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global http.proxy http://localhost:10809</span><br><span class="line">git config --global https.proxy http://localhost:10809</span><br></pre></td></tr></table></figure>
+
+<p>这样子我们使用 <code>git clone https://github.com/Dedicatus546/jm-desktop.git</code> 时就能走代理。</p>
+<p>但是这样有一个问题，就是如果我们想要使用 git push 时，每次都得提交账号和密码。</p>
+<p>虽然 git 提供了 <code>git config credential.helper store</code> 来避免重复输入账号和密码，但是这会将账号和密码信息<strong>明文</strong>保存到本地文件上，这对账号的安全存在风险。</p>
+<p>所以一般我们是会使用 ssh 的方式来克隆仓库，在本地上生成一个公钥和私钥，然后把公钥设置到 github 上，就可以使用了。</p>
+<p>但是 ssh 的方式并不走上面的代理设置。我们需要在 ssh 侧来设置。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="window-上设置代理"><a href="#window-上设置代理" class="headerlink" title="window 上设置代理"></a>window 上设置代理</h2><p>在 window 上，我们需要一个 <code>ncat</code> 命令，来代理 ssh 连接。</p>
+<p>为了能够调用 <code>ncat</code> 命令，我们需要去 nmap 官网下载 window 对应的安装包</p>
+<p><a target="_blank" rel="noopener" href="https://nmap.org/download.html#windows">Download the Free Nmap Security Scanner for Linux&#x2F;Mac&#x2F;Windows</a></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128130549353.avif"></p>
+<p>安装之后我们可以测试一下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ncat --version</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128130715127.avif"></p>
+<p>接着我们执行 <code>ncat -h</code> ，看看用法：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">Ncat 7.95 ( https://nmap.org/ncat )</span><br><span class="line">Usage: ncat [options] [hostname] [port]</span><br><span class="line"></span><br><span class="line">Options taking a time assume seconds. Append &#x27;ms&#x27; for milliseconds,</span><br><span class="line">&#x27;s&#x27; for seconds, &#x27;m&#x27; for minutes, or &#x27;h&#x27; for hours (e.g. 500ms).</span><br><span class="line">  -4                         Use IPv4 only</span><br><span class="line">  -6                         Use IPv6 only</span><br><span class="line">  -C, --crlf                 Use CRLF for EOL sequence</span><br><span class="line">  -c, --sh-exec &lt;command&gt;    Executes the given command via /bin/sh</span><br><span class="line">  -e, --exec &lt;command&gt;       Executes the given command</span><br><span class="line">      --lua-exec &lt;filename&gt;  Executes the given Lua script</span><br><span class="line">  -g hop1[,hop2,...]         Loose source routing hop points (8 max)</span><br><span class="line">  -G &lt;n&gt;                     Loose source routing hop pointer (4, 8, 12, ...)</span><br><span class="line">  -m, --max-conns &lt;n&gt;        Maximum &lt;n&gt; simultaneous connections</span><br><span class="line">  -h, --help                 Display this help screen</span><br><span class="line">  -d, --delay &lt;time&gt;         Wait between read/writes</span><br><span class="line">  -o, --output &lt;filename&gt;    Dump session data to a file</span><br><span class="line">  -x, --hex-dump &lt;filename&gt;  Dump session data as hex to a file</span><br><span class="line">  -i, --idle-timeout &lt;time&gt;  Idle read/write timeout</span><br><span class="line">  -p, --source-port port     Specify source port to use</span><br><span class="line">  -s, --source addr          Specify source address to use (doesn&#x27;t affect -l)</span><br><span class="line">  -l, --listen               Bind and listen for incoming connections</span><br><span class="line">  -k, --keep-open            Accept multiple connections in listen mode</span><br><span class="line">  -n, --nodns                Do not resolve hostnames via DNS</span><br><span class="line">  -t, --telnet               Answer Telnet negotiations</span><br><span class="line">  -u, --udp                  Use UDP instead of default TCP</span><br><span class="line">      --sctp                 Use SCTP instead of default TCP</span><br><span class="line">  -v, --verbose              Set verbosity level (can be used several times)</span><br><span class="line">  -w, --wait &lt;time&gt;          Connect timeout</span><br><span class="line">  -z                         Zero-I/O mode, report connection status only</span><br><span class="line">      --append-output        Append rather than clobber specified output files</span><br><span class="line">      --send-only            Only send data, ignoring received; quit on EOF</span><br><span class="line">      --recv-only            Only receive data, never send anything</span><br><span class="line">      --no-shutdown          Continue half-duplex when receiving EOF on stdin</span><br><span class="line">      --allow                Allow only given hosts to connect to Ncat</span><br><span class="line">      --allowfile            A file of hosts allowed to connect to Ncat</span><br><span class="line">      --deny                 Deny given hosts from connecting to Ncat</span><br><span class="line">      --denyfile             A file of hosts denied from connecting to Ncat</span><br><span class="line">      --broker               Enable Ncat&#x27;s connection brokering mode</span><br><span class="line">      --chat                 Start a simple Ncat chat server</span><br><span class="line">      --proxy &lt;addr[:port]&gt;  Specify address of host to proxy through</span><br><span class="line">      --proxy-type &lt;type&gt;    Specify proxy type (&quot;http&quot;, &quot;socks4&quot;, &quot;socks5&quot;)</span><br><span class="line">      --proxy-auth &lt;auth&gt;    Authenticate with HTTP or SOCKS proxy server</span><br><span class="line">      --proxy-dns &lt;type&gt;     Specify where to resolve proxy destination</span><br><span class="line">      --ssl                  Connect or listen with SSL</span><br><span class="line">      --ssl-cert             Specify SSL certificate file (PEM) for listening</span><br><span class="line">      --ssl-key              Specify SSL private key (PEM) for listening</span><br><span class="line">      --ssl-verify           Verify trust and domain name of certificates</span><br><span class="line">      --ssl-trustfile        PEM file containing trusted SSL certificates</span><br><span class="line">      --ssl-ciphers          Cipherlist containing SSL ciphers to use</span><br><span class="line">      --ssl-servername       Request distinct server name (SNI)</span><br><span class="line">      --ssl-alpn             ALPN protocol list to use</span><br><span class="line">      --version              Display Ncat&#x27;s version information and exit</span><br></pre></td></tr></table></figure>
+
+<p>这里面重要的就是 <code>ncat [options] [hostname] [port]</code> 。</p>
+<p>其中 <code>[options]</code> 配置中，我们只要知道 <code>--proxy &lt;addr[:port]&gt;</code> 和 <code>--proxy-type &lt;type&gt;</code> 即可，即命令类似：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这里以 V2rayN 的默认 socks 地址为例</span></span><br><span class="line">ncat --proxy localhost:10808 --proxy-type socks5 hostname port</span><br></pre></td></tr></table></figure>
+
+<p>接着我们在 <code>.ssh</code> 文件夹下创建一个 <code>config</code> 文件，写入以下内容：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Host github.com</span><br><span class="line">  ProxyCommand ncat --proxy-type socks5 --proxy 127.0.0.1:10808 %h %p</span><br></pre></td></tr></table></figure>
+
+<p>这个 <code>ProxyCommand</code> 的配置可以在 <a target="_blank" rel="noopener" href="https://man.openbsd.org/ssh_config.5#ProxyCommand">ProxyCommand - ssh_config</a> 查阅。</p>
+<p>这里这个 <code>%h</code> 和 <code>%p</code> 就是该命令提供的 <a target="_blank" rel="noopener" href="https://man.openbsd.org/ssh_config.5#TOKENS">TOKEN</a> ，刚好对应 <code>ncat</code> 命令的后两个参数。</p>
+<p>然后打开控制台，执行 <code>ssh -vT git@github.com</code> 之后，可以看到：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128143111932.avif"></p>
+<p>如果全部没问题，最后会输出一句：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hi Dedicatus546(这里是你的密钥对应的用户)! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br></pre></td></tr></table></figure>
+
+<p>现在就可以愉快地克隆项目了，速度超快，超爽。</p>
+<p>不过需要注意，要确保 V2rayN 启动，不然代理地址不存在的话 ssh 连接会失败：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128143427326.avif"></p>
+<h2 id="linux-上设置代理"><a href="#linux-上设置代理" class="headerlink" title="linux 上设置代理"></a>linux 上设置代理</h2><p>linux 上和 window 上其实差不多，可以下载 ncat 的 linux 版本的 rpm 包：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/28/20241128144920381.avif"></p>
+<p>接着同样在 <code>config</code> 文件中配置即可。</p>
+<p>linux 下可能存在不同种类的代理命令（比如 nc 命令），只需要根据对应的命令修改 <code>ProxyCommand</code> 即可。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/582562e47bf1" title="git SSH 连接使用代理">https://prohibitorum.top/582562e47bf1</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/ssh/" rel="tag"># ssh</a>
+              <a href="/tags/proxy/" rel="tag"># proxy</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/62a21028aeac" rel="prev" title="ECMAScript2024（es15）新特性">
+                  <i class="fa fa-angle-left"></i> ECMAScript2024（es15）新特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/f2de7c48b49e" rel="next" title="记录广州申迪的前端面试">
+                  记录广州申迪的前端面试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1732777665"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

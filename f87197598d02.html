@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.7">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.7（译）">
+<meta property="og:url" content="https://prohibitorum.top/f87197598d02">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.7">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-23T15:36:22.000Z">
+<meta property="article:modified_time" content="2024-11-28T15:07:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/f87197598d02.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/f87197598d02","path":"f87197598d02.html","title":"TypeScript 5.7（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.7（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E4%BB%8E%E6%9C%AA%E5%88%9D%E5%A7%8B%E5%8C%96%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">检查从未初始化的变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E5%86%99%E7%9B%B8%E5%AF%B9%E8%B7%AF%E5%BE%84"><span class="nav-number">2.2.</span> <span class="nav-text">重写相对路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-%E2%80%93target-es2024-%E5%92%8C-%E2%80%93lib-es2024"><span class="nav-number">2.3.</span> <span class="nav-text">支持 –target es2024 和 –lib es2024</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%9C%E7%B4%A2%E7%A5%96%E5%85%88%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E9%A1%B9%E7%9B%AE%E6%89%80%E6%9C%89%E6%9D%83"><span class="nav-number">2.4.</span> <span class="nav-text">搜索祖先配置文件的项目所有权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E7%BB%84%E5%90%88%E9%A1%B9%E7%9B%AE%E7%9A%84%E7%BC%96%E8%BE%91%E6%8F%90%E4%BE%9B%E6%9B%B4%E5%BF%AB%E5%9C%B0%E9%A1%B9%E7%9B%AE%E6%89%80%E6%9C%89%E6%9D%83%E6%A3%80%E6%9F%A5%E3%80%82"><span class="nav-number">2.5.</span> <span class="nav-text">为组合项目的编辑提供更快地项目所有权检查。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%93module-nodenext-%E4%B8%8B%E5%90%88%E6%B3%95%E7%9A%84-JSON-%E5%AF%BC%E5%85%A5"><span class="nav-number">2.6.</span> <span class="nav-text">–module nodenext 下合法的 JSON 导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8-Node-%E4%B8%AD%E6%94%AF%E6%8C%81-V8-%E7%BC%96%E8%AF%91%E7%BC%93%E5%AD%98"><span class="nav-number">2.7.</span> <span class="nav-text">在 Node 中支持 V8 编译缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.8.</span> <span class="nav-text">需要注意的行为变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts"><span class="nav-number">2.8.1.</span> <span class="nav-text">lib.d.ts</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TypedArrays-%E7%8E%B0%E5%9C%A8%E6%98%AF-ArrayBufferLike-%E7%9A%84%E9%80%9A%E7%94%A8%E7%89%88%E6%9C%AC"><span class="nav-number">2.8.2.</span> <span class="nav-text">TypedArrays 现在是 ArrayBufferLike 的通用版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E7%B1%BB%E4%B8%AD%E7%9A%84%E9%9D%9E%E5%AD%97%E9%9D%A2%E6%96%B9%E6%B3%95%E5%90%8D%E5%88%9B%E5%BB%BA%E7%B4%A2%E5%BC%95%E7%AD%BE%E5%90%8D"><span class="nav-number">2.8.3.</span> <span class="nav-text">为类中的非字面方法名创建索引签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%BF%94%E5%9B%9E-null-%E5%92%8C-undefined-%E7%9A%84%E5%87%BD%E6%95%B0%E4%B8%8A%E6%8F%90%E7%A4%BA%E6%9B%B4%E5%A4%9A%E9%9A%90%E5%BC%8F-any-%E9%94%99%E8%AF%AF"><span class="nav-number">2.8.4.</span> <span class="nav-text">对返回 null 和 undefined 的函数上提示更多隐式 any 错误</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/f87197598d02">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.7（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.7（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-23 15:36:22" itemprop="dateCreated datePublished" datetime="2024-11-23T15:36:22+00:00">2024-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-28 15:07:45" itemprop="dateModified" datetime="2024-11-28T15:07:45+00:00">2024-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-7/">Announcing TypeScript 5.7</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="检查从未初始化的变量"><a href="#检查从未初始化的变量" class="headerlink" title="检查从未初始化的变量"></a>检查从未初始化的变量</h2><p>很长一段时间，当一个变量在所有先前的分支中未被初始化时， TypeScript 已经能够捕获这个问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="attr">result</span>: number</span><br><span class="line"><span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">  result = <span class="title function_">doSomeWork</span>();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> temporaryWork = <span class="title function_">doSomeWork</span>();</span><br><span class="line">  temporaryWork *= <span class="number">2</span>;</span><br><span class="line">  <span class="comment">// 忘记给 result 赋值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result); <span class="comment">// 错误，变量 result 在赋值前使用</span></span><br></pre></td></tr></table></figure>
+
+<p>不幸的是，某些地方这种分析并不起作用。比如，如果在其他的函数中访问这个变量，类型系统就无法知道这个函数何时会被调用，反而会以“乐观”的观点认为变量会被初始化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">result</span>: number</span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">    result = <span class="title function_">doSomeWork</span>();</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> temporaryWork = <span class="title function_">doSomeWork</span>();</span><br><span class="line">    temporaryWork *= <span class="number">2</span>;</span><br><span class="line">    <span class="comment">// 忘记给 result 赋值</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">printResult</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">printResult</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(result); <span class="comment">// 这里不会报错</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然 TypeScript 5.7 仍然对可能被初始化的变量保持宽容，但是类型系统已经能够对那些完全未被初始化的变量进行报错了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">result</span>: number</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 做一些操作，但是忘记给 result 赋值</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">printResult</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(result); <span class="comment">// 错误，变量 result 在赋值前使用</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>感谢 Github 用户 <a target="_blank" rel="noopener" href="https://github.com/Zzzen">Zzzen</a> 贡献了这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/55887">PR</a> 。</p>
+<h2 id="重写相对路径"><a href="#重写相对路径" class="headerlink" title="重写相对路径"></a>重写相对路径</h2><p>一些工具和运行时允许用户“就地”执行 TypeScript 代码，这意味着无需构建步骤来生成 JavaScript 代码。比如， ts-node，tsx，Deno 以及 Bun 都支持直接运行 <code>.ts</code> 文件。最近， Node 开始研究通过 <code>--experimental-strip-types</code> （很快会取消实验标记）和 <code>--experimental-transform-types</code> 标记来提供该特性支持。这是极其方便的，因为这允许我们无需关心去重新运行一个构建任务，从而进行更快地迭代。</p>
+<p>不过，使用这些模式时需要知道一些复杂性。为了最大限度地兼容所有的这些工具，一个被就地导入的 TypeScript 文件<strong>必须</strong>在处于运行时时导入合适的 TypeScript 扩展名。比如，为了导入一个名为 <code>foo.ts</code> 的文件，我们必须在 Node 的实验性支持开启的情况下编写如下的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> foo <span class="keyword">from</span> <span class="string">&quot;./foo.ts&quot;</span>; <span class="comment">// &lt;- 这里需要导入 ./foo.ts 而不是 ./foo.js</span></span><br></pre></td></tr></table></figure>
+
+<p>通常情况下，如果我们这样做的话 TypeScript 会报告一个错误，因为 TypeScript 期待我们导入的是输出文件。由于一些工具确实允许 <code>.ts</code> 导入， TypeScript 在过去的一段时间内已经支持通过一个名为 <code>--allowImportingTsExtensions</code> 的选项来支持这种导入风格了。这看起来很好，但是如果我们需要的是生成的 <code>.js</code> 文件而不是 <code>.ts</code> 文件会发生什么情况？这对需要能够只分发 <code>.js</code> 文件的库作者来说是一个需求，但目前为止， TypeScript 已经避免重写任何路径。</p>
+<p>为了支持这个设想，我们添加了一个新的编译器选项，名为 <code>--rewriteRelativeImportExtensions</code> 。当一个导入路径为相对路径（以 <code>./</code> 和 <code>../</code> 开头），并以一个 TypeScript 扩展名（<code>.ts</code> ， <code>.tsx</code> ， <code>.mts</code> ， <code>.cts</code> ），并且不是一个声明文件时，编译器会把该路径重写为对应的 JavaScript 扩展名（ <code>.js</code> ， <code>.jsx</code> ， <code>.mjs</code> ， .<code>cjs</code>）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开启 --rewriteRelativeImportExtensions</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这些路径会被重写</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> foo <span class="keyword">from</span> <span class="string">&quot;./foo.ts&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> bar <span class="keyword">from</span> <span class="string">&quot;../someFolder/bar.mts&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这些在任何情况下都不会被重写</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> a <span class="keyword">from</span> <span class="string">&quot;./foo&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> b <span class="keyword">from</span> <span class="string">&quot;some-package/file.ts&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> c <span class="keyword">from</span> <span class="string">&quot;@some-scope/some-package/file.ts&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> d <span class="keyword">from</span> <span class="string">&quot;#/file.ts&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> e <span class="keyword">from</span> <span class="string">&quot;./file.js&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这允许我们编写可以就地运行的 TypeScript 代码，然后在准备好时将其编译成 JavaScript 。</p>
+<p>现在，我们注意到 TypeScript 通常会避免重写路径，这是有一些原因的，不过最明显的原因是动态导入。如果一个开发者编写了如下的代码，处理 <code>import</code> 收到的路径并不是一件容易的事。实际上，我们不可能去覆盖任何项目依赖的 <code>import</code> 行为。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getPath</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Math</span>.<span class="title function_">random</span>() &lt; <span class="number">0.5</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;./foo.ts&quot;</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;./foo.js&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> myImport = <span class="keyword">await</span> <span class="keyword">import</span>(<span class="title function_">getPath</span>());</span><br></pre></td></tr></table></figure>
+
+<p>另一个问题是（就如上面所示）只有相对路径会被重写，这种重写是“天真地”。这意味着任何依赖 TypeScript 的 <code>baseUrl</code> 和 <code>paths</code> 的路径都不会被重写。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;module&quot;</span><span class="punctuation">:</span> <span class="string">&quot;nodenext&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;paths&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@/*&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;./src/*&quot;</span><span class="punctuation">]</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不会被转化</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> utilities <span class="keyword">from</span> <span class="string">&quot;@/utilities.ts&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>任何通过 <code>package.json</code> 的 <code>exports</code> 和 <code>imports</code> 字段解析路径也不会。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;my-package&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;imports&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;#root/*&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./dist/*&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不会被转化</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> utilities <span class="keyword">from</span> <span class="string">&quot;#root/utilities.ts&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>因此，如果你使用了带有多个相互引用的包的工作区风格的项目布局，你可能需要使用带有 <a target="_blank" rel="noopener" href="https://nodejs.org/api/packages.html#resolving-user-conditions">scoped custom conditions</a> 的 <a target="_blank" rel="noopener" href="https://nodejs.org/api/packages.html#conditional-exports">conditional exports</a> 来使其正常工作：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;my-package&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exports&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;.&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@my-package/development&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./src/index.ts&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;import&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./lib/index.js&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./*&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;@my-package/development&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./src/*.ts&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;import&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./lib/*.js&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>任何时候只要你想导入 <code>.ts</code> 文件，你可以执行 <code>node --conditions=@my-package/development</code> 。</p>
+<p>注意我们为条件 <code>@my-package/development</code> 使用的“命名空间”和“范围”。这是一个临时性的解决方案，可以避免可能使用 <code>development</code> 条件下的依赖产生的冲突。如每个人都在他们的包中使用 <code>development</code> ，那么解析一个 <code>.ts</code> 文件的解析过程不一定能正常工具。这个理念和 Colin McDonnell 的 <a target="_blank" rel="noopener" href="https://colinhacks.com/essays/live-types-typescript-monorepo#:~:text=custom%20conditions">Live types in a TypeScript monorepo</a> 以及 <a target="_blank" rel="noopener" href="https://github.com/isaacs/tshy#loading-from-source">tshy’s guidance for loading from source</a> 文章所描述的相似。</p>
+<p>更多关于这个特性运作的具体细节，可以阅读此处 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59767">PR</a> 。</p>
+<h2 id="支持-–target-es2024-和-–lib-es2024"><a href="#支持-–target-es2024-和-–lib-es2024" class="headerlink" title="支持 –target es2024 和 –lib es2024"></a>支持 –target es2024 和 –lib es2024</h2><p>TypeScript 5.7 现在支持 <code>--target es2024</code> 选项，这样用户就可以将目标切到 ECMAScript 2024 运行时。这个 target 主要是指定了 <code>--lib es2024</code> 选项，它包含了许多特性，比如 <code>SharedArrayBuffer</code> 和 <code>ArrayBuffer</code> ， <code>Object.groupBy</code> ， <code>Map.groupBy</code> ， <code>Promise.withResolvers</code> 等。 <code>Atomics.waitAsync</code> 也从 <code>--lib es2022</code> 移动到了 <code>--lib es2024</code> 。</p>
+<p>注意作为变更的一部分的 <code>SharedArrayBuffer</code> 和 <code>ArrayBuffer</code> ，这两者现在有点不同。为了弥补差异以及保留底层的 buffer 类型，现在所有的 <code>TypedArrays</code> （比如 <code>Uint8Array</code> 以及其他）都是带泛型的。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Uint8Array</span>&lt;<span class="title class_">TArrayBuffer</span> <span class="keyword">extends</span> <span class="title class_">ArrayBufferLike</span> = <span class="title class_">ArrayBufferLike</span>&gt; &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个 <code>TypedArray</code> 现在包含了一个名为 <code>TArrayBuffer</code> 的类型参数，尽管这个类型参数有一个默认的类型，即我们可以继续使用 <code>Int32Array</code> 而不用显式地使用 <code>Int32Array&lt;ArrayBufferLike&gt;</code> 。</p>
+<p>如果你遇到了任何关于这个更新的问题，你可能需要更新 <code>@types/node</code> 包。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/petamoriken">Kenta Moriuchi</a> 贡献了绝大部分的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/58573">工作</a>。</p>
+<h2 id="搜索祖先配置文件的项目所有权"><a href="#搜索祖先配置文件的项目所有权" class="headerlink" title="搜索祖先配置文件的项目所有权"></a>搜索祖先配置文件的项目所有权</h2><p>当一个 TypeScript 文件由一个编辑器使用 TSServer 加载（比如 Visual Studio 或者 VS Code）时，编辑器将会尝试去寻找拥有该文件的相关的 <code>tsconfig.json</code> 文件。为了实现它，程序需要沿着编辑文件的位置从目录树一直往上查找任何名为 <code>tsconfig.json</code> 的文件。</p>
+<p>先前，这个搜索会在找到第一个 <code>tsconfig.json</code> 文件的时候停止。然而，想象一下如下的项目结构：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">project/</span><br><span class="line">├── src/</span><br><span class="line">│   ├── foo.ts</span><br><span class="line">│   ├── foo-test.ts</span><br><span class="line">│   ├── tsconfig.json</span><br><span class="line">│   └── tsconfig.test.json</span><br><span class="line">└── tsconfig.json</span><br></pre></td></tr></table></figure>
+
+<p>这个结构中，我们的想法是 <code>src/tsconfig.json</code> 为项目的“主要”配置文件， <code>src/tsconfig.test.json</code> 为执行测试的配置文件。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/tsconfig.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;outDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../dist&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exclude&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;**/*.test.ts&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/tsconfig.test.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;outDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../dist/test&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;**/*.test.ts&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;references&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./tsconfig.json&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// 这是一个工具区风格或者叫解决方案风格的 tsconfig 。</span></span><br><span class="line">  <span class="comment">// 它不指定任何的文件，而是只引用所有实际的项目。</span></span><br><span class="line">  <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;references&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./src/tsconfig.json&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./src/tsconfig.test.json&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的问题是当编辑 <code>foo-test.ts</code> 时，编辑器会将 <code>project/src/tsconfig.json</code> 当做“拥有”该文件的配置文件，但是这却不是我们想要的。如果在此时就停止向上查找的话，这可能不能让人满意。先前避免这个问题的唯一的方式是将 <code>src/tsconfig.json</code> 重命名为类似 <code>src/tsconfig.src.json</code> 这样的命名，这样所有的文件就会匹配到顶层的引用了所有可能项目的 <code>tsconfig.json</code> 文件。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">project/</span><br><span class="line">├── src/</span><br><span class="line">│   ├── foo.ts</span><br><span class="line">│   ├── foo-test.ts</span><br><span class="line">│   ├── tsconfig.src.json</span><br><span class="line">│   └── tsconfig.test.json</span><br><span class="line">└── tsconfig.json</span><br></pre></td></tr></table></figure>
+
+<h2 id="为组合项目的编辑提供更快地项目所有权检查。"><a href="#为组合项目的编辑提供更快地项目所有权检查。" class="headerlink" title="为组合项目的编辑提供更快地项目所有权检查。"></a>为组合项目的编辑提供更快地项目所有权检查。</h2><p>想象一下有一个如下结构的巨大代码库：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">packages</span><br><span class="line">├── graphics/</span><br><span class="line">│   ├── tsconfig.json</span><br><span class="line">│   └── src/</span><br><span class="line">│       └── ...</span><br><span class="line">├── sound/</span><br><span class="line">│   ├── tsconfig.json</span><br><span class="line">│   └── src/</span><br><span class="line">│       └── ...</span><br><span class="line">├── networking/</span><br><span class="line">│   ├── tsconfig.json</span><br><span class="line">│   └── src/</span><br><span class="line">│       └── ...</span><br><span class="line">├── input/</span><br><span class="line">│   ├── tsconfig.json</span><br><span class="line">│   └── src/</span><br><span class="line">│       └── ...</span><br><span class="line">└── app/</span><br><span class="line">    ├── tsconfig.json</span><br><span class="line">    ├── some-script.js</span><br><span class="line">    └── src/</span><br><span class="line">        └── ...</span><br></pre></td></tr></table></figure>
+
+<p>每个在 <code>packages</code> 下的文件夹都是一个单独的 TypeScript 项目， <code>app</code> 文件夹为主项目，它依赖所有其他的项目。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app/tsconfig.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;src&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;references&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../graphics/tsconfig.json&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../sound/tsconfig.json&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../networking/tsconfig.json&quot;</span> <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span> <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;../input/tsconfig.json&quot;</span> <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在请注意在 <code>app</code> 文件夹下有一个 <code>some-script.js</code> 的文件。当我们在编辑器中打开这个文件时，TypeScript 语言服务（它也可以处理 JavaScript 文件的编辑体验）不得不去弄清文件属于哪个项目，只有这样才能应用正确的设置。</p>
+<p>在这种情况下，最近的 <code>tsconfig.json</code> 文件不包含 <code>some-script.js</code> 文件，但是 TypeScript 仍会去询问“ <code>app/tsconfig.json</code> 引用的项目是否有一个包含了 <code>some-script</code> 文件？”。为了实现它，先前 TypeScript 会一个接一个地加载每个项目，在找到一个包含 <code>some-script.js</code> 文件的项目后立即停止。即使 <code>some-script.js</code> 不包含在根文件集合中， TypeScript 仍会去解析项目内的所有文件，因为某些根文件集合可能仍然间接引用了 <code>some-script.js</code> 。</p>
+<p>随着时间的推移我们发现这个行为在一些大型代码库中造成了极端且不可预测的行为。开发者打开了一些杂散的脚本文件，然后发现这些文件需要等待整个代码库加载。</p>
+<p>万幸的是，被另一个项目（非工作区）引用的项目必须开启一个名为 <code>composite</code> 的标志，它强制执行一条规则，即必须预先知道所有的输入源文件。所以当探测一个 <code>composite</code> 项目时， TypeScript 5.7 将只检查该文件是否属于该项目的根文件集合。这可以避免这种常见的最坏的情况的行为。</p>
+<p>更多信息可以查看该 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59688">PR</a> 。</p>
+<h2 id="–module-nodenext-下合法的-JSON-导入"><a href="#–module-nodenext-下合法的-JSON-导入" class="headerlink" title="–module nodenext 下合法的 JSON 导入"></a>–module nodenext 下合法的 JSON 导入</h2><p>当在 <code>--module nodenext</code> 下导入一个 <code>.json</code> 文件时， TypeScript 现在将会强制某些规则来防止运行时错误。</p>
+<p>其一是任何 JSON 文件导入都需要包含一个 <code>type: &quot;json&quot;</code> 的导入属性。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> myConfig <span class="keyword">from</span> <span class="string">&quot;./myConfig.json&quot;</span>;</span><br><span class="line"><span class="comment">//                   ~~~~~~~~~~~~~~~~~</span></span><br><span class="line"><span class="comment">// ❌ --module nodenext 下导入 JSON 必须显式指定 type: &quot;json&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> myConfig <span class="keyword">from</span> <span class="string">&quot;./myConfig.json&quot;</span> <span class="keyword">with</span> &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br><span class="line"><span class="comment">//                                          ^^^^^^^^^^^^^^^^</span></span><br><span class="line"><span class="comment">// ✅ 正确</span></span><br></pre></td></tr></table></figure>
+
+<p>在这个验证规则的上层， TypeScript 将不会生成“命名”导出，一个 JSON 导入的内容只能通过默认属性来获取。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 正确:</span></span><br><span class="line"><span class="keyword">import</span> myConfigA <span class="keyword">from</span> <span class="string">&quot;./myConfig.json&quot;</span> <span class="keyword">with</span> &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br><span class="line"><span class="keyword">let</span> version = myConfigA.<span class="property">version</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">///////////</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> myConfigB <span class="keyword">from</span> <span class="string">&quot;./myConfig.json&quot;</span> <span class="keyword">with</span> &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 错误:</span></span><br><span class="line"><span class="keyword">let</span> version = myConfig.<span class="property">version</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确:</span></span><br><span class="line"><span class="keyword">let</span> version = myConfig.<span class="property">default</span>.<span class="property">version</span>;</span><br></pre></td></tr></table></figure>
+
+<p>更多变更请查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60019">PR</a> 。</p>
+<h2 id="在-Node-中支持-V8-编译缓存"><a href="#在-Node-中支持-V8-编译缓存" class="headerlink" title="在 Node 中支持 V8 编译缓存"></a>在 Node 中支持 V8 编译缓存</h2><p>Node 22 支持了一个名为 <a target="_blank" rel="noopener" href="https://github.com/nodejs/node/pull/54501">module.enableCompileCache()</a> 的新 API 。这个 API 允许工作执行完第一次后在运行时重用一些已完成的解析和编译工作。</p>
+<p>TypeScript 5.7 现在利用了此 API ，所以能更快地开始工作。在我们的某些测试中，我们发现在执行 <code>tsc --version</code> 时有大约 2.5 倍的速度提升。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Benchmark 1: node ./built/local/_tsc.js --version (*without* caching)</span><br><span class="line">  Time (mean ± σ):     122.2 ms ±   1.5 ms    [User: 101.7 ms, System: 13.0 ms]</span><br><span class="line">  Range (min … max):   119.3 ms … 132.3 ms    200 runs</span><br><span class="line"> </span><br><span class="line">Benchmark 2: node ./built/local/tsc.js --version  (*with* caching)</span><br><span class="line">  Time (mean ± σ):      48.4 ms ±   1.0 ms    [User: 34.0 ms, System: 11.1 ms]</span><br><span class="line">  Range (min … max):    45.7 ms …  52.8 ms    200 runs</span><br><span class="line"> </span><br><span class="line">Summary</span><br><span class="line">  node ./built/local/tsc.js --version ran</span><br><span class="line">    2.52 ± 0.06 times faster than node ./built/local/_tsc.js --version</span><br></pre></td></tr></table></figure>
+
+<p>更多信息查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59720">PR</a> 。</p>
+<h2 id="需要注意的行为变更"><a href="#需要注意的行为变更" class="headerlink" title="需要注意的行为变更"></a>需要注意的行为变更</h2><h3 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h3><p>详情请查看<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60061">此处</a>。</p>
+<h3 id="TypedArrays-现在是-ArrayBufferLike-的通用版本"><a href="#TypedArrays-现在是-ArrayBufferLike-的通用版本" class="headerlink" title="TypedArrays 现在是 ArrayBufferLike 的通用版本"></a>TypedArrays 现在是 ArrayBufferLike 的通用版本</h3><p>在 ECMAScript 2024 中， <code>ShareArrayBuffer</code> 和 <code>ArrayBuffer</code> 的类型有略微不同。为了弥补差异以及保留底层的 <code>buffer</code> 类型，现在所有的 <code>TypedArrays</code> （比如 <code>Uint8Array</code> 以及其他）都是带泛型的。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Uint8Array</span>&lt;<span class="title class_">TArrayBuffer</span> <span class="keyword">extends</span> <span class="title class_">ArrayBufferLike</span> = <span class="title class_">ArrayBufferLike</span>&gt; &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每个 <code>TypedArray</code> 现在包含了一个名为 <code>TArrayBuffer</code> 的类型参数，尽管这个类型参数有一个默认的类型，即我们可以继续使用 <code>Int32Array</code> 而不用显式地使用 <code>Int32Array&lt;ArrayBufferLike&gt;</code> 。</p>
+<p>如果你遇到了任何关于这个更新的问题，比如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">error TS2322: Type &#x27;Buffer&#x27; is not assignable to type &#x27;Uint8Array&lt;ArrayBufferLike&gt;&#x27;.</span><br><span class="line">error TS2345: Argument of type &#x27;Buffer&#x27; is not assignable to parameter of type &#x27;Uint8Array&lt;ArrayBufferLike&gt;&#x27;.</span><br><span class="line">error TS2345: Argument of type &#x27;ArrayBufferLike&#x27; is not assignable to parameter of type &#x27;ArrayBuffer&#x27;.</span><br><span class="line">error TS2345: Argument of type &#x27;Buffer&#x27; is not assignable to parameter of type &#x27;string | ArrayBufferView | Stream | Iterable&lt;string | ArrayBufferView&gt; | AsyncIterable&lt;string | ArrayBufferView&gt;&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>你可能需要更新 <code>@types/node</code> 包。</p>
+<p>可以在此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59417">PR</a> 上阅读关于该变更的具体内容。</p>
+<h3 id="为类中的非字面方法名创建索引签名"><a href="#为类中的非字面方法名创建索引签名" class="headerlink" title="为类中的非字面方法名创建索引签名"></a>为类中的非字面方法名创建索引签名</h3><p>TypeScript 现在对类中的方法会有更加一致的行为，这也包括通过非字面的计算属性名称定义的方法。比如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">const</span> <span class="attr">symbolMethodName</span>: <span class="built_in">symbol</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  [symbolMethodName]() &#123; <span class="keyword">return</span> <span class="number">1</span> &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先前 TypeScript 只会以类似下面的方式展示这个类：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，从类型系统的角度看， <code>[symbolMethodName]</code> 对 <code>A</code> 的类型没有任何贡献。</p>
+<p>TypeScript 5.7 现在会更有意义地展示 <code>[symbolMethodName]() &#123;&#125;</code> 方法，并生成一个所以签名。因此，上面提及的代码会被解释为类似如下的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  [<span class="attr">x</span>: <span class="built_in">symbol</span>]: <span class="function">() =&gt;</span> <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个特性提供了与字面对象中的属性和方法一致的行为。</p>
+<p>更多信息查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59860">PR</a> 。</p>
+<h3 id="对返回-null-和-undefined-的函数上提示更多隐式-any-错误"><a href="#对返回-null-和-undefined-的函数上提示更多隐式-any-错误" class="headerlink" title="对返回 null 和 undefined 的函数上提示更多隐式 any 错误"></a>对返回 null 和 undefined 的函数上提示更多隐式 any 错误</h3><p>当一个函数表达式通过一个泛型类型签名返回的类型进行上下文类型化时， TypeScript 现在会适当地在 <code>noImplicitAny</code> 下提供一个隐式 <code>any</code> 错误，但在 <code>strictNullChecks</code> 下则不会。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">var</span> <span class="attr">p</span>: <span class="title class_">Promise</span>&lt;<span class="built_in">number</span>&gt;;</span><br><span class="line"><span class="keyword">const</span> p2 = p.<span class="title function_">catch</span>(<span class="function">() =&gt;</span> <span class="literal">null</span>);</span><br><span class="line"><span class="comment">//                 ~~~~~~~~~~</span></span><br><span class="line"><span class="comment">// error TS7011: Function expression, which lacks return-type annotation, implicitly has an &#x27;any&#x27; return type.</span></span><br><span class="line"><span class="comment">// 缺乏返回类型注释的函数默认有一个隐式的 any 返回类型</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/f87197598d02" title="TypeScript 5.7（译）">https://prohibitorum.top/f87197598d02</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/8daeef187878" rel="prev" title="记录使用 electron 的一次经历">
+                  <i class="fa fa-angle-left"></i> 记录使用 electron 的一次经历
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/62a21028aeac" rel="next" title="ECMAScript2024（es15）新特性">
+                  ECMAScript2024（es15）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1732777665"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

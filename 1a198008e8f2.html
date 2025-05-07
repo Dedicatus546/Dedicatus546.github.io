@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言为什么我们与-CSS-in-JS-分道扬镳（译）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么我们与 CSS-in-JS 分道扬镳（译）">
+<meta property="og:url" content="https://prohibitorum.top/1a198008e8f2">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言为什么我们与-CSS-in-JS-分道扬镳（译）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031318890.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031318869.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031319228.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031319976.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031320670.avif">
+<meta property="article:published_time" content="2023-05-03T13:52:54.000Z">
+<meta property="article:modified_time" content="2023-05-03T13:56:47.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="CSS-in-js">
+<meta property="article:tag" content="React">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031318890.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/1a198008e8f2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/1a198008e8f2","path":"1a198008e8f2.html","title":"为什么我们与 CSS-in-JS 分道扬镳（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>为什么我们与 CSS-in-JS 分道扬镳（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-in-js-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">CSS-in-js 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-in-js-%E7%9A%84%E4%BC%98%E5%8A%A3"><span class="nav-number">2.2.</span> <span class="nav-text">CSS-in-js 的优劣</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9"><span class="nav-number">2.2.1.</span> <span class="nav-text">优点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E6%80%A7%E8%A7%82%E7%82%B9"><span class="nav-number">2.2.2.</span> <span class="nav-text">中性观点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">2.2.3.</span> <span class="nav-text">缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%91%E9%99%8B%E7%82%B9"><span class="nav-number">2.2.4.</span> <span class="nav-text">丑陋点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%B1%E5%85%A5%E6%8E%A2%E8%AE%A8%E6%80%A7%E8%83%BD"><span class="nav-number">2.3.</span> <span class="nav-text">深入探讨性能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E6%B8%B2%E6%9F%93%E5%86%85%E9%83%A8%E8%BF%98%E6%98%AF%E6%B8%B2%E6%9F%93%E5%A4%96%E9%83%A8%E8%BF%9B%E8%A1%8C%E5%BA%8F%E5%88%97%E5%8C%96%E3%80%82"><span class="nav-number">2.3.1.</span> <span class="nav-text">在渲染内部还是渲染外部进行序列化。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%88%90%E5%91%98%E6%B5%8F%E8%A7%88%E7%BB%84%E4%BB%B6%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-number">2.3.2.</span> <span class="nav-text">对成员浏览组件的基准测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E7%81%AB%E7%84%B0%E5%9B%BE"><span class="nav-number">2.3.3.</span> <span class="nav-text">分析火焰图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8-Emotion-%E4%B8%8B%E5%AF%B9%E6%88%90%E5%91%98%E6%B5%8F%E8%A7%88%E7%BB%84%E4%BB%B6%E7%9A%84%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="nav-number">2.3.4.</span> <span class="nav-text">不使用 Emotion 下对成员浏览组件的基准测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%A0%B7%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-number">2.4.</span> <span class="nav-text">新的样式系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%90%8D"><span class="nav-number">2.4.1.</span> <span class="nav-text">工具类名</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E%E7%BC%96%E8%AF%91%E6%97%B6-CSS-in-js"><span class="nav-number">2.5.</span> <span class="nav-text">关于编译时 CSS-in-js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">2.6.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-Spot"><span class="nav-number">2.7.</span> <span class="nav-text">关于 Spot</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/1a198008e8f2">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="为什么我们与 CSS-in-JS 分道扬镳（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为什么我们与 CSS-in-JS 分道扬镳（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-05-03 13:52:54 / 修改时间：13:56:47" itemprop="dateCreated datePublished" datetime="2023-05-03T13:52:54+00:00">2023-05-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AF%91%E6%96%87/" itemprop="url" rel="index"><span itemprop="name">译文</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>20 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为什么我们与-CSS-in-JS-分道扬镳（译）</p>
+<span id="more"></span>
+
+<p>原帖地址：<a target="_blank" rel="noopener" href="https://dev.to/srmagura/why-were-breaking-up-wiht-css-in-js-4g9b">Why We’re Breaking Up with CSS-in-JS</a></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>哈喽，我是 Sam ，是 <a target="_blank" rel="noopener" href="https://www.spotvirtual.com/">Spot</a> 的软件工程师，也是 <a target="_blank" rel="noopener" href="https://emotion.sh/">Emotion</a> 的第二大活跃的维护者。 Emotion 是一个广受欢迎的 React 的 CSS-in-js 库。这篇文章将会深入研究最初吸引我使用 CSS-in-js 的理由，以及为什么我（和其他的 Spot 成员）决定放弃使用它。</p>
+<p>首先我们先从 CSS-in-js 的概述开始说起，讲述它的优点以及缺点。接着我们将会深入在 Spot 中 CSS-in-js 造成的性能问题，以及如何去避免这些问题。</p>
+<h2 id="CSS-in-js-是什么"><a href="#CSS-in-js-是什么" class="headerlink" title="CSS-in-js 是什么"></a>CSS-in-js 是什么</h2><p>顾名思义， CSS-in-js 允许你通过在 JavaScript 或者 TypeScript 代码中直接编写 CSS 样式来为你的 React 组件添加样式：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @emotion/react (css prop), with object styles</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">ErrorMessage</span>(<span class="params">&#123; children &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">css</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">color:</span> &#x27;<span class="attr">red</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">fontWeight:</span> &#x27;<span class="attr">bold</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    &gt;</span></span></span><br><span class="line"><span class="language-xml">      &#123;children&#125;</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// styled-components or @emotion/styled, with string styles</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">ErrorMessage</span> = styled.<span class="property">div</span><span class="string">`</span></span><br><span class="line"><span class="string">  color: red;</span></span><br><span class="line"><span class="string">  font-weight: bold;</span></span><br><span class="line"><span class="string">`</span>;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://styled-components.com/">styled-components</a> 和 <a target="_blank" rel="noopener" href="https://emotion.sh/">Emotions</a> 是 React 社区中最受欢迎的 CSS-in-js 库。虽然我只使用过 Emotion ，但我相信本文中提到的所有观点基于都可以同样的应用于 style-components 库上。</p>
+<p>本文专注于 CSS-in-js 的运行时，在 styled-components 和 Emotion 中都包含的一个分类。CSS-in-js 运行时可以简单地理解为当应用运行的时候，解释以及应用样式。我们会在文末简单地讨论下 CSS-in-js 地编译时间。</p>
+<h2 id="CSS-in-js-的优劣"><a href="#CSS-in-js-的优劣" class="headerlink" title="CSS-in-js 的优劣"></a>CSS-in-js 的优劣</h2><p>在我们深入 CSS-in-js 的编码模式的本质以及对性能的影响之前，我们先从一个高等级的概述开始，来说明为什么你会选择或者不会选择采用这项技术。</p>
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h3><p>1. <strong>局部范围样式</strong> ，但我们编写纯的 CSS 时，很容易在不经意间把样式应用到比原先打算的更大的范围。比如，想象你正在制作一个列表视图，每一行应该设置些 padding 间距和 border 边框，你可能会编写如下的样式：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.row</span> &#123;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0.5rem</span>;</span><br><span class="line">  <span class="attribute">border</span>: <span class="number">1px</span> solid <span class="number">#ddd</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>在几个月后当你完全忘记这个列表试图的时候，你会创建另一个包含行的组件，自然而然的，你会在这些行上设置 <code>className=&quot;row&quot;</code> 。现在新的组件的行有着一个难看的边框，但是你却不知道这是为什么！虽然这种类型的问题可以通过使用更长的类名或者更具体的选择器来解决，但是对于身为开发人员的你来说，你依然需要确保没有类名冲突。</p>
+<p>CSS-in-js 默认情况下通过样式局部化来完全解决这个问题。如果你编写如下的列表视图的行：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div css=&#123;&#123; <span class="attr">padding</span>: <span class="string">&#x27;0.5rem&#x27;</span>, <span class="attr">border</span>: <span class="string">&#x27;1px solid #ddd&#x27;</span> &#125;&#125;&gt;...&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里不可能把 padding 和 border 偶然地应用到不相关的元素上。</p>
+<blockquote>
+<p>注意 CSS Modules 也提供了局部范围样式。</p>
+</blockquote>
+<p>2. <strong>托管你的 CSS 样式</strong> 。如果你使用纯的 CSS ，你可能会把所有的 <code>.css</code> 文件放到 <code>src/styles</code> 文件夹下，而所有的 React 组件则放在了 <code>src/components</code> 下。随着应用的大小不断增大，很快就会很难分辨哪个组件使用了哪个样式了。很多时候，你的 CSS 样式中最终会出现死代码，因为无法简单地辨别样式是否被使用到。</p>
+<p>一个组织代码的更好的方法是，<strong>在同一个地方引入一个包含了全部东西的单个组件</strong>。这样子的实践，叫做托管，在 Kent C. Dodds 的一篇非常棒的<a target="_blank" rel="noopener" href="https://kentcdodds.com/blog/colocation">博客</a>中有提到。</p>
+<p>问题是很难使用纯的 CSS 来实现托管，因为 CSS 和 JavaScript 必须放在不同的文件中，而且样式将会应用到全局，无论 <code>.css</code> 文件放在什么地方。另一个方面，如果你使用 CSS-in-js ，你可以在你的 React 组件中直接编写样式，然后使用他们，如果操作正确，这会大大地提高程序地可维护性。</p>
+<blockquote>
+<p>注意：CSS Modules 也允许你合并样式与组件，虽然可以不用在同一个文件中。</p>
+</blockquote>
+<p>3. <strong>在样式中可以使用 JavaScript 变量</strong>。 CSS-in-js 能在样式规则中够引用 JavaScript 变量，比如：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// colors.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> colors = &#123;</span><br><span class="line">  <span class="attr">primary</span>: <span class="string">&#x27;#0d6efd&#x27;</span>,</span><br><span class="line">  <span class="attr">border</span>: <span class="string">&#x27;#ddd&#x27;</span>,</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// MyComponent.tsx</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params">&#123; fontSize &#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">p</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">css</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">color:</span> <span class="attr">colors.primary</span>,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">fontSize</span>,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">border:</span> `<span class="attr">1px</span> <span class="attr">solid</span> $&#123;<span class="attr">colors.border</span>&#125;`,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    &gt;</span></span></span><br><span class="line"><span class="language-xml">      ...</span></span><br><span class="line"><span class="language-xml">    <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上例子所示，你可以在 CSS-in-js 样式中使用 JavaScript 常量（比如 <code>colors</code> ）和 React 的 props 或者 state （比如 <code>fontSize</code> ） 。在样式中使用 JavaScript 常量的能力可以在某些情况下减少重复的代码，因为不必将同一个常量定义为一个 CSS 变量和一个 JavaScript 常量。使用 props 和 state 的能力允许你创建高度可定制样式的组件，而不用使用行内的样式（当相同的样式应用于许多元素时，行内样式的性能不理想。）</p>
+<h3 id="中性观点"><a href="#中性观点" class="headerlink" title="中性观点"></a>中性观点</h3><p>1. <strong>这是一项新的热门的技术</strong>。许多开发者，包括我，会快速采用 JavaScript 社区中最热门的新趋势。这是合理的，因为在很多情况下，新的库以及框架已经证明了比它们的前辈有巨大的改进（可以想想 React 相比早期的 JQuery 提高了多少生产力）。另一方面，我们对新的工具的痴迷另一部分原因仅仅是一种痴迷。我们害怕错过下一件重大的事情，当我们决定采取新的库或者框架时我们可能忽略真正的缺点。我认为这一定是 CSS-in-js 被广泛采用的一个因素，至少对我来说。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>1. <strong>CSS-in-js 增加了运行时开销</strong>。当你的组件渲染的时候， CSS-in-js 库必须“序列化”样式，生成纯的 CSS ，这样才可以被插入到网页文档中。很明显这占用了额外的 CPU 周期，但它真的对你的应用的性能产生足够明显的影响吗？<strong>我们会在下个章节深入探究这个问题</strong>。</p>
+<p>2. <strong>CSS-in-js 增加了打包产物大小</strong>。这是一个很明显的缺点，现在每一个访问你的站点的用户不得不下载 CSS-in-js 库的 JavaScript 代码。 Emotion 在最小压缩后为 <a target="_blank" rel="noopener" href="https://bundlephobia.com/package/@emotion/react@11.10.4">7.9kB</a> ，而 styled-component 为 <a target="_blank" rel="noopener" href="https://bundlephobia.com/package/styled-components@5.3.6">12.7kB</a> 。虽然两者的库体积都不是很大，但是它确确实实地增加了（作为比较， <code>react</code> + <code>react-dom</code> 为 44.5kB）。</p>
+<p>3. <strong>CSS-in-js 让 React Devtools 的显示变得混乱</strong>。对于每一个使用 <code>css</code> 的 prop 的元素， Emotion 会渲染 <code>&lt;EmotionCssPropInternal&gt;</code> 和 <code>&lt;Insertion&gt;</code> 组件。如果你在许多元素上使用 <code>css</code> 的 prop ， Emotion 的内部组件会让 React Devtools 的显示变得混乱，如下所示：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031318890.avif"></p>
+<h3 id="丑陋点"><a href="#丑陋点" class="headerlink" title="丑陋点"></a>丑陋点</h3><p>1. <strong>频繁地插入 CSS 规则，会让浏览器强制性地执行许多额外的工作</strong>。 <a target="_blank" rel="noopener" href="https://github.com/sebmarkbage">Sebastian Markbåge</a> ，React 核心团队的成员，以及 React Hook 的最初设计者，在 React 18 工作小组内写了一篇<a target="_blank" rel="noopener" href="https://github.com/reactwg/react-18/discussions/110">内容丰富的讨论</a>，是关于 CSS-in-js 库需要在 React 18 上如何改变才能让彼此一起工作，以及运行时 CSS-in-js 的在一般情况下的未来。他特别指出：</p>
+<blockquote>
+<p>在并发渲染下， React 可以两次渲染间让出执行权给浏览器。如果你为一个组件插入了一个新的规则，然后 React 交出执行权，然后浏览器必须确认这些规则是否应用到现有的文档树中。所以它重新计算样式规则。然后 React 渲染下一个组件，然后这个组件发现了一个新的样式规则，浏览器又开始重新计算样式规则，周而复始。</p>
+<p><strong>这实际上造成了当 React 渲染的时候，针对所有 DOM 节点的所有 CSS 规则在每一帧中都重新计算了</strong>。这是非常慢的。</p>
+</blockquote>
+<p><strong>2022-10-25 更新</strong>： Sebastian 的这句话特别指的是 React 并发模式下的性能，并且没用使用 <code>useInsertionEffect</code> 。如果你想要更深入地了解，我推荐你去完整地阅读整个讨论。感谢 Dan Abramov 在推特上<a target="_blank" rel="noopener" href="https://twitter.com/dan_abramov/status/1584838817982590976">指出</a>了这个错误</p>
+<p>这个问题最糟糕的是，这不是一个可修复的问题（在运行时 CSS-in-js 的上下文中）。当组件渲染的时候，运行时 CSS-in-js 库通过插入新的样式规则来工作，这在根本上不利于性能。</p>
+<p>2. <strong>在使用 CSS-in-js 中，这里会有很多情况会造成错误，特别是在使用 SSR 以及、或者组件库</strong>。在 Emotion 的仓库中，我们收到了很多类似下面的 issues ：</p>
+<blockquote>
+<p>我在 SSR 下使用 Emotion 和 MUI &#x2F; Mantine &#x2F; （其他由 Emotion 驱动的组件库），它没有正确工作，因为…</p>
+</blockquote>
+<p>虽然每个 issue 的根本原因不相同，但是这里有些共同的主题：</p>
+<ul>
+<li>多个 Emotion 实例一次性加载了。即使多个实例是相同版本的 Emotion ，这也会造成问题。（<a target="_blank" rel="noopener" href="https://github.com/emotion-js/emotion/issues/2639">例子</a>）</li>
+<li>组件库经常不会给你完整的控制样式插入顺序的权力。（<a target="_blank" rel="noopener" href="https://github.com/emotion-js/emotion/issues/2803">例子</a>）</li>
+<li>Emotion 的 SSR 支持在 React 17 和 React 18 下是不同的。这对兼容 React 18 的流式传输 SSR 是有必要的。（<a target="_blank" rel="noopener" href="https://github.com/emotion-js/emotion/issues/2725">例子</a>）</li>
+</ul>
+<p>相信我，这些复杂性的源头只是冰山一角。（如果你很勇敢，你可以查看 TypeScript 定义中关于 <code>@emotion/styled</code> 的<a target="_blank" rel="noopener" href="https://github.com/emotion-js/emotion/blob/8a163746f0de5c6a43052db37f14c36d703be7b9/packages/styled/types/base.d.ts">部分</a>）</p>
+<h2 id="深入探讨性能"><a href="#深入探讨性能" class="headerlink" title="深入探讨性能"></a>深入探讨性能</h2><p>关于这点，很明显运行时 CSS-in-js 既有优点也有缺点。为了理解为什么我们的团队放弃了这项技术，我们需要探究 CSS-in-js 在真实世界中的性能影响。</p>
+<p>本节专注于在 Spot 的代码库中使用 Emotion 造成的性能影响。像这样，不能假定下面的性能数字也适用于你的代码库，使用 Emotion 方式的方式有很多，每一种都有自己的性能指标。</p>
+<h3 id="在渲染内部还是渲染外部进行序列化。"><a href="#在渲染内部还是渲染外部进行序列化。" class="headerlink" title="在渲染内部还是渲染外部进行序列化。"></a>在渲染内部还是渲染外部进行序列化。</h3><p>样式序列化指的是 Emotion 获取 CSS 字符串或者对象样式，然后把它们转化为可插入文档的纯 CSS 字符串的过程。在序列化时 Emotion 也会计算该纯 CSS 样式的一个哈希值，这个哈希就是你所看到的类名。比如 <code>css-15nl2r3</code> 。</p>
+<p>虽然我没有对上面的情况测量，但我认为 Emotion 如何执行的最重要的原因之一是样式序列化是在 React 的渲染周期的内部还是外部执行。</p>
+<p>在 Emotion 的文档中的例子展示了渲染周期内部序列化，例子如下：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    <span class="language-xml"><span class="tag">&lt;<span class="name">div</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      <span class="attr">css</span>=<span class="string">&#123;&#123;</span></span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">backgroundColor:</span> &#x27;<span class="attr">blue</span>&#x27;,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">width:</span> <span class="attr">100</span>,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">        <span class="attr">height:</span> <span class="attr">100</span>,</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">      &#125;&#125;</span></span></span><br><span class="line"><span class="tag"><span class="language-xml">    /&gt;</span></span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>每一次 <code>MyComponent</code> 渲染，对象样式会被重新序列化。如果 <code>MyComponent</code> 频繁地渲染（比如：每一次的点击），重复地序列化可能会增大性能开销。</p>
+<p>一个性能更高的方法是把样式对象移动到组件外部，这样当模块加载的时候，序列化只会执行一次，而不是在每次渲染的时候都执行。你可以通过 <code>@emotion/react</code> 包下的 <code>css</code> 函数来实现它</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myCss = <span class="title function_">css</span>(&#123;</span><br><span class="line">  <span class="attr">backgroundColor</span>: <span class="string">&#x27;blue&#x27;</span>,</span><br><span class="line">  <span class="attr">width</span>: <span class="number">100</span>,</span><br><span class="line">  <span class="attr">height</span>: <span class="number">100</span>,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">MyComponent</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="language-xml"><span class="tag">&lt;<span class="name">div</span> <span class="attr">css</span>=<span class="string">&#123;myCss&#125;</span> /&gt;</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这样你就不能在样式中使用 props 变量了，也就是说你错过了一个 CSS-in-js 的主要卖点。</p>
+<p><strong>在 Spot 代码库中，我们在渲染周期内执行样式序列化，所以下面的性能分析会基于这种情况</strong>。</p>
+<h3 id="对成员浏览组件的基准测试"><a href="#对成员浏览组件的基准测试" class="headerlink" title="对成员浏览组件的基准测试"></a>对成员浏览组件的基准测试</h3><p>终于到了通过分析一个来自 Spot 的真实组件来使得事情具体化的时候了。我们使用一个成员浏览的组件，一个相当简单的视图列表，显示了团队中的所有成员。组件的样式几乎都使用了 Emotion ，具体来说是使用了 <code>css</code> 的 prop 来指定样式。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031318869.avif"></p>
+<p>对于这个测试</p>
+<ul>
+<li>成员浏览组件会展示 20 个用户。</li>
+<li>不会对列表成员包裹 <code>React.memo</code> 。</li>
+<li>强制最顶层的 <code>&lt;BrowseMembers&gt;</code> 组件每秒渲染一次，然后记录最开始 10 次渲染的时间。</li>
+<li>关闭 React 的严格模式（开启严格模式会使得在分析器中的渲染时间翻倍）。</li>
+</ul>
+<p>我使用 React DevTools 分析了页面，得到了头 10 次渲染时间的怕平均值，为 <strong>54.3</strong> 毫秒。</p>
+<p>我个人的经验法则是 React 组件的渲染时间应该在 16 毫秒或更短，因为每秒 60 帧中的 1 帧需要 16.67 毫秒。成员浏览组件目前是这个数字的 3 倍多，所以它是一个相当繁重的组件。</p>
+<p>这个测试是在 <strong>M1 Max</strong> 的 CPU 上执行的，这个 CPU 的性能超过了用户的平均值。 在功能较弱的机器上很容易达到 <strong>200</strong> 毫秒。</p>
+<h3 id="分析火焰图"><a href="#分析火焰图" class="headerlink" title="分析火焰图"></a>分析火焰图</h3><p>下面是上面测试的<strong>单个列表项</strong>的火焰图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031319228.avif"></p>
+<p>正如你所见， <code>&lt;Box&gt;</code> 和 <code>&lt;Flex&gt;</code> 组件的渲染花费了很多时间。这些花费就是我们使用 <code>css</code> 的 prop 所进行的 “样式原语” 操作的花费。渲染每一个 <code>&lt;Box&gt;</code> 组件需要使用 0.1 到 0.2 毫秒，由于 <code>&lt;Box&gt;</code> 的组件数量很多，加起来花费的开销就会很大了。</p>
+<h3 id="不使用-Emotion-下对成员浏览组件的基准测试"><a href="#不使用-Emotion-下对成员浏览组件的基准测试" class="headerlink" title="不使用 Emotion 下对成员浏览组件的基准测试"></a>不使用 Emotion 下对成员浏览组件的基准测试</h3><p>为了看到这个由于 Emotion 造成的昂贵的渲染有多大，我使用 Sass Modules 而非 Emotion 重写了组件的样式。（ Sass Modules 会在构建的时候生成纯 CSS 样式，所以使用它几乎没有性能损失）。</p>
+<p>我重复这个如上所述的相同的测试，得到了头 10 次渲染的平均值，为 <strong>27.7</strong> 毫秒，和原来相比减少了 <strong>48%</strong> 。</p>
+<p>所以，这就是我们放弃 CSS-in-js 的原因： 运行时性能开销简直太高了。</p>
+<p>综上我重复这个免责声明：这个结果只直接适用于 Spot 的代码库，以及我们如何使用 Emotion。如果你的代码库用更高效的方式来使用 Emotion （比如：在渲染周期外部样式序列化），在移除 CSS-in-js 你可能会发现提升不大。</p>
+<p>下面是一些给好奇的人准备的原始数据：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031319976.avif"></p>
+<h2 id="新的样式系统"><a href="#新的样式系统" class="headerlink" title="新的样式系统"></a>新的样式系统</h2><p>在我们下决心放弃 CSS-in-js 后，显而易见的问题是：我们应该使用什么，理想情况下，我们想要一个性能和纯 CSS 相近的样式系统，同时尽可能多的保留 CSS-in-js 的优点。这是一些我在标为“优点”的小节中的描述的 CSS-in-js 的基本优点：</p>
+<ul>
+<li>支持局部样式。</li>
+<li>样式和应用它的组件位于同一位置。</li>
+<li>可以在样式中使用 JavaScript 变量。</li>
+</ul>
+<p>如果你密切关注了那一小节，你可能会记得我说过 CSS Modules 也提供了局部样式和样式托管，并且 CSS Modules 会编译成纯的 CSS 文件，所以使用它并不会有运行时的开销。</p>
+<p>在我看来， CSS Modules 的主要缺点是，归根到底，它仍然是纯的 CSS ，纯 CSS 缺少了提高开发体验和减少相同代码的特性。虽然 CSS 即将支持<a target="_blank" rel="noopener" href="https://developer.chrome.com/blog/help-css-nesting/">嵌套选择器</a>特性，但目前仍然没有实现，这个特性极大提升了开发体验。</p>
+<p>幸运地是，这个问题有一个简单的解决办法，即 Sass Modules ，用 <a target="_blank" rel="noopener" href="https://sass-lang.com/">Sass</a> 来编写 CSS Modules 。通过 CSS Modules 你可以享受到局部样式特性，而使用 Sass ，可以享受到强大的构建时特性，并且本质上没有运行时开销。这是为什么 Sass Modules 将会成为我们通用的样式解决方案。</p>
+<blockquote>
+<p>边注：使用 Sass Modules ，你会失去上文说到的第 3 个 CSS-in-js 的优点（在样式中使用 JavaScript 变量的能力）。尽管，你可以在 Sass 文件中使用一个 <code>:export</code> 块来把 Sass 的常量应用到 JavaScript 中。这不是很方便，但也聊胜于无。</p>
+</blockquote>
+<h3 id="工具类名"><a href="#工具类名" class="headerlink" title="工具类名"></a>工具类名</h3><p>从 Emotion 切换到 Sass Modules ，团队担忧应用及其常见的样式会不太方便，比如：<code>display: flex</code> ，在这之前，我们会写</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="title class_">FlexH</span> alignItems=<span class="string">&quot;center&quot;</span>&gt;...&lt;/<span class="title class_">FlexH</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>只是用 Sass Modules 来完成的话，我们必须新建一个 <code>.module.scss</code> 文件，然后创建一个类名，这个类名应用了 <code>display: flex</code> 和 <code>align-items: center</code> 。这看起来不算糟糕，但是确实不太方便。</p>
+<p>为了提高开发体验，我们决定引用一个工具类名系统。如果你不熟悉工具类名，它们是一组 CSS 类，每一个类会为元素设置单个 CSS 属性。通常情况下，你会组合多个工具类名来得到想要的样式。根据上面的例子，可以写出如下的代码：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div className=<span class="string">&quot;d-flex align-items-center&quot;</span>&gt;...&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://getbootstrap.com/">Bootstrap</a> 和 <a target="_blank" rel="noopener" href="https://tailwindcss.com/">Tailwind</a> 是最受欢迎的 CSS 框架，它们提供了许多的工具类。这些库为它们的工具系统花费了大量的设计精力，所以选择其中的一个而非自研一个是最有意义的。我已经使用 Bootstrap 很多年了，所以我们选择了 Bootstrap 。虽然可以引入 Bootstrap 工具类名来作为预构建 CSS 文件，但是我们仍然需要自定义类来适配我们现有的样式系统，所以我拷贝了 Bootstrap 源码的相关部分到我们的项目中。</p>
+<p>我们已经为新的组件使用 Sass Modules 和工具类名，这一过程到目前已经持续了几周，我们用起来相当地开心。开发体验和 Emotion 相似，运行时的性能非常的优秀。</p>
+<blockquote>
+<p>边注：我们也使用了 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/typed-scss-modules">typed-scss-modules</a> 包来为 Sass Modules 生成 TypeScript 定义。可能这样做最大的好处时允许我们定义一个工作方式类似于 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/classnames">classnames</a> 的 utils 的工具函数，除了它只接受合法的工具类名作为参数。</p>
+</blockquote>
+<h2 id="关于编译时-CSS-in-js"><a href="#关于编译时-CSS-in-js" class="headerlink" title="关于编译时 CSS-in-js"></a>关于编译时 CSS-in-js</h2><p>本文主要专注于运行时 CSS-in-js 库，比如 Emotion 和 styled-components 。最近，我们发现一些新出现的 CSS-in-js 库，它们在编译的时候把样式转化为纯的 CSS 。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://compiledcssinjs.com/">Compiled</a></li>
+<li><a target="_blank" rel="noopener" href="https://vanilla-extract.style/">Vanilla Extract</a></li>
+<li><a target="_blank" rel="noopener" href="https://linaria.dev/">Linaria</a></li>
+</ul>
+<p>这些库支持提供和运行时 CSS-in-js 相似的优点，并且没有运行时开销。</p>
+<p>虽然我自己没有使用过任何编译时的 CSS-in-js 库，但我觉得和 Sass Modules 相比，它仍然有缺点。以下是当我特别查看编译环节的时候发现的缺点：</p>
+<ul>
+<li>样式仍然需要在组件第一次挂载时插入文档，这会强制浏览器对每一个 DOM 节点重新计算样式（这个缺点在丑陋点一节中有讨论到）</li>
+<li>动态样式，比如在这个<a target="_blank" rel="noopener" href="https://compiledcssinjs.com/#speed-up-your-styles">例子</a>中的 <code>color</code> 的 prop 就无法在构建时被提取。所以编译过程使用 <code>style</code> 的 prop （内联样式）添加了一个 CSS 变量。众所周知当应用行内样式到许多的元素上时，会导致性能下降。</li>
+<li>这些库仍然会往 React 树中插入样板组件，比如<a target="_blank" rel="noopener" href="https://compiledcssinjs.com/#speed-up-your-styles">这里</a>所示。这和运行时 CSS-in-js 一样会使得 React DevTools 变得混乱。</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>感谢您阅读这篇深入讨论运行时 CSS-in-js 的文章。和许多技术一样，它有优点，也有缺点。最终，评估这些优缺点取决于作为程序员的你，然后关于这项技术是否符合你的用例做出明确的决定。对于 Spot 的我们来说， Emotion 的运行时的性能开销远远超过开发体验上的优点，特别是当你发现 Sass Modules + 工具类名的替代方案也有良好的开发体验并且提供了及其优越的性能时。</p>
+<h2 id="关于-Spot"><a href="#关于-Spot" class="headerlink" title="关于 Spot"></a>关于 Spot</h2><p>在 <a target="_blank" rel="noopener" href="https://www.spotvirtual.com/">Spot</a> 中，我们正在构建远程工作的未来。当公司选择远程办公时，可能会失去在办公室中存在的联系感和文化感。 Spot 是一个下一代的沟通平台，通过结合传统的消息沟通和能够创建和定制你自己的 3D 虚拟办公室特性的视频会议，将你们的团队聚集在一起。如果你听起来很有趣，可以联系我们！</p>
+<p>PS：我们正在寻找才华横溢的软件工程师来加入我们的团队，<a target="_blank" rel="noopener" href="https://www.spotvirtual.com/careers/">可以在这里查看详情</a></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/03/202305031320670.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>我也尝鲜过 CSS-in-js ，我觉得 CSS-in-js 最大的优点就是能够和 JavaScript 无缝衔接，能够在 render 内部使用相关的变量。</p>
+<p>不过上面也提到了，过多的样式插入也会消耗性能，目前我看到应该就力扣使用了 Emotion 的库，使用起来感觉也还行吧。</p>
+<p>Vue 就支持直接写局部样式，而不用担心污染全局，不过和 CSS Modules 之类一样，不支持使用 JavaScript 变量，不过我记得有类似通过 CSS 变量来实现的特性，和文中提到的编译时 CSS-in-js 很像。</p>
+<p>原帖评论也有提到一个 BEM 的 CSS 命名规则，不过一个项目毕竟不是一个人完成的，每个人对起名的理解都不一样，比如有的人复数喜欢用 <code>s</code> 结尾，而有的人喜欢用 <code>list</code> 结尾，比如 <code>users</code> 和 <code>userList</code>。</p>
+<p>归根结底，需要根据项目自身的情况来选择合适的技术栈，就如同原文所说的，如果项目更加注重开发体验，网站整体的复杂性不高，更多的是静态内容显示，那么使用 Emotion 的相关 CSS-in-js 是相当不错的。</p>
+<p>而如果网站对性能的要求很高，那么选择 0 运行时开销的 CSS 技术就很有必要了，目前来看首选的就是 CSS(Sass) Modules 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/1a198008e8f2" title="为什么我们与 CSS-in-JS 分道扬镳（译）">https://prohibitorum.top/1a198008e8f2</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+              <a href="/tags/CSS-in-js/" rel="tag"># CSS-in-js</a>
+              <a href="/tags/React/" rel="tag"># React</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/4f1e26b032dc" rel="prev" title="在 Hexo 中集成 Swiper">
+                  <i class="fa fa-angle-left"></i> 在 Hexo 中集成 Swiper
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/713d0a17c169" rel="next" title="2023年4月新番个人推荐">
+                  2023年4月新番个人推荐 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1683093174"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

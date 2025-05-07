@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言之前我们写了 RxJS 的基本的使用方法 接下来写一写 RxJS 的，我个人觉得最重要的，也是最核心的一个概念：管道">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJS 使用之 pipe 管道">
+<meta property="og:url" content="https://prohibitorum.top/c64018267a73">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言之前我们写了 RxJS 的基本的使用方法 接下来写一写 RxJS 的，我个人觉得最重要的，也是最核心的一个概念：管道">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181445089.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181450978.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181452872.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191736247.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191737044.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191756564.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/20/202205201442536.avif">
+<meta property="article:published_time" content="2022-05-18T14:15:06.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="RxJavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181445089.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/c64018267a73.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/c64018267a73","path":"c64018267a73.html","title":"RxJS 使用之 pipe 管道"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxJS 使用之 pipe 管道 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-pipe"><span class="nav-number">2.1.</span> <span class="nav-text">使用 pipe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84-pipe-%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">常见的 pipe 函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">2.2.1.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">2.2.2.</span> <span class="nav-text">filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tap"><span class="nav-number">2.2.3.</span> <span class="nav-text">tap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-%E5%92%8C-min"><span class="nav-number">2.2.4.</span> <span class="nav-text">max 和 min</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#take-%E5%92%8C-skip"><span class="nav-number">2.2.5.</span> <span class="nav-text">take 和 skip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#first-%E5%92%8C-last"><span class="nav-number">2.2.6.</span> <span class="nav-text">first 和 last</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#debounceTime-%E5%92%8C-throttleTime"><span class="nav-number">2.2.7.</span> <span class="nav-text">debounceTime 和 throttleTime</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E8%87%AA%E5%AE%9A%E4%B9%89-pipe-%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">创建自定义 pipe 函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/c64018267a73">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RxJS 使用之 pipe 管道 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxJS 使用之 pipe 管道
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-05-18 14:15:06" itemprop="dateCreated datePublished" datetime="2022-05-18T14:15:06+00:00">2022-05-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前我们写了 <code>RxJS</code> 的基本的使用方法</p>
+<p>接下来写一写 <code>RxJS</code> 的，我个人觉得最重要的，也是最核心的一个概念：<strong>管道</strong></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>如果把 <code>Observable</code> 、 <code>Observer</code> 比喻成一部房子的地基</p>
+<p>那么 <code>pipe</code> 就是建在地基上的房子，展现在大家的眼前</p>
+<p><code>RxJS</code> 封装了许多不同的 <code>pipe</code> ，组合这些函数，使得房子可以变化出不同的样子</p>
+<h2 id="使用-pipe"><a href="#使用-pipe" class="headerlink" title="使用 pipe"></a>使用 pipe</h2><p>在新建 <code>Observable</code> 对象之后，我们可以调用 <code>.pipe(p1(), p2(), ... , pN())</code> 来组合各式各样的管道</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> newObservable = observable.<span class="title function_">pipe</span>();</span><br><span class="line"></span><br><span class="line">newObservable.<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(val);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>需要注意的时，<code>pipe</code> 函数返回了一个 <code>Observable</code> 对象</p>
+<p>如果管道为空，即调用了 <code>pipe()</code> ，那么返回的 <code>Observable</code> 就等于原对象，即 <code>newObservable === observable</code></p>
+<p>如果管道不为空，比如调用 <code>pipe(map(x =&gt; x * 2))</code> ，那么返回的 <code>Observable</code> 就不等于原来的原来的 <code>Observable</code> 对象</p>
+<p>在内部实现中，我们发现 <code>pipe</code> 依赖于 <code>pipeFromArray</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181445089.avif"></p>
+<p>从调用上，可以发现 <code>pipeFromArray</code> 是一个返回函数的函数</p>
+<p>看下它的实现</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181450978.avif"></p>
+<p>在参数为 <code>0</code> 个时返回了 <code>identity</code> 这个函数</p>
+<p>而 <code>identity</code> 的实现就是返回自身</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/18/202205181452872.avif"></p>
+<p>所以当参数为 <code>0</code> 个时， <code>pipe</code> 的实现等价于如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Observable</span>&lt;T&gt; <span class="keyword">implements</span> <span class="title class_">Subscribable</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="comment">// ... 其他方法</span></span><br><span class="line">  </span><br><span class="line">  <span class="title function_">pipe</span>(...<span class="attr">operations</span>: <span class="title class_">OperatorFunction</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;[]): <span class="title class_">Observable</span>&lt;<span class="built_in">any</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">function</span> identity&lt;T&gt;(<span class="attr">x</span>: T): T &#123;</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">identity</span>(<span class="variable language_">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见的-pipe-函数"><a href="#常见的-pipe-函数" class="headerlink" title="常见的 pipe 函数"></a>常见的 pipe 函数</h2><h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map</code> 很像 <code>js</code> 中数组的 <code>map</code> ，都是对原值映射成新值的一个函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; map, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">map</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x + <span class="number">1</span>)).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>以上例子会输出 <code>0 2 4</code>，即对 <code>0 1 2</code> 的每一个数字都乘以 <code>2</code></p>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h3><p>与数组的 <code>filter</code> 方法同理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; filter, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">filter</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>以上就会输出 <code>0 2</code> ，即过滤了不是偶数的数字，在原输出 <code>0 1 2</code> 中非偶数的数字为 <code>1</code></p>
+<h3 id="tap"><a href="#tap" class="headerlink" title="tap"></a>tap</h3><p><code>tap</code> 和调用 <code>subscribe</code> 方法很相像，都是传入一个 <code>Observer</code> 对象，但是 <code>tap</code> 可以在 <code>pipe</code> 的各个阶段织入，获取当时对应的值</p>
+<p>而 <code>subscribe</code> 只能获取 <code>pipe</code> 处理完之后的值，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; filter, map, <span class="title class_">Observable</span>, tap &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 输出 0 - 9</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable</span><br><span class="line">  .<span class="title function_">pipe</span>(</span><br><span class="line">    <span class="comment">// 过滤出偶数</span></span><br><span class="line">    <span class="title function_">filter</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x % <span class="number">2</span> === <span class="number">0</span>),</span><br><span class="line">    <span class="comment">// 看看当前的数据</span></span><br><span class="line">    <span class="title function_">tap</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;tap1: &quot;</span>, val)),</span><br><span class="line">    <span class="comment">// 每个偶数乘以2</span></span><br><span class="line">    <span class="title function_">map</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x * <span class="number">2</span>),</span><br><span class="line">    <span class="comment">// 看看当前的数据</span></span><br><span class="line">    <span class="title function_">tap</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;tap2: &quot;</span>, val))</span><br><span class="line">  )</span><br><span class="line">  .<span class="title function_">subscribe</span>();</span><br></pre></td></tr></table></figure>
+
+<p>运行上面的例子，会打印出</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">tap1:  0</span><br><span class="line">tap2:  0</span><br><span class="line">tap1:  2</span><br><span class="line">tap2:  4</span><br><span class="line">tap1:  4</span><br><span class="line">tap2:  8</span><br><span class="line">tap1:  6</span><br><span class="line">tap2:  12</span><br><span class="line">tap1:  8</span><br><span class="line">tap2:  16</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意的时，我们必须调用 <code>subscribe</code> ，管道内的函数才会被执行</p>
+<p>一般情况下，<code>tap</code> 都是被用来 <code>debugger</code> 程序的，就像上面的例子，由于组合了许多 <code>pipe</code> 函数</p>
+<p>但是我们需要定位是在哪个 <code>pipe</code> 函数出了问题，那么这时就可以在这个 <code>pipe</code> 前后加一个 <code>tap</code> 来打印值</p>
+<p>同时 <code>tap</code> 也是一个执行副作用的地方，对于管道函数，它最好是纯函数，即相同的输入一定会有相同的输出，比如上面的 <code>map</code> ， <code>filter</code></p>
+<p><code>tap</code> 提供了一个“逃生舱”，使得程序可以在特定的 <code>pipe</code> 位置执行一些副作用（比如发起网络请求，或者修改全局的某些变量），但是不会影响整个 <code>pipe</code> 的执行结果</p>
+<h3 id="max-和-min"><a href="#max-和-min" class="headerlink" title="max 和 min"></a>max 和 min</h3><p>统计最大值和最小值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; max, min, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 输出 0 - 9</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">max</span>()).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;max: &quot;</span>, val));</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">min</span>()).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;min: &quot;</span>, val));</span><br></pre></td></tr></table></figure>
+
+<h3 id="take-和-skip"><a href="#take-和-skip" class="headerlink" title="take 和 skip"></a>take 和 skip</h3><p><code>take</code> 接受一个数字，表示只取前几个值</p>
+<p><code>skip</code> 接受一个数字，表示跳过前几个值，和 <code>take</code> 相反</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span>, skip, take &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 输出 0 - 9</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">3</span>)).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">skip</span>(<span class="number">6</span>)).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>以上会输出 <code>0 1 2</code> 以及 <code>6 7 8 9</code> </p>
+<h3 id="first-和-last"><a href="#first-和-last" class="headerlink" title="first 和 last"></a><code>first</code> 和 <code>last</code></h3><p><code>first</code> 就是 <code>take(1)</code> ，即取第一个元素</p>
+<p>而 <code>last</code> 就是取最后一个元素</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; first, last, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 输出 0 - 9</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">first</span>()).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">last</span>()).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>以上例子输出 <code>0</code> 和 <code>9</code></p>
+<p>当然，也可以对这个值进行限制，比如我们像找第一个大于 <code>5</code> 的值，可以往 <code>first</code> 里面传入一个验证函数</p>
+<p>这样就可以拿到第一个使得验证函数为 <code>true</code> 的值了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; first, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 输出 0 - 9</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">observable.<span class="title function_">pipe</span>(<span class="title function_">first</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x &gt; <span class="number">5</span>)).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>以上例子输出 <code>6</code></p>
+<h3 id="debounceTime-和-throttleTime"><a href="#debounceTime-和-throttleTime" class="headerlink" title="debounceTime 和 throttleTime"></a>debounceTime 和 throttleTime</h3><p>防抖和节流函数 <code>RxJS</code> 也给我们封装好了</p>
+<p>传入时间即可实现对应的功能</p>
+<p>防抖例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; debounceTime, <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(++i);</span><br><span class="line">    <span class="keyword">if</span> (i === <span class="number">5</span>) &#123;</span><br><span class="line">      subscriber.<span class="title function_">complete</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = observable.<span class="title function_">pipe</span>(<span class="title function_">debounceTime</span>(<span class="number">1000</span>)).<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">  <span class="attr">next</span>: <span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val),</span><br><span class="line">  <span class="attr">complete</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;complete&quot;</span>) &amp;&amp; subscription.<span class="title function_">unsubscribe</span>(),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>以上例子只输出 <code>5</code> ，当输出 <code>1</code> 的时候，在等待 <code>1s</code> 之后才会输出，而等待 <code>500ms</code> 之后又输出了 <code>2</code> ，此时 <code>1</code> 就不该输出了，重新对 <code>2</code> 进行计时，数字 <code>3</code> ， <code>4</code> 同理</p>
+<p>节流例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span>, throttleTime &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">const</span> timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(++i);</span><br><span class="line">    <span class="keyword">if</span> (i === <span class="number">5</span>) &#123;</span><br><span class="line">      subscriber.<span class="title function_">complete</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;, <span class="number">300</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = observable.<span class="title function_">pipe</span>(<span class="title function_">throttleTime</span>(<span class="number">1000</span>)).<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">  <span class="attr">next</span>: <span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val),</span><br><span class="line">  <span class="attr">complete</span>: <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;complete&quot;</span>) &amp;&amp; subscription.<span class="title function_">unsubscribe</span>(),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>以上例子输出 <code>1 5</code> ，节流使得一段时间内只拿到一个值，忽略这段时间产生的其他值</p>
+<p>在例子中，不使用节流的话，输出为 <code>1(0) 2(300) 3(600) 4(900) 5(1200)</code></p>
+<p>在 <code>1000ms</code> 内只拿到一个值，所以拿到了 <code>1</code> 和 <code>5</code></p>
+<p>当然，这是针对 <code>throttleTime</code> 的默认 <code>ThrottleConfig</code> 参数（<code>&#123; leading: true, trailing: false &#125;</code>）的情况下，即先拿值再计时</p>
+<p>如果 <code>ThrottleConfig</code> 参数改成 <code>&#123; leading: false, trailing: true &#125;</code> 的话，那么输出就是 <code>4</code> 和 <code>5</code> 了</p>
+<h2 id="创建自定义-pipe-函数"><a href="#创建自定义-pipe-函数" class="headerlink" title="创建自定义 pipe 函数"></a>创建自定义 pipe 函数</h2><p>上面我们讲了很多官方的提供的 <code>pipe</code> 函数，但有时我们需要的功能官方提供的函数无法实现</p>
+<p>这时候就可以通过创建自定义 <code>pipe</code> 函数</p>
+<p>在这之前，我们需要明白 <code>pipe</code> 函数究竟是个啥</p>
+<p>这里我们以 <code>map</code> 的源码为例子</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191736247.avif"></p>
+<p>可以看到返回了执行 <code>operate</code> 函数，传入了一个函数参数，查看 <code>operate</code> 的源码</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191737044.avif"></p>
+<p>通过实现我们可以发现，管道的最外层就是一个传入上一个 <code>Observable</code> ，然后返回一个<strong>新</strong>的 <code>Observable</code> 的一个函数</p>
+<p>可能由于类型看的会比较乱，我们把类型和错误捕获删了，只留下核心逻辑</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">operate</span>(<span class="params">init</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">source</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> source.<span class="title function_">lift</span>(<span class="keyword">function</span> (<span class="params">liftedSource</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">init</span>(liftedSource, <span class="variable language_">this</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里发现它调用了 <code>Observable</code> 的 <code>lift</code> 方法，源码如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/19/202205191756564.avif"></p>
+<p>发现它创建了一个新的 <code>Observable</code> 对象，挂载了一些属性</p>
+<p>可能到这里你会无法理解，发出“这个 <code>source</code> 属性是干嘛的，这个 <code>operator</code> 属性又是干嘛的”的疑问</p>
+<p>但是不要急，我们发现这个方法它是 <code>deprecated</code> 的，这意味着它不被官方推荐使用</p>
+<p>我们看下 <code>deprecated</code> 注释的内容</p>
+<blockquote>
+<p>Internal implementation detail, do not use directly. Will be made internal in v8. If you have implemented an operator using <code>lift</code>, it is recommended that you create an operator by simply returning <code>new Observable()</code> directly. See “Creating new operators from scratch” section here: <a target="_blank" rel="noopener" href="https://rxjs.dev/guide/operators">https://rxjs.dev/guide/operators</a></p>
+</blockquote>
+<p>翻译过来就是：这个一个内部实现，请不要直接使用，它会在版本 <code>8</code> 上转为内部（目前暴露在了 <code>Observable</code> 的属性上），如果你需要通过 <code>lift</code> 方法实现一个操作，推荐直接通过 <code>new Observable()</code> 返回一个新的对象</p>
+<p>现在就好办了，直接返回一个新的 <code>Observable</code> 就完事了，于是乎我们可以写出下面的框架代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">myPipe</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">source</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// TODO 实现</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回过头来，我们来看 <code>map</code> 的实现</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> map&lt;T, R&gt;(<span class="attr">project</span>: <span class="function">(<span class="params"><span class="attr">value</span>: T, <span class="attr">index</span>: <span class="built_in">number</span></span>) =&gt;</span> R, thisArg?: <span class="built_in">any</span>): <span class="title class_">OperatorFunction</span>&lt;T, R&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">operate</span>(<span class="function">(<span class="params">source, subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">    source.<span class="title function_">subscribe</span>(</span><br><span class="line">      <span class="title function_">createOperatorSubscriber</span>(subscriber, <span class="function">(<span class="params"><span class="attr">value</span>: T</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 这里这个 subscriber 可以理解为新 Observable 的构造函数里面的那个 subscriber </span></span><br><span class="line">        subscriber.<span class="title function_">next</span>(project.<span class="title function_">call</span>(thisArg, value, index++));</span><br><span class="line">      &#125;)</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过对源 <code>Observable</code> 调用 <code>subscribe</code> ，传入了一个经过 <code>createOperatorSubscriber</code> 包装过后的 <code>Observer</code> （ <code>Subscriber</code> 是 <code>Observer</code> 的实现）</p>
+<p>然后通过新的 <code>Observable</code> 的 <code>next</code> 来发送映射之后的值，即 <code>project.call(thisArg, value, index++)</code></p>
+<p>上面的代码可能比较晦涩，换成下面这样写，就非常容易理解了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">myPipe</span> = (<span class="params">mapFn, context</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">source</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">      source.<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">        <span class="title function_">next</span>(<span class="params">val</span>) &#123;</span><br><span class="line">          <span class="comment">// 订阅源的next，把值包装之后，通过新的 Observable next出去</span></span><br><span class="line">          subscriber.<span class="title function_">next</span>(mapFn.<span class="title function_">call</span>(context, val, index++));</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">complete</span>(<span class="params"></span>) &#123;</span><br><span class="line">          <span class="comment">// 如果源完成了，那么新的 Observable 也应该完成</span></span><br><span class="line">          subscriber.<span class="title function_">complete</span>();</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">error</span>(<span class="params">e</span>) &#123;</span><br><span class="line">          <span class="comment">// 如果源出现了错误，那么新的 Observable 同样也该传递一样的错误</span></span><br><span class="line">          subscriber.<span class="title function_">error</span>(e);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们写个例子测试一下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span>, map &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> observable = <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.<span class="title function_">next</span>(<span class="number">1</span>);</span><br><span class="line">  subscriber.<span class="title function_">next</span>(<span class="number">2</span>);</span><br><span class="line">  subscriber.<span class="title function_">next</span>(<span class="number">3</span>);</span><br><span class="line">  subscriber.<span class="title function_">complete</span>();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">myPipe</span> = (<span class="params">mapFn, context</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">source</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">      source.<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">        <span class="title function_">next</span>(<span class="params">val</span>) &#123;</span><br><span class="line">          <span class="comment">// 订阅源的next，把值包装之后，通过新的 Observable next出去</span></span><br><span class="line">          subscriber.<span class="title function_">next</span>(mapFn.<span class="title function_">call</span>(context, val, index++));</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">complete</span>(<span class="params"></span>) &#123;</span><br><span class="line">          <span class="comment">// 如果源完成了，那么新的 Observable 也应该完成</span></span><br><span class="line">          subscriber.<span class="title function_">complete</span>();</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="title function_">error</span>(<span class="params">e</span>) &#123;</span><br><span class="line">          <span class="comment">// 如果源出现了错误，那么新的 Observable 同样也该传递一样的错误</span></span><br><span class="line">          subscriber.<span class="title function_">error</span>(e);</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = observable</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">myPipe</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> x * <span class="number">2</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>输出如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/05/20/202205201442536.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>当然，出了本文提到的 <code>pipe</code> ，<code>RxJS</code> 还内置了非常多的管道</p>
+<p>可以点击 <a target="_blank" rel="noopener" href="https://rxjs.dev/guide/operators">RxJS Operators</a> 查看</p>
+<p>全记住我觉得还是很难的，如果有需要自定义管道时，可以先翻一翻文档，如果有那就直接用，如果可以组合已有管道，那就不要自己再写了</p>
+<p>在完全没有的情况下，再考虑自己写管道</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/c64018267a73" title="RxJS 使用之 pipe 管道">https://prohibitorum.top/c64018267a73</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/RxJavaScript/" rel="tag"># RxJavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/7b866d31c88a" rel="prev" title="RxJS 的一些使用及简单理解">
+                  <i class="fa fa-angle-left"></i> RxJS 的一些使用及简单理解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/8db93a4f959c" rel="next" title="RxJS 使用之 Subject">
+                  RxJS 使用之 Subject <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1652854506"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

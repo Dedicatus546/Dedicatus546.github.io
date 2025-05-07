@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记录使用 electron 的一次经历。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录使用 electron 的一次经历">
+<meta property="og:url" content="https://prohibitorum.top/8daeef187878">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记录使用 electron 的一次经历。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213139986.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213514897.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213813927.avif">
+<meta property="article:published_time" content="2024-11-06T18:26:39.000Z">
+<meta property="article:modified_time" content="2024-11-28T15:11:03.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="electron">
+<meta property="article:tag" content="vue">
+<meta property="article:tag" content="vuetify">
+<meta property="article:tag" content="ant-design-vue">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213139986.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/8daeef187878.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/8daeef187878","path":"8daeef187878.html","title":"记录使用 electron 的一次经历"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记录使用 electron 的一次经历 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="nav-number">2.1.</span> <span class="nav-text">前期准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">技术选型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">2.3.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%BA%90"><span class="nav-number">2.4.</span> <span class="nav-text">相关资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%A8%A1%E6%9D%BF"><span class="nav-number">2.4.1.</span> <span class="nav-text">项目模板</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E4%BB%B6%E5%BA%93"><span class="nav-number">2.4.2.</span> <span class="nav-text">组件库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90-css"><span class="nav-number">2.4.3.</span> <span class="nav-text">原子 css</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%AF%B7%E6%B1%82"><span class="nav-number">2.4.4.</span> <span class="nav-text">接口请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%BF%9B%E7%A8%8B%E7%9A%84-ioc"><span class="nav-number">2.4.5.</span> <span class="nav-text">主进程的 ioc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#better-sqlite3"><span class="nav-number">2.4.6.</span> <span class="nav-text">better-sqlite3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%95%E5%85%A5%E5%AD%97%E4%BD%93"><span class="nav-number">2.4.7.</span> <span class="nav-text">快速引入字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Express-%E4%BB%A3%E7%90%86%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.4.8.</span> <span class="nav-text">Express 代理接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E8%BF%9B%E7%A8%8B%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="nav-number">2.4.9.</span> <span class="nav-text">渲染进程使用代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%A9%E6%94%BE"><span class="nav-number">2.4.10.</span> <span class="nav-text">缩放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%B0%E5%BD%95%E7%94%A8%E6%88%B7%E7%AA%97%E5%8F%A3%E4%BD%8D%E7%BD%AE"><span class="nav-number">2.4.11.</span> <span class="nav-text">记录用户窗口位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">2.4.12.</span> <span class="nav-text">使用工作流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/8daeef187878">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记录使用 electron 的一次经历 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录使用 electron 的一次经历
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-06 18:26:39" itemprop="dateCreated datePublished" datetime="2024-11-06T18:26:39+00:00">2024-11-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-11-28 15:11:03" itemprop="dateModified" datetime="2024-11-28T15:11:03+00:00">2024-11-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录使用 electron 的一次经历。</p>
+<span id="more"></span>
+
+<p>已经快一个月没有写帖子了，时间过的好快，转眼就又到年末了。</p>
+<p>一号才从老家回到广州，歇了差不多一个月，这段时间也是用 electron + vue 开发了一个桌面软件。</p>
+<p>项目 github 地址：<a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/jm-desktop">jm-desktop</a></p>
+<p>这篇帖子就记录下这一个月的过程。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>首先，在编写之前，分析了接口加密以及图片编码的原理，这部分在下面两篇帖子中。</p>
+<ul>
+<li><a href="https://prohibitorum.top/202da2aab6d1">记一次分析某漫接口密钥</a></li>
+<li><a href="https://prohibitorum.top/d5936495bfca">记一次分析某漫的图片</a></li>
+</ul>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><p>Web 菜鸡，什么 Qt 、 winui 都不会，只能用 electron 来做套壳应用，这对我来说上手最快，并且可以快速实现需要的功能。</p>
+<p>最开始的时候选择了 electron + react + ant-design ，写到一半发现 hold 不住 react ，写的太别扭了，果断换成了 electron + vue + ant-design-vue ，再写到一半发现 ant-design-vue 写出来像一个后台管理系统，并且社区维护不积极，果断转到 vuetify 上。</p>
+<p>所以最后的技术栈就是 electron + vue ，组件库选择了 vuetify 。以及一些杂七杂八的库。</p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>对于一个第三方的漫画 APP ，核心的功能我觉得就两个，一个是搜索、一个是浏览，细分下来就是：</p>
+<ul>
+<li>搜索页</li>
+<li>漫画详情页</li>
+<li>漫画阅读页</li>
+</ul>
+<p>其他都是甜头，比如什么首页，每周推荐，评论，甚至登录（除非需要登录才能查看）等等。</p>
+<p>所以当时基本上是先实现这些核心的模块。</p>
+<h2 id="相关资源"><a href="#相关资源" class="headerlink" title="相关资源"></a>相关资源</h2><h3 id="项目模板"><a href="#项目模板" class="headerlink" title="项目模板"></a>项目模板</h3><p>使用 electron + vue ，自己搭环境就太慢了（<del>并不是我不会</del>），直接使用下面这个模板。</p>
+<p>项目地址： <a target="_blank" rel="noopener" href="https://github.com/electron-vite/electron-vite-vue">electron-vite-vue</a></p>
+<p>electron-vite 这个组织开源了多个项目，包括和 vue 或者 react 集成的模板，以及开箱即用的 vite 插件，省去了自己搭建目录，对于我这个体量的项目完全够用了。</p>
+<p>使用 electron-vite-vue 还有一个好处就是 electron 主进程的代码直接可以使用 TypeScript ，太棒了。</p>
+<h3 id="组件库"><a href="#组件库" class="headerlink" title="组件库"></a>组件库</h3><p>这里选用了 <a target="_blank" rel="noopener" href="https://vuetifyjs.com/zh-Hans/getting-started/installation/#section-5b8988c5">vuetify</a> ，它是一个基于 material 的组件库，组件全面（不过 material 感觉和国内的审美水土不服，看多了国内的 app ，再看谷歌系的总感觉到了另一个次元）。</p>
+<p>配合 <a target="_blank" rel="noopener" href="https://github.com/unplugin/unplugin-vue-components">unplugin-vue-components</a> 插件完成自动导入，省略很多 import 语句 。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Vuetify3Resolver</span> &#125; <span class="keyword">from</span> <span class="string">&quot;unplugin-vue-components/resolvers&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> component <span class="keyword">from</span> <span class="string">&quot;unplugin-vue-components/vite&quot;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="title function_">component</span>(&#123;</span><br><span class="line">      <span class="attr">resolvers</span>: [<span class="title class_">Vuetify3Resolver</span>()],</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>启动之后会生成 <code>components.d.ts</code> 文件，注意要将它加入到 TypeScript 中，这样可以得到模板中的类型提示。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// tsconfig.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="string">&quot;src/**/*.ts&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;src/**/*.tsx&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;src/**/*.vue&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;electron&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;auto-imports.d.ts&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="string">&quot;components.d.ts&quot;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>PS：之前在使用 ant-design-vue 的时候，发现了一个 bug ，但是提交到了 issue 上还没修（虽然我也不确定到底是 bug 还是特性），果然还是得有官方的团队的组件库才比较可信…</p>
+<p>这里贴上 issue 地址：<a target="_blank" rel="noopener" href="https://github.com/vueComponent/ant-design-vue/issues/7875">the args of notification.useNotification does not work</a> 。</p>
+<p>也不知道要多久才能处理这个 issue …</p>
+<h3 id="原子-css"><a href="#原子-css" class="headerlink" title="原子 css"></a>原子 css</h3><p>这里使用了 <a target="_blank" rel="noopener" href="https://unocss.dev/guide/">unocss</a> 来生成 css 类，主要是使用一些工具类，使用较多的是 flex 相关的。</p>
+<p>首先要在 vite 中添加 unocss 插件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// vite.config.ts</span></span><br><span class="line"><span class="keyword">import</span> unocss <span class="keyword">from</span> <span class="string">&quot;unocss/vite&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="title function_">unocss</span>(),</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后额外创建一个 <code>uno.config.ts</code> 文件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// uno.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineConfig, presetWind &#125; <span class="keyword">from</span> <span class="string">&quot;unocss&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">presets</span>: [<span class="title function_">presetWind</span>()],</span><br><span class="line">  <span class="attr">rules</span>: [</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;app-region-drag&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="string">&quot;-webkit-app-region&quot;</span>: <span class="string">&quot;drag&quot;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">      <span class="string">&quot;app-region-nodrag&quot;</span>,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="string">&quot;-webkit-app-region&quot;</span>: <span class="string">&quot;no-drag&quot;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    ],</span><br><span class="line">  ],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里我们配置了 tailwind 规则，以及多生成了两个类，主要是来快速处理头部部分是否能够拖动的情况。</p>
+<p>最后在 <code>main.ts</code> 中导入 <code>uno.css</code> 即可</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/main.ts</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;virtual:uno.css&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="接口请求"><a href="#接口请求" class="headerlink" title="接口请求"></a>接口请求</h3><p>以往基本上都是用 axios 的，这次用了 <a target="_blank" rel="noopener" href="https://alova.js.org/zh-CN/">alova</a> ，它附带的功能更多，而且内置了 useRequest 、 usePagination 的组合式 api ，大大减少了很多样板代码，很棒，以及提供了接口缓存，这样子在某些接口上开启缓存，可以减少接口调用次数，切换页面的体验上升很多。</p>
+<p>alova 和 axios 在某种情况下还是很像的，都是创建一个请求实例，用这个实例来发起 Get 、Post 等请求。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/apis/http.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; xhrRequestAdapter &#125; <span class="keyword">from</span> <span class="string">&quot;@alova/adapter-xhr&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createAlova &#125; <span class="keyword">from</span> <span class="string">&quot;alova&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> vueHook <span class="keyword">from</span> <span class="string">&quot;alova/vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> http = <span class="title function_">createAlova</span>(&#123;</span><br><span class="line">  <span class="attr">statesHook</span>: vueHook,</span><br><span class="line">  <span class="attr">requestAdapter</span>: <span class="title function_">xhrRequestAdapter</span>(),</span><br><span class="line">  <span class="attr">baseURL</span>: <span class="string">&quot;/api&quot;</span>,</span><br><span class="line">  <span class="title function_">beforeRequest</span>(<span class="params">method</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">responded</span>: &#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">onSuccess</span>(<span class="params">response, method</span>) &#123;</span><br><span class="line">      <span class="comment">// ...</span></span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>onSuccess</code> 就和 axios 中的拦截器差不多， <code>beforeRequest</code> 在请求前添加一些全局的请求头，注意这里使用了 <code>xhrRequestAdapter</code> ，即基于 XMLHttpRequest 封装的适配器，由于 fetch 适配器不支持获取上传下载进度，而功能里面有下载漫画，所以需要使用 <code>xhrRequestAdapter</code> 。 <code>vueHook</code> 则让 alova 能够在 setup 中使用组合式的 api ，这里用的最多的就是 <code>useRequest</code> 和 <code>usePagination</code> ，特别是 <code>usePagination</code> 相当的方便，很多的列表页都只要一个 <code>usePagination</code> 就能拿到大部分的状态。</p>
+<p>接着我们只需要编写相应的业务请求即可，比如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/apis/ajax.ts</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">loginApi</span> = (<span class="params"><span class="attr">username</span>: <span class="built_in">string</span>, <span class="attr">password</span>: <span class="built_in">string</span></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">  formData.<span class="title function_">append</span>(<span class="string">&quot;username&quot;</span>, username);</span><br><span class="line">  formData.<span class="title function_">append</span>(<span class="string">&quot;password&quot;</span>, password);</span><br><span class="line">  <span class="keyword">return</span> http.<span class="property">Post</span>&lt;</span><br><span class="line">    <span class="title class_">RespWrapper</span>&lt;&#123;</span><br><span class="line">      <span class="attr">uid</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">username</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">email</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">avatar</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">jCoin</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">level</span>: [<span class="built_in">number</span>, <span class="built_in">string</span>];</span><br><span class="line">      <span class="attr">currentExp</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">nextLevelExp</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">collectCount</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">maxCollectCount</span>: <span class="built_in">number</span>;</span><br><span class="line">    &#125;&gt;,</span><br><span class="line">    <span class="title class_">RespWrapper</span>&lt;&#123;</span><br><span class="line">      <span class="attr">uid</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">username</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">email</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">emailverified</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">photo</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">fname</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">gender</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">message</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">coin</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">album_favorites</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">s</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">level_name</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">level</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">nextLevelExp</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">exp</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">expPercent</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">badges</span>: <span class="built_in">unknown</span>[];</span><br><span class="line">      <span class="attr">album_favorites_max</span>: <span class="built_in">number</span>;</span><br><span class="line">      <span class="attr">ad_free</span>: <span class="built_in">boolean</span>;</span><br><span class="line">      <span class="attr">ad_free_before</span>: <span class="built_in">unknown</span>;</span><br><span class="line">      <span class="attr">charge</span>: <span class="built_in">string</span>;</span><br><span class="line">      <span class="attr">jar</span>: <span class="built_in">string</span>;</span><br><span class="line">    &#125;&gt;</span><br><span class="line">  &gt;(<span class="string">&quot;login&quot;</span>, formData, &#123;</span><br><span class="line">    <span class="title function_">transform</span>(<span class="params">res</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">code</span>: res.<span class="property">code</span>,</span><br><span class="line">        <span class="attr">data</span>: &#123;</span><br><span class="line">          <span class="attr">uid</span>: <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(res.<span class="property">data</span>.<span class="property">uid</span>),</span><br><span class="line">          <span class="attr">username</span>: res.<span class="property">data</span>.<span class="property">username</span>,</span><br><span class="line">          <span class="attr">email</span>: res.<span class="property">data</span>.<span class="property">email</span>,</span><br><span class="line">          <span class="attr">avatar</span>: res.<span class="property">data</span>.<span class="property">photo</span>,</span><br><span class="line">          <span class="attr">jCoin</span>: res.<span class="property">data</span>.<span class="property">coin</span>,</span><br><span class="line">          <span class="attr">level</span>: [res.<span class="property">data</span>.<span class="property">level</span>, res.<span class="property">data</span>.<span class="property">level_name</span>],</span><br><span class="line">          <span class="attr">currentExp</span>: <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(res.<span class="property">data</span>.<span class="property">exp</span>),</span><br><span class="line">          <span class="attr">nextLevelExp</span>: res.<span class="property">data</span>.<span class="property">nextLevelExp</span>,</span><br><span class="line">          <span class="attr">collectCount</span>: res.<span class="property">data</span>.<span class="property">album_favorites</span>,</span><br><span class="line">          <span class="attr">maxCollectCount</span>: res.<span class="property">data</span>.<span class="property">album_favorites_max</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里有两个注意的点</p>
+<p>一个是封装的时候不要添加 async ，即 <code>loginApi</code> 不要加 async ，不然 setup 内传入 <code>useRequest</code> 和 <code>usePagination</code> 会提示类型错误，原因是 <code>http.Post</code> 返回的是一个 <code>Method</code> 类型，它是一个类 Promise 而不是 Promise ，如果我们直接调用 <code>loginApi(&#39;username&#39;, &#39;password&#39;)</code> 是不会发起请求的，只有 <code>loginApi(&#39;username&#39;, &#39;password&#39;).then()</code> 才会。</p>
+<p>另一个是 <code>http.Post</code> 的两个泛型分别是转换后类型以及转换前类型，如果接口需要进行数据转化的话，填写这两个类型可以在 <code>transform</code> 内获得良好的类型提示，如果不需要转化则直接编写第一个泛型即可。</p>
+<p>在 setup 中，使用 <code>usePagination</code> 可以获取绝大部分的状态：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; usePagination &#125; <span class="keyword">from</span> <span class="string">&quot;alova/client&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; getComicListApi &#125; <span class="keyword">from</span> <span class="string">&quot;@/apis&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123; </span></span><br><span class="line"><span class="language-javascript">  total,        <span class="comment">// 总条数</span></span></span><br><span class="line"><span class="language-javascript">  page,         <span class="comment">// 当前页码</span></span></span><br><span class="line"><span class="language-javascript">  pageSize,     <span class="comment">// 每页大小</span></span></span><br><span class="line"><span class="language-javascript">  pageCount,    <span class="comment">// 有多少页</span></span></span><br><span class="line"><span class="language-javascript">  data,         <span class="comment">// 列表数据</span></span></span><br><span class="line"><span class="language-javascript">  send,         <span class="comment">// 发起请求函数</span></span></span><br><span class="line"><span class="language-javascript">  loading       <span class="comment">// 加载状态</span></span></span><br><span class="line"><span class="language-javascript">&#125; = <span class="title function_">usePagination</span>(</span></span><br><span class="line"><span class="language-javascript">  <span class="function">(<span class="params">page</span>) =&gt;</span></span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">getComicListApi</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">      page,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">content</span>: formState.<span class="property">content</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">order</span>: formState.<span class="property">order</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;),</span></span><br><span class="line"><span class="language-javascript">  &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 默认起始页和页大小</span></span></span><br><span class="line"><span class="language-javascript">    <span class="attr">initialPage</span>: <span class="number">1</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">initialPageSize</span>: <span class="number">80</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 这里 data 和 total 就是返回 data 和 total 所拿到的值</span></span></span><br><span class="line"><span class="language-javascript">    <span class="attr">data</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="property">data</span>.<span class="property">content</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">total</span>: <span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="property">data</span>.<span class="property">total</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 这里可以设置额外的参数，这样 formState.order 变化时会直接重新发起请求</span></span></span><br><span class="line"><span class="language-javascript">    <span class="attr">watchingStates</span>: [<span class="function">() =&gt;</span> formState.<span class="property">order</span>],</span></span><br><span class="line"><span class="language-javascript">  &#125;,</span></span><br><span class="line"><span class="language-javascript">);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="主进程的-ioc"><a href="#主进程的-ioc" class="headerlink" title="主进程的 ioc"></a>主进程的 ioc</h3><p>既然是自己写的项目，那就得玩玩一些平时用不上的东西。</p>
+<p>所以这次我在项目里面使用了微软的依赖注入库 <a target="_blank" rel="noopener" href="https://github.com/microsoft/tsyringe">tsyringe</a> 。</p>
+<p>这是一个轻量的 IOC 库，用法也很简单，和 spring 很相似。</p>
+<p>首先我们要在 <code>tsconfig.json</code> 内开启装饰器支持。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;experimentalDecorators&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;emitDecoratorMetadata&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>接着我们还要安装一个 <code>reflect-metadata</code> ，它是一个对 Reflect 的一个扩展，可以让对象存储元数据，在入口处直接导入即可。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// electron/main.ts</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;reflect-metadata&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>接着我们给模块加上 <code>@singleton</code> 装饰器</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; singleton &#125; <span class="keyword">from</span> <span class="string">&quot;tsyringe&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@singleton</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">PathService</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用 <code>singleton</code> 而不是 <code>injectable</code> 的原因是 <code>injectable</code> 每次注入都会生成一个新的对象，而 <code>singleton</code> 只会有一个对象。</p>
+<p>要注意这样只是注册了这个类，如果我们直接运行容器内是不会有这个类的实例的，如果想要让类初始化实例，则需要调用另一个 API 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// electron/main.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; container &#125; <span class="keyword">from</span> <span class="string">&quot;tsyringe&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">PathService</span> &#125; <span class="keyword">from</span> <span class="string">&quot;./modules/path&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line"><span class="keyword">const</span> instance = container.<span class="title function_">resolve</span>(<span class="title class_">PathService</span>);</span><br></pre></td></tr></table></figure>
+
+<p>所以整个 electron 侧的逻辑就是在 <code>electron/modules</code> 下编写模块，然后在 <code>electron/main.ts</code> 调用 win 模块来初始化整个应用，不过这里目前还有一些问题，就是某些模块并不会和 win 模块存在依赖关系，通常只会通过 ipcMain 来监听一些事件然后处理，这里用的一个方法是注入但不使用</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; inject, singleton &#125; <span class="keyword">from</span> <span class="string">&quot;tsyringe&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">DbService</span> &#125; <span class="keyword">from</span> <span class="string">&quot;../db&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@singleton</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">WinService</span> &#123;</span><br><span class="line">  <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span></span><br><span class="line"><span class="params">    <span class="comment">// @ts-expect-error inject dbService</span></span></span><br><span class="line"><span class="params">    <span class="meta">@inject</span>(DbService) <span class="keyword">private</span> <span class="attr">dbService</span>: <span class="title class_">DbService</span>,</span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里要加这个注释，不然 TypeScript 会报错。</p>
+<p>或许这里改成扫描 <code>electron/modules</code> 下的模块并且直接 <code>container.resolve</code> 会更好？🤔</p>
+<h3 id="better-sqlite3"><a href="#better-sqlite3" class="headerlink" title="better-sqlite3"></a>better-sqlite3</h3><p>在编写下载功能的时候，需要一个轻量的数据库，这里选用了 sqlite 。</p>
+<p>这里提一嘴这个是可能在开发或者打包会报错，提示 node（或其他） 版本不正确问题。</p>
+<p>这时需要使用执行 <code>electron-builder install-app-deps</code> 来讲依赖重新编译为当前环境的版本</p>
+<p>可以在 <code>package.json</code> 添加 <code>postinstall</code> 来让 <code>pnpm i</code> 完成后触发</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;postinstall&quot;</span><span class="punctuation">:</span> <span class="string">&quot;electron-builder install-app-deps&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="快速引入字体"><a href="#快速引入字体" class="headerlink" title="快速引入字体"></a>快速引入字体</h3><p>这里可以使用 <a target="_blank" rel="noopener" href="https://github.com/fontsource/fontsource">Fontsource</a> 。</p>
+<p>这个仓库收录了开源可商用的字体，可以在<a target="_blank" rel="noopener" href="https://fontsource.org/?query=roboto">此处</a>搜索相应的字体。</p>
+<p>导入也非常简单，安装对应的字体文件，然后导入即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm install @fontsource/roboto</span><br></pre></td></tr></table></figure>
+
+<p>引入：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/main.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;@fontsource/roboto&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后在需要的地方使用即可。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;Roboto&#x27;</span>, sans-serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Express-代理接口"><a href="#Express-代理接口" class="headerlink" title="Express 代理接口"></a>Express 代理接口</h3><p>在生产环境下，应用会在主进程启动一个 Express 实例，来代理相关的接口。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 核心代码</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title class_">Express</span>();</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(</span><br><span class="line">  <span class="string">&quot;/api&quot;</span>,</span><br><span class="line">  <span class="title function_">createProxyMiddleware</span>(&#123;</span><br><span class="line">    <span class="attr">target</span>: config.<span class="property">target</span>,</span><br><span class="line">    <span class="attr">changeOrigin</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">secure</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">pathRewrite</span>: &#123;</span><br><span class="line">      <span class="string">&quot;^/api&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>由于接口在大陆并不总是能使用，所以我们需要为这个代理启用一个“梯子”</p>
+<p>做法就是配置它的 <code>agnet</code> 属性。</p>
+<p>先安装 <code>https-proxy-agent</code> ，表明我们想代理一个 https 域名（这里要根据需要选择 <code>http-proxy-agent</code> 或者 <code>https-proxy-agent</code> ）。</p>
+<p>使用很简单，如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">HttpsProxyAgent</span> &#125; <span class="keyword">from</span> <span class="string">&quot;https-proxy-agent&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 核心代码</span></span><br><span class="line"><span class="keyword">const</span> app = <span class="title class_">Express</span>();</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">use</span>(</span><br><span class="line">  <span class="string">&quot;/api&quot;</span>,</span><br><span class="line">  <span class="title function_">createProxyMiddleware</span>(&#123;</span><br><span class="line">    <span class="attr">target</span>: config.<span class="property">target</span>,</span><br><span class="line">    <span class="attr">agent</span>: <span class="keyword">new</span> <span class="title class_">HttpsProxyAgent</span>(<span class="string">&quot;http://localhost:10809&quot;</span>)</span><br><span class="line">    <span class="attr">changeOrigin</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">secure</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">pathRewrite</span>: &#123;</span><br><span class="line">      <span class="string">&quot;^/api&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;),</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>http://localhost:10809</code> 就是代理服务的域名，由于我们使用的是 <a target="_blank" rel="noopener" href="https://github.com/2dust/v2rayN">v2rayN</a> ，所以这里默认就是 <code>http://localhost:10809</code> 。</p>
+<p>至于代理的这些信息，就通过渲染进程的用户填写后拿到。</p>
+<h3 id="渲染进程使用代理"><a href="#渲染进程使用代理" class="headerlink" title="渲染进程使用代理"></a>渲染进程使用代理</h3><p>除了 Express ，在渲染进程中我们需要访问第三方的图片，在网络不好的时候，我们希望使用代理进行加速，这里需要导入 electron 的 <code>session</code> ，然后使用 <a target="_blank" rel="noopener" href="https://www.electronjs.org/docs/latest/api/structures/proxy-config">setProxy</a> 这个方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  session,</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&quot;electron&quot;</span>;</span><br><span class="line"></span><br><span class="line">session.<span class="property">defaultSession</span>.<span class="title function_">setProxy</span>(&#123;</span><br><span class="line">  <span class="comment">// 默认就为 fixed_servers </span></span><br><span class="line">  <span class="comment">// 需要设置 proxyRules 才能生效</span></span><br><span class="line">  <span class="attr">mode</span>: <span class="string">&quot;fixed_servers&quot;</span>,</span><br><span class="line">  <span class="attr">proxyRules</span>: <span class="string">&quot;http://localhost:10809&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这样设置之后渲染进程的请求就会走这个代理。</p>
+<h3 id="缩放"><a href="#缩放" class="headerlink" title="缩放"></a>缩放</h3><p>electron 提供给了我们一个 <code>win.webContents.setZoomFactor(zoomFactor)</code> 来设置缩放因子</p>
+<p>但是要注意，这个功能默认是关闭的，直接调用这个方法是没法改变的，这里需要先调用 <code>win.webContents.setVisualZoomLevelLimits(1, 3)</code> 后再调用 <code>win.webContents.setZoomFactor(zoomFactor)</code> 才能成功缩放，这里当时卡了很久…</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 必须先调用 setVisualZoomLevelLimits 解除缩放限制</span></span><br><span class="line">win.<span class="property">webContents</span>.<span class="title function_">setVisualZoomLevelLimits</span>(<span class="number">1</span>, <span class="number">3</span>).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  win.<span class="property">webContents</span>.<span class="title function_">setZoomFactor</span>(zoomFactor);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="记录用户窗口位置"><a href="#记录用户窗口位置" class="headerlink" title="记录用户窗口位置"></a>记录用户窗口位置</h3><p>核心的 API 是 <code>win.getBounds()</code> 可以获取窗口当前的位置和大小，我们只需在退出前将信息保存在本地，然后下次启动前读取这个信息设置位置和大小即可。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 保存</span></span><br><span class="line"><span class="keyword">const</span> rect = win.<span class="title function_">getBounds</span>();</span><br><span class="line"><span class="title function_">writeToLocal</span>(rect);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取</span></span><br><span class="line"><span class="keyword">const</span> rect = <span class="title function_">getFromLocal</span>(<span class="string">&#x27;bounds&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> win = (<span class="variable language_">this</span>.<span class="property">win</span> = <span class="keyword">new</span> <span class="title class_">BrowserWindow</span>(&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="attr">x</span>: rect.<span class="property">x</span>,</span><br><span class="line">  <span class="attr">y</span>: rect.<span class="property">y</span>,</span><br><span class="line">  <span class="attr">width</span>: rect.<span class="property">width</span>,</span><br><span class="line">  <span class="attr">height</span>: rect.<span class="property">height</span>,</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用工作流"><a href="#使用工作流" class="headerlink" title="使用工作流"></a>使用工作流</h3><p>因为仓库是在 github 上开源的，所以可以使用工作流来帮我们打多个环境的包。</p>
+<p>在本项目中，有两个工作流，一个是监听 tag 推送然后根据 tag 打包，一个是手动触发的最新打包。</p>
+<p>监听 tag 只需要如下配置：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">tags:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&#x27;v*.*.*&#x27;</span>  <span class="comment"># 只在版本标签推送时触发</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用 <code>npm version major|minor|patch</code> 命令来更新版本，这个命令会生成一个提交，在这个提交上面标上一个 tag 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213139986.avif"></p>
+<p>接着我们 <code>git push &amp;&amp; git push origin v1.9.0</code> 来把这个 tag 提交到远程就可以触发上面的工作流了。</p>
+<p>手动触发的则需要使用如下配置</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">workflow_dispatch:</span></span><br></pre></td></tr></table></figure>
+
+<p>这样在 Actions 页面就有一个按钮可以启动工作流了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213514897.avif"></p>
+<p>一般使用工作流的时候，基本上是在 linux 上跑的，但是 electron 的打包是需要在对应系统上打对应系统的包的，即 linux 只能打 linux 的包，而 windows 只能打 windows 的包，所以我们需要配置一下，让工作流跑两个环境，核心就是下面这个配置。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Build</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">strategy:</span></span><br><span class="line">      <span class="attr">matrix:</span></span><br><span class="line">        <span class="attr">os:</span> [<span class="string">ubuntu-latest</span>, <span class="string">windows-latest</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这样子就会有两个任务在跑。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/11/12/20241112213813927.avif"></p>
+<p>然后某些步骤如果需要指定只在某个环境跑，可以在步骤上用一个 if 语法，比如如果要缓存 pnpm 的包的话，在 window 上的路径和 linux 上的路径不一样，所以需要两个 step 。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Build</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">strategy:</span></span><br><span class="line">      <span class="attr">matrix:</span></span><br><span class="line">        <span class="attr">os:</span> [<span class="string">ubuntu-latest</span>, <span class="string">windows-latest</span>]</span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Cache</span> <span class="string">Linux</span> <span class="string">pnpm</span></span><br><span class="line">        <span class="comment"># 只在 linux 上执行这个步骤</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">matrix.os</span> <span class="string">==</span> <span class="string">&#x27;ubuntu-latest&#x27;</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/cache@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">~/.local/share/pnpm/store</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">pnpm-$&#123;&#123;</span> <span class="string">runner.os</span> <span class="string">&#125;&#125;-$&#123;&#123;</span> <span class="string">hashFiles(&#x27;**/pnpm-lock.yaml&#x27;)</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">restore-keys:</span> <span class="string">|</span></span><br><span class="line"><span class="string">            pnpm-$&#123;&#123; runner.os &#125;&#125;-</span></span><br><span class="line"><span class="string"></span>      </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Cache</span> <span class="string">Windows</span> <span class="string">pnpm</span></span><br><span class="line">        <span class="comment"># 只在 windows 上执行这个步骤</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">matrix.os</span> <span class="string">==</span> <span class="string">&#x27;windows-latest&#x27;</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/cache@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">D:\.pnpm-store</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">pnpm-$&#123;&#123;</span> <span class="string">runner.os</span> <span class="string">&#125;&#125;-$&#123;&#123;</span> <span class="string">hashFiles(&#x27;**/pnpm-lock.yaml&#x27;)</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">restore-keys:</span> <span class="string">|</span></span><br><span class="line">            <span class="string">pnpm-$&#123;&#123;</span> <span class="string">runner.os</span> <span class="string">&#125;&#125;-</span></span><br></pre></td></tr></table></figure>
+
+<p>最后，如果是基于 tag 的推送的，可以借助 electron-builder 自动提交到 release 上。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Build</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">strategy:</span></span><br><span class="line">      <span class="attr">matrix:</span></span><br><span class="line">        <span class="attr">os:</span> [<span class="string">ubuntu-latest</span>, <span class="string">windows-latest</span>]</span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="comment"># ...</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span> <span class="string">Electron</span> <span class="string">App</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="attr">GH_TOKEN:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.GH_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">pnpm</span> <span class="string">run</span> <span class="string">build</span></span><br></pre></td></tr></table></figure>
+
+<p>这里记得要注入 <code>GH_TOKEN</code> ，这样才能推送成功，<code>pnpm run build</code> 实际上运行了 <code>vite build &amp;&amp; electron-builder --publish always</code> 这里自动推送就是 <code>--publish always</code> 起作用。</p>
+<p>而如果是基于最新的打包，则需要指定 <code>--publish</code> 为 <code>never</code> ，然后借助工作流 Artifacts 暂存文件，将打包后的文件上传到这里即可，这里需要使用 <code>actions/upload-artifact</code> 。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">build:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">Build</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">$&#123;&#123;</span> <span class="string">matrix.os</span> <span class="string">&#125;&#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="attr">strategy:</span></span><br><span class="line">      <span class="attr">matrix:</span></span><br><span class="line">        <span class="attr">os:</span> [<span class="string">ubuntu-latest</span>, <span class="string">windows-latest</span>]</span><br><span class="line"></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="comment"># ...</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">Linux</span> <span class="string">Artifacts</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">matrix.os</span> <span class="string">==</span> <span class="string">&#x27;ubuntu-latest&#x27;</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/upload-artifact@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="comment"># 通过 github.sha 来区分文件</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">linux-release-assets-$&#123;&#123;</span> <span class="string">github.sha</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">release/*/jm-desktop-Linux-*.zip</span></span><br><span class="line">  </span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Upload</span> <span class="string">Windows</span> <span class="string">Artifacts</span></span><br><span class="line">        <span class="attr">if:</span> <span class="string">matrix.os</span> <span class="string">==</span> <span class="string">&#x27;windows-latest&#x27;</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/upload-artifact@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="comment"># 通过 github.sha 来区分文件</span></span><br><span class="line">          <span class="attr">name:</span> <span class="string">windows-release-assets-$&#123;&#123;</span> <span class="string">github.sha</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">release/*/jm-desktop-Windows-*.zip</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>虽然启动慢了点，但是功能上还是相当完整的，自己还是非常开心能够完成这个项目。</p>
+<p><del>虽然在不起眼的地方有很多 bug 。</del></p>
+<p><del>在修了在修了，新建 fix 分支。</del></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/8daeef187878" title="记录使用 electron 的一次经历">https://prohibitorum.top/8daeef187878</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+              <a href="/tags/electron/" rel="tag"># electron</a>
+              <a href="/tags/vue/" rel="tag"># vue</a>
+              <a href="/tags/vuetify/" rel="tag"># vuetify</a>
+              <a href="/tags/ant-design-vue/" rel="tag"># ant-design-vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d5936495bfca" rel="prev" title="记一次分析某漫的图片">
+                  <i class="fa fa-angle-left"></i> 记一次分析某漫的图片
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/f87197598d02" rel="next" title="TypeScript 5.7（译）">
+                  TypeScript 5.7（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1732777863"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

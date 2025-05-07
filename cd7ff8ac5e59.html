@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言写写HTML5中增强的input标签">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML5增强input标签">
+<meta property="og:url" content="https://prohibitorum.top/cd7ff8ac5e59">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言写写HTML5中增强的input标签">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/07/0dYxk8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/07/0d5uCD.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/07/0d5HIK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/07/0dIeLn.png">
+<meta property="article:published_time" content="2020-10-07T18:33:29.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="HTML5">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/10/07/0dYxk8.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/cd7ff8ac5e59.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/cd7ff8ac5e59","path":"cd7ff8ac5e59.html","title":"HTML5增强input标签"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HTML5增强input标签 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#input"><span class="nav-number">2.</span> <span class="nav-text">input</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#placeholder"><span class="nav-number">2.1.</span> <span class="nav-text">placeholder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#datalist"><span class="nav-number">2.2.</span> <span class="nav-text">datalist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autocomplete"><span class="nav-number">2.3.</span> <span class="nav-text">autocomplete</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pattern"><span class="nav-number">2.4.</span> <span class="nav-text">pattern</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#required"><span class="nav-number">2.5.</span> <span class="nav-text">required</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#autofocus"><span class="nav-number">2.6.</span> <span class="nav-text">autofocus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selectionDirection"><span class="nav-number">2.7.</span> <span class="nav-text">selectionDirection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#type%E6%89%A9%E5%B1%95"><span class="nav-number">2.8.</span> <span class="nav-text">type扩展</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/cd7ff8ac5e59">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HTML5增强input标签 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTML5增强input标签
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-07 18:33:29" itemprop="dateCreated datePublished" datetime="2020-10-07T18:33:29+00:00">2020-10-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>写写HTML5中增强的<code>input</code>标签</p>
+<span id="more"></span>
+
+<h1 id="input"><a href="#input" class="headerlink" title="input"></a>input</h1><h2 id="placeholder"><a href="#placeholder" class="headerlink" title="placeholder"></a>placeholder</h2><p>设定文本框未输入时的输入提示</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;我是placeholder设定的文字&quot;</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行如下</p>
+<input placeholder="我是placeholder设定的文字"/>
+
+<p>placeholder的字体可以通过特定的样式来设定</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* webkit系列的浏览器 */</span></span><br><span class="line"><span class="selector-tag">input</span>::-webkit-input-placeholder&#123;</span><br><span class="line">  <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 火狐 */</span></span><br><span class="line"><span class="selector-tag">input</span>::-moz-placeholder&#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* IE */</span></span><br><span class="line"><span class="selector-tag">input</span>::-ms-input-placeholder&#123;</span><br><span class="line">  <span class="attribute">color</span>: orange;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行如下</p>
+<p>
+  <input id="input1" placeholder="我是placeholder设定的文字"/>
+  <style>
+  input#input1::-webkit-input-placeholder{
+    color: green;
+  }
+  input#input1::-moz-placeholder{
+    color: red;
+  }
+  input#input1::-ms-input-placeholder{
+    color: orange;
+  }
+  </style>
+</p>
+
+<p>PS：火狐浏览器下会是红色，IE下是橙色。</p>
+<h2 id="datalist"><a href="#datalist" class="headerlink" title="datalist"></a>datalist</h2><p>可以通过指定<code>input</code>的<code>list</code>属性指定id并配合<code>datalist</code>标签来完成下拉框的展示。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">list</span>=<span class="string">&quot;datalist1&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">datalist</span> <span class="attr">id</span>=<span class="string">&quot;datalist1&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;选项1&quot;</span>&gt;</span>选项1<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;选项2&quot;</span>&gt;</span>选项2<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">&quot;选项3&quot;</span>&gt;</span>选项3<span class="tag">&lt;/<span class="name">option</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">datalist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行如下（点击可以看到下拉展示框）</p>
+<p>
+  <input type="text" list="datalist1" autocomplete="off" />
+  <datalist id="datalist1">
+    <option value="选项1">选项1</option>
+    <option value="选项2">选项2</option>
+    <option value="选项3">选项3</option>
+  </datalist>
+</p>
+
+<h2 id="autocomplete"><a href="#autocomplete" class="headerlink" title="autocomplete"></a>autocomplete</h2><p>使得浏览器可以使用之前提交过的数据自动填充</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">name</span>=<span class="string">&quot;phone&quot;</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果之前提交过含有<code>name</code>属性值为<code>phone</code>的<code>form</code>表单，下面的<code>input</code>框点击之后会有历史的下拉列表可供选择</p>
+<p><input id="input2" type="text" name="phone" autocomplete="on" /></p>
+
+<p>tips：谷歌浏览器不写情况下<code>autocomplete</code>默认开启。</p>
+<p>效果图</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/07/0dYxk8.png"></p>
+<h2 id="pattern"><a href="#pattern" class="headerlink" title="pattern"></a>pattern</h2><p><code>pattern</code>属性可以让浏览器提交表单前验证内容是否符合设置的正则。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;https://www.w3school.com.cn/example/html5/demo_form.asp&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;输入3个数字&quot;</span> <span class="attr">name</span>=<span class="string">&quot;number&quot;</span> <span class="attr">pattern</span>=<span class="string">&quot;[0-9]&#123;3&#125;&quot;</span> &gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>tips：如果不输入直接提交那么不会检查。</p>
+<p>
+  <form action="https://www.w3school.com.cn/example/html5/demo_form.asp" method="get">
+    <input placeholder="输入3个数字" name="number" pattern="[0-9]{3}" >
+    <input type="submit" value="提交">
+  </form>
+</p>
+
+<p>在chrome下的效果</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/07/0d5uCD.png"></p>
+<p>在火狐下的效果</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/07/0d5HIK.png"></p>
+<h2 id="required"><a href="#required" class="headerlink" title="required"></a>required</h2><p>要求用户必须输入内容，不然不允许提交。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;https://www.w3school.com.cn/example/html5/demo_form.asp&quot;</span> <span class="attr">method</span>=<span class="string">&quot;get&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;输入内容&quot;</span> <span class="attr">name</span>=<span class="string">&quot;content&quot;</span> <span class="attr">required</span> &gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>运行如下</p>
+<p>
+  <form action="https://www.w3school.com.cn/example/html5/demo_form.asp" method="get">
+    <input placeholder="输入内容" name="content" required />
+    <input type="submit" value="提交">
+  </form>
+</p>
+
+<p>效果图</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/07/0dIeLn.png"></p>
+<h2 id="autofocus"><a href="#autofocus" class="headerlink" title="autofocus"></a>autofocus</h2><p>使得文本框自动获得焦点，一般只能在一个页面上设置一个控件为autofocus</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">placeholder</span>=<span class="string">&quot;刷新试试&quot;</span> <span class="attr">autofocus</span>/&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>tips：chrome下会把此控件自动拉到屏幕中间。</p>
+<h2 id="selectionDirection"><a href="#selectionDirection" class="headerlink" title="selectionDirection"></a>selectionDirection</h2><p>通过dom对象该属性来判断当前用户是正向选取文字还是反向选取文字</p>
+<p>正向选择或者没有选取任何文字时为forward，反向选择时为backward</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">id</span>=<span class="string">&quot;input3&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">value</span>=<span class="string">&quot;选中文字试试&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&quot;btn1&quot;</span> <span class="attr">onclick</span>=<span class="string">&quot;&quot;</span>&gt;</span>查看当前的选择方向<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span>&gt;</span>当前的方向为：<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">&quot;curSD&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> el = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;input3&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;btn1&#x27;</span>).<span class="property">onclick</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;curSD&#x27;</span>).<span class="property">innerText</span> = el.<span class="property">selectionDirection</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>tips：这个属性对<code>textarea</code>标签适用</p>
+<p>运行如下</p>
+<p>
+  <input id="input3" type="text" value="选中文字试试">
+  <button id="btn1" onclick="">查看当前的选择方向</button>
+  <span>
+    <span>当前的方向为：</span>
+    <span id="curSD"></span>
+  </span>
+  <script>
+  const el = document.getElementById('input3');
+  document.getElementById('curSD').innerText = el.selectionDirection;
+  document.getElementById('btn1').onclick = function() {
+    document.getElementById('curSD').innerText = el.selectionDirection;
+  }
+  </script>
+</p>
+
+<h2 id="type扩展"><a href="#type扩展" class="headerlink" title="type扩展"></a>type扩展</h2><p>HTML5扩展了<code>input</code>的<code>type</code>类型</p>
+<ul>
+<li><p><code>type=&quot;search&quot;</code> 和text类型的基本一样，chrome下这个输入之后在输入框内测右部有一个’X’可以删除输入内容，而火狐下没有</p>
+<p><input type="search"/></p>
+</li>
+<li><p><code>type=&quot;tel&quot;</code> 用于输入电话，但是没有校验规则，因为世界上的电话号码有很多的格式</p>
+<p><input type="tel"/></p>
+</li>
+<li><p><code>type=&quot;url&quot;</code> 用于输入一个url，如果不是一个合法的url不允许提交（必须存在协议前缀，比如<code>http://</code>，<code>https://</code>），不判空，如果需要非空，则需添加<code>required</code></p>
+<p>
+  <form action="https://www.w3school.com.cn/example/html5/demo_form.asp" method="get">
+    <input type="url" name="url" />
+    <input type="submit" value="提交">
+  </form>
+</p>
+</li>
+<li><p><code>type=&quot;email&quot;</code> 用于输入一个email，如果不是一个合法的email不允许提交，不判空，如果需要非空，则需添加<code>required</code></p>
+<p>
+  <form action="https://www.w3school.com.cn/example/html5/demo_form.asp" method="get">
+    <input type="email" name="email" />
+    <input type="submit" value="提交">
+  </form>
+</p>
+</li>
+<li><p><code>type=&quot;date&quot;</code> 原生自带的日期选择控件，包括年月日的选取，<br>在js中通过<code>e.target.value</code>获取的是一个字符串，格式为<code>yyyy-MM-dd</code><br>也可以通过<code>e.target.valueAsNumber</code>获取时间戳（UTC时间戳），或者<code>e.target.valueAsDate</code>获取一个日期对象</p>
+<p>
+  <input id="input5" type="date"/>
+  <p>
+    <p>
+      <span>value属性值：</span>
+      <span id="valueProp">无</span>；
+    </p>
+    <p>
+      <span>valueAsNumber属性值：</span>
+      <span id="valueAsNumberProp">无</span>；
+    </p>
+    <p>
+      <span>valueAsDate属性值：</span>
+      <span id="valueAsDateProp">无</span>
+    </p>
+  </p>
+  <script>
+    document.getElementById('input5').onchange = function(e){
+      document.getElementById('valueProp').innerText = e.target.value;
+      document.getElementById('valueAsNumberProp').innerText = e.target.valueAsNumber;
+      document.getElementById('valueAsDateProp').innerText = e.target.valueAsDate;
+    }
+  </script>
+</p>
+</li>
+<li><p><code>type=&quot;month&quot;</code> 原生自带的日期选择控件，包括年月（火狐下不支持）<br>在js中通过<code>e.target.value</code>获取的是一个字符串，格式为<code>yyyy-MM</code><br>也可以通过<code>e.target.valueAsNumber</code>获取据1970年1月起经过的月份，或者<code>e.target.valueAsDate</code>获取一个日期对象</p>
+<p>
+  <input id="input6" type="month" />
+  <p>
+    <p>
+      <span>value属性值：</span>
+      <span id="valueProp1">无</span>；
+    </p>
+    <p>
+      <span>valueAsNumber属性值：</span>
+      <span id="valueAsNumberProp1">无</span>；
+    </p>
+    <p>
+      <span>valueAsDate属性值：</span>
+      <span id="valueAsDateProp1">无</span>
+    </p>
+  </p>
+  <script>
+    document.getElementById('input6').onchange = function(e){
+      document.getElementById('valueProp1').innerText = e.target.value;
+      document.getElementById('valueAsNumberProp1').innerText = e.target.valueAsNumber;
+      document.getElementById('valueAsDateProp1').innerText = e.target.valueAsDate;
+    }
+  </script>
+</p>
+</li>
+<li><p><code>type=&quot;week&quot;</code> 原生自带周数选择控件，火狐下不支持<br>value属性的值的格式为<code>yyyy-W + &#39;周数&#39;</code>，比如<code>2020-W01</code>表示2020年的第一周</p>
+<p>
+  <input id="input7" type="week"/>
+  <p>
+    <p>
+      <span>value属性值：</span>
+      <span id="valueProp2">无</span>；
+    </p>
+    <p>
+      <span>valueAsNumber属性值：</span>
+      <span id="valueAsNumberProp2">无</span>；
+    </p>
+    <p>
+      <span>valueAsDate属性值：</span>
+      <span id="valueAsDateProp2">无</span>
+    </p>
+  </p>
+  <script>
+    document.getElementById('input7').onchange = function(e){
+      document.getElementById('valueProp2').innerText = e.target.value;
+      document.getElementById('valueAsNumberProp2').innerText = e.target.valueAsNumber;
+      document.getElementById('valueAsDateProp2').innerText = e.target.valueAsDate;
+    }
+  </script>
+</p>
+</li>
+<li><p><code>type=&quot;time&quot;</code> 原生自带时间选择控件，包括小时和分钟，时间为24小时制<br>小时范围00-23，分钟范围00-59，<code>value</code>属性的值的格式为<code>HH:mm</code><br>谷歌下有下拉框可供选择，火狐下只能通过输入来选择并且火狐下多了个上下午选择框</p>
+<p>
+  <input id="input8" type="time"/>
+  <p>
+    <p>
+      <span>value属性值：</span>
+      <span id="valueProp3">无</span>；
+    </p>
+    <p>
+      <span>valueAsNumber属性值：</span>
+      <span id="valueAsNumberProp3">无</span>；
+    </p>
+    <p>
+      <span>valueAsDate属性值：</span>
+      <span id="valueAsDateProp3">无</span>
+    </p>
+  </p>
+  <script>
+    document.getElementById('input8').onchange = function(e){
+      document.getElementById('valueProp3').innerText = e.target.value;
+      document.getElementById('valueAsNumberProp3').innerText = e.target.valueAsNumber;
+      document.getElementById('valueAsDateProp3').innerText = e.target.valueAsDate;
+    }
+  </script>
+</p>
+</li>
+<li><p><code>type=&quot;datetime-local&quot;</code> 可以看出<code>date</code>和<code>time</code>类型的结合体，不过选择的时间是本地时间<br>支持年月日和时分，<code>value</code>属性的值的格式为<code>yyyy-MM-ddTHH:mm</code><br>火狐下不支持，chrome下无<code>valueAsDate</code>的属性值</p>
+<p>
+  <input id="input9" type="datetime-local"/>
+  <p>
+    <p>
+      <span>value属性值：</span>
+      <span id="valueProp4">无</span>；
+    </p>
+    <p>
+      <span>valueAsNumber属性值：</span>
+      <span id="valueAsNumberProp4">无</span>；
+    </p>
+    <p>
+      <span>valueAsDate属性值：</span>
+      <span id="valueAsDateProp4">无</span>
+    </p>
+  </p>
+  <script>
+    document.getElementById('input9').onchange = function(e){
+      document.getElementById('valueProp4').innerText = e.target.value;
+      document.getElementById('valueAsNumberProp4').innerText = e.target.valueAsNumber;
+      document.getElementById('valueAsDateProp4').innerText = e.target.valueAsDate;
+    }
+  </script>
+</p>
+</li>
+<li><p><code>type=&quot;number&quot;</code> 元素自带的数字输入控件，只允许输入数字，如果输入其他内容则表单提交时该字段为空白<br>输入框内部右侧有个上下按钮可以以此递增或递减数字</p>
+<p>
+  <input type="number" onchange="document.getElementById('valueAsDateProp5').innerText = this.valueAsNumber"/>
+  <p>
+    <span>valueAsNumber属性值：</span>
+    <span id="valueAsDateProp5">无</span>
+  </p>
+</p>
+</li>
+<li><p><code>type=&quot;range&quot;</code> 原生自带范围输入控件，默认范围0-100，通过min属性和max属性来设置设置最小值和最大值</p>
+<p>
+  <input type="range" min="-1" max="50"
+      value="-1"
+      onchange="document.getElementById('valueAsDateProp6').innerText = this.valueAsNumber"/>
+  <p>
+    <span>valueAsNumber属性值：</span>
+    <span id="valueAsDateProp6">无</span>
+  </p>
+</p>
+</li>
+<li><p><code>type=&quot;color&quot;</code> 原生自带的取色板控件<br>chrome下的面板比较的简单，火狐下的面板比较的复杂，可以存自定的颜色<br><code>value</code>属性的值的格式为16进制颜色格式</p>
+<p>
+  <input type="color"
+    onchange="document.getElementById('valueAsDateProp7').innerText = this.value"/>
+  <p>
+    <span>value属性值：</span>
+    <span id="valueAsDateProp7">无</span>
+  </p>
+</p></li>
+</ul>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>新特性虽然好，但是不同浏览器下的样式不一样，而且无法细致地控制行为，所以很少用到。</p>
+<p>如果是一些管理系统，使用现成的组件库会是更好地选择。</p>
+<p>比如Vue的<code>ElementUI</code>，<code>Vuetify</code>，<code>Ant Design Vue</code>。</p>
+<p>或者React的<code>Ant Design</code>。</p>
+<p>都有更好的兼容性和更强的控制性。</p>
+<p>不过当成学习也是相当不错的嘛。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/cd7ff8ac5e59" title="HTML5增强input标签">https://prohibitorum.top/cd7ff8ac5e59</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HTML5/" rel="tag"># HTML5</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/349091160e40" rel="prev" title="HTTP1.1状态码（译）">
+                  <i class="fa fa-angle-left"></i> HTTP1.1状态码（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/09304f3a6c9b" rel="next" title="a标签的那些伪类">
+                  a标签的那些伪类 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1602066809"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

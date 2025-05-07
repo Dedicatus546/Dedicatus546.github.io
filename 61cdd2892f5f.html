@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.2（译）">
+<meta property="og:url" content="https://prohibitorum.top/61cdd2892f5f">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.2">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/06/comma-completions-5-2-beta.gif">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/06/inline-variable-5-2-beta.gif">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/08/clickable-inlay-hints-5-2.gif">
+<meta property="article:published_time" content="2023-10-10T10:31:37.000Z">
+<meta property="article:modified_time" content="2023-10-10T10:31:37.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/06/comma-completions-5-2-beta.gif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/61cdd2892f5f.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/61cdd2892f5f","path":"61cdd2892f5f.html","title":"TypeScript 5.2（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.2（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#using-%E5%A3%B0%E6%98%8E%E5%92%8C%E6%98%BE%E7%A4%BA%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">using 声明和显示的资源管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-number">2.2.</span> <span class="nav-text">装饰器元数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B7%E5%90%8D%E5%92%8C%E5%8C%BF%E5%90%8D%E7%9A%84%E5%85%83%E7%BB%84%E5%85%83%E7%B4%A0"><span class="nav-number">2.3.</span> <span class="nav-text">具名和匿名的元组元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E8%81%94%E5%90%88%E6%95%B0%E7%BB%84%E6%8F%90%E4%BE%9B%E6%9B%B4%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E6%B3%95%E7%94%A8%E4%BE%8B"><span class="nav-number">2.4.</span> <span class="nav-text">为联合数组提供更简单的方法用例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E7%BB%84%E5%A4%8D%E5%88%B6%E6%96%B9%E6%B3%95"><span class="nav-number">2.5.</span> <span class="nav-text">数组复制方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WeakMap-%E5%92%8C-WeakSet-%E6%94%AF%E6%8C%81-symbol-%E4%BD%9C%E4%B8%BA%E9%94%AE%E5%80%BC"><span class="nav-number">2.6.</span> <span class="nav-text">WeakMap 和 WeakSet 支持 symbol 作为键值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%85%E7%B1%BB%E5%9E%8B%E5%AF%BC%E5%85%A5%E6%94%AF%E6%8C%81%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%90%8D"><span class="nav-number">2.7.</span> <span class="nav-text">仅类型导入支持文件扩展名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E6%88%90%E5%91%98%E6%94%AF%E6%8C%81%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%E5%88%86%E5%8F%B7"><span class="nav-number">2.8.</span> <span class="nav-text">对象成员支持自动添加分号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%81%94%E5%8F%98%E9%87%8F%E6%93%8D%E4%BD%9C%E9%87%8D%E6%9E%84"><span class="nav-number">2.9.</span> <span class="nav-text">内联变量操作重构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84%E5%B5%8C%E5%85%A5%E5%8F%82%E6%95%B0%E6%8F%90%E7%A4%BA"><span class="nav-number">2.10.</span> <span class="nav-text">可点击的嵌入参数提示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E6%AD%A3%E5%9C%A8%E8%BF%9B%E8%A1%8C%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%85%BC%E5%AE%B9%E6%A3%80%E6%9F%A5"><span class="nav-number">2.11.</span> <span class="nav-text">优化正在进行中的类型兼容检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A0%B4%E5%9D%8F%E6%80%A7%E5%8F%98%E6%9B%B4%E5%92%8C%E6%AD%A3%E7%A1%AE%E6%80%A7%E4%BF%AE%E5%A4%8D"><span class="nav-number">2.12.</span> <span class="nav-text">破坏性变更和正确性修复</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts-%E5%8F%98%E6%9B%B4"><span class="nav-number">2.12.1.</span> <span class="nav-text">lib.d.ts 变更</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#labeledElementDeclarations-%E5%8C%85%E5%90%AB-undefined-%E5%85%83%E7%B4%A0%E3%80%82"><span class="nav-number">2.12.2.</span> <span class="nav-text">labeledElementDeclarations 包含 undefined 元素。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#module-%E5%92%8C-moduleResolution-%E9%80%89%E9%A1%B9%E5%BF%85%E9%A1%BB%E5%9C%A8%E6%9C%80%E8%BF%91%E7%9A%84-Node-js-%E8%AE%BE%E7%BD%AE%E4%B8%8B%E5%8C%B9%E9%85%8D"><span class="nav-number">2.12.3.</span> <span class="nav-text">module 和 moduleResolution 选项必须在最近的 Node.js 设置下匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E5%90%88%E5%B9%B6%E7%9A%84%E7%AC%A6%E5%8F%B7%E8%BF%9B%E8%A1%8C%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%AF%BC%E5%87%BA%E6%A3%80%E6%9F%A5"><span class="nav-number">2.12.4.</span> <span class="nav-text">对合并的符号进行一致性的导出检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%80%BB%E6%98%AF%E7%94%9F%E6%88%90%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="nav-number">2.12.5.</span> <span class="nav-text">模块总是生成命名空间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/61cdd2892f5f">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.2（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.2（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-10 10:31:37" itemprop="dateCreated datePublished" datetime="2023-10-10T10:31:37+00:00">2023-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>7.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>26 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/">Announcing TypeScript 5.2</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>今天我们激动地宣布：Typescript 5.2 正式发布。</p>
+<p>如果你还不熟悉 TypeScript 的话，可以简单地理解为， TypeScript 是一门建立在 JavaScript 上的语言，TypeScript 通过添加类型语法来进行类型检查。TypeScript 提供的类型描述了程序的一些细节，然后在 TypeScript 编译之前根据这些类型进行检查以捕获可能的拼写错误，逻辑 BUG 等等。 TypeScript 还能根据这些类型来提供编辑器工具，比如代码完成，代码重构等等。实际上，如果你使用像 VS 或者 VS Code 这样的编辑器， TypeScript 已经提供了这种体验。你可以阅读关于 TypeScript 的文档 <a target="_blank" rel="noopener" href="https://typescriptlang.org/">https://typescriptlang.org</a> 来了解更多信息。</p>
+<p>为了开始使用 TypeScript ，可以通过 <a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild">NuGet</a> 获取，或者通过执行如下的 npm 命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D typescript</span><br></pre></td></tr></table></figure>
+
+<p>以下是 TypeScript 5.2 新增的功能列表！</p>
+<ul>
+<li><a href="#using-%E5%A3%B0%E6%98%8E%E5%92%8C%E6%98%BE%E7%A4%BA%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86"> using 声明和显示的资源管理</a></li>
+<li><a href="#%E8%A3%85%E9%A5%B0%E5%99%A8%E5%85%83%E6%95%B0%E6%8D%AE">装饰器元数据</a></li>
+<li><a href="#%E5%85%B7%E5%90%8D%E5%92%8C%E5%8C%BF%E5%90%8D%E7%9A%84%E5%85%83%E7%BB%84%E5%85%83%E7%B4%A0">具名和匿名的元组元素</a></li>
+<li><a href="#%E4%B8%BA%E8%81%94%E5%90%88%E6%95%B0%E7%BB%84%E6%8F%90%E4%BE%9B%E6%9B%B4%E7%AE%80%E5%8D%95%E7%9A%84%E6%96%B9%E6%B3%95%E7%94%A8%E4%BE%8B">为联合数组提供更简单的方法用例</a></li>
+<li><a href="#%E6%95%B0%E7%BB%84%E5%A4%8D%E5%88%B6%E6%96%B9%E6%B3%95">数组复制方法</a></li>
+<li><a href="#weakmap-%E5%92%8C-weakset-%E6%94%AF%E6%8C%81-symbol-%E4%BD%9C%E4%B8%BA%E9%94%AE%E5%80%BC"> WeakMap 和 WeakSet 支持 symbol 作为键值</a></li>
+<li><a href="#%E4%BB%85%E7%B1%BB%E5%9E%8B%E5%AF%BC%E5%85%A5%E6%94%AF%E6%8C%81%E6%96%87%E4%BB%B6%E6%89%A9%E5%B1%95%E5%90%8D">仅类型导入支持文件扩展名</a></li>
+<li><a href="#%E5%AF%B9%E8%B1%A1%E6%88%90%E5%91%98%E6%94%AF%E6%8C%81%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%E5%88%86%E5%8F%B7">对象成员支持自动添加分号</a></li>
+<li><a href="#%E5%86%85%E8%81%94%E5%8F%98%E9%87%8F%E6%93%8D%E4%BD%9C%E9%87%8D%E6%9E%84">内联变量操作重构</a></li>
+<li><a href="#%E5%8F%AF%E7%82%B9%E5%87%BB%E7%9A%84%E5%B5%8C%E5%85%A5%E5%8F%82%E6%95%B0%E6%8F%90%E7%A4%BA">可点击的嵌入参数提示</a></li>
+<li><a href="#%E4%BC%98%E5%8C%96%E6%AD%A3%E5%9C%A8%E8%BF%9B%E8%A1%8C%E4%B8%AD%E7%9A%84%E7%B1%BB%E5%9E%8B%E5%85%BC%E5%AE%B9%E6%A3%80%E6%9F%A5">优化正在进行中的类型兼容检查</a></li>
+<li><a href="#%E7%A0%B4%E5%9D%8F%E6%80%A7%E5%8F%98%E6%9B%B4%E5%92%8C%E6%AD%A3%E7%A1%AE%E6%80%A7%E4%BF%AE%E5%A4%8D">破坏性变更和正确性修复</a></li>
+</ul>
+<h2 id="using-声明和显示的资源管理"><a href="#using-声明和显示的资源管理" class="headerlink" title="using 声明和显示的资源管理"></a><code>using</code> 声明和显示的资源管理</h2><p>TypeScript 5.2 为 ECMAScript 中即将到来的<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-explicit-resource-management">显式资源管理</a>特性提供了支持。我们可以探讨下该特性的一些动机以及去理解该特性给我们带来了什么。</p>
+<p>在创建一个对象之后，需要去做一些“清理”的操作是很常见的。比如，你可能需要去关闭网络连接，删除临时的文件，或者只是释放一些内存。</p>
+<p>我们可以假设有一个创建临时文件的函数，这个函数通过操作来读取和写入文件，然后关闭文件，删除它。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> fs <span class="keyword">from</span> <span class="string">&quot;fs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> path = <span class="string">&quot;.some_temp_file&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> file = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用这个文件...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关闭文件，然后删掉它</span></span><br><span class="line">  fs.<span class="title function_">closeSync</span>(file);</span><br><span class="line">  fs.<span class="title function_">unlinkSync</span>(path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个过程没什么问题，但如果我们想提前退出的话会发生什么？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> path = <span class="string">&quot;.some_temp_file&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> file = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用文件...</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">    <span class="comment">// 额外的工作...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 关闭文件然后删除它</span></span><br><span class="line">    fs.<span class="title function_">closeSync</span>(file);</span><br><span class="line">    fs.<span class="title function_">unlinkSync</span>(path);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关闭文件然后删除它</span></span><br><span class="line">  fs.<span class="title function_">closeSync</span>(file);</span><br><span class="line">  fs.<span class="title function_">unlinkSync</span>(path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们会发现一些容易忘记的重复的清理操作。并且我们也不能保证在抛出错误时也能关闭以及删除文件。这可以通过包裹 <code>try/finally</code> 块来解决。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> path = <span class="string">&quot;.some_temp_file&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> file = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 使用文件...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">      <span class="comment">// 额外的工作...</span></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// 关闭文件然后删除它</span></span><br><span class="line">    fs.<span class="title function_">closeSync</span>(file);</span><br><span class="line">    fs.<span class="title function_">unlinkSync</span>(path);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然这样写程序的健壮性更好，但是它往代码中添加了一些“噪音”。如果我们开始在 <code>finally</code> 块中添加更多的清理逻辑，很容易被其他部分误伤。比如，阻止其他资源释放引发的异常。这就是<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-explicit-resource-management">显式资源管理</a>提案想要解决的问题。该提案的关键点是以一种主流的思想来支持资源清理，即我们尝试处理的清理工作。</p>
+<p>因此，我们先添加了一个内置的名叫 <code>Symbol.dispose</code> 的 symbol 变量，然后我们创建一个带有 <code>Symbol.dispose</code> 方法的对象。方便起见， TypeScript 定义了一个新的全局类型 <code>Disposable</code> 来描述这种情况。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TempFile</span> <span class="keyword">implements</span> <span class="title class_">Disposable</span> &#123;</span><br><span class="line">  #<span class="attr">path</span>: <span class="built_in">string</span>;</span><br><span class="line">  #<span class="attr">handle</span>: <span class="built_in">number</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="attr">path</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.#path = path;</span><br><span class="line">    <span class="variable language_">this</span>.#handle = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 其他方法</span></span><br><span class="line"></span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="property">dispose</span>]() &#123;</span><br><span class="line">    <span class="comment">// 关闭文件然后删除 它</span></span><br><span class="line">    fs.<span class="title function_">closeSync</span>(<span class="variable language_">this</span>.#handle);</span><br><span class="line">    fs.<span class="title function_">unlinkSync</span>(<span class="variable language_">this</span>.#path);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后我们就可以调用这个方法了</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> file = <span class="keyword">new</span> <span class="title class_">TempFile</span>(<span class="string">&quot;.some_temp_file&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    file[<span class="title class_">Symbol</span>.<span class="property">dispose</span>]();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>把清理操作移动到 <code>TempFile</code> 类自身中并没有给我们带来便利，我们基本上只是把清理操作从 <code>finally</code> 块中移动到特定的方法中，这一直都是可以实现的。但是这个方法有一个众所周知的“名字”，这意味着 JavaScript 可以在它的基础上构建其他的特性。</p>
+<p>因此带来的第一个特性点为： <code>using</code> 声明。 <code>using</code> 是一个新的关键字，可以让我们定义新的固定绑定，有点类似 <code>const</code> ，不过该关键字的不同之处在于，通过 <code>using</code> 定义的变量会在它的作用域结束后调用它的 <code>Symbol.dispose</code> 方法。</p>
+<p>所以我们可以简单地编写出如下的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  using file = <span class="keyword">new</span> <span class="title class_">TempFile</span>(<span class="string">&quot;.some_temp_file&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用文件...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">    <span class="comment">// 更多的操作...</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以发现上面的代码中没有使用 <code>try/finally</code> 块，至少我们没有看见。从功能上讲，这正是 <code>using</code> 声明为我们做的事情，但我们无需去处理它。</p>
+<p>你可能会觉得熟悉，比如 C# 中的 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-8.0/using">using 声明</a>， Python 中的 <a target="_blank" rel="noopener" href="https://docs.python.org/3/reference/compound_stmts.html#the-with-statement">with 语句</a>，以及 Java 中的 <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html">try-with-resource 声明</a>，这些和 JavaScript 的新 <code>using</code> 关键字类似，都提供了一种相似的显式的方式来执行一个作用域结束对象的“销毁”程序。</p>
+<p><code>using</code> 声明会在包含它们的作用域的最后或者在“提前返回”，比如一个返回语句或者错误抛出的时候执行清理。它们的销毁顺序也以类似栈的结构一样，遵循先进后出的方式。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">loggy</span>(<span class="params"><span class="attr">id</span>: <span class="built_in">string</span></span>): <span class="title class_">Disposable</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Creating <span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    [<span class="title class_">Symbol</span>.<span class="property">dispose</span>]() &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Disposing <span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">func</span>(<span class="params"></span>) &#123;</span><br><span class="line">  using a = <span class="title function_">loggy</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  using b = <span class="title function_">loggy</span>(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">  &#123;</span><br><span class="line">    using c = <span class="title function_">loggy</span>(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">    using d = <span class="title function_">loggy</span>(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  using e = <span class="title function_">loggy</span>(<span class="string">&quot;e&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不可达</span></span><br><span class="line">  <span class="comment">// 不会创建，也不会销毁</span></span><br><span class="line">  using f = <span class="title function_">loggy</span>(<span class="string">&quot;f&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">func</span>();</span><br><span class="line"><span class="comment">// Creating a</span></span><br><span class="line"><span class="comment">// Creating b</span></span><br><span class="line"><span class="comment">// Creating c</span></span><br><span class="line"><span class="comment">// Creating d</span></span><br><span class="line"><span class="comment">// Disposing d</span></span><br><span class="line"><span class="comment">// Disposing c</span></span><br><span class="line"><span class="comment">// Creating e</span></span><br><span class="line"><span class="comment">// Disposing e</span></span><br><span class="line"><span class="comment">// Disposing b</span></span><br><span class="line"><span class="comment">// Disposing a</span></span><br></pre></td></tr></table></figure>
+
+<p><code>using</code> 声明支持异常抛出情况；如果一个错误被抛出，它会在销毁执行之后被再次抛出。另一方面，你的函数体可能按预期执行，但是 <code>Symbol.dispose</code> 函数抛出了异常，这种情况下，异常同样会被重新抛出。</p>
+<p>但是如果两个逻辑，即一个在销毁之前，一个在销毁过程中的时候抛出了异常会发生什么？对于这些情况，引入 <code>SuppressedError</code> 类，它是 <code>Error</code> 的一个新的子类。它有一个 <code>suppressed</code> 属性，这个属性保存了最后一次抛出的错误，它还有一个 <code>error</code> 属性，保存了最近抛出的错误。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ErrorA</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Error</span> &#123;</span><br><span class="line">  name = <span class="string">&quot;ErrorA&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ErrorB</span> <span class="keyword">extends</span> <span class="title class_ inherited__">Error</span> &#123;</span><br><span class="line">  name = <span class="string">&quot;ErrorB&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">throwy</span>(<span class="params">id: string</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    [<span class="title class_">Symbol</span>.<span class="property">dispose</span>]() &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ErrorA</span>(<span class="string">`Error from <span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">func</span>(<span class="params"></span>) &#123;</span><br><span class="line">  using a = <span class="title function_">throwy</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ErrorB</span>(<span class="string">&quot;oops!&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="title function_">func</span>();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span> (<span class="attr">e</span>: any) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">name</span>); <span class="comment">// SuppressedError</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">message</span>); <span class="comment">// An error was suppressed during disposal.</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">error</span>.<span class="property">name</span>); <span class="comment">// ErrorA</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">error</span>.<span class="property">message</span>); <span class="comment">// Error from a</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">suppressed</span>.<span class="property">name</span>); <span class="comment">// ErrorB</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(e.<span class="property">suppressed</span>.<span class="property">message</span>); <span class="comment">// oops!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>你可能注意到了例子中使用的是同步的方法。然而，许多资源的销毁涉及异步操作，因此我们需要在继续执行其他代码之前等待这些操作完成。</p>
+<p>这就是为什么定义了一个新的 <code>Symbol.asyncDispose</code> 函数，这就是我们展示的下一个特性点 —— <code>await using</code> 声明。它和 <code>using</code> 声明类似，但是关键的是它会查找需要 <code>await</code> 的销毁程序。它使用了一个不同的名为 <code>Symbol.asyncDispose</code> 方法，尽管它同样能使用 <code>Symbol.dispose</code> 来处理任何事情。方便起见， TypeScript 也引入了一个新的全局类型 <code>AsyncDisposable</code> ，用来描述任何带有一个异步销毁方法的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">doWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// Do fake work for half a second.</span></span><br><span class="line">  <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="built_in">setTimeout</span>(resolve, <span class="number">500</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">loggy</span>(<span class="params">id: string</span>): <span class="title class_">AsyncDisposable</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Constructing <span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="keyword">async</span> [<span class="title class_">Symbol</span>.<span class="property">asyncDispose</span>]() &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Disposing (async) <span class="subst">$&#123;id&#125;</span>`</span>);</span><br><span class="line">      <span class="keyword">await</span> <span class="title function_">doWork</span>();</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">func</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">await</span> using a = <span class="title function_">loggy</span>(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> using b = <span class="title function_">loggy</span>(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">await</span> using c = <span class="title function_">loggy</span>(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">    <span class="keyword">await</span> using d = <span class="title function_">loggy</span>(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">await</span> using e = <span class="title function_">loggy</span>(<span class="string">&quot;e&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 不可达</span></span><br><span class="line">  <span class="comment">// 不会创建，也不会销毁</span></span><br><span class="line">  <span class="keyword">await</span> using f = <span class="title function_">loggy</span>(<span class="string">&quot;f&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">func</span>();</span><br><span class="line"><span class="comment">// Constructing a</span></span><br><span class="line"><span class="comment">// Constructing b</span></span><br><span class="line"><span class="comment">// Constructing c</span></span><br><span class="line"><span class="comment">// Constructing d</span></span><br><span class="line"><span class="comment">// Disposing (async) d</span></span><br><span class="line"><span class="comment">// Disposing (async) c</span></span><br><span class="line"><span class="comment">// Constructing e</span></span><br><span class="line"><span class="comment">// Disposing (async) e</span></span><br><span class="line"><span class="comment">// Disposing (async) b</span></span><br><span class="line"><span class="comment">// Disposing (async) a</span></span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>Disposable</code> 和 <code>AsyncDisposable</code> 来定义类型可以让你的代码和其他销毁逻辑工作起来更简单。实际上，许多存在的类型都自然地存在一个 <code>dispose</code> 或者 <code>close</code> 方法。比如， VS Code 的接口甚至定义了它们自己的 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/api/references/vscode-api#Disposable">Disposable 接口</a>。在浏览器中，或者诸如 Node.js ， Deno 以及 Bun 之类的运行时中，接口可能都会选择为存在清理方法的对象使用 <code>Symbol.dispose</code> 和 <code>Symbol.asyncDispos</code>e 。比如文件句柄，连接等等。</p>
+<p>目前看来这些特性或许对类库很有帮助，但对你的场景来说可能有点重。如果你正在执行许多的临时清理操作，创建一个新的类型可能会引入过度抽象和关于最佳实践的问题。比如，说回之前 <code>TempFile</code> 的例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TempFile</span> <span class="keyword">implements</span> <span class="title class_">Disposable</span> &#123;</span><br><span class="line">  #<span class="attr">path</span>: <span class="built_in">string</span>;</span><br><span class="line">  #<span class="attr">handle</span>: <span class="built_in">number</span>;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="attr">path</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.#path = path;</span><br><span class="line">    <span class="variable language_">this</span>.#handle = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 其他方法</span></span><br><span class="line"></span><br><span class="line">  [<span class="title class_">Symbol</span>.<span class="property">dispose</span>]() &#123;</span><br><span class="line">    <span class="comment">// 关闭文件然后删除它</span></span><br><span class="line">    fs.<span class="title function_">closeSync</span>(<span class="variable language_">this</span>.#handle);</span><br><span class="line">    fs.<span class="title function_">unlinkSync</span>(<span class="variable language_">this</span>.#path);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  using file = <span class="keyword">new</span> <span class="title class_">TempFile</span>(<span class="string">&quot;.some_temp_file&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用文件...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">      <span class="comment">// 其他的操作...</span></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们想要的只是记得去调用两个函数，但这样的写法是最佳的方式吗？我们应该在构造函数中调用 <code>openSync</code> 吗，还是说创建一个 <code>open</code> 方法，或者自己传入句柄，又或者我们应该为每个可能的需要执行的操作暴露一个方法？又或者我们只是需要把属性设置为公共的？</p>
+<p>这也就是我们想说的第三个特性点， <code>DisposableStack</code> 和 <code>AsyncDisposableStack</code> 。这两个对象对于进行一次性清理以及任何数量的清理很有用。 <code>DisposableStack</code> 对象有几个方法来跟踪可销毁的对象，以及执行传入的函数来随意执行清理操作。我们也可以把它分配给 <code>using</code> 变量，因为它们自身也是可销毁的。所以我们可以把原始的例子写成：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">doSomeWork</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> path = <span class="string">&quot;.some_temp_file&quot;</span>;</span><br><span class="line">  <span class="keyword">const</span> file = fs.<span class="title function_">openSync</span>(path, <span class="string">&quot;w+&quot;</span>);</span><br><span class="line"></span><br><span class="line">  using cleanup = <span class="keyword">new</span> <span class="title class_">DisposableStack</span>();</span><br><span class="line">  cleanup.<span class="title function_">defer</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    fs.<span class="title function_">closeSync</span>(file);</span><br><span class="line">    fs.<span class="title function_">unlinkSync</span>(path);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用文件...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="title function_">someCondition</span>()) &#123;</span><br><span class="line">      <span class="comment">// 其他的操作...</span></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面， <code>defer</code> 方法接受一个回调，一旦开始处理清理过程，回调就会执行。通常， <code>defer</code> （以及 <code>DisposableStack</code> 的 <code>use</code> 和 <code>adopt</code> 等其他方法）应该在创建完资源之后立即调用。顾名思义， <code>DisposableStack</code> 像栈一样按照先进后出的顺序来处理跟踪的所有操作，因此在创建值之后立即延迟调用有助于避免奇怪的依赖问题。 <code>AsyncDisposableStack</code> 和 <code>DisposableStack</code> 类似，但可以跟踪异步的函数以及 <code>AsyncDisposable</code> 对象，并且它自身也是一个 <code>AsyncDisposable</code> 对象。</p>
+<p><code>defer</code> 方法在很多方面和 <a target="_blank" rel="noopener" href="https://go.dev/tour/flowcontrol/12">Go</a> ， <a target="_blank" rel="noopener" href="https://docs.swift.org/swift-book/documentation/the-swift-programming-language/statements/#Defer-Statement">Swift</a> ， <a target="_blank" rel="noopener" href="https://ziglang.org/documentation/master/#defer">Zig</a> ， <a target="_blank" rel="noopener" href="https://odin-lang.org/docs/overview/#defer-statement">Odin</a> 等等的 <code>defer</code> 关键字类似，其中的约定应该相似。</p>
+<p>由于这个特性是最近才有的，因此大多数的运行时本身并不支持它。要运行它，你需要以下的运行时垫片。</p>
+<ul>
+<li><code>Symbol.dispose</code></li>
+<li><code>Symbol.asyncDispose</code></li>
+<li><code>DisposableStack</code></li>
+<li><code>AsyncDisposableStack</code></li>
+<li><code>SuppressedError</code></li>
+</ul>
+<p>然而，如果你只对 <code>using</code> 和 <code>await using</code> 感兴趣，那么你应该只需对内置的 symbol 对象添加垫片。像下面这样简单地处理应该适用于大部分例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Symbol</span>.<span class="property">dispose</span> ??= <span class="title class_">Symbol</span>(<span class="string">&quot;Symbol.dispose&quot;</span>);</span><br><span class="line"><span class="title class_">Symbol</span>.<span class="property">asyncDispose</span> ??= <span class="title class_">Symbol</span>(<span class="string">&quot;Symbol.asyncDispose&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>你也需要把你的编译目标设置为 <code>es2022</code> 或者该版本以上，然后配置你的 lib 设置项，添加 <code>esnext</code> 或者 <code>esnext.disposable</code> 选项。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;es2022&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;lib&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;es2022&quot;</span><span class="punctuation">,</span> <span class="string">&quot;esnext.disposable&quot;</span><span class="punctuation">,</span> <span class="string">&quot;dom&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>有关该特性的更多信息，可以在该 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54505">PR</a> 中查看上查看</p>
+<h2 id="装饰器元数据"><a href="#装饰器元数据" class="headerlink" title="装饰器元数据"></a>装饰器元数据</h2><p>TypeScript 5.2 实现了即将到来的 ECMAScript 特性之一，<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-decorator-metadata">装饰器元数据</a>。</p>
+<p>该特性的关键点是让任何附带了装饰器或者内部使用了装饰器的类更加简单地在去创建和使用元数据。</p>
+<p>每当使用装饰器函数，现在它们都可以放问其上下文对象上的一个新的 <code>metadata</code> 属性。 <code>metadata</code> 属性只是保存了一个简单的对象。由于 JavaScript 可以让我们随意地添加属性，所以它可以被用作一个每个装饰器更新的字典。或者，由于每个 <code>metadata</code> 对象在类的每个修饰部分都是相同的，所以它可以当作一个 <code>Map</code> 的键。在类上或者类内的所有的装饰器执行之后，可以通过类的 <code>Symbol.metadata</code> 属性来获取这个对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Context</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">metadata</span>: <span class="title class_">Record</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">setMetadata</span>(<span class="params"><span class="attr">_target</span>: <span class="built_in">any</span>, <span class="attr">context</span>: <span class="title class_">Context</span></span>) &#123;</span><br><span class="line">  context.<span class="property">metadata</span>[context.<span class="property">name</span>] = <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SomeClass</span> &#123;</span><br><span class="line">  <span class="meta">@setMetadata</span></span><br><span class="line">  foo = <span class="number">123</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@setMetadata</span></span><br><span class="line">  accessor bar = <span class="string">&quot;hello!&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@setMetadata</span></span><br><span class="line">  <span class="title function_">baz</span>(<span class="params"></span>) &#123; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ourMetadata = <span class="title class_">SomeClass</span>[<span class="title class_">Symbol</span>.<span class="property">metadata</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(ourMetadata));</span><br><span class="line"><span class="comment">// &#123; &quot;bar&quot;: true, &quot;baz&quot;: true, &quot;foo&quot;: true &#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这对一些不同的场景很有用。许多用例可能会获取元数据，比如调试，序列化，或者通过装饰器来运行依赖注入。由于每个被装饰类都会生成元数据对象，框架可以在私底下把他们当作一个 <code>Map</code> 或者 <code>WeakMap</code> 的键，或者根据需要来附加一些属性。</p>
+<p>举个例子，假设我们想要使用装饰器来跟踪在使用 <code>JSON.stringify</code> 的时哪个属性或者访问器是可序列化，代码如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; serialize, jsonify &#125; <span class="keyword">from</span> <span class="string">&quot;./serializer&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">  <span class="attr">firstName</span>: <span class="built_in">string</span>;</span><br><span class="line">  <span class="attr">lastName</span>: <span class="built_in">string</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@serialize</span></span><br><span class="line">  <span class="attr">age</span>: <span class="built_in">number</span></span><br><span class="line"></span><br><span class="line">  <span class="meta">@serialize</span></span><br><span class="line">  <span class="keyword">get</span> <span class="title function_">fullName</span>() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>.firstName&#125;</span> <span class="subst">$&#123;<span class="variable language_">this</span>.lastName&#125;</span>`</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">toJSON</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">jsonify</span>(<span class="variable language_">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="attr">firstName</span>: <span class="built_in">string</span>, <span class="attr">lastName</span>: <span class="built_in">string</span>, <span class="attr">age</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的代码中，我么只希望 <code>age</code> 和 <code>fullName</code> 字段应该被序列化，因为它们使用了 <code>@serialize</code> 装饰器。我们定义了一个 <code>toJSON</code> 的方法来达到这个目的，但它只是调用了 <code>jsonify</code> 函数，他只会使用 <code>@serialize</code> 装饰的元数据信息。</p>
+<p>下面的例子展示了 <code>./serialize.ts</code> 的可能的定义</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> serializables = <span class="title class_">Symbol</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Context</span> =</span><br><span class="line">  | <span class="title class_">ClassAccessorDecoratorContext</span></span><br><span class="line">  | <span class="title class_">ClassGetterDecoratorContext</span></span><br><span class="line">  | <span class="title class_">ClassFieldDecoratorContext</span></span><br><span class="line">  ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">serialize</span>(<span class="params"><span class="attr">_target</span>: <span class="built_in">any</span>, <span class="attr">context</span>: <span class="title class_">Context</span></span>): <span class="built_in">void</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (context.<span class="property">static</span> || context.<span class="property">private</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Can only serialize public instance members.&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> context.<span class="property">name</span> === <span class="string">&quot;symbol&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Cannot serialize symbol-named properties.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> propNames = (context.<span class="property">metadata</span>[serializables] <span class="keyword">as</span> <span class="built_in">string</span>[] | <span class="literal">undefined</span>) ??= [];</span><br><span class="line">  propNames.<span class="title function_">push</span>(context.<span class="property">name</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">jsonify</span>(<span class="params"><span class="attr">instance</span>: <span class="built_in">object</span></span>): <span class="built_in">string</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> metadata = instance.<span class="property">constructor</span>[<span class="title class_">Symbol</span>.<span class="property">metadata</span>];</span><br><span class="line">  <span class="keyword">const</span> propNames = metadata?.[serializables] <span class="keyword">as</span> <span class="built_in">string</span>[] | <span class="literal">undefined</span>;</span><br><span class="line">  <span class="keyword">if</span> (!propNames) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;No members marked with @serialize.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> pairStrings = propNames.<span class="title function_">map</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> strKey = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(key);</span><br><span class="line">    <span class="keyword">const</span> strValue = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>((instance <span class="keyword">as</span> <span class="built_in">any</span>)[key]);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;strKey&#125;</span>: <span class="subst">$&#123;strValue&#125;</span>`</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&#123; <span class="subst">$&#123;pairStrings.join(<span class="string">&quot;, &quot;</span>)&#125;</span> &#125;`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该模块有一个本地的名为 <code>serializables</code> 的 symbol 变量，用于存储和取回被 <code>@serializable</code> 装饰的属性的名字。每当调用 <code>@serializable</code> 时，它就会在元数据对象中保存了一个包含这些属性的名的列表。当调用 <code>jsonify</code> 时，会从元数据对象中去除该属性名列表，并用于从实例上获取对应的值，最后序列化这些属性名以及对应的值。</p>
+<p>从技术上说，使用一个 symbol 变量可以让其他人获取到这个数据。或者使用一个键为元数据对象的 <code>WeakMap</code> 来作为一个替代的方案。这可以让数据保持私有，并且在此情况下恰好使用更少地类型断言，但是在其他方面是相似的。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> serializables = <span class="keyword">new</span> <span class="title class_">WeakMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Context</span> =</span><br><span class="line">  | <span class="title class_">ClassAccessorDecoratorContext</span></span><br><span class="line">  | <span class="title class_">ClassGetterDecoratorContext</span></span><br><span class="line">  | <span class="title class_">ClassFieldDecoratorContext</span></span><br><span class="line">  ;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">serialize</span>(<span class="params"><span class="attr">_target</span>: <span class="built_in">any</span>, <span class="attr">context</span>: <span class="title class_">Context</span></span>): <span class="built_in">void</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (context.<span class="property">static</span> || context.<span class="property">private</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Can only serialize public instance members.&quot;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> context.<span class="property">name</span> !== <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Can only serialize string properties.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> propNames = serializables.<span class="title function_">get</span>(context.<span class="property">metadata</span>);</span><br><span class="line">  <span class="keyword">if</span> (propNames === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    serializables.<span class="title function_">set</span>(context.<span class="property">metadata</span>, propNames = []);</span><br><span class="line">  &#125;</span><br><span class="line">  propNames.<span class="title function_">push</span>(context.<span class="property">name</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">jsonify</span>(<span class="params"><span class="attr">instance</span>: <span class="built_in">object</span></span>): <span class="built_in">string</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> metadata = instance.<span class="property">constructor</span>[<span class="title class_">Symbol</span>.<span class="property">metadata</span>];</span><br><span class="line">  <span class="keyword">const</span> propNames = metadata &amp;&amp; serializables.<span class="title function_">get</span>(metadata);</span><br><span class="line">  <span class="keyword">if</span> (!propNames) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;No members marked with @serialize.&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> pairStrings = propNames.<span class="title function_">map</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> strKey = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(key);</span><br><span class="line">    <span class="keyword">const</span> strValue = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>((instance <span class="keyword">as</span> <span class="built_in">any</span>)[key]);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;strKey&#125;</span>: <span class="subst">$&#123;strValue&#125;</span>`</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">`&#123; <span class="subst">$&#123;pairStrings.join(<span class="string">&quot;, &quot;</span>)&#125;</span> &#125;`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，这些实现没有处理子类和继承的情况。这留给你当作一个练习（你可能会发现一个更加简易的版本）。</p>
+<p>由于这个特性还很新，许多运行时还没有原生地支持它。为了使用它，你需要为 <code>Symbol.metadata</code> 添加一个垫片。下面简单的实例可以应对大多数情况：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Symbol</span>.<span class="property">metadata</span> ??= <span class="title class_">Symbol</span>(<span class="string">&quot;Symbol.metadata&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>你还需要把你的编译目标设置为 <code>es2022</code> 或者以上的版本，然后配置 lib 设置项，增加 <code>esnext</code> 或者 <code>esnext.decorators</code> 选项。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;es2022&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;lib&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;es2022&quot;</span><span class="punctuation">,</span> <span class="string">&quot;esnext.decorators&quot;</span><span class="punctuation">,</span> <span class="string">&quot;dom&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/a-tarasyuk">Oleksandr Tarasiuk</a> 为 TypeScript 5.2 贡献了这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54657">装饰器元数据的实现</a></p>
+<h2 id="具名和匿名的元组元素"><a href="#具名和匿名的元组元素" class="headerlink" title="具名和匿名的元组元素"></a>具名和匿名的元组元素</h2><p>元组类型支持为每个元素使用可选的标签或者名称</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Pair</span> = [<span class="attr">first</span>: T, <span class="attr">second</span>: T];</span><br></pre></td></tr></table></figure>
+
+<p>这些标签不会更改你被允许的操作，它们只是为了更好的可读性以及更加便于工具。</p>
+<p>然而， TypeScript 在先前有一条规则，即不允许元组混合和标记带有标签和不带标签的元素。换句话说，要么元组中的所有元素没有标签，要么元组中的所有元素都有一个标签。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ✅ 正确 - 不包含标签</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Pair1</span> = [T, T];</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正确 - 都包含了标签</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Pair2</span> = [<span class="attr">first</span>: T, <span class="attr">second</span>: T];</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 先前版本报错</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Pair3</span> = [<span class="attr">first</span>: T, T];</span><br><span class="line"><span class="comment">//                         ~</span></span><br><span class="line"><span class="comment">// 元组元素要么都有名字，要么都没有名字</span></span><br></pre></td></tr></table></figure>
+
+<p>对于剩余的元素来说这是很恼人，我们需要强制添加一个标签，比如 <code>rest</code> 或者 <code>tail</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 先前版本报错</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">TwoOrMore</span>_A = [<span class="attr">first</span>: T, <span class="attr">second</span>: T, ...T[]];</span><br><span class="line"><span class="comment">//                                          ~~~~~~</span></span><br><span class="line"><span class="comment">// 元组元素要么都有名字，要么都没有名字</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅</span></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">TwoOrMore</span>_B = [<span class="attr">first</span>: T, <span class="attr">second</span>: T, <span class="attr">rest</span>: ...T[]];</span><br></pre></td></tr></table></figure>
+
+<p>这也意味着必须在类型系统内部强制执行这个限制，否则 TypeScript 会丢失这些标签。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">HasLabels</span> = [<span class="attr">a</span>: <span class="built_in">string</span>, <span class="attr">b</span>: <span class="built_in">string</span>];</span><br><span class="line"><span class="keyword">type</span> <span class="title class_">HasNoLabels</span> = [<span class="built_in">number</span>, <span class="built_in">number</span>];</span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Merged</span> = [...<span class="title class_">HasNoLabels</span>, ...<span class="title class_">HasLabels</span>];</span><br><span class="line"><span class="comment">//   ^ [number, number, string, string]</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//     在合并的时候丢失了 &#x27;a&#x27; 和 &#x27;b&#x27; 标签</span></span><br></pre></td></tr></table></figure>
+
+<p>在 TypeScript 5.2 要么都有要么都没有这个在元组上的限制被解除了。 TypeScript 现在可以在一个没有标签的元组中展开元组时保留展开元组的标签。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/JoshuaKGoldberg">Josh Goldberg</a> 和 <a target="_blank" rel="noopener" href="https://github.com/Andarist">Mateusz Burzyński</a> 合作解除了这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53356">限制</a>。</p>
+<h2 id="为联合数组提供更简单的方法用例"><a href="#为联合数组提供更简单的方法用例" class="headerlink" title="为联合数组提供更简单的方法用例"></a>为联合数组提供更简单的方法用例</h2><p>在先前的版本的 TypeScript 中，调用联合数组类型的数组的方法可能会让人抓狂。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">let</span> <span class="attr">array</span>: <span class="built_in">string</span>[] | <span class="built_in">number</span>[];</span><br><span class="line"></span><br><span class="line">array.<span class="title function_">filter</span>(<span class="function"><span class="params">x</span> =&gt;</span> !!x);</span><br><span class="line"><span class="comment">//    ~~~~~~ error!</span></span><br><span class="line"><span class="comment">// This expression is not callable.</span></span><br><span class="line"><span class="comment">//   Each member of the union type &#x27;...&#x27; has signatures,</span></span><br><span class="line"><span class="comment">//   but none of those signatures are compatible</span></span><br><span class="line"><span class="comment">//   with each other.</span></span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中， TypeScript 会尝试观察是否每个 filter 的版本能够兼容到 <code>string[]</code> 和 <code>number[]</code> 。在没有关联两者的策略下， TypeScript 会摊开双手说：我无法使它工作。</p>
+<p>在 TypeScript 5.2 中，在放弃这些情况之前，并集数组类型的数组会被当作一个特殊的情况。每个成员元素类型会生成一个新的类型，然后在这个类型上执行方法。</p>
+<p>拿上面的例子来说， <code>string[] | number[]</code> 会被转化为 <code>(string | number)[]</code> （或者 <code>Array&lt;string | number&gt;</code> ），然后在这个类型上执行 <code>filter</code> 方法。有一点需要注意的是， <code>filter</code> 方法会生成一个 <code>Array&lt;string | number&gt;</code> 类型而不是 <code>string[] | number[]</code> 。对于新产生的值来说，这样出错的风险比较小。</p>
+<p>这意味着许多像 <code>filter</code> ， <code>find</code> ， <code>some</code> ， <code>every</code> 以及 <code>reduce</code> 方法在先前在联合数组类型的数组上不可调用的情况下都会变得可以调用。</p>
+<p>你可以在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/53489">PR</a> 找到更多的实现细节。</p>
+<h2 id="数组复制方法"><a href="#数组复制方法" class="headerlink" title="数组复制方法"></a>数组复制方法</h2><p>TypeScript 5.2 包括了 ECMAScript 关于“<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-change-array-by-copy">通过拷贝改变数组</a>”提案中添加的方法的定义。</p>
+<p>虽然 JavaScript 的数组已经有一些很有用的方法，比如 <code>sort()</code> ， <code>splice()</code> 以及 <code>reverse()</code> ，但是这些方法会原地更新数组自身。通常，我们都是希望创建一个完全分离的数组，这样不会影响到原数组。为了实现它，你可以先使用 <code>slice()</code> 方法或者数组的展开方式来获得一个数组的拷贝副本，然后执行相关的操作。比如，你可以通过 <code>myArray.slice().reverse()</code> 来获取一个翻转的数组副本。</p>
+<p>还有一种常见的情况，创建一个拷贝，但其实内部只有一个元素改变了，有很多种方式可以实现它，但最明显的一种方式需要多个语句：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> copy = myArray.<span class="title function_">slice</span>();</span><br><span class="line">copy[someIndex] = updatedValue;</span><br><span class="line"><span class="title function_">doSomething</span>(copy);</span><br></pre></td></tr></table></figure>
+
+<p>或者下面这种意图不明显的方式：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">doSomething</span>(myArray.<span class="title function_">map</span>(<span class="function">(<span class="params">value, index</span>) =&gt;</span> index === someIndex ? updatedValue : value));</span><br></pre></td></tr></table></figure>
+
+<p>对于这个相当常见的操作而言这两种方式都太麻烦了。这也就是为什么 JavaScript 添加了 4 个新的方式来执行对应相同的操作而不改变原始的数组，这四个方法为 <code>toSorted</code> ， <code>toSpliced</code> ， <code>toReversed</code> 以及 <code>with</code> 。前 3 个方法与其对应原地更新的方法执行相同的操作，但是会返回一个新的数组。 <code>with</code> 也会返回一个新的数组，但是只会更新一个元素（如同上面讨论的那样）</p>
+<table>
+<thead>
+<tr>
+<th>可变</th>
+<th>拷贝</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>myArray.reverse()</code></td>
+<td><code>myArray.toReversed()</code></td>
+</tr>
+<tr>
+<td><code>myArray.sort((a, b) =&gt; ...)</code></td>
+<td><code>myArray.toSorted((a, b) =&gt; ...)</code></td>
+</tr>
+<tr>
+<td><code>myArray.splice(start, deleteCount, ...items)</code></td>
+<td><code>myArray.toSpliced(start, deleteCount, ...items)</code></td>
+</tr>
+<tr>
+<td><code>myArray[index] = updatedValue</code></td>
+<td><code>myArray.with(index, updatedValue)</code></td>
+</tr>
+</tbody></table>
+<p>注意拷贝版本的方法会始终创建一个新的数组，与可变版本的行为不一致。</p>
+<p>这些方法不仅可在普通数组中使用，而且也能在类似 <code>Int32Array</code> ， <code>Unit8Array</code> 之类的 TypedArray 类型数组中使用。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/sno2">Carter Snook</a> 更新了这些声明<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/51367">文件</a>。</p>
+<h2 id="WeakMap-和-WeakSet-支持-symbol-作为键值"><a href="#WeakMap-和-WeakSet-支持-symbol-作为键值" class="headerlink" title="WeakMap 和 WeakSet 支持 symbol 作为键值"></a><code>WeakMap</code> 和 <code>WeakSet</code> 支持 symbol 作为键值</h2><p>symbol 变量现在可以在 <code>WeakMap</code> 和 <code>WeakSet</code> 中作为键，对应了 ECMAScript 自身添加的<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-symbols-as-weakmap-keys">特性</a>。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myWeakMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> key = <span class="title class_">Symbol</span>();</span><br><span class="line"><span class="keyword">const</span> someObject = &#123; <span class="comment">/*...*/</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正常工作 ✅</span></span><br><span class="line">myWeakMap.<span class="title function_">set</span>(key, someObject);</span><br><span class="line">myWeakMap.<span class="title function_">has</span>(key);</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/leoelm">Leo Elmecker-Plakolm</a> 代表 <a target="_blank" rel="noopener" href="https://www.bloomberg.com/company/">Bloomberg</a> 提供了这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54195">更新</a>，由衷感谢他。</p>
+<h2 id="仅类型导入支持文件扩展名"><a href="#仅类型导入支持文件扩展名" class="headerlink" title="仅类型导入支持文件扩展名"></a>仅类型导入支持文件扩展名</h2><p>TypeScript 现在支持在仅导入类型的导入语句中同时包括声明和文件扩展名。无论是否启用了 <code>allowImportingTsExtensions</code> </p>
+<p>这意味着现在你可以使用 <code>.ts</code> ， <code>.mts</code> ， <code>.cts</code> 以及 <code>.tsx</code> 文件扩展来编写 <code>import type</code> 语句。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">JustAType</span> &#125; <span class="keyword">from</span> <span class="string">&quot;./justTypes.ts&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"><span class="attr">param</span>: <span class="title class_">JustAType</span></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这也意味着在 TypeScript 和 JavaScript 中使用 JSDoc 通过 <code>import()</code> 导入的类型，也能使用这些扩展名。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">import(&quot;./justTypes.ts&quot;).JustAType</span>&#125; <span class="variable">param</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">param</span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有关更多的细节，请查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54746">PR</a> 。</p>
+<h2 id="对象成员支持自动添加分号"><a href="#对象成员支持自动添加分号" class="headerlink" title="对象成员支持自动添加分号"></a>对象成员支持自动添加分号</h2><p>当给一个对象添加新的属性的时候，很容易忘记添加分号。在以前，如果你忘记添加分号，然后使用自动完成功能的话， TypeScript 会困惑地给出糟糕的，不相关的自动完成的结果。</p>
+<p>TypeScript 5.2 现在可以优雅地对缺少分号的对象成员进行自动完成。但是如果你只是跳过语法错误的话，还是会自动插入缺少的逗号。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/06/comma-completions-5-2-beta.gif"></p>
+<h2 id="内联变量操作重构"><a href="#内联变量操作重构" class="headerlink" title="内联变量操作重构"></a>内联变量操作重构</h2><p>TypeScript 5.2 现在重构了内联变量操作，该变量的所有使用的地方都会被内联。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/06/inline-variable-5-2-beta.gif"></p>
+<p>使用“内联变量”重构操作会消除该变量然后使用该变量的初始值来替换所有使用该变量的地方。注意这可能会造成在不同时机执行带来的初始值副作用的问题，副作用的次数却决于变量使用的次数。</p>
+<p>更多的细节，查看实现的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54281">PR</a> 。</p>
+<h2 id="可点击的嵌入参数提示"><a href="#可点击的嵌入参数提示" class="headerlink" title="可点击的嵌入参数提示"></a>可点击的嵌入参数提示</h2><p>嵌入提示可以让我们一眼就了解相关的信息，即使它不存在我们的代码中，比如参数的名字，推断的类型等等。在 TypeScript 5.2 中，嵌入提示可以交互。比如，在 VS Code Insiders 中，现在你可以点击嵌入提示来跳转到相应参数的声明位置。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2023/08/clickable-inlay-hints-5-2.gif"></p>
+<p>更多的信息，你可以在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54734">PR</a> 下粗略浏览该特性的实现。</p>
+<h2 id="优化正在进行中的类型兼容检查"><a href="#优化正在进行中的类型兼容检查" class="headerlink" title="优化正在进行中的类型兼容检查"></a>优化正在进行中的类型兼容检查</h2><p>由于 TypeScript 是一个结构化的类型系统，有时候类型就需要以成员的方式进行比较，然而，递归的类型会带来一些问题，比如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> A &#123;</span><br><span class="line">  <span class="attr">value</span>: A;</span><br><span class="line">  <span class="attr">other</span>: <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> B &#123;</span><br><span class="line">  <span class="attr">value</span>: B;</span><br><span class="line">  <span class="attr">other</span>: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当检查类型 <code>A</code> 是否兼容类型 <code>B</code> 的时候， TypeScript 最终会检查 <code>A</code> 和 <code>B</code> 的 <code>value</code> 属性的类型是否兼容。在这种情况下，类型系统需要停止检查该成员，然后去检查其他的成员。为了实现它，类型系统不得不跟踪任何两个类型相关的时机。</p>
+<p>先前的 TypeScript 已经通过堆结构来保存了类型对，然后通过迭代来确定这些类型是否相关。当堆比较浅时，没有什么问题，但当堆很深的时候，<a target="_blank" rel="noopener" href="https://accidentallyquadratic.tumblr.com/">问题</a>就来了。</p>
+<p>在 TypeScript 5.2 中，使用一个简单的 <code>Set</code> 来协助跟踪这些信息。这种方式将使用 drizzle 库的报告测试用例花费的时间减少 33% 以上。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Benchmark 1: old</span><br><span class="line">  Time (mean ± σ):      3.115 s ±  0.067 s    [User: 4.403 s, System: 0.124 s]</span><br><span class="line">  Range (min … max):    3.018 s …  3.196 s    10 runs</span><br><span class="line"></span><br><span class="line">Benchmark 2: new</span><br><span class="line">  Time (mean ± σ):      2.072 s ±  0.050 s    [User: 3.355 s, System: 0.135 s]</span><br><span class="line">  Range (min … max):    1.985 s …  2.150 s    10 runs</span><br><span class="line"></span><br><span class="line">Summary</span><br><span class="line">  &#x27;new&#x27; ran</span><br><span class="line">    1.50 ± 0.05 times faster than &#x27;old&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/55224">PR</a> 查看更多的变更。</p>
+<h2 id="破坏性变更和正确性修复"><a href="#破坏性变更和正确性修复" class="headerlink" title="破坏性变更和正确性修复"></a>破坏性变更和正确性修复</h2><p>TypeScript 尽力不引入不必要的破坏性变更，然而，我们必须偶尔进行修正和改进，以便更好地进行代码分析。</p>
+<h3 id="lib-d-ts-变更"><a href="#lib-d-ts-变更" class="headerlink" title="lib.d.ts 变更"></a>lib.d.ts 变更</h3><p>为 DOM 生成的类型可能对你的代码库会有影响。更多相关的信息请查看 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54725">DOM 在 TypeScript 5.2 中的更新</a>。</p>
+<h3 id="labeledElementDeclarations-包含-undefined-元素。"><a href="#labeledElementDeclarations-包含-undefined-元素。" class="headerlink" title="labeledElementDeclarations 包含 undefined 元素。"></a>labeledElementDeclarations 包含 undefined 元素。</h3><p>为了支持混合使用带标签和不带标签的元素， TypeScript 的接口做了细微的改变。 <code>TupleType</code> 的 <code>labeledElementDeclarations</code> 属性的每个不带标签的元素的位置都可能为 <code>undefined</code> 。</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  interface TupleType &#123;</span><br><span class="line"><span class="deletion">-   labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];</span></span><br><span class="line"><span class="addition">+   labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration | undefined)[];</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="module-和-moduleResolution-选项必须在最近的-Node-js-设置下匹配"><a href="#module-和-moduleResolution-选项必须在最近的-Node-js-设置下匹配" class="headerlink" title="module 和 moduleResolution 选项必须在最近的 Node.js 设置下匹配"></a>module 和 moduleResolution 选项必须在最近的 Node.js 设置下匹配</h3><p><code>--module</code> 和 <code>--moduleResolution</code> 选项都支持 <code>node16</code> 和 <code>nodenext</code> 值。这些实际上有效的“现代 Node.js ”的设置应该被用在最近的 Node.js 项目中。我们发现当这两个选项在是否使用 Node.js 的相关设置上出现不一致时，项目实际上是配置错误的。</p>
+<p>在 TypeScript 5.2 中，当使用 <code>node16</code> 或则 <code>nodenext</code> 作为 <code>--module</code> 和 <code>--moduleResolution</code> 选项的值之一时， TypeScript 现在要求彼此要有相似的 Node.js 相关的设置。在设置出现分歧的情况下，你可能会收到以下的错误信息。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Option &#x27;moduleResolution&#x27; must be set to &#x27;NodeNext&#x27; (or left unspecified) when option &#x27;module&#x27; is set to &#x27;NodeNext&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Option &#x27;module&#x27; must be set to &#x27;Node16&#x27; when option &#x27;moduleResolution&#x27; is set to &#x27;Node16&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>所以例如 <code>--module esnext --moduleResolution node16</code> 这样的写法会报错，但你可能最好使用单独的 <code>--module nodenext</code> ，或者 <code>--module esnext --moduleResolution bundler</code> 。</p>
+<p>在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54567">PR</a> 了解更多的信息。</p>
+<h3 id="对合并的符号进行一致性的导出检查"><a href="#对合并的符号进行一致性的导出检查" class="headerlink" title="对合并的符号进行一致性的导出检查"></a>对合并的符号进行一致性的导出检查</h3><p>当两个声明合并的时候，它们必须就是否一起导出达成一致。由于存在 bug ， TypeScript 错失了环境上下文中的特定情况，比如处于声明文件或者 <code>declare module</code> 块中。比如，下面的例子中，声明 <code>replaceInFile</code> 为一个导出的函数，然后声明为一个未导出的命名空间，这种情况不会报错。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="variable language_">module</span> <span class="string">&#x27;replace-in-file&#x27;</span> &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">replaceInFile</span>(<span class="params"><span class="attr">config</span>: <span class="built_in">unknown</span></span>): <span class="title class_">Promise</span>;</span><br><span class="line">  <span class="keyword">export</span> &#123;&#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">namespace</span> <span class="title class_">replaceInFile</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">sync</span>(<span class="params"><span class="attr">config</span>: <span class="built_in">unknown</span></span>): <span class="built_in">unknown</span>[];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在环境模块中，添加一个 <code>export &#123; ... &#125;</code> 或者一个类似 <code>export default ...</code> 的相似的构造会隐式地更改是否自动导出所有声明。 TypeScript 现在能更一致地识别到这些令人疑惑的语义，然后根据 <code>replaceInFile</code> 的所有声明必须和它们的修饰符达成一致的事实发出错误，这个错误内容如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Individual declarations in merged declaration &#x27;replaceInFile&#x27; must be all exported or all local.</span><br></pre></td></tr></table></figure>
+
+<p>更多的信息，在此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54659">PR</a> 查看更改。</p>
+<h3 id="模块总是生成命名空间"><a href="#模块总是生成命名空间" class="headerlink" title="模块总是生成命名空间"></a>模块总是生成命名空间</h3><p>TypeScript 的命名空间实际上是始于 <code>module</code> 关键字的，因为看起来 ECMAScript 最终可能会出于同样的目的来使用它。最初，这称之为“内部模块”，但它最终未进入 JavaScript 中。</p>
+<p>很多年前（自从 2015 年 TypeScript 1.5 开始）， TypeScript 就支持 <code>namespace</code> 关键字来避免混淆。为了进一步推进这种方式，当生成声明文件的时候， TypeScript 5.2 总是会生成 <code>namespace</code> 关键字，代码看起来如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">module</span> foo &#123;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>会生成如下的声明文件：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">namespace</span> <span class="title class_">foo</span> &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params"></span>): <span class="built_in">void</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然这会不兼容非常非常多旧版本的 TypeScript ，但是我们认为这个影响是有限的。</p>
+<p>注意，环境模块的声明如下所示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// UNAFFECTED</span></span><br><span class="line"><span class="keyword">declare</span> <span class="variable language_">module</span> <span class="string">&quot;some-module-path&quot;</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种方式不受影响。</p>
+<p>这项<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/54134">工作</a>由 <a target="_blank" rel="noopener" href="https://github.com/CC972">Chi Leung</a> 代表 Bloomberg 提供。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>感觉最有意思的更新就是 using 关键字了，这个还是 ECMAScript 提供的特性， TypeScript 做了类型支持。</p>
+<p>以及数组的拷贝版本的 API ，以前做一些不想更改原数组的操作都是要先 .slice() 来获取一个浅的副本再进行操作，现在可以说就是官方帮你实现了，可以写更少的代码了😂</p>
+<p>其他的点大部分都是一些 UX 的点以及一些小更新了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/61cdd2892f5f" title="TypeScript 5.2（译）">https://prohibitorum.top/61cdd2892f5f</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/66cc63b8959c" rel="prev" title="Content Security policy（译）">
+                  <i class="fa fa-angle-left"></i> Content Security policy（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/5f68adb6440a" rel="next" title="RxJS 源码解读之 Observable">
+                  RxJS 源码解读之 Observable <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1696905097"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

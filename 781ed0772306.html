@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言试着翻译下ECMA中对Promise实现规范，顺便学习下Promise（承诺）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Promise A+规范（译）">
+<meta property="og:url" content="https://prohibitorum.top/781ed0772306">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言试着翻译下ECMA中对Promise实现规范，顺便学习下Promise（承诺）。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-12T09:26:37.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/781ed0772306.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/781ed0772306","path":"781ed0772306.html","title":"Promise A+规范（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Promise A+规范（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%91%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">译文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Terminology%EF%BC%88%E6%9C%AF%E8%AF%AD%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. Terminology（术语）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Requirements%EF%BC%88%E8%A6%81%E6%B1%82%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. Requirements（要求）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Promise-States%EF%BC%88Promise%E7%9A%84%E7%8A%B6%E6%80%81%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.1 Promise States（Promise的状态）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-The-then-Method%EF%BC%88then%E6%96%B9%E6%B3%95%EF%BC%89"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2 The then Method（then方法）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-The-Promise-Resolution-Procedure%EF%BC%88Promise%E7%9A%84%E8%A7%A3%E5%86%B3%E7%A8%8B%E5%BA%8F%EF%BC%89"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.3 The Promise Resolution Procedure（Promise的解决程序）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Notes%EF%BC%88%E4%B8%80%E4%BA%9B%E5%9C%B0%E6%96%B9%E7%9A%84%E8%A7%A3%E9%87%8A%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3.Notes（一些地方的解释）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">3.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">3.2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3"><span class="nav-number">2.3.3.</span> <span class="nav-text">3.3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4"><span class="nav-number">2.3.4.</span> <span class="nav-text">3.4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5"><span class="nav-number">2.3.5.</span> <span class="nav-text">3.5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6"><span class="nav-number">2.3.6.</span> <span class="nav-text">3.6</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/781ed0772306">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Promise A+规范（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Promise A+规范（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 09:26:37" itemprop="dateCreated datePublished" datetime="2020-06-12T09:26:37+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>试着翻译下ECMA中对Promise实现规范，顺便学习下Promise（承诺）。</p>
+<span id="more"></span>
+
+<h1 id="译文"><a href="#译文" class="headerlink" title="译文"></a>译文</h1><blockquote>
+<p>原文地址 <a target="_blank" rel="noopener" href="https://promisesaplus.com/">Promise&#x2F;A+</a></p>
+</blockquote>
+<p>ok，开始一段一段的翻译</p>
+<blockquote>
+<p><strong>An open standard for sound, interoperable JavaScript promises—by implementers, for implementers.</strong></p>
+</blockquote>
+<p>译：一个完整开放的，可互相操作的JavaScript Promise的开放标准，由实现者指定，面向实现者。</p>
+<blockquote>
+<p>A <em>promise</em> represents the eventual result of an asynchronous operation. The primary way of interacting with a promise is through its <code>then</code> method, which registers callbacks to receive either a promise’s eventual value or the reason why the promise cannot be fulfilled.</p>
+</blockquote>
+<p>译：一个promise意味着一个不是现在发生（非共时）的操作的最终结果。与一个promise进行交流的基本的方式是通过它的<code>then</code>方法，<code>then</code>方法注册了一个的回调函数，这个函数要么接收Promise的最终值，要么接收为什么这个promise不能转为完成状态（fulfilled）的原因。</p>
+<blockquote>
+<p>This specification details the behavior of the <code>then</code> method, providing an interoperable base which all Promises&#x2F;A+ conformant promise implementations can be depended on to provide. As such, the specification should be considered very stable. Although the Promises&#x2F;A+ organization may occasionally revise this specification with minor backward-compatible changes to address newly-discovered corner cases, we will integrate large or backward-incompatible changes only after careful consideration, discussion, and testing.</p>
+</blockquote>
+<p>译：规范详细说明了<code>then</code>方法的的行为，提供了一个可以互相操作的基础来规定行为，所有和Promise&#x2F;A+规范一致的promise实现依赖这个基础。因此，规范应该被认为是非常稳定的。虽然Promise&#x2F;A+组织可能偶尔修改这份规范中少数的可以向后兼容的变化来解决新发现的极端情况，但是只有在经过深思熟虑，讨论和测试后才会合并大型的或者不能向后兼容的变化。</p>
+<blockquote>
+<p>Historically, Promises&#x2F;A+ clarifies the behavioral clauses of the earlier <a target="_blank" rel="noopener" href="http://wiki.commonjs.org/wiki/Promises/A">Promises&#x2F;A proposal</a>, extending it to cover <em>de facto</em> behaviors and omitting parts that are underspecified or problematic.</p>
+</blockquote>
+<p>译：历史上，Promise&#x2F;A+阐明了早期Promise&#x2F;A提案中的行为条文，并扩展到覆盖实际上的行为和忽略未指定和有问题的部分。</p>
+<blockquote>
+<p>Finally, the core Promises&#x2F;A+ specification does not deal with how to create, fulfill, or reject promises, choosing instead to focus on providing an interoperable <code>then</code> method. Future work in companion specifications may touch on these subjects.</p>
+</blockquote>
+<p>译：最后，核心的Promise&#x2F;A+规范没有处理如何创建，完成，或者拒绝Promise，而是专注于提供一个可以互相操作的<code>then</code>方法，在未来的配套规范中会涉及这些问题。</p>
+<h2 id="1-Terminology（术语）"><a href="#1-Terminology（术语）" class="headerlink" title="1. Terminology（术语）"></a>1. Terminology（术语）</h2><blockquote>
+<ul>
+<li>‘promise’ is an object or function with a <code>then</code> method whose behaior conforms to this specification.</li>
+<li>‘thenable’ is an object or function that defines a <code>then</code> method.</li>
+<li>‘value’ is any legal JavaScript value (including <code>undefined</code>, a thenable, or a promise).</li>
+<li>‘exception’ is a value that is thrown using the <code>throw</code> statement.</li>
+<li>‘reason’ is a value that indicates why a promise was rejected.</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>“promise”应该是一个带有<code>then</code>方法的对象或者函数，这个<code>then</code>方法的行为符合这份规范。</li>
+<li>“thenable”是一个定义了<code>then</code>方法的对象或者函数。</li>
+<li>“value”可以是任何合法的JavaScript的值（包括<code>undefined</code>，一个thenable或者一个promise）。</li>
+<li>“exception”是一个使用了异常语句所抛出的值。</li>
+<li>“reason”是一个表示为什么promise被拒绝的值。</li>
+</ul>
+<h2 id="2-Requirements（要求）"><a href="#2-Requirements（要求）" class="headerlink" title="2. Requirements（要求）"></a>2. Requirements（要求）</h2><h3 id="2-1-Promise-States（Promise的状态）"><a href="#2-1-Promise-States（Promise的状态）" class="headerlink" title="2.1 Promise States（Promise的状态）"></a>2.1 Promise States（Promise的状态）</h3><blockquote>
+<p>A promise must be in one of three states: pending, fulfilled, or rejected.</p>
+</blockquote>
+<p>译：一个Promise的状态必须是等待状态，完成状态，或者拒绝状态中的一个。</p>
+<blockquote>
+<ul>
+<li>When pending, a promise:<ul>
+<li>may transition to either the fulfilled or rejected state.</li>
+</ul>
+</li>
+<li>When fulfilled, a promise:<ul>
+<li>must not transition to any other state.</li>
+<li>must have a value, which must not change.</li>
+</ul>
+</li>
+<li>When rejected, a promise:<ul>
+<li>must not transition to any other state.</li>
+<li>must have a reason, which must not change.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>当promise处于等待状态的时候：<ul>
+<li>promise可以转变成完成状态或者拒绝状态的其中一个状态。</li>
+</ul>
+</li>
+<li>当promise处于完成状态的时候：<ul>
+<li>不能转变成其他任何状态。</li>
+<li>必须有一个value，并且这个value不能改变。</li>
+</ul>
+</li>
+<li>当promise处于拒绝状态的时候：<ul>
+<li>不能转变成其他任何状态。</li>
+<li>必须有一个reason，并且这个reason不能改变。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Here, “must not change” means immutable identity (i.e. <code>===</code>), but does not imply deep immutability.</p>
+</blockquote>
+<p>译：这里的”不能改变”的意思是特征不变（即严格相等 <code>===</code> ），但不是意味着深层次的不变。（意思应该是浅相等，但不是深相等）</p>
+<h3 id="2-2-The-then-Method（then方法）"><a href="#2-2-The-then-Method（then方法）" class="headerlink" title="2.2 The then Method（then方法）"></a>2.2 The <code>then</code> Method（<code>then</code>方法）</h3><blockquote>
+<p>A promise must provide a <code>then</code> method to access its current or eventual value or reason.</p>
+</blockquote>
+<p>译：一个promise必须提供一个<code>then</code>方法来使用它当前或者最终的值或者（拒绝状态的）原因。</p>
+<blockquote>
+<p>A promise’s <code>then</code> method accepts two arguments:</p>
+</blockquote>
+<p>译：promise的<code>then</code>方法接收两个参数</p>
+<blockquote>
+<p><code>promise.then(onFulfilled, onRejected)</code></p>
+<ul>
+<li>Both <code>onFulfilled</code> and <code>onRejected</code> are optional arguments:<ul>
+<li>If <code>onFulfilled</code> is not a function, it must be ignored.</li>
+<li>If <code>onRejected</code> is not a function, it must be ignored.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li><code>onFulfilled</code>和<code>onRejected</code>参数都是可选的的参数:<ul>
+<li>如果<code>onFulfilled</code>不是一个函数，则将被忽略。</li>
+<li>如果<code>onRejected</code>不是一个函数，则将被忽略。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>If <code>onFulfilled</code> is a function:<ul>
+<li>it must be called after <code>promise</code> is fulfilled, with <code>promise</code>‘s value as its first argument.</li>
+<li>it must not be called before <code>promise</code> is fulfilled.</li>
+<li>it must not be called more than once.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>如果<code>onFulfilled</code>是一个函数：<ul>
+<li>在<code>promise</code>完成之后调用，并且函数的第一个参数为<code>promise</code>的<code>value</code>。</li>
+<li>在<code>promise</code>完成之前不能被调用。</li>
+<li>不能被调用超过一次。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>If <code>onRejected</code> is a function:<ul>
+<li>it must be called after <code>promise</code> is rejected, with <code>promise</code>’s reason as its first argument.</li>
+<li>it must not be called before <code>promise</code> is rejected.</li>
+<li>it must not be called more than once.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>如果<code>onRejected</code>是一个函数<ul>
+<li>在<code>promise</code>被拒绝之后调用，并且函数的第一个参数为<code>promise</code>被拒绝的原因。</li>
+<li>在<code>promise</code>被拒绝之前不能被调用。</li>
+<li>不能被调用超过一次。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><code>onFulfilled</code> or <code>onRejected</code> must not be called until the execution context stack contains only platform code.<a href="#3-1">#3.1</a></p>
+</blockquote>
+<p>译：在执行上下文的堆栈中仅包含平台代码之前，<code>onFulfilled</code>和<code>onRejected</code>不能被调用。</p>
+<blockquote>
+<ul>
+<li><code>onFulfilled</code> and <code>onRejected</code> must be called as functions (i.e. with no <code>this</code> value).<a href="#3-2">#3.2</a></li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li><code>onFulfilled</code>和<code>onRejected</code>函数必须以函数方式调用（即不能是<code>this</code>这个值）。</li>
+</ul>
+<blockquote>
+<ul>
+<li><code>then</code> may be called multiple times on the same promise.<ul>
+<li>If&#x2F;when <code>promise</code> is fulfilled, all respective <code>onFulfilled</code> callbacks must execute in the order of their originating calls to <code>then</code>.</li>
+<li>If&#x2F;when <code>promise</code> is rejected, all respective <code>onRejected</code> callbacks must execute in the order of their originating calls to <code>then</code>.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>在同一个<code>promise</code>中<code>then</code>方法可以重复调用。<ul>
+<li>如果或者说当<code>promise</code>完成时，各自的<code>onFulfilled</code>回调函数必须按照它们最初在<code>then</code>方法上调用的顺序执行。</li>
+<li>如果或者说当<code>promise</code>被拒绝时，各自的<code>onRejected</code>回调函数必须按照它们最初在<code>then</code>方法上调用的顺序执行。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li><code>then</code> must return a promise.<a href="#3-3">#3.3</a><br><code>promise2 = promise1.then(onFulfilled, onRejected);</code></li>
+<li>If either <code>onFulfilled</code> or <code>onRejected</code> returns a value <code>x</code>, run the Promise Resolution Procedure <code>[[Resolve]](promise2, x)</code>.<ul>
+<li>If either <code>onFulfilled</code> or <code>onRejected</code> throws an exception <code>e</code>, <code>promise2</code> must be rejected with <code>e</code> as the reason.</li>
+<li>If <code>onFulfilled</code> is not a function and <code>promise1</code> is fulfilled, <code>promise2</code> must be fulfilled with the same value as <code>promise1</code>.</li>
+<li>If <code>onRejected</code> is not a function and <code>promise1</code> is rejected, <code>promise2</code> must be rejected with the same reason as <code>promise1</code>.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li><code>then</code>方法必须返回一个promise<br><code>promise2 = promise1.then(onFulfilled, onRejected);</code></li>
+<li>如果<code>onFulfilled</code>或者<code>onRejected</code>其中一个函数返回了一个值<code>x</code>，那么执行Promise的解决过程<code>[[Resolve]](promise2,x)</code><ul>
+<li>如果<code>onFulfilled</code>或者<code>onRejected</code>其中一个函数抛出了一个异常<code>e</code>，那么promise2必须为以<code>e</code>为原因的拒绝状态。</li>
+<li>如果<code>onFulfilled</code>不是一个函数而且promise1为完成态时，promise2必须为完成态并且带有和promise1相同的值</li>
+<li>如果<code>onRejected</code>不是一个函数而且promise1为拒绝态时，promise2必须为拒绝态并且带有和promise1相同的原因。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-The-Promise-Resolution-Procedure（Promise的解决程序）"><a href="#2-3-The-Promise-Resolution-Procedure（Promise的解决程序）" class="headerlink" title="2.3 The Promise Resolution Procedure（Promise的解决程序）"></a>2.3 The Promise Resolution Procedure（Promise的解决程序）</h3><blockquote>
+<p>The <strong>promise resolution procedure</strong> is an abstract operation taking as input a promise and a value, which we denote as <code>[[Resolve]](promise, x)</code>. If <code>x</code> is a thenable, it attempts to make <code>promise</code> adopt the state of <code>x</code>, under the assumption that <code>x</code> behaves at least somewhat like a promise. Otherwise, it fulfills <code>promise</code> with the value <code>x</code>.</p>
+</blockquote>
+<p>译：promise解决过程是一个输入一个promise或者一个值抽象的操作，这个操作我们用<code>[[Resolve]](promise, x)</code>这个标记来表示。如果<code>x</code>是一个thenable对象的话，在<code>x</code>的行为至少有点像一个promise的假设下，这个方法尝试将<code>promise</code>采用<code>x</code>的状态，否则，这个方法将以<code>x</code>的值来完成<code>promise</code>。</p>
+<blockquote>
+<p>This treatment of thenables allows promise implementations to interoperate, as long as they expose a Promises&#x2F;A+-compliant <code>then</code> method. It also allows Promises&#x2F;A+ implementations to “assimilate” nonconformant implementations with reasonable <code>then</code> methods.</p>
+</blockquote>
+<p>译：对于thenables的论述允许promise的实现可以相互操作，只要它们暴露了一个Promise&#x2F;A+一致性的<code>then</code>方法。它也允许Promise&#x2F;A+实现以合理的<code>then</code>方法来”同化”不一致的实现。</p>
+<blockquote>
+<p>To run <code>[[Resolve]](promise, x)</code>, perform the following steps:</p>
+</blockquote>
+<p>译：为了执行<code>[[Resolve]](promise, x)</code>，需要履行以下步骤：</p>
+<blockquote>
+<ul>
+<li>If <code>promise</code> and <code>x</code> refer to the same object, reject <code>promise</code> with a <code>TypeError</code> as the reason.</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>如果<code>promise</code>和<code>x</code>是同一个对象的话，以<code>TypeError</code>为原因拒绝这个promise。</li>
+</ul>
+<blockquote>
+<ul>
+<li>If <code>x</code> is a promise, adopt its state<a href="#3-4">#3.4</a>:<ul>
+<li>If <code>x</code> is pending, <code>promise</code> must remain pending until <code>x</code> is fulfilled or rejected.</li>
+<li>If&#x2F;when <code>x</code> is fulfilled, fulfill <code>promise</code> with the same value.</li>
+<li>If&#x2F;when <code>x</code> is rejected, reject <code>promise</code> with the same reason.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>如果<code>x</code>是一个promise，采用它的状态：<ul>
+<li>如果<code>x</code>即将发生，<code>promise</code>必须保持即将发生的状态直到x完成或者被拒绝。</li>
+<li>如果或者当<code>x</code>完成，使得这个<code>promise</code>以相同的值完成</li>
+<li>如果或者当<code>x</code>被拒绝，使得这个<code>promise</code>以相同的原因被拒绝。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>Otherwise, if <code>x</code> is an object or function,<ul>
+<li>Let <code>then</code> be <code>x.then</code>.<a href="#3-5">#3.5</a></li>
+<li>If retrieving the property <code>x.then</code> results in a thrown exception <code>e</code>, reject <code>promise</code> with <code>e</code> as the reason.</li>
+<li>If <code>then</code> is a function, call it with <code>x</code> as <code>this</code>, first argument <code>resolvePromise</code>, and second argument <code>rejectPromise</code>, where:<ul>
+<li>If&#x2F;when <code>resolvePromise</code> is called with a value <code>y</code>, run [[Resolve]](promise, y).</li>
+<li>If&#x2F;when <code>rejectPromise</code> is called with a reason <code>r</code>, reject <code>promise</code> with <code>r</code>.</li>
+<li>If both <code>resolvePromise</code> and <code>rejectPromise</code> are called, or multiple calls to the same argument are made, the first call takes precedence, and any further calls are ignored.</li>
+<li>If calling <code>then</code> throws an exception <code>e</code>,<ul>
+<li>If <code>resolvePromise</code> or <code>rejectPromise</code> have been called, ignore it.</li>
+<li>Otherwise, reject <code>promise</code> with <code>e</code> as the reason.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>If <code>then</code> is not a function, fulfill <code>promise</code> with <code>x</code>.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>否则，如果<code>x</code>是一个对象或者函数，<ul>
+<li>设置<code>then</code>方法为<code>x.then</code></li>
+<li>如果检索<code>x.then</code>的属性导致一个抛出的异常<code>e</code>的话，以异常<code>e</code>为原因拒绝<code>promise</code>。</li>
+<li>如果<code>then</code>是一个函数，以<code>x</code>为<code>this</code>(上下文)的方式调用，第一个参数为<code>resolvePromise</code>，第二个参数为<code>rejectPromise</code>：<ul>
+<li>如果或者当<code>resolvePromise</code>以一个值<code>y</code>被调用，执行<code>[[Resolve]](promise,y)</code>。</li>
+<li>如果或者当<code>rejectPromise</code>以一个原因<code>r</code>被调用，以<code>r</code>来拒绝这个promise。</li>
+<li>如果<code>resolvePromise</code>和<code>rejectPromise</code>都被调用，或者对同一个参数进行了多次的调用，只有第一次调用生效，其他即将的调用被忽略。</li>
+<li>如果执行<code>then</code>抛出了一个异常<code>e</code><ul>
+<li>如果<code>resolvePromise</code>或者<code>rejectPromise</code>已经被调用，则忽略它。</li>
+<li>否则，以<code>e</code>作为原因拒绝这个<code>promise</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>如果<code>then</code>不是一个函数，则以<code>x</code>为值完成<code>promise</code>。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li>If <code>x</code> is not an object or function, fulfill <code>promise</code> with <code>x</code>.</li>
+</ul>
+</blockquote>
+<p>译：</p>
+<ul>
+<li>如果x不是一个对象或者函数，以<code>x</code>为值完成promise。</li>
+</ul>
+<blockquote>
+<p>If a promise is resolved with a thenable that participates in a circular thenable chain, such that the recursive nature of <code>[[Resolve]](promise, thenable)</code> eventually causes <code>[[Resolve]](promise, thenable)</code> to be called again, following the above algorithm will lead to infinite recursion. Implementations are encouraged, but not required, to detect such recursion and reject <code>promise</code> with an informative <code>TypeError</code> as the reason.<a href="#3-6">#3.6</a></p>
+</blockquote>
+<p>译：如果一个promise通过一个thenable解决，而这个thenable参与了一个环形的thenable链，以至于<code>[[Resolve]](promise, thenable)</code>的递归性质最终造成<code>[[Resolve]](promise, thenable)</code>被再一次的调用，以上的计算将会导致无限的递归。实现应该鼓励去发现这样的递归然后提供一个<code>TypeError</code>错误作为原因来拒绝promise，但这并不是规定的。</p>
+<h2 id="3-Notes（一些地方的解释）"><a href="#3-Notes（一些地方的解释）" class="headerlink" title="3.Notes（一些地方的解释）"></a>3.Notes（一些地方的解释）</h2><h3 id="3-1"><a href="#3-1" class="headerlink" title="3.1"></a>3.1</h3><blockquote>
+<p>Here “platform code” means engine, environment, and promise implementation code. In practice, this requirement ensures that <code>onFulfilled</code> and <code>onRejected</code> execute asynchronously, after the event loop turn in which <code>then</code> is called, and with a fresh stack. This can be implemented with either a “macro-task” mechanism such as <code>setTimeout</code> or <code>setImmediate</code>, or with a “micro-task” mechanism such as <code>MutationObserver</code> or <code>process.nextTick</code>. Since the promise implementation is considered platform code, it may itself contain a task-scheduling queue or “trampoline” in which the handlers are called.</p>
+</blockquote>
+<p>译：这里的”平台代码”意思是指引擎，环境和promise实现的代码。实际上，这个要求确保<code>onFulfilled</code>和<code>onRejected</code>函数在<code>then</code>方法调用的事件循环之后以一个新的堆栈异步执行。可以以宏任务机制比如<code>setTimeout</code>或者<code>setImmediate</code>来实现，又或者以微任务机制比如<code>MutationObserver</code>或者<code>process.nextTick</code>来实现。由于promise实现被认为是平台代码，它自身可能包含一个调用处理程序的任务调度队列或者”蹦床”。</p>
+<h3 id="3-2"><a href="#3-2" class="headerlink" title="3.2"></a>3.2</h3><blockquote>
+<p>That is, in strict mode <code>this</code> will be <code>undefined</code> inside of them; in sloppy mode, it will be the global object.</p>
+</blockquote>
+<p>译：在严格模式下<code>this</code>在内部将会是<code>undefined</code>，而在非严格模式下，它将会是全局对象。</p>
+<h3 id="3-3"><a href="#3-3" class="headerlink" title="3.3"></a>3.3</h3><blockquote>
+<p>Implementations may allow <code>promise2 === promise1</code>, provided the implementation meets all requirements. Each implementation should document whether it can produce promise2 &#x3D;&#x3D;&#x3D; promise1 and under what conditions.</p>
+</blockquote>
+<p>译：假设实现满足所有要求，实现可能允许<code>promise2 === promise1</code>。每个实现应该记录在什么情况下是否产生<code>promise2 === promise1</code>。</p>
+<h3 id="3-4"><a href="#3-4" class="headerlink" title="3.4"></a>3.4</h3><blockquote>
+<p>Generally, it will only be known that <code>x</code> is a true promise if it comes from the current implementation. This clause allows the use of implementation-specific means to adopt the state of known-conformant promises.</p>
+</blockquote>
+<p>译：一般地，只有在promise来自当前（自身）的实现的情况才能知道<code>x</code>是一个真的promise。这个条文允许具体实现的方式去采用已知一致的promise。</p>
+<h3 id="3-5"><a href="#3-5" class="headerlink" title="3.5"></a>3.5</h3><blockquote>
+<p>This procedure of first storing a reference to x.then, then testing that reference, and then calling that reference, avoids multiple accesses to the x.then property. Such precautions are important for ensuring consistency in the face of an accessor property, whose value could change between retrievals.</p>
+</blockquote>
+<p>译：程序的第一步储存<code>x.then</code>的引用，然后检验引用，然后调用引用，避免多次获取<code>x.then</code>的属性。这样的预防对于确保那些可能在检索过程中变化的存储属性的一致性很重要。</p>
+<h3 id="3-6"><a href="#3-6" class="headerlink" title="3.6"></a>3.6</h3><blockquote>
+<p>Implementations should not set arbitrary limits on the depth of thenable chains, and assume that beyond that arbitrary limit the recursion will be infinite. Only true cycles should lead to a <code>TypeError</code>; if an infinite chain of distinct thenables is encountered, recursing forever is the correct behavior.</p>
+</blockquote>
+<p>译：实现不应该对thenable链的深度设置任意的限制，并假设超过这个任意的限制递归将是无限的。只有正确的循环应该导致一个<code>TypeError</code>的错误；如果遇到一个不同的thenables组成的无限的链，永久的递归才是正确的行为。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/781ed0772306" title="Promise A+规范（译）">https://prohibitorum.top/781ed0772306</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a5a00a4c0119" rel="prev" title="记一次对StarUML-3.2.2的解包">
+                  <i class="fa fa-angle-left"></i> 记一次对StarUML-3.2.2的解包
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/bbb824cff21a" rel="next" title="JavaScript中的Reflect">
+                  JavaScript中的Reflect <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591925197"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.8（译）">
+<meta property="og:url" content="https://prohibitorum.top/7dc7c776f888">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.8">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-03-03T22:45:58.000Z">
+<meta property="article:modified_time" content="2025-03-04T14:54:58.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/7dc7c776f888.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/7dc7c776f888","path":"7dc7c776f888.html","title":"TypeScript 5.8（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.8（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%86%E7%B2%92%E5%8C%96%E6%A3%80%E6%B5%8B%E8%BF%94%E5%9B%9E%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%9A%84%E5%88%86%E6%94%AF"><span class="nav-number">2.1.</span> <span class="nav-text">细粒化检测返回表达式的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%9C%A8-module-nodenext-%E4%B8%8B%E5%9C%A8-ESM-%E6%A8%A1%E5%9D%97%E4%B8%AD%E8%B0%83%E7%94%A8-require"><span class="nav-number">2.2.</span> <span class="nav-text">支持在 --module nodenext 下在 ESM 模块中调用 require()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#module-node18"><span class="nav-number">2.3.</span> <span class="nav-text">--module node18</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#erasableSyntaxOnly"><span class="nav-number">2.4.</span> <span class="nav-text">--erasableSyntaxOnly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#libReplacement"><span class="nav-number">2.5.</span> <span class="nav-text">--libReplacement</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E5%A3%B0%E6%98%8E%E6%96%87%E4%BB%B6%E4%B8%AD%E4%BF%9D%E5%AD%98%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7%E5%90%8D%E7%A7%B0"><span class="nav-number">2.6.</span> <span class="nav-text">在声明文件中保存计算属性名称</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%92%8C%E6%9B%B4%E6%96%B0"><span class="nav-number">2.7.</span> <span class="nav-text">优化程序的加载和更新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.8.</span> <span class="nav-text">需要注意的行为变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts"><span class="nav-number">2.8.1.</span> <span class="nav-text">lib.d.ts</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#module-nodenext-%E9%99%90%E5%88%B6%E5%AF%BC%E5%85%A5%E6%96%AD%E8%A8%80"><span class="nav-number">2.8.1.1.</span> <span class="nav-text">--module nodenext 限制导入断言</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/7dc7c776f888">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.8（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.8（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-03 22:45:58" itemprop="dateCreated datePublished" datetime="2025-03-03T22:45:58+00:00">2025-03-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 14:54:58" itemprop="dateModified" datetime="2025-03-04T14:54:58+00:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-8/">Announcing TypeScript 5.8</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="细粒化检测返回表达式的分支"><a href="#细粒化检测返回表达式的分支" class="headerlink" title="细粒化检测返回表达式的分支"></a>细粒化检测返回表达式的分支</h2><p>考虑一段如下的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">const</span> <span class="attr">untypedCache</span>: <span class="title class_">Map</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUrlObject</span>(<span class="params"><span class="attr">urlString</span>: <span class="built_in">string</span></span>): <span class="variable constant_">URL</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> untypedCache.<span class="title function_">has</span>(urlString) ? untypedCache.<span class="title function_">get</span>(urlString) : urlString;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码的意图是如果缓存中存在的话，从缓存中取 URL 对象，如果缓存中不存在，则创建一个新的对象。然而这里有一个 bug ：我们实际上忘记根据输入构建一个新的 URL 对象。不幸的是， TypeScript 通常不会捕获这类错误。</p>
+<p>当 TypeScript 检查条件表达式，比如 <code>cond ? trueBranch : falseBranch</code> ，它的类型被视为两个分支类型的联合类型。换句话说，它会计算 <code>trueBranch</code> 和 <code>falseBranch</code> 的类型，然后将它们合并为一个联合类型。在这种情况下，类型 <code>untypedCache.get(urlString)</code> 的类型是 <code>any</code> ，而 <code>urlString</code> 的类型为 <code>string</code> 。这正是原因所在，因为 <code>any</code> 很容易感染和它产生关系的其他类型。联合类型 <code>any | string</code> 可以简化为 <code>any</code> ，所以在 TypeScript 开始检查 <code>return</code> 语句的表达式是否和预期返回的 <code>URL</code> 类型兼容之前，类型系统就已经丢失了可以捕获此代码错误的任何信息了。</p>
+<p>在 TypeScript 5.8 中，类型系统将 <code>return</code> 语句中直接返回的条件表达式的语句视为特殊情况，每个条件分支都会和函数返回类型的声明（如果存在的话）进行比较，这样类型系统就可以捕获上面例子中的 bug 了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">const</span> <span class="attr">untypedCache</span>: <span class="title class_">Map</span>&lt;<span class="built_in">any</span>, <span class="built_in">any</span>&gt;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getUrlObject</span>(<span class="params"><span class="attr">urlString</span>: <span class="built_in">string</span></span>): <span class="variable constant_">URL</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> untypedCache.<span class="title function_">has</span>(urlString) ? untypedCache.<span class="title function_">get</span>(urlString) : urlString;</span><br><span class="line">  <span class="comment">//  ~~~~~~~~~</span></span><br><span class="line">  <span class="comment">// error! Type &#x27;string&#x27; is not assignable to type &#x27;URL&#x27;.</span></span><br><span class="line">  <span class="comment">// 错误！&#x27;string&#x27; 类型无法分配个 &#x27;URL&#x27; 类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个变更来源于这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56941">PR</a> ，它会作为 TypeScript 未来更广泛改进的一部分。</p>
+<h2 id="支持在-module-nodenext-下在-ESM-模块中调用-require"><a href="#支持在-module-nodenext-下在-ESM-模块中调用-require" class="headerlink" title="支持在 --module nodenext 下在 ESM 模块中调用 require()"></a>支持在 <code>--module nodenext</code> 下在 ESM 模块中调用 <code>require()</code></h2><p>多年来， Node 支持了 ESM 模块和 CommonJS 模块。不幸的是，两者之间的互操作性存在一些挑战。</p>
+<ul>
+<li>ESM 模块可以 <code>import</code> CommonJS 模块。</li>
+<li>CommonJS 模块无法 <code>require</code> ESM 模块。</li>
+</ul>
+<p>换句话说，在 ESM 模块中使用 CommonJS 模块是可以的，但是反之则不行。这给那些想要提供 ESM 模块支持的库作者带来了很多挑战。这部分库作者要么双重发布（为 ESM 和 CommonJS 提供不同的入口点）他们的库，这不得不破坏用户在  CommonJS 使用下的兼容性，要么只能继续无期限地将库维持在 CommonJS 下。虽然双重发布可能听起来是个不错的折中方案，但是这个方案复杂且容易出错，还会使包大小增加大约一倍。</p>
+<p>Node 22 放宽了这些限制，允许从 CommonJS 模块中调用 <code>require(&quot;esm&quot;)</code> 来导入 ESM 模块。 虽然 Node 仍然不允许在一个包含顶层 await 的 ESM 模块中调用 <code>require()</code> ， 但现在 CommonJS 模块可以引用了大多数 ESM 模块了。这为库作者提供了一个重要的机会，使得他们无需双重发布他们的包就可以提供 ESM 模块支持。</p>
+<p>TypeScript 5.8 在 <code>--module nodenext</code> 下支持了这个行为。当 <code>--module nodenext</code> 开启时， TypeScript 不会对那些在 ESM 模块中的 <code>require()</code> 调用报错。</p>
+<p>由于这个特性可能移植到低版本的 Node 中，所以目前通过 <code>--module nodeXXXX</code> 来开启这个行为的功能是不稳定的。但是，我们预测将来的 TypeScript 版本会能够在 node20 下稳定这个功能。同时，我们鼓励使用 Node22 及以上的用户使用 <code>--module nodenext</code> ， 而库作者和那些使用旧版本 Node 的用户应该继续使用 <code>--module node16</code> （或者打个次要更新补丁升级到 <code>--module node18</code> ）。</p>
+<p>更多信息，可以查看这个 [PR]<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60761">https://github.com/microsoft/TypeScript/pull/60761</a>) 。</p>
+<h2 id="module-node18"><a href="#module-node18" class="headerlink" title="--module node18"></a><code>--module node18</code></h2><p>TypeScript 5.8 引入了稳定的 <code>--module node18</code> 的标志。这个标志为那些仍然使用 Node18 的用户提供了一个稳定的功能列表，不会包含 <code>--module nodenext</code> 下的一些行为，具体为：</p>
+<ul>
+<li><code>node18</code> 下不允许 ESM 模块内使用 <code>require()</code> ，但 <code>nodenext</code> 允许。</li>
+<li><code>node18</code> 下允许使用导入断言（已废弃，改为使用导入属性），但 <code>nodenext</code> 不允许。</li>
+</ul>
+<p>在此查看相关的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60722">PR1</a> 和 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60761">PR2</a> 。</p>
+<h2 id="erasableSyntaxOnly"><a href="#erasableSyntaxOnly" class="headerlink" title="--erasableSyntaxOnly"></a><code>--erasableSyntaxOnly</code></h2><p>最近， Node23.6 把直接运行 TypeScript 文件的实验支持的标志取消了，虽然在这个模式下只支持了某些结构。 Node 取消了 <code>--experimental-strip-types</code> 标志，这个标志要求任何 TypeScript 特有的语法不能存在运行时语义。换句话说，必须能够简单地擦除或者说“去掉”文件中的任何 TypeScript 特有的语法，从而留下一个合法的 JavaScript 文件。</p>
+<p>这意味着如下的构造将不被支持：</p>
+<ul>
+<li><code>enum</code> 定义</li>
+<li>带有运行时代码的命名空间（ <code>namespace</code> ）和模块（ <code>module</code> ）</li>
+<li>类内的参数属性</li>
+<li>导入别名（ <code>import = </code> ）</li>
+</ul>
+<p>下面是一些例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ error: A namespace with runtime code.</span></span><br><span class="line"><span class="comment">// 命名空间带有运行时代码</span></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">container</span> &#123;</span><br><span class="line">  foo.<span class="title function_">method</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">Bar</span> = <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ error: An `import =` alias</span></span><br><span class="line"><span class="comment">// 导入别名</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Bar</span> = container.<span class="property">Bar</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">  <span class="comment">// ❌ error: Parameter properties</span></span><br><span class="line">  <span class="comment">// 构造函数的参数属性</span></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="keyword">public</span> <span class="attr">x</span>: <span class="built_in">number</span>, <span class="keyword">public</span> <span class="attr">y</span>: <span class="built_in">number</span></span>) &#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ error: An enum declaration.</span></span><br><span class="line"><span class="comment">// enum 定义</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">Direction</span> &#123;</span><br><span class="line">  <span class="title class_">Up</span>,</span><br><span class="line">  <span class="title class_">Down</span>,</span><br><span class="line">  <span class="title class_">Left</span>,</span><br><span class="line">  <span class="title class_">Right</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>类似的工具，比如 ts-blank-space 或者 Amaro （ Node 下潜在的类型去除库）也有相同的限制。这些工具在遇到那些不符合这些要求的代码时会提供有用的错误的信息，但实际上只有真正去尝试执行代码的话，才会发现代码无法正常工作。</p>
+<p>这就是为什么 TypeScript 5.8 引入了 <code>--erasableSyntaxOnly</code> 的标志。当这个标志开启时， TypeScript 会对那些带有运行时行为的 TypeScript 特有的构造报错。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"><span class="keyword">public</span> <span class="attr">x</span>: <span class="built_in">number</span></span>) &#123; &#125;</span><br><span class="line">  <span class="comment">//          ~~~~~~~~~~~~~~~~</span></span><br><span class="line">  <span class="comment">// error! This syntax is not allowed when &#x27;erasableSyntaxOnly&#x27; is enabled.</span></span><br><span class="line">  <span class="comment">// 错误！开启 erasableSyntaxOnly 后不允许改语法。</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通常，你会想要将这个标志和 <code>--verbatimModuleSyntax</code> 结合起来，以此确保模块包含了恰当的导入语法，并且不会省略导入。</p>
+<p>更多信息查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61011">PR</a> 。</p>
+<h2 id="libReplacement"><a href="#libReplacement" class="headerlink" title="--libReplacement"></a><code>--libReplacement</code></h2><p>在 TypeScript 4.5 ，引入了用自定文件替代默认 <code>lib</code> 文件的远景，它基于从一个名为 <code>@typescript/lib-*</code> 包中解析库文件。比如，你可以把 <code>dom</code> 库锁在一个特定的 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@types/web?activeTab=readme">@types&#x2F;web</a> 包版本，它的 <code>package.json</code> 看起来如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@typescript/lib-dom&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm:@types/web@0.0.199&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>当安装依赖的时候，由于存在 <code>@typescript/lib-dom</code> 包，当在设置中使用了 <code>dom</code> 时， TypeScript 会从该包中查找。</p>
+<p>这是一个强大的特性，但也导致了一些额外的工作。即使你没有使用这个特性， TypeScript 仍然会执行这些查找，并且必须监听 <code>node_modules</code> 内的变更，防止一个 <code>lib</code> 开头的替换包出现但没有生效的问题。</p>
+<p>TypeScript 5.8 引入了 <code>--libReplacement</code> 标志，它允许你关闭这个行为。如果你没有使用 <code>--libReplacement</code> ，那么现在你就可以通过 <code>--libReplacement false</code> 来禁用它。未来 <code>--libReplacement false</code> 可能会成为默认选项，所以如果当前依赖这些行为，则应该明确考虑通过 <code>--libReplacement true</code> 开启它。</p>
+<p>更多信息查看 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/61023">PR</a> 。</p>
+<h2 id="在声明文件中保存计算属性名称"><a href="#在声明文件中保存计算属性名称" class="headerlink" title="在声明文件中保存计算属性名称"></a>在声明文件中保存计算属性名称</h2><p>为了让计算属性在声明文件中的输出更加可预测， TypeScript 5.8 会始终在类的计算属性名称中保存实体名称（裸变量或者类似 <code>a.b.c.d</code>）。</p>
+<p>比如考虑如下代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> propName = <span class="string">&quot;theAnswer&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">  [propName] = <span class="number">42</span>;</span><br><span class="line">  <span class="comment">//  ~~~~~~~~~~</span></span><br><span class="line">  <span class="comment">// error!</span></span><br><span class="line">  <span class="comment">// A computed property name in a class property declaration must have a simple literal type or a &#x27;unique symbol&#x27; type.</span></span><br><span class="line">  <span class="comment">// 类的计算属性必须有一个简单的字面类型或者一个 &#x27;unique symbol&#x27; 类型。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先前版本的 TypeScript 在为这个模块生成定义文件时会报错，声明文件会生成一个索引签名。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">let</span> <span class="attr">propName</span>: <span class="built_in">string</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">  [<span class="attr">x</span>: <span class="built_in">string</span>]: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 TypeScript 5.8 中上面例子现在不会报错了，并且生成的声明文件会和你的代码相匹配：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">let</span> <span class="attr">propName</span>: <span class="built_in">string</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">  [propName]: <span class="built_in">number</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意这不会在类上创建静态命名的属性。你最终仍然得到一个像 <code>[x: string]: number</code> 的有效的索引签名，因此如果想要这么做的话，则需要使用 <code>unique symbol</code> 或者字面类型。</p>
+<p>注意这段代码现在在 <code>--isolatedDeclarations</code> 标志下仍然是错误的。但我们预计，得益于这个变更，计算属性名称将可以合法地输出到声明中。</p>
+<p>注意可能（不太可能）存在一个在 TypeScript 5.8 编译生成的声明文件无法兼容 TypeScript 5.7 及之前版本的情况。</p>
+<p>更多信息，查看此 [PR]<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60052">https://github.com/microsoft/TypeScript/pull/60052</a>) 。</p>
+<h2 id="优化程序的加载和更新"><a href="#优化程序的加载和更新" class="headerlink" title="优化程序的加载和更新"></a>优化程序的加载和更新</h2><p>TypeScript 5.8 引入了多个优化，缩短了构建程序的时间，并且也可以在 <code>--watch</code> 模式或者编辑器场景下的文件变更时更新程序。</p>
+<p>首先，TypeScript 现在避免在执行路径标准化时的数组分配。通常，路径标准化会涉及将路径的每部分分段放入一个字符串数组中，基于相关段来规范结果路径，之后使用规范的分隔符再把它们拼到一起。对于那些有许多文件的项目，这个过程是一个巨大且重复的工作。 TypeScript 现在会避免分配数组，而是更多地通过索引直接对源路径进行操作。</p>
+<p>另外，当出现不会改变项目的基础结构的编辑操作时， TypeScript 现在会避免重新验证提供给它的设置（比如 tsconfig.json 的文件内容）。这意味着，比如，简单的编辑可能不要求检查项目的输出路径是否和输入路径相冲突，它会使用上次检查的结果。这能让大项目内的编辑操作响应更快。</p>
+<h2 id="需要注意的行为变更"><a href="#需要注意的行为变更" class="headerlink" title="需要注意的行为变更"></a>需要注意的行为变更</h2><h3 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h3><p>详情请查看<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60985">此处</a>。</p>
+<h4 id="module-nodenext-限制导入断言"><a href="#module-nodenext-限制导入断言" class="headerlink" title="--module nodenext 限制导入断言"></a><code>--module nodenext</code> 限制导入断言</h4><p>导入断言是 ECMAScript 的一个提案，用来保证一个导入的某些属性（比如 “这个模块是 JSON ，它不是用来执行 JavaScript 代码的”）。这里还有一个<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-import-attributes">导入属性</a>的提案，作为过渡的一部分，从 使用 <code>assert</code> 关键字改为 <code>with</code> 关键字。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// An import assertion ❌ - not future-compatible with most runtimes.</span></span><br><span class="line"><span class="comment">// 导热油迪亚比他不</span></span><br><span class="line"><span class="keyword">import</span> data <span class="keyword">from</span> <span class="string">&quot;./data.json&quot;</span> assert &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// An import attribute ✅ - the preferred way to import a JSON file.</span></span><br><span class="line"><span class="comment">// 导入属性</span></span><br><span class="line"><span class="keyword">import</span> data <span class="keyword">from</span> <span class="string">&quot;./data.json&quot;</span> <span class="keyword">with</span> &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Node22 不再接受使用 <code>assert</code> 语法的导入断言。而当在 TypeScript 5.8 开启 <code>--module nodenext</code> 时， TypeScript 会在遇到导入断言时报错。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> data <span class="keyword">from</span> <span class="string">&quot;./data.json&quot;</span> assert &#123; <span class="attr">type</span>: <span class="string">&quot;json&quot;</span> &#125;;</span><br><span class="line"><span class="comment">//                             ~~~~~~</span></span><br><span class="line"><span class="comment">// error! Import assertions have been replaced by import attributes. Use &#x27;with&#x27; instead of &#x27;assert&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>更多信息查看此 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/60761">PR</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/7dc7c776f888" title="TypeScript 5.8（译）">https://prohibitorum.top/7dc7c776f888</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a8869ca56948" rel="prev" title="MyGO!!!!! 观后感">
+                  <i class="fa fa-angle-left"></i> MyGO!!!!! 观后感
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/0260e2038d9a" rel="next" title="一个快 10 倍的 TypeScript">
+                  一个快 10 倍的 TypeScript <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1741013159"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

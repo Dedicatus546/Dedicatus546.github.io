@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记录一次在 windows 上安装 Rocky Linux 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录一次在 windows 上安装 Rocky Linux">
+<meta property="og:url" content="https://prohibitorum.top/3dba217ce9f2">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记录一次在 windows 上安装 Rocky Linux 。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202145141347.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202145258101.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202155036023.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202151025657.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163356397.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163652941.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163916931.avif">
+<meta property="article:published_time" content="2024-12-02T17:05:53.000Z">
+<meta property="article:modified_time" content="2024-12-02T17:05:53.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="WSL">
+<meta property="article:tag" content="Rocky">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202145141347.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/3dba217ce9f2.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/3dba217ce9f2","path":"3dba217ce9f2.html","title":"记录一次在 windows 上安装 Rocky Linux"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记录一次在 windows 上安装 Rocky Linux | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rocky-Linux"><span class="nav-number">2.1.</span> <span class="nav-text">Rocky Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-WSL"><span class="nav-number">2.2.</span> <span class="nav-text">安装 WSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85-Rocky-Linux"><span class="nav-number">2.3.</span> <span class="nav-text">安装 Rocky Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8-Rocky-Linux"><span class="nav-number">2.4.</span> <span class="nav-text">启动 Rocky Linux</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E7%94%A8-systemd"><span class="nav-number">2.5.</span> <span class="nav-text">启用 systemd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%BF%E6%8D%A2%E6%BA%90"><span class="nav-number">2.6.</span> <span class="nav-text">替换源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A3%85%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E7%9A%84%E8%BD%AF%E4%BB%B6"><span class="nav-number">2.7.</span> <span class="nav-text">装一些常见的软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ps-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.7.1.</span> <span class="nav-text">ps 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clear-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.7.2.</span> <span class="nav-text">clear 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ip-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.7.3.</span> <span class="nav-text">ip 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vim-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.7.4.</span> <span class="nav-text">vim 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker"><span class="nav-number">2.7.5.</span> <span class="nav-text">docker</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8B%89%E5%8F%96%E9%95%9C%E5%83%8F"><span class="nav-number">2.7.5.1.</span> <span class="nav-text">拉取镜像</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E6%9C%BA%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%BA%92-ping"><span class="nav-number">2.8.</span> <span class="nav-text">主机子系统互 ping</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/3dba217ce9f2">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记录一次在 windows 上安装 Rocky Linux | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记录一次在 windows 上安装 Rocky Linux
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-02 17:05:53" itemprop="dateCreated datePublished" datetime="2024-12-02T17:05:53+00:00">2024-12-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录一次在 windows 上安装 Rocky Linux 。</p>
+<span id="more"></span>
+
+<p>在 Windows 上使用 WSL 的 Linux 确实很不错，不管是学习还是开发，主要是可以和 Windows 的环境隔离开了，不想要了直接把相关的 Linux 删了就行。</p>
+<p>之前重装了几次系统，这次就记录下来，方便以后翻阅。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Rocky-Linux"><a href="#Rocky-Linux" class="headerlink" title="Rocky Linux"></a>Rocky Linux</h2><p>Centos 8 后，红帽（Red Hat）就不再构建 Red Hat Enterprise Linux 下游的生产版本了， Centos Stream 为 Red Hat Enterprise Linux 的上游版本。 Rocky Linux 可以认为是 Red Hat Enterprise Linux 下游的构建，可以理解为 Centos 8 的延续。</p>
+<h2 id="安装-WSL"><a href="#安装-WSL" class="headerlink" title="安装 WSL"></a>安装 WSL</h2><p>本文的环境为 Windows 11 ，Windows 10 应该通用。</p>
+<p>执行以下命令安装 WSL ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl.exe --install</span><br></pre></td></tr></table></figure>
+
+<p>这会安装最新的 WSL 。</p>
+<p>安装成功后，最好<strong>重启</strong>一下电脑。</p>
+<h2 id="安装-Rocky-Linux"><a href="#安装-Rocky-Linux" class="headerlink" title="安装 Rocky Linux"></a>安装 Rocky Linux</h2><p>网上的很多文章都需要通过 Docker 来将 Rocky Linux 的镜像导出为一个 tar 包，其实并不需要，Rocky Linux 本身就构建了相关的资源。</p>
+<p>在最新的 9.5 的<a target="_blank" rel="noopener" href="https://dl.rockylinux.org/pub/rocky/9.5/images/x86_64/">镜像文件夹</a>下，可以看到 <a target="_blank" rel="noopener" href="https://dl.rockylinux.org/pub/rocky/9.5/images/x86_64/Rocky-9-Container-Base-9.5-20241118.0.x86_64.tar.xz">Rocky-9-Container-Base-9.5-20241118.0.x86_64.tar.xz</a> 的文件，这个文件就可以直接使用 WSL 命令导入</p>
+<p>将这个文件下载下来用，使用 <code>wsl --import 系统名字 安装的位置 tar包位置</code> 命令导入到 WSL 中，我的安装脚本如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wsl --import Rocky9 E:\wsl\Rocky9 C:\Users\lwf16\Downloads\Rocky-9-Container-Base-9.5-20241118.0.x86_64.tar.xz</span><br></pre></td></tr></table></figure>
+
+<p>这里系统名称可以随意取，通过 <code>wsl -l</code> 可以查看所有安装的 linux 子系统。</p>
+<p>如果速度太慢，可以使用阿里云的镜像地址：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/rockylinux/9.5/images/x86_64/?spm=a2c6h.25603864.0.0.709f9612yxImMm">Index of &#x2F;rockylinux&#x2F;9.5&#x2F;images&#x2F;x86_64&#x2F;</a>，相关文件地址为：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/rockylinux/9.5/images/x86_64/Rocky-9-Container-Base.latest.x86_64.tar.xz">Rocky-9-Container-Base.latest.x86_64.tar.xz</a></p>
+<h2 id="启动-Rocky-Linux"><a href="#启动-Rocky-Linux" class="headerlink" title="启动 Rocky Linux"></a>启动 Rocky Linux</h2><p>执行 <code>wsl -l</code> ，会出现前面安装的 Rocky9 ，该 Linux 为默认的子系统：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202145141347.avif"></p>
+<p>直接执行 <code>wsl</code> 即可启动（这里由于我启动了 V2rayN ，所以会有代理的提示，不用管）：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202145258101.avif"></p>
+<h2 id="启用-systemd"><a href="#启用-systemd" class="headerlink" title="启用 systemd"></a>启用 systemd</h2><p>我们需要在 <code>/etc</code> 下创建一个 <code>wsl.conf</code> 文件，然后写入以下内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[boot]</span><br><span class="line">systemd=true</span><br></pre></td></tr></table></figure>
+
+<p>然后重启该子系统，可以使用 <code>wsl --shutdown</code> 停掉整个 wsl ，或者 <code>wsl -t Rocky9</code> 注销指定的子系统。</p>
+<p>重启之后为了验证是否为 systemd 接管，执行 <code>pstree</code> 命令，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202155036023.avif"></p>
+<p>更多 WSL 的可配置项可以在微软的<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config">文档</a>中查看。</p>
+<h2 id="替换源"><a href="#替换源" class="headerlink" title="替换源"></a>替换源</h2><p>默认的源可能网速较慢，这里我们可以切换到阿里的源。</p>
+<p>在阿里云 Rocky Linux 的<a target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/rockylinux?spm=a2c6h.13651102.0.0.6bd71b11nsfXe4">页面</a>下，提供了如下的替换命令，直接复制执行即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sed -e <span class="string">&#x27;s|^mirrorlist=|#mirrorlist=|g&#x27;</span> \</span><br><span class="line">    -e <span class="string">&#x27;s|^#baseurl=http://dl.rockylinux.org/$contentdir|baseurl=https://mirrors.aliyun.com/rockylinux|g&#x27;</span> \</span><br><span class="line">    -i.bak \</span><br><span class="line">    /etc/yum.repos.d/Rocky-*.repo</span><br><span class="line"></span><br><span class="line">dnf makecache</span><br></pre></td></tr></table></figure>
+
+<p>接着我们可以执行 <code>dnf update</code> 来更新一下系统软件。</p>
+<h2 id="装一些常见的软件"><a href="#装一些常见的软件" class="headerlink" title="装一些常见的软件"></a>装一些常见的软件</h2><p>由于这个镜像为基础镜像，所以有些命令可能不全，我们需要手动安装。</p>
+<h3 id="ps-命令"><a href="#ps-命令" class="headerlink" title="ps 命令"></a>ps 命令</h3><p><code>ps</code> 命令由 <code>procps</code> 包提供，直接执行 <code>dnf install procps</code> 安装。</p>
+<h3 id="clear-命令"><a href="#clear-命令" class="headerlink" title="clear 命令"></a>clear 命令</h3><p><code>clear</code> 命令由 <code>ncurses</code> 包提供，直接执行 <code>dnf install ncurses</code> 安装。当然也可以通过 <code>win + l</code> 快捷键来清除当前窗口的信息。</p>
+<h3 id="ip-命令"><a href="#ip-命令" class="headerlink" title="ip 命令"></a>ip 命令</h3><p><code>ip</code> 命令由 <code>iproute</code> 包提供，直接执行 <code>dnf install iproute</code> 安装。</p>
+<h3 id="vim-命令"><a href="#vim-命令" class="headerlink" title="vim 命令"></a>vim 命令</h3><p>镜像默认有 vi 命令，不过没有高亮，可以装一个 vim ，执行 <code>dnf install vim</code> 安装。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202151025657.avif"></p>
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><p>docker 的官网给了我们相关的<a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/rhel/">教程</a>，依次执行以下命令即可：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">dnf -y install dnf-plugins-core</span><br><span class="line"></span><br><span class="line">dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo</span><br><span class="line"></span><br><span class="line">dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+
+<p>装完之后执行 <code>systemctl start docker</code> 启动 docker 。</p>
+<h4 id="拉取镜像"><a href="#拉取镜像" class="headerlink" title="拉取镜像"></a>拉取镜像</h4><p>国内 Docker Hub 基本无法访问，所以我们需要通过代理来连接 Docker Hub 。在 systemd 的管理下，我们需要在 <code>/etc/systemd/system/docker.service.d</code> 文件夹下创建一个 <code>http-proxy.conf</code> 文件，然后写入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[Service]</span><br><span class="line"># 这里要写你的代理对应的 ip 值</span><br><span class="line">Environment=&quot;HTTP_PROXY=socks5://172.21.128.1:10808&quot;</span><br><span class="line"># 这里要写你的代理对应的 ip 值</span><br><span class="line">Environment=&quot;HTTPS_PROXY=socks5://172.21.128.1:10808&quot;</span><br></pre></td></tr></table></figure>
+
+<p>接着我们重启 systemd 和 docker ，执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>接着就可以随便拉取一个镜像试试看了，比如拉取 mysql ，执行以下命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull mysql:9</span><br></pre></td></tr></table></figure>
+
+<p>为了确认是否加载了相关的配置文件，我们可以执行 <code>systemctl status docker</code> 来查看：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163356397.avif"></p>
+<p>可以看到 Drop-In 一栏显示了我们新增的配置文件</p>
+<h2 id="主机子系统互-ping"><a href="#主机子系统互-ping" class="headerlink" title="主机子系统互 ping"></a>主机子系统互 ping</h2><p>默认情况下，子系统可以 ping 通主机，但是主机无法 ping 通子系统。</p>
+<p>为了查看子系统的 ip ，我们执行 <code>ip addr</code> 命令：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163652941.avif"></p>
+<p>可以看到这里 eth0 为默认 NAT 情况下的网卡，默认情况下 windows 会建立一个 NAT 网络来连接子系统，在 windows 上执行 <code>ipconfig</code> 可以看到对应的网卡：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202163916931.avif"></p>
+<p>这里我们要把这个网卡加到防火墙中，在管理员权限下执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-NetFirewallRule -DisplayName <span class="string">&quot;WSL&quot;</span> -Direction Inbound -InterfaceAlias <span class="string">&quot;vEthernet (WSL (Hyper-V firewall))&quot;</span> -Action Allow </span><br></pre></td></tr></table></figure>
+
+<p>此时就可以互 ping 了。</p>
+<div class="swiper" id="swiperInst-sfnvfb6u" style="width: 100%">
+  <div class="swiper-wrapper">
+      
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202164725087.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/12/02/20241202164752703.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-sfnvfb6u", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-sfnvfb6u .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/3dba217ce9f2" title="记录一次在 windows 上安装 Rocky Linux">https://prohibitorum.top/3dba217ce9f2</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/WSL/" rel="tag"># WSL</a>
+              <a href="/tags/Rocky/" rel="tag"># Rocky</a>
+              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Windows/" rel="tag"># Windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/f2de7c48b49e" rel="prev" title="记录广州申迪的前端面试">
+                  <i class="fa fa-angle-left"></i> 记录广州申迪的前端面试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/bc5dbb322dbc" rel="next" title="记录 uniapp 微信小程序登录流程">
+                  记录 uniapp 微信小程序登录流程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1733130353"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

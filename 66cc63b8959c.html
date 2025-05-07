@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言Content Security policy（译）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Content Security policy（译）">
+<meta property="og:url" content="https://prohibitorum.top/66cc63b8959c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言Content Security policy（译）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://web-dev.imgix.net/image/T4FyVKpzu4WKF1kBNvXepbi08t52/RSnKHpls9RiDnnSGxMlE.png?auto=format&w=741">
+<meta property="article:published_time" content="2023-10-01T17:01:53.000Z">
+<meta property="article:modified_time" content="2023-10-01T17:01:53.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="CSP">
+<meta property="article:tag" content="Html">
+<meta property="article:tag" content="Web 安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://web-dev.imgix.net/image/T4FyVKpzu4WKF1kBNvXepbi08t52/RSnKHpls9RiDnnSGxMlE.png?auto=format&w=741">
+
+
+<link rel="canonical" href="https://prohibitorum.top/66cc63b8959c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/66cc63b8959c","path":"66cc63b8959c.html","title":"Content Security policy（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Content Security policy（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary%EF%BC%88%E6%91%98%E8%A6%81%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">Summary（摘要）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%81%E8%AE%B8%E7%9A%84%E6%BA%90%E5%88%97%E8%A1%A8%EF%BC%88Source-allowlists%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">允许的源列表（Source allowlists）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E5%90%84%E7%A7%8D%E8%B5%84%E6%BA%90%E5%BA%94%E7%94%A8%E7%AD%96%E7%95%A5"><span class="nav-number">2.2.1.</span> <span class="nav-text">为各种资源应用策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">2.2.2.</span> <span class="nav-text">实现细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B2%99%E7%9B%92"><span class="nav-number">2.2.3.</span> <span class="nav-text">沙盒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE"><span class="nav-number">2.2.4.</span> <span class="nav-text">&lt;meta&gt; 标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E8%81%94%E4%BB%A3%E7%A0%81%E6%98%AF%E6%9C%89%E5%AE%B3%E7%9A%84"><span class="nav-number">2.3.</span> <span class="nav-text">内联代码是有害的</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E4%BD%A0%E5%BF%85%E9%A1%BB%E4%BD%BF%E7%94%A8%E5%AE%83"><span class="nav-number">2.3.1.</span> <span class="nav-text">如果你必须使用它</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-%E4%B9%9F%E6%98%AF%E6%9C%89%E5%AE%B3%E7%9A%84"><span class="nav-number">2.4.</span> <span class="nav-text">eval 也是有害的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E5%91%8A"><span class="nav-number">2.5.</span> <span class="nav-text">报告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%85%E6%8A%A5%E5%91%8A"><span class="nav-number">2.5.1.</span> <span class="nav-text">仅报告</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%B0%E5%AE%9E%E4%B8%96%E7%95%8C%E7%9A%84%E7%94%A8%E4%BE%8B"><span class="nav-number">2.6.</span> <span class="nav-text">现实世界的用例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BE%8B-1-%EF%BC%8C%E7%A4%BE%E4%BA%A4%E5%AA%92%E4%BD%93%E9%83%A8%E4%BB%B6"><span class="nav-number">2.6.1.</span> <span class="nav-text">用例 1 ，社交媒体部件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BE%8B-2"><span class="nav-number">2.6.2.</span> <span class="nav-text">用例 2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E4%BE%8B-3-%E4%BB%85%E4%BD%BF%E7%94%A8-SSL"><span class="nav-number">2.6.3.</span> <span class="nav-text">用例 3 仅使用 SSL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AA%E6%9D%A5"><span class="nav-number">2.7.</span> <span class="nav-text">未来</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/66cc63b8959c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Content Security policy（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Content Security policy（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-10-01 17:01:53" itemprop="dateCreated datePublished" datetime="2023-10-01T17:01:53+00:00">2023-10-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Content Security policy（译）</p>
+<span id="more"></span>
+
+<p>原文地址：<a target="_blank" rel="noopener" href="https://web.dev/csp/">Content security policy</a></p>
+<p>这次带来的是 web.dev 上的一篇文章，不得不说这网站很不错。</p>
+<p>前提是英语够好，很适合当厕所读物。</p>
+<p>本文主要是讲述 Content Security policy ，即内容安全策略。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>在现代浏览器上， Content Security policy （下文统称 CSP ）可以显著减少跨站脚本攻击带来的风险和影响。</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Same-origin_policy">同源策略</a>是 web 内容安全模型的根源。来自 <code>https://mybank.com</code> 的代码应该只能访问 <code>https://mybank.com</code> 的数据，而 <code>https://evil.example.com</code> 网站绝对不应该被允许访问这些数据。每个源应该和网站的其他部分隔离，并为开发者提供了一个安全的沙箱，使得开发者能够构建和执行他们的应用。理论上看，这实在是太棒了，但实际上，攻击者可以使用一种聪明的方法来攻击系统。</p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cross-site_scripting">Cross-site script attacks</a> （跨站脚本攻击，下文统称 XSS ）就是这样的一种方法，它通过欺骗站点来传递包含了恶意代码的预期内容。这是一个很严重的问题，因为浏览器信任所有页面上展示的代码，它会将这些代码视作该页面的安全来源的一个合法的部分。 <a target="_blank" rel="noopener" href="https://www.owasp.org/index.php/XSS_Filter_Evasion_Cheat_Sheet">XSS Cheat Sheet</a> 是一个古老但记录了具有代表性的的方法。攻击者可能会使用这些方法，通过注入恶意代码来违反这种信任规则。如果一个攻击者成功地注入了任何代码，这意味着完蛋了，用户的会话（session）数据会被窃取，应该保密的信息也会泄露给坏人。显然我们得防止这样的情况发生。</p>
+<p>本概述重点介绍了一种可以显著降低现代浏览器中收到 XSS 攻击的风险和影响的防御措施，即 CSP 。</p>
+<h2 id="Summary（摘要）"><a href="#Summary（摘要）" class="headerlink" title="Summary（摘要）"></a>Summary（摘要）</h2><ul>
+<li>使用允许，告诉客户端被允许的或不被允许的名单。</li>
+<li>学习可用的指令。</li>
+<li>学习这些指令对应的关键词。</li>
+<li>内联代码和使用 <code>eval()</code> 是有害的。</li>
+<li>在执行策略之前，向服务器报告违反策略的行为。</li>
+</ul>
+<h2 id="允许的源列表（Source-allowlists）"><a href="#允许的源列表（Source-allowlists）" class="headerlink" title="允许的源列表（Source allowlists）"></a>允许的源列表（Source allowlists）</h2><p>XSS 攻击利用的是浏览器无法区分脚本是应用的一部分还是被第三方恶意的注入的一部分。比如，本页底部的 Google 的加一按钮在从 <code>https://apis.google.com/js/plusone.js</code> 这个地址加载并在本页面的上下文中执行。我们信任这些代码，但我们不能期望浏览器自身去认定来自 <code>apis.google.com</code> 的代码是好的，而来自 <code>api.evil.example.com</code> 的代码可能是不好的。浏览器只会“乐呵呵”地下载这些文件然后执行这些请求的任何代码，无论代码的来源如何。</p>
+<p>CSP 定义了 <code>Content-Security-Policy</code> 请求头，允许你创建一个可信任内容的允许源列表，然后指示浏览器只执行或者渲染来自这些源的资源，而不是盲目地信任服务器分发地任何资源。即使一个攻击者找到了漏洞来注入代码，由于脚本和允许源列表不匹配，因此这些恶意代码就无法被执行了。</p>
+<p>因为我们信任了 <code>apis.google.com</code> 分发的合法的代码，我们也可以信任自身的代码。我们可以定义一个策略，这个策略允许执行来自这两个源中的其中一个源的代码：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">Content-Security-Policy:</span> <span class="string">script-src</span> <span class="string">&#x27;self&#x27;</span> <span class="string">https://apis.google.com</span></span><br></pre></td></tr></table></figure>
+
+<p>很简单对吧？正如你所猜测的那样， <code>script-src</code> 是一个控制指定页面相关特权脚本集合的指令，在这里我们制定了 <code>self</code> 作为一个合法的脚本源， <code>https://apis.google.com</code> 作为另一个，这样，浏览器就会尽责地下载和执行来自 HTTPS 协议的 <code>api.google.com</code> 的，以及自身来源的代码。</p>
+<p><img data-src="https://web-dev.imgix.net/image/T4FyVKpzu4WKF1kBNvXepbi08t52/RSnKHpls9RiDnnSGxMlE.png?auto=format&w=741"></p>
+<p>定义了这个策略后，浏览器会简单地抛出一个错误而不是加载任何其他来源的脚本。当一个聪明的攻击者设法往你的站点注入代码时，他们只能头大地看着这条错误消息，而不是他们期望地成功注入。</p>
+<h3 id="为各种资源应用策略"><a href="#为各种资源应用策略" class="headerlink" title="为各种资源应用策略"></a>为各种资源应用策略</h3><p>虽然脚本资源是最明显具有安全风险的一类资源， 但是 CSP 提供了一系列的丰富的策略指令，这些指令可以细粒度地控制页面允许加载的资源。在上文中你已经知道了 <code>script-src</code> 指令，所以理解起来应该是不难的。</p>
+<p>我们可以快速浏览其余的资源指令。下面的列表展示了第二版标准的指令的说明，第三版标准已经发布了，但是主流浏览器大部分都未实现。</p>
+<ul>
+<li><code>base-url</code> 限制了页面中 <code>&lt;base&gt;</code> 元素可以出现的 URL 列表。</li>
+<li><code>child-src</code> 列出了 worker 和内嵌 iframe 内容的 URL 列表。比如： <code>child-src https://youtube.com</code> 能够内嵌来自 Youtube 的视频而其他来源的则不可以。</li>
+<li><code>connect-src</code> 限制了你可以连接的（通过 XHR ， WebSockets 和 EventSource ） URL 列表。</li>
+<li><code>font-src</code> 指定了可以提供 web 字体的源列表。 Google 的 web 字体需要通过 <code>font-src https://themes.googleusercontent.com</code> 来开启。</li>
+<li><code>form-action</code> 列出了 <code>&lt;form&gt;</code> 标签合法的提交位置列表。</li>
+<li><code>frame-ancestors</code> 制定了可以内嵌到当前页面的源列表。这个指令应用到 <code>&lt;frame&gt;</code> ， <code>&lt;iframe&gt;</code> ， <code>&lt;embed&gt;</code> 和 <code>&lt;applet&gt;</code> 标签上。这个指令无法通过 <code>&lt;meta&gt;</code> 标签来使用，并且只能应用到非 HTML 的资源。</li>
+<li><code>frame-src</code> 在第二版标准中废弃了，但是在第三版标准中恢复了。如果不设定的话，和以前一样会回退到 <code>child-src</code> 指令上。</li>
+<li><code>img-src</code> 定义了一个允许加载图像的源列表。</li>
+<li><code>media-src</code> 限制了允许分发视频和音频的源列表。</li>
+<li><code>object-src</code> 允许控制 Flash 和其他的插件。</li>
+<li><code>plugin-types</code> 限制了页面可能调用的插件的类型。</li>
+<li><code>report-uri</code> 指定了一个当违反 CSP 时浏览器发送报告的 URL 。这个指令无法通过 <code>&lt;meta&gt;</code> 标签指定。</li>
+<li><code>style-src</code> 类似于 <code>script-src</code> 。</li>
+<li><code>upgrade-insecure-requests</code> 指示用户代理去重写 URL 协议，比如将 HTTP 改成 HTTPS 。这个指令适合那些有大量需要重写旧 URL 的网站。</li>
+<li><code>worker-src</code> 是第三版标准的指令，用来限制加载 worker ， shared worker 或者 service worker 的源列表。截至 2017 年 7 月，该指令部分实现。</li>
+</ul>
+<p>默认情况下，指令是开放的，如果你不设置某个策略的指令，比如 <code>font-src</code> ，那么这个指令的默认行为就跟你指定了 * 作为合法的源一样（也就是说你可以从任何地方加载字体，没有限制）。</p>
+<p>你可以通过使用 <code>default-src</code> 指令来重写默认的行为。这个指令定义了大多数未指定值的指令的默认值。通常情况下，这个指令会应用到任何以 <code>-src</code> 为结尾的指令。如果 <code>default-src</code> 设置为 <code>http://example.com</code> ， 并且你未指定 <code>font-src</code> 的值，那么你只能从 <code>https://example.com</code> 加载字体了。前面的例子中我们只制定了 <code>script-src</code> ，这意味着诸如图片，字体等都能从任何源加载。</p>
+<p>以下的指令不会回退到 <code>default-src</code> 。记住未指定值的情况等同于允许任何源。</p>
+<ul>
+<li><code>base-uri</code></li>
+<li><code>form-action</code></li>
+<li><code>frame-ancestors</code></li>
+<li><code>plugin-types</code></li>
+<li><code>report-uri</code></li>
+<li><code>sandbox</code></li>
+</ul>
+<p>你可以根据情况为你的应用指定尽可能多的或尽可能少的指令，只需要简单地在 HTTP 请求头中列出每个指令，并用分号分开即可。你要确保在单个指令中列出指定类型需要的全部资源。如果你编写了诸如 <code>script-src https://host1.com; script-src https://host2.com</code> ，第二个指令会被简单地忽略掉。下面的方式可以正确地指定两个源一起作为合法的值：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script-src https://host1.com https://host2.com</span><br></pre></td></tr></table></figure>
+
+<p>举个例子，如果你有一个应用，这个应用从 CDN 中加载它的所有资源（假设这个 CDN 的地址为 <code>https://cdn.example.net</code> ），并且你知道你无需任何其他任何框架或者插件，那么你的策略看起来跟如下一样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src https://cdn.example.net; child-src &#x27;none&#x27;; object-src &#x27;none&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="实现细节"><a href="#实现细节" class="headerlink" title="实现细节"></a>实现细节</h3><p>你可能会在网络上的各种教程中看到 <code>X-Webkit-CSP</code> 和 <code>X-Content-Security-Policy</code> 请求头。现在，你应该忽略这些前缀的请求头，现代浏览器（IE 除外）支持了不包含前缀的 <code>Content-Security-Policy</code> 请求头，这才是你应该使用的。</p>
+<p>无论你使用了什么标头，策略都是基于每个页面来定义的，你需要对每个想要被保护的页面发送响应的 HTTP 标头。这是相当灵活的，因为你可以对有特定需求的指定页面上调整相应的策略。可能在你的站点上的某个页面有一个加一的按钮，而其他页面没有，那么你可以允许在这个页面上加载按钮代码而其他页面则不允许。</p>
+<p>每个指令的源列表都是灵活的。你可以通过协议（ <code>data:</code> ， <code>https:</code> ），或者从只指定主机范围（比如指定 <code>example.com</code> ，这表示匹配任何该主机的源，任何的协议，任何端口）到指定一个完整的 URI 地址（比如 <code>https//example.com:443</code> ，只会匹配 HTTPS ，主机为 <code>example.com</code> 并且端口为 443 ）。通配符也是允许的值，但只能作为一个协议，一个端口，或者主机名最左边的位置， <code>*://*.example.com:*</code> 会匹配所有 <code>example.com</code> 的子域名（但不包含 <code>example.com</code> 自身），所有的协议以及任何的端口。</p>
+<p>源列表也可以接受下面的四个关键字作为值：</p>
+<ul>
+<li><code>&#39;none&#39;</code> ，正如你所期望的，它不会匹配任何东西。</li>
+<li><code>&#39;self&#39;</code> 匹配当前的源，但不包含它的子域名。</li>
+<li><code>&#39;unsafe-inline&#39;</code> 允许内联的 JavaScript 和 CSS 代码（我们稍后会深入讨论这一点）。</li>
+<li><code>&#39;unsafe-eval&#39;</code> 允许使用文本执行 JavaScript 代码，比如 <code>eval</code> （稍后也会讨论这一点）。</li>
+</ul>
+<p>这些关键字需要单引号包起来，比如， <code>script-src &#39;self&#39;</code> （带有引号）允许执行来自当前域名的代码。而 <code>script-src self</code> （不带引号）则是允许执行来自一个名叫 self 的服务器的代码（不是来自当前域名），不带引号的写法可能和你的理解会存在出入。</p>
+<h3 id="沙盒"><a href="#沙盒" class="headerlink" title="沙盒"></a>沙盒</h3><p><code>sandbox</code> 这个指令值得一谈。它和我们见过的指令有细微不同，因为它是限制页面可以执行的操作而不是页面可以加载的资源。如果设置了 <code>sandbox</code> 指令，页面会被当作在一个带着 <code>sandbox</code> 属性的 <code>&lt;iframe&gt;</code> 标签内部加载的一样。这会对页面造成广泛的影响，即强制页面进入一个独立的源中，阻止表单提交，等等。这部分有点超出本文的范围了，你可以在 <a target="_blank" rel="noopener" href="https://html.spec.whatwg.org/dev/origin.html#sandboxing">HTML5 规范的沙盒部分</a>中找到 <code>sandbox</code> 属性的完整细节。</p>
+<h3 id="标签"><a href="#标签" class="headerlink" title="&lt;meta&gt; 标签"></a>&lt;meta&gt; 标签</h3><p>CSP 首选的分发机制是通过请求头。但是通过直接在页面上通过标记设置策略可能也很有用。可以通过一个带有 <code>http-equiv</code> 属性的 <code>&lt;meta&gt;</code> 标签来实现。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src https://cdn.example.net; child-src &#x27;none&#x27;; object-src &#x27;none&#x27;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="内联代码是有害的"><a href="#内联代码是有害的" class="headerlink" title="内联代码是有害的"></a>内联代码是有害的</h2><p>应该明确的是， CSP 是基于允许源列表，它是指示浏览器将特定的资源集合视为可接受的并且拒绝其他的资源的一种明确的方式。然而，基于源的允许列表无法解决由 XSS 攻击带来最大的威胁，即内联代码注入。如果一个攻击者可以注入一段直接包含一些恶意载体的 script 标签的代码（ <code>&lt;script&gt;sendMyDataToEvilDotCom()&lt;/script&gt;</code> ），浏览器没有一种机制去把它和包含合法的内联代码的 <code>&lt;script&gt;</code> 标签区分开。 CSP 通过完全禁止内联脚本来解决这个问题，这是唯一可以解决的方式。</p>
+<p>完全禁止内联脚本不仅包括在 <code>&lt;script&gt;</code> 标签中直接嵌入的脚本，也包括内联的事件处理程序以及 <code>javascript:</code> 协议的地址。你需要将 <code>&lt;script&gt;</code> 标签的内容移动到一个外部的文件中，然后把 <code>javascript:</code> 地址和 <code>&lt;a ... onclick=&quot;[JAVASCRIPT]&quot;&gt;</code> 替换成适当的 <code>addEventListener()</code> 调用。比如，你可能会把下面的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">function</span> <span class="title function_">doAmazingThings</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">alert</span>(<span class="string">&#x27;YOU AM AMAZING!&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&#x27;doAmazingThings();&#x27;</span>&gt;</span>Am I amazing?<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>改写成如下这样：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&#x27;amazing.js&#x27;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">&#x27;amazing&#x27;</span>&gt;</span>Am I amazing?<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// amazing.js</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">doAmazingThings</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">alert</span>(<span class="string">&#x27;YOU AM AMAZING!&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;amazing&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, doAmazingThings);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>重写后的代码相比原先的有很多的优点并且能够很好地配合 CSP 技术。无论你是否使用 CSP ，这都已经是最佳的实践。内联代码使用了一种你不该的使用的混合了结构和行为的方式。而外部资源可以很好地被浏览器缓存，对开发者而言更容易去理解，并且有利于编译和压缩。如果你把代码移动到外部资源中那么你可以写出更好的代码。</p>
+<p>内联样式的道理也是一样的，所有的 <code>style</code> 属性和 <code>&lt;style&gt;</code> 标签都应该合并到一个外部的样式文件中，这样可以防止 CSS 启用各种巧妙的<a target="_blank" rel="noopener" href="https://scarybeastsecurity.blogspot.com/2009/12/generic-cross-browser-cross-domain.html">数据泄露</a>的方式。</p>
+<p>如果你必须使用内联脚本或者样式，你可以通过在 <code>script-src</code> 和 <code>style-src</code> 的允许源列表内添加 <code>&#39;unsafe-inline&#39;</code> 来开它。你也可以使用随机数或者哈希值（见下文），但你真的不应该这么做。禁止内联脚本是 CSP 提供的最大的安全优势，禁用内联样式同样也能加固你的应用。移动所有不合规的代码并确保应用仍然可以正确工作需要一点儿工作量，但这是一个非常值得做出的权衡。</p>
+<h3 id="如果你必须使用它"><a href="#如果你必须使用它" class="headerlink" title="如果你必须使用它"></a>如果你必须使用它</h3><p>CSP 第二版允许你通过加密随机数（只使用一次）或者一个哈希值来将内联脚本添加到允许源列表中，这提供了一种低版本兼容性。尽管这可能很麻烦，但在紧要关头真的很有用。</p>
+<p>为了使用一个随机数，需要在 <code>&lt;script&gt;</code> 标签上添加一个 <code>nonce</code> 属性。它的值必须和可信任的源列表中的一个匹配。比如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">nonce</span>=<span class="string">&quot;EDNnf03nceIOfn39fn3e9h3sdfa&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// Some inline code I can&#x27;t remove yet, but need to asap.</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在，把这个随机数附加到 <code>nonce-</code> 关键字后，然后添加到你的 <code>script-src</code> 指令内。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src &#x27;nonce-EDNnf03nceIOfn39fn3e9h3sdfa&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>记住随机数必须在每个页面请求中重写生成，并且这些随机数必须是不可猜测的。</p>
+<p>哈希值的工作方式也一样，为脚本自身创建一个 SHA 哈希值，然后添加到 <code>script-src</code> 指令内，而非往 <code>&lt;script&gt;</code> 标签上添加一个属性。比如，我们假设你的页面上包含下面的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"><span class="title function_">alert</span>(<span class="string">&#x27;Hello, world.&#x27;</span>);</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>你的安全策略需要包含他，那么你需要写成如下形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: script-src &#x27;sha256-qznLcsROx4GACP2dm0UCKCzCG-HiZ1guq6ZZDob_Tng=&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>这里还有一些东西需要主义。 <code>sha-*</code> 前缀制定了生成哈希的算法。在上面的例子中，使用了 <code>sha256-</code> 前缀。CSP 也支持 <code>sha384-</code> 和 <code>sha512-</code> 。当生成哈希的时候，不要把 <code>&lt;script&gt;</code> 标签包含在内。并且大小写和空格，包括前置和尾随的空格也很重要。</p>
+<p>通过 Google 搜索生成 SHA 哈希值，你可以找到多种语言的解决方案。使用 Chrome 40 之后的版本，你可以打开 DevTools 然后重新加载你的页面，然后控制台选项卡会出现你包含的每一个内联脚本的正确 sha256 哈希值的的错误信息。</p>
+<h2 id="eval-也是有害的"><a href="#eval-也是有害的" class="headerlink" title="eval 也是有害的"></a>eval 也是有害的</h2><p>即使一个攻击者无法直接注入脚本，但他们能够将原本其他的惰性文本转换成可执行的 JavaScript 代码以此欺骗你的应用，然后通过你的应用来执行这些代码。 <code>eval</code> ， <code>new Function</code> ， <code>setTimeout([string], ...)</code> ，以及 <code>setInterval([string], ...)</code> 都是一些能够注入可能文本并且最终执行到一些非期望的恶意行为的容器。CSP 对这个风险的默认处理是完全阻止这些容器。</p>
+<p>这对你构建应用程序的方式有多种影响：</p>
+<ul>
+<li>你必须通过内建的 <code>JSON.parse</code> 来解析 JSON ，而不能依赖 <code>eval</code> 。从 IE8 之后的每个<a target="_blank" rel="noopener" href="https://caniuse.com/#feat=json">浏览器</a>都能执行原生的 JSON 操作，这些操作是安全的。</li>
+<li>重写任何 <code>setTimeout</code> 和 <code>setInterval</code> ，使用内联函数而不是字符串作为参数，比如：</li>
+</ul>
+<p>把下面的方式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="string">&quot;document.querySelector(&#x27;a&#x27;).style.display = &#x27;none&#x27;;&quot;</span>, <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+
+<p>重写成如下会更好：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;a&#x27;</span>).<span class="property">style</span>.<span class="property">display</span> = <span class="string">&#x27;none&#x27;</span>;</span><br><span class="line">&#125;, <span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>避免运行时使用任何内联模板，许多模板库会使用 <code>new Function</code> 来加速运行时模板的生成。这是动态编程的一个奇淫技巧，但是存在评估恶意文本的风险。一些框架对 CSP 的支持是开箱即用的，在没有 <code>eval</code> 的情况下会回退到一个健壮的解析器。<a target="_blank" rel="noopener" href="https://docs.angularjs.org/api/ng/directive/ngCsp">AngularJS 的 <code>ng-csp</code> 指令</a>就是一个很好的例子。</li>
+</ul>
+<p>然而，更好的是选择一个提供预编译的模板语言（比如 <a target="_blank" rel="noopener" href="https://handlebarsjs.com/installation/precompilation.html">Handlebars</a> ）。预编译模板可以让用户体验到比最快运行时实现还要快的速度，并且也更安全。如果 <code>eval</code> 和它的转 JavaScript 的文本片段对你的应用是必要的话，你可以通过往 <code>script-src</code> 指令中添加 <code>&#39;unsafe-eval&#39;</code> 作为一个允许的源来开启它，但我们强烈不鼓励你开启它。禁止字符串的执行能力使得攻击者在你的站点上执行非信任代码变得非常的困难。</p>
+<h2 id="报告"><a href="#报告" class="headerlink" title="报告"></a>报告</h2><p>CSP 阻止客户端内非信任源的能力对你的用户来说是一个巨大的优点，但出错后发送到后端服务器的某种通知也是相当有用的，这样你就可以第一时间确认然后消除这些允许恶意注入的 bug 。为此，你可以指示浏览器 <code>POST</code> 一个 JSON 格式的违规报告到 <code>report-uri</code> 指令指定的一个地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;self&#x27;; ...; report-uri /my_amazing_csp_report_parser;</span><br></pre></td></tr></table></figure>
+
+<p>这些 JSON 格式的报告的格式看起来如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;csp-report&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;document-uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://example.org/page.html&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;referrer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://evil.example.com/&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;blocked-uri&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://evil.example.com/evil.js&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;violated-directive&quot;</span><span class="punctuation">:</span> <span class="string">&quot;script-src &#x27;self&#x27; https://apis.google.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;original-policy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;script-src &#x27;self&#x27; https://apis.google.com; report-uri http://example.org/my_amazing_csp_report_parser&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这包含了很多有用的信息，可以帮助你追踪到指定页面违规的原因，包括违规的页面地址（ <code>document-uri</code> ），页面的来源（注意这里不是 HTTP 标头字段，这个键并没有拼写错误），违规的资源（ <code>blocked-uri</code> ），造成违规的指令（ <code>violated-directive</code> ）以及页面完整的策略值（ <code>original-policy</code> ）。</p>
+<h3 id="仅报告"><a href="#仅报告" class="headerlink" title="仅报告"></a>仅报告</h3><p>如果你只是刚开始使用 CSP ，那么在向你的用户推出一个严格的策略之前，评估你的应用的当前状态是有意义的。CSP 作为一个完整部署的附加选项，你可以让浏览器监控策略，报告违规行为但不强制执行策略限制。这时候你需要发送一个 <code>Content-Security-Policy-Report-Only</code> 标头而不是 <code>Content-Security-Policy</code> 标头。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy-Report-Only: default-src &#x27;self&#x27;; ...; report-uri /my_amazing_csp_report_parser;</span><br></pre></td></tr></table></figure>
+
+<p>在仅报告中指定的策略不会阻止被限制的资源，但是会向指定的地址发送违规报告。你甚至可以两个标头都发送给客户端，强制一项策略同时监控另一项策略。这对于评估你的应用使用 CSP 带来改变的影响是一种很棒的方式。对一个新的策略采用仅报告模式，监控违规报告，然后修复开启后出现的 bug 。当你对这个策略的影响满意之后，关闭进报告模式，强制限制该策略。</p>
+<h2 id="现实世界的用例"><a href="#现实世界的用例" class="headerlink" title="现实世界的用例"></a>现实世界的用例</h2><p>CSP 第一版标准在 Chrome 、 Safari 和 Firefox 浏览器中相当有用，但在 IE10 中仅能有限支持。你可以在 <a target="_blank" rel="noopener" href="https://caniuse.com/#feat=contentsecuritypolicy">caniuse</a> 中查看具体信息。 CSP 第二版标准在 Chrome 40 之后就支持了。像 Twitter 和 Facebook 等大量的网站已经部署了这个标头（<a target="_blank" rel="noopener" href="https://blog.twitter.com/engineering/en_us/a/2011/improving-browser-security-with-csp.html"> Twitter 用例学习</a>这一篇文章值得一读），该标准已经完全准备好部署在你自己的站点上了。</p>
+<p>为你的应用指定策略的第一步是评估你的应用实际加载的资源。一旦你认为自己掌握了如何将你的应用的内容组合到一起，你就可以根据这些要求来设置一个策略。让我们来看一些一些常见的用例，确定如何在 CSP 的保护范围内来获得最好支持。</p>
+<h3 id="用例-1-，社交媒体部件"><a href="#用例-1-，社交媒体部件" class="headerlink" title="用例 1 ，社交媒体部件"></a>用例 1 ，社交媒体部件</h3><ul>
+<li>Facebook 的<a target="_blank" rel="noopener" href="https://developers.facebook.com/docs/plugins/like-button">喜欢按钮</a> 实现了一些配置项。我们推荐坚持使用 iframe 版本，因为它与你站点的其他部分安全地沙箱化了。对此，为了让这个功能正常，我们需要一个 <code>child-src https://facebook.com</code> 的指令。注意，默认情况下， Facebook 提供的 iframe 代码通过一个相对路径进行加载，即 <code>//facebook.com</code> 。你可以显式指定为 HTTPS ，即 <code>https://facebook.com</code> 。如果你不是需要的话，你完全没理由使用 HTTP 。</li>
+<li>Twitter 的<a target="_blank" rel="noopener" href="https://publish.twitter.com/#">喜欢按钮</a> 依赖一个脚本和一个 iframe 。两者都是以 <code>https://platform.twitter.com</code> 为主机名。（ Twitter 同样提供默认的相对 URL ，当进行复制粘贴到本地环境时，通过修改代码来指定成 HTTPS ）通过设置成 <code>script-src https://platform.twitter.com; child-src https://platform.twitter.com</code> ， 然后只需把 Twitter 提供的代码片段移动到一个外部的 JavaScript 文件即可。</li>
+<li>有相似的要求的其他平台，操作也是类似的。我们建议只设置一个 <code>default-src &#39;none&#39;</code> ，然后观察控制台来确定需要启用那些资源来让部件正常工作。</li>
+</ul>
+<p>包含多个组件的情况也是容易理解的，简单地组合策略指令，记住在一个指令内合并所有的单个类型的全部资源。如果你想要全部的三种媒体组件，策略看起来如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script-src https://apis.google.com https://platform.twitter.com; child-src https://plusone.google.com https://facebook.com https://platform.twitter.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="用例-2"><a href="#用例-2" class="headerlink" title="用例 2"></a>用例 2</h3><p>假设你运营了一个银行站点，并且你想要确保能够加载你编写的全部资源，可以先以一个阻止一切的策略（ <code>default-src &#39;none&#39;</code> ）来作为开始，从此出进行构建。</p>
+<p>我们假设银行站点从一个 CDN （ <code>https://cdn.mybank.net</code> ）加载所有的图片，样式和脚本，通过 XHR 来连接 <code>https://api.mybank.com/</code> 来拉取各种数据，并且会使用 iframe ，但只是作为站点的本地页面（没有第三方来源），不会使用 Flash ，没有字体文件以及额外的东西。在这样的条件下，我们可以发送一个最具有限制性的 CSP 标头，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src &#x27;none&#x27;; script-src https://cdn.mybank.net; style-src https://cdn.mybank.net; img-src https://cdn.mybank.net; connect-src https://api.mybank.com; child-src &#x27;self&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="用例-3-仅使用-SSL"><a href="#用例-3-仅使用-SSL" class="headerlink" title="用例 3 仅使用 SSL"></a>用例 3 仅使用 SSL</h3><p>有一个结婚戒指讨论论坛的管理员想要确保所有的资源仅通过安全通道加载，但不想要编写很多的代码。重写庞大的充满了内联脚本和样式的第三方论坛软件超出了他的能力。下面的策略可能会有效：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Content-Security-Policy: default-src https:; script-src https: &#x27;unsafe-inline&#x27;; style-src https: &#x27;unsafe-inline&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>尽管 <code>default-src</code> 指定了 <code>https:</code> ，但是脚本和样式指令没有自动的继承。每个指令完全覆盖该特定资源类型的默认值。</p>
+<h2 id="未来"><a href="#未来" class="headerlink" title="未来"></a>未来</h2><p>CSP 第二版标准是<a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSP2/">候选推荐</a>的。 W3C 的 Web 应用安全工作小组早已开始编写下一个版本的规范了，即 <a target="_blank" rel="noopener" href="https://www.w3.org/TR/CSP3/">CSP 第三版标准</a>。</p>
+<p>如果你对这些即将推出的新功能的讨论感兴趣的话，可以浏览 <a target="_blank" rel="noopener" href="http://lists.w3.org/Archives/Public/public-webappsec/">public-webappsec@</a> 的邮件归档列表，或者直接加入。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/66cc63b8959c" title="Content Security policy（译）">https://prohibitorum.top/66cc63b8959c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CSP/" rel="tag"># CSP</a>
+              <a href="/tags/Html/" rel="tag"># Html</a>
+              <a href="/tags/Web-%E5%AE%89%E5%85%A8/" rel="tag"># Web 安全</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/240588e9b05b" rel="prev" title="通过例子来解释防抖和节流（译）">
+                  <i class="fa fa-angle-left"></i> 通过例子来解释防抖和节流（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/61cdd2892f5f" rel="next" title="TypeScript 5.2（译）">
+                  TypeScript 5.2（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1696150913"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

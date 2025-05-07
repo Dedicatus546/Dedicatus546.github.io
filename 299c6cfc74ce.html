@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言在 uniapp 中使用绘制地图线路。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 uniapp 中使用绘制地图线路">
+<meta property="og:url" content="https://prohibitorum.top/299c6cfc74ce">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言在 uniapp 中使用绘制地图线路。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710063901284.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710064300292.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710065232982.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710072359012.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074441112.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074537332.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074902109.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075036533.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075240459.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075342069.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075510558.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710080947024.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710081356553.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091230567.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091418057.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091651058.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092117144.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092412539.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092746724.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093006398.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093036432.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093757530.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710094518352.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710094634536.avif">
+<meta property="article:published_time" content="2024-07-10T14:29:50.000Z">
+<meta property="article:modified_time" content="2024-07-10T14:29:50.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="uniapp">
+<meta property="article:tag" content="vue3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710063901284.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/299c6cfc74ce.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/299c6cfc74ce","path":"299c6cfc74ce.html","title":"在 uniapp 中使用绘制地图线路"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在 uniapp 中使用绘制地图线路 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#uniapp"><span class="nav-number">2.1.</span> <span class="nav-text">uniapp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E5%9C%B0%E5%9B%BE"><span class="nav-number">2.2.</span> <span class="nav-text">显示地图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E8%B7%AF%E7%BA%BF"><span class="nav-number">2.3.</span> <span class="nav-text">绘制路线</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/299c6cfc74ce">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在 uniapp 中使用绘制地图线路 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 uniapp 中使用绘制地图线路
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-10 14:29:50" itemprop="dateCreated datePublished" datetime="2024-07-10T14:29:50+00:00">2024-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 uniapp 中使用绘制地图线路。</p>
+<span id="more"></span>
+
+<p>好久没写东西了，刚好最近由于项目需要接触了一下 uniapp ，做一个卖东西的简单的小程序，其中某个功能是要绘制从发货地到目的地的路线给用户看的功能，所以借此机会了解了下在 uniapp 中关于地图的一些使用。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="uniapp"><a href="#uniapp" class="headerlink" title="uniapp"></a>uniapp</h2><p>uniapp 是一个跨平台的方案，能够编写一份代码，打包到很多平台，比如 h5 ，各个小程序，APP 。</p>
+<p>它的核心是使用到了 vue （2 和 3 都可以），所以对 web 开发人员很友好，web 的特性意味着能够快速地根据原型图编写代码。</p>
+<p>在<a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/quickstart-cli.html">官网</a>中，我们可以通过多种方式来创建 uniapp 项目，这里需要注意，使用 uniapp 并不一定需要 hbuilder 来开发。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710063901284.avif"></p>
+<p>这里我选择了最后一个，也就是 vite + vue3 的，不过因为网络原因一直失败，所以直接从给的 <a target="_blank" rel="noopener" href="https://gitee.com/dcloud/uni-preset-vue/repository/archive/vite-ts.zip">gitee</a> 上下载了项目的代码</p>
+<p>安装完依赖后，我们就完成了架子的初始化。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710064300292.avif"></p>
+<p>这里的 peerDep 似乎没有处理好，不过我们可以不管，vue 小版本的更新问题不大。</p>
+<p>接下来我们可以直接执行 <code>pnpm run dev:h5</code> 来开启 h5 的预览，也就是常见的 web 模式。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710065232982.avif"></p>
+<p>对于 uniapp 的项目目录结构，这里不做讲述，我们主要修改的地方就是 <code>src/pages/index/index.vue</code> 文件，也就是上面显示的 UI 对应的文件。</p>
+<h2 id="显示地图"><a href="#显示地图" class="headerlink" title="显示地图"></a>显示地图</h2><p>在 uniapp 中，为我们提供了一个 <a target="_blank" rel="noopener" href="https://uniapp.dcloud.net.cn/component/map.html">map</a> 组件，它可以直接渲染地图出来，很方便，编写如下代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">map</span>&gt;</span><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>刷新页面发现提示我们缺少了什么 key 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710072359012.avif"></p>
+<p>在 h5 中，map 组件支持三种类型的地图</p>
+<table>
+<thead>
+<tr>
+<th>地图服务商</th>
+<th>App</th>
+<th>H5</th>
+<th>微信小程序</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>高德</td>
+<td>√</td>
+<td>3.6.0+</td>
+<td></td>
+</tr>
+<tr>
+<td>Google</td>
+<td>3.4+ 仅nvue页面</td>
+<td>3.2.10+</td>
+<td></td>
+</tr>
+<tr>
+<td>腾讯</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+</tr>
+</tbody></table>
+<p>因为我们用的已经是 4 版本的 uniapp 了，所以三种都是支持的，只需配置一下供应商的 key 即可。</p>
+<p>这里我们以腾讯地图为例，首先需要去腾讯位置服务官网：<a target="_blank" rel="noopener" href="https://lbs.qq.com/">腾讯位置服务</a> 。注册步骤省略，用 qq 注册按要求下一步即可。</p>
+<p>接着我们打开控制台的应用管理的我的应用。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074441112.avif"></p>
+<p>点击右上角的创建应用，按要求填写。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074537332.avif"></p>
+<p>接着通过应用来创建 key ，点击创建 key ，按要求填写，这里要注意勾上 webServiceAPI ，后面我们会用到。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710074902109.avif"></p>
+<p>创建完成后，我们复制一下生成的 key 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075036533.avif"></p>
+<p>然后在 src&#x2F;manifest.json 中的 h5 平台上，配置一下 key 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075240459.avif"></p>
+<p>接着回到页面，我们就能看到地图渲染出来了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075342069.avif"></p>
+<p>不过看起来样式有点不对，而且没有显示地图的内容，样式的原因是 uniapp 给 map 组件设置了默认的宽高。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710075510558.avif"></p>
+<p>所以这里我们要写样式来覆盖。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">map</span> <span class="attr">style</span>=<span class="string">&quot;width: 100%; height: 100%&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">uni-page-<span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>地图上没有内容，是因为我们没有设置经纬度，腾讯位置服务提供了一个<a target="_blank" rel="noopener" href="https://lbs.qq.com/getPoint">坐标拾取器</a>可以将地点转为坐标。</p>
+<p>这里我们拾取了一个地址。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710080947024.avif"></p>
+<p>然后根据 uniapp 的 map 的文档设置一下经度和纬度</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">map</span></span></span><br><span class="line"><span class="tag">    <span class="attr">style</span>=<span class="string">&quot;width: 100%; height: 100%&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:longitude</span>=<span class="string">&quot;116.409001&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:latitude</span>=<span class="string">&quot;39.907464&quot;</span></span></span><br><span class="line"><span class="tag">  &gt;</span><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">uni-page-<span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在页面上我们就可以看到地图正确的展示出来了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710081356553.avif"></p>
+<h2 id="绘制路线"><a href="#绘制路线" class="headerlink" title="绘制路线"></a>绘制路线</h2><p>显示完地图之后，接下来我们需要绘制线路，在 map 文档中，有一个 <code>polyline</code> 的属性正好可以实现这一需求。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091230567.avif"></p>
+<p>接着，我们再在坐标拾取器上选另一个点。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091418057.avif"></p>
+<p>然后写下如下的代码：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">map</span></span></span><br><span class="line"><span class="tag">    <span class="attr">style</span>=<span class="string">&quot;width: 100%; height: 100%&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:longitude</span>=<span class="string">&quot;116.409001&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:latitude</span>=<span class="string">&quot;39.907464&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:polyline</span>=<span class="string">&quot;[</span></span></span><br><span class="line"><span class="string"><span class="tag">      &#123;</span></span></span><br><span class="line"><span class="string"><span class="tag">        points: [</span></span></span><br><span class="line"><span class="string"><span class="tag">          &#123;</span></span></span><br><span class="line"><span class="string"><span class="tag">            longitude: 116.409001,</span></span></span><br><span class="line"><span class="string"><span class="tag">            latitude: 39.907464,</span></span></span><br><span class="line"><span class="string"><span class="tag">          &#125;,</span></span></span><br><span class="line"><span class="string"><span class="tag">          &#123;</span></span></span><br><span class="line"><span class="string"><span class="tag">            longitude: 116.404967,</span></span></span><br><span class="line"><span class="string"><span class="tag">            latitude: 39.901743,</span></span></span><br><span class="line"><span class="string"><span class="tag">          &#125;,</span></span></span><br><span class="line"><span class="string"><span class="tag">        ],</span></span></span><br><span class="line"><span class="string"><span class="tag">        color: &#x27;#ff0&#x27;,</span></span></span><br><span class="line"><span class="string"><span class="tag">        width: 5,</span></span></span><br><span class="line"><span class="string"><span class="tag">      &#125;,</span></span></span><br><span class="line"><span class="string"><span class="tag">    ]&quot;</span></span></span><br><span class="line"><span class="tag">  &gt;</span><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">uni-page-<span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就可以看到两点之间确实绘制了一条<strong>直线</strong>出来。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710091651058.avif"></p>
+<p>这时候你可能会想说：不对啊哥们，哪有这样的路线的，这么近的距离难道我坐飞机？？？</p>
+<p>没错，这样子实际上是不符合我们原本的要求的，这就要引出我们之前注册的腾讯位置服务了。</p>
+<p>在腾讯位置服务中，提供了一种路线规划的接口，通过传递起始点和结束点，接口就会返回若干的坐标，然后我们将每个坐标依次连线，这样的路线才符合实际的情况。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092117144.avif"></p>
+<p>这里有很多种类型的规划，比如驾车，步行，公交，骑行等等，每个类型都提供了对应的接口。</p>
+<p>这里我们就以<a target="_blank" rel="noopener" href="https://lbs.qq.com/service/webService/webServiceGuide/route/webServiceRoute#2">驾车</a>为例子</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092412539.avif"></p>
+<p>接口最重要的其实就是三个，一个是 key ，其他两个是起始点经纬度和结束点经纬度，所以我们很容易地拼接出这个请求</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://apis.map.qq.com/ws/direction/v1/driving/?from=39.907464,116.409001&amp;to=39.901743,116.404967&amp;key=[你的key]</span><br></pre></td></tr></table></figure>
+
+<p>由于是 get 请求，我们可以直接访问</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710092746724.avif"></p>
+<p>可以发现返回了一连串的经纬度，不过似乎不是常见的格式，这在文档中有解释：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093006398.avif"></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093036432.avif"></p>
+<p>至此，我们就可以编写完整的代码了。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onLoad &#125; <span class="keyword">from</span> <span class="string">&quot;@dcloudio/uni-app&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">longitude</span>: <span class="number">116.409001</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">latitude</span>: <span class="number">39.907464</span>,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">polyline</span>: [</span></span><br><span class="line"><span class="language-javascript">    &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">points</span>: [],</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">color</span>: <span class="string">&quot;#ff0&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">width</span>: <span class="number">5</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">  ],</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onLoad</span>(<span class="title function_">async</span> () =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 由于接口存在跨域问题，所以需要在 vite.config.ts 中配置下 server.proxy</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// &#123;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//   &quot;^/map-api&quot;: &#123;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//     target: &quot;https://apis.map.qq.com&quot;,</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//     changeOrigin: true,</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//     secure: false,</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//     rewrite(path) &#123;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//       return path.replace(&quot;/map-api&quot;, &quot;&quot;);</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//     &#125;,</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">//   &#125;,</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// &#125;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> res = (</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">await</span> uni.<span class="title function_">request</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">url</span>: <span class="string">&quot;/map-api/ws/direction/v1/driving/&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">data</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">from</span>: <span class="string">&quot;39.907464,116.409001&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">to</span>: <span class="string">&quot;39.901743,116.404967&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// 填入你的 key</span></span></span><br><span class="line"><span class="language-javascript">        <span class="attr">key</span>: <span class="string">&quot;[你的key]&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">      &#125;,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">method</span>: <span class="string">&quot;GET&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;)</span></span><br><span class="line"><span class="language-javascript">  ).<span class="property">data</span> <span class="keyword">as</span> any;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (res.<span class="property">status</span> === <span class="number">0</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> route = res.<span class="property">result</span>.<span class="property">routes</span>[<span class="number">0</span>];</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> &#123; polyline &#125; = route;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i &lt; polyline.<span class="property">length</span>; i++) &#123;</span></span><br><span class="line"><span class="language-javascript">      polyline[i] = polyline[i - <span class="number">2</span>] + polyline[i] / <span class="number">1000000</span>;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> points = [] <span class="keyword">as</span> any;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; polyline.<span class="property">length</span>; i += <span class="number">2</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      points.<span class="title function_">push</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">latitude</span>: polyline[i],</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">longitude</span>: polyline[i + <span class="number">1</span>],</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">    state.<span class="property">polyline</span>[<span class="number">0</span>].<span class="property">points</span> = points;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">map</span></span></span><br><span class="line"><span class="tag">    <span class="attr">style</span>=<span class="string">&quot;width: 100%; height: 100%&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:longitude</span>=<span class="string">&quot;state.longitude&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:latitude</span>=<span class="string">&quot;state.latitude&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:polyline</span>=<span class="string">&quot;state.polyline&quot;</span></span></span><br><span class="line"><span class="tag">  &gt;</span><span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">uni-page-<span class="selector-tag">body</span> &#123;</span></span><br><span class="line"><span class="language-css">  <span class="attribute">height</span>: <span class="number">100%</span>;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后我们就能看到路线正确地被绘制出来了，而不是傻傻地两点连成一线。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710093757530.avif"></p>
+<p>如果发现接口无法使用，那么很有可能是你没有为 key 配置额度。</p>
+<p>首先我们进入腾讯位置服务的仪表盘，点击配额管理的账户额度，然后点击驾车路线规划的配额分配</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710094518352.avif"></p>
+<p>然后选中你创建的 key ，分配下额度和并发量。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/07/10/20240710094634536.avif"></p>
+<p>提交之后稍等一会儿再刷新，接口应该就可以访问了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>说实话我对 uniapp 还是喜欢不起来，这次使用 uniapp 而不是原生微信小程序开发的原因是客户那边不确定只需要微信小程序，有可能要上其他的小程序。</p>
+<p>所以权衡再三，选择了 uniapp ，毕竟可以打包到不同的小程序，节省了熟悉各种小程序的规范的时间。</p>
+<p>有时候也会想，不喜欢是一回事，用不用就是另外一回事了。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/299c6cfc74ce" title="在 uniapp 中使用绘制地图线路">https://prohibitorum.top/299c6cfc74ce</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/uniapp/" rel="tag"># uniapp</a>
+              <a href="/tags/vue3/" rel="tag"># vue3</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/51365b4ceddc" rel="prev" title="从 tui.editor 中生成支持定位的 TOC 目录">
+                  <i class="fa fa-angle-left"></i> 从 tui.editor 中生成支持定位的 TOC 目录
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/b0bfe24afb10" rel="next" title="使用 patch-package 来修改 node_modules 里的代码">
+                  使用 patch-package 来修改 node_modules 里的代码 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1720592990"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

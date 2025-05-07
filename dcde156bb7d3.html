@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="XMLHttpRequest对象的简单使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XMLHttpRequest对象的简单使用">
+<meta property="og:url" content="https://prohibitorum.top/dcde156bb7d3">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="XMLHttpRequest对象的简单使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/24/0pTFXR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0pHEFK.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/25/WHqXQErUgM7xlyA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09NNo8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09URBt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09dbT0.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09DBNt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/096p80.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09RNTg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09W9nf.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09WBUe.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09hsXt.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/094RDx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/095jyR.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09o9un.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09TQMj.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09TbY8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/09qQhV.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CADoV.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CEoBn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CrOjU.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0Csbad.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0C6U10.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CgIfA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CRu5Q.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0CRXGj.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/25/ztm1i9xdKQWTAZS.gif">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/25/0C4Rmt.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/ry4xGHQ8fiM75N6.png">
+<meta property="og:image" content="https://i.loli.net/2020/09/26/awmjrb7DINPq5Mh.gif">
+<meta property="article:published_time" content="2020-09-24T22:57:07.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="XMLHttpRequest">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/24/0pTFXR.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/dcde156bb7d3.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/dcde156bb7d3","path":"dcde156bb7d3.html","title":"XMLHttpRequest对象的简单使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>XMLHttpRequest对象的简单使用 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XMLHttpRequest"><span class="nav-number">1.</span> <span class="nav-text">XMLHttpRequest</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%87%86%E5%A4%87"><span class="nav-number">2.</span> <span class="nav-text">前置准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#XMLHttpRequest-%E6%B5%8B%E8%AF%95"><span class="nav-number">3.</span> <span class="nav-text">XMLHttpRequest 测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#open"><span class="nav-number">3.1.</span> <span class="nav-text">open</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#send"><span class="nav-number">3.2.</span> <span class="nav-text">send</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#onreadystatechange"><span class="nav-number">3.3.</span> <span class="nav-text">onreadystatechange</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%9A%84%E7%9B%91%E5%90%AC%E5%87%BD%E6%95%B0"><span class="nav-number">3.4.</span> <span class="nav-text">其他的监听函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ontimeout"><span class="nav-number">3.4.1.</span> <span class="nav-text">ontimeout</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onabort"><span class="nav-number">3.4.2.</span> <span class="nav-text">onabort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onprogress%E5%92%8Cupload"><span class="nav-number">3.4.3.</span> <span class="nav-text">onprogress和upload</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/dcde156bb7d3">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="XMLHttpRequest对象的简单使用 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          XMLHttpRequest对象的简单使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-24 22:57:07" itemprop="dateCreated datePublished" datetime="2020-09-24T22:57:07+00:00">2020-09-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>16 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>XMLHttpRequest</code>对象的简单使用</p>
+<span id="more"></span>
+
+<h1 id="XMLHttpRequest"><a href="#XMLHttpRequest" class="headerlink" title="XMLHttpRequest"></a>XMLHttpRequest</h1><p><code>XMLHttpRequest</code>是一个浏览器对象，通过这个对象，可以实现和服务器进行数据上的交互。</p>
+<p><code>Wiki</code>上这么定义<code>XMLHttpRequest</code>。</p>
+<blockquote>
+<p><code>XMLHTTP</code>是一组<code>API</code>函数集，可被<code>JavaScript</code>、<code>JScript</code>、<code>VBScript</code>以及其它<code>web</code>浏览器内嵌的脚本语言调用，通过<code>HTTP</code>在浏览器和<code>web</code>服务器之间收发<code>XML</code>或其它数据。**<code>XMLHTTP</code>最大的好处在于可以动态地更新网页<strong>，它</strong>无需重新从服务器读取整个网页<strong>，也</strong>不需要安装额外的插件**。该技术被许多网站使用，以实现快速响应的动态网页应用。</p>
+</blockquote>
+<p>这也就是我们常说的通过<code>AJAX</code>技术来实现网页的局部更新。</p>
+<p><code>Wiki</code>上这么定义<code>AJAX</code>。</p>
+<blockquote>
+<p><code>AJAX</code>即“<strong>Asynchronous JavaScript and XML</strong>”（异步的<code>JavaScript</code>与<code>XML</code>技术），指的是一套综合了多项技术的浏览器端网页开发技术。</p>
+</blockquote>
+<blockquote>
+<p>传统的<code>web</code>应用允许用户端填写表单（<code>form</code>），当提交表单时就向网页服务器发送一个请求。服务器接收并处理传来的表单，然后送回一个新的网页，但这个做法<strong>浪费了许多带宽</strong>，因为在前后两个页面中的大部分<code>HTML</code>代码往往是相同的。由于每次应用的沟通都需要向服务器发送请求，应用的回应时间依赖于服务器的回应时间。这导致了用户界面的回应比本机应用慢得多。</p>
+</blockquote>
+<blockquote>
+<p>与此不同，<code>AJAX</code>应用可以仅向服务器发送并取回必须的数据，并在客户端采用<code>JavaScript</code>处理来自服务器的回应。因为<strong>在服务器和浏览器之间交换的数据大量减少</strong>，服务器回应更快了。同时，很多的处理工作可以在发出请求的客户端机器上完成，因此<code>web</code>服务器的负荷也减少了。</p>
+</blockquote>
+<p>也就是说，我们通过<code>XMLHttpRequest</code>对象和服务器进行交互，格式为<code>XML</code>，而现在大部分使用的是<code>JSON</code>格式的对象，<code>Wiki</code>上称此为<code>AJAJ</code></p>
+<blockquote>
+<p>类似于<code>DHTML</code>或<code>LAMP</code>，<code>AJAX</code>不是指一种单一的技术，而是有机地利用了一系列相关的技术。虽然其名称包含<code>XML</code>，但实际上数据格式可以由<code>JSON</code>代替，进一步减少数据量，形成所谓的<strong>AJAJ</strong>。而客户端与服务器也并不需要异步。一些基于<code>AJAX</code>的“派生／合成”式（<code>derivative</code>&#x2F;<code>composite</code>）的技术也正在出现，如<strong>AFLAX</strong>。</p>
+</blockquote>
+<p>Tips: 在最后我们看到了一个<code>AFLAX</code>这个比较陌生的名词，那么这个又是啥呢</p>
+<blockquote>
+<p><code>AFLAX</code>是<code>&#39;A JavaScript Library for Macromedia&#39;s Flash™ Platform&#39;</code>的略称。<code>AFLAX</code>是(<code>AJAX</code> - <code>Javascript + Flash</code>) - 基于<code>AJAX</code>的“派生／合成”式（<code>derivative</code>&#x2F;<code>composite</code>）技术。正如略称字面的意思，<code>AFLAX</code> 是<strong>融合 Ajax 和 Flash</strong>的开发技术。</p>
+</blockquote>
+<p>感觉这个都没怎么听过，<code>chrome</code>计划在今年年末就停止对<code>flash</code>的支持了，现在的<code>js</code>能操作的东西越来越多，感觉<code>flash</code>也逐渐的退出了历史的舞台（个人觉得 😂）。</p>
+<p>当我们打开一个使用<code>flash</code>技术的网址时，会有下面的提示</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/24/0pTFXR.png" alt="bilibili的flash播放器"></p>
+<p>似乎扯远了，<code>XMLHttpRequest</code>可能我们在做项目的时候没见过（至少我做的两个都基本不需要跟他打交道，取而代之的是封装它的<code>Axios</code>）。</p>
+<p>但是做项目大部分都使用过<code>Axios</code>这个库，这个库在浏览器端上的底层实现就是依赖了<code>XMLHttpRequest</code>。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0pHEFK.png" alt="Axios在浏览器端底层的依赖"></p>
+<p>那么如何原生的使用使用这个对象呢？</p>
+<p>首先，<code>XMLHttpRequest</code>是一个构造器，需要先 new 出来一个对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br></pre></td></tr></table></figure>
+
+<p>可以在浏览器上看到它的全部的属性和方法。</p>
+<p><img data-src="https://i.loli.net/2020/09/25/WHqXQErUgM7xlyA.png"></p>
+<p>其中前面<code>on</code>开头的很明显是一个监听事件的回调函数：</p>
+<ul>
+<li><code>onabort</code></li>
+<li><code>onerror</code></li>
+<li><code>onload</code></li>
+<li><code>onloadstart</code></li>
+<li><code>onloadend</code></li>
+<li><code>onprogress</code></li>
+<li><code>onreadystatechange</code></li>
+<li><code>ontimeout</code></li>
+</ul>
+<p>其他的就是一些属性：</p>
+<ul>
+<li><code>readyState</code></li>
+<li><code>response</code></li>
+<li><code>responseText</code></li>
+<li><code>responseType</code></li>
+<li><code>responseURL</code></li>
+<li><code>responseXML</code></li>
+<li><code>status</code></li>
+<li><code>statusText</code></li>
+<li><code>timeout</code></li>
+<li><code>withCredentials</code></li>
+</ul>
+<p>其中有个比较特别的是<code>upload</code>对象，这是和上传有关的对象，现在先不管他。</p>
+<p>伟人鲁迅曾经说过：“光说不做，那叫耍流氓”。</p>
+<h1 id="前置准备"><a href="#前置准备" class="headerlink" title="前置准备"></a>前置准备</h1><p>so，我们要实际操作来验证这些到底是个啥东西，他们的执行顺序以及含义。</p>
+<p>我们先搭个<code>http</code>服务器出来。</p>
+<p>这里我使用的是<code>Koa</code>以及配套的<code>Koa-Router</code>（<code>Koa</code>的路由中间件，可以很容易地进行<code>api</code>的编写）。</p>
+<p>和<code>Koa-Static</code>（<code>Koa</code>的静态文件映射中间件，这里主要映射下测试用的<code>html</code>文件）。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">|-- server</span><br><span class="line">  |-- html            // 这里存放Html文件</span><br><span class="line">    |-- index.html</span><br><span class="line">  |-- index.js        // server的入口文件</span><br></pre></td></tr></table></figure>
+
+<p>在<code>index.js</code>来编写我们的这个<code>http</code>服务器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&quot;koa&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaStatic</span> = <span class="built_in">require</span>(<span class="string">&quot;koa-static&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaRouter</span> = <span class="built_in">require</span>(<span class="string">&quot;koa-router&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">KoaRouter</span>();</span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&quot;path&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> home = <span class="title class_">KoaStatic</span>(path.<span class="title function_">join</span>(__dirname));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置当前目录为静态目录，</span></span><br><span class="line">app.<span class="title function_">use</span>(home);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置路由</span></span><br><span class="line">app.<span class="title function_">use</span>(router.<span class="title function_">routes</span>()).<span class="title function_">use</span>(router.<span class="title function_">allowedMethods</span>());</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> port = <span class="number">3030</span>;</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(port, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) <span class="keyword">throw</span> err;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`服务器已经运行，端口号为：<span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>node</code>之后，如果启动成功，则会出现我们写在<code>listen</code>函数的回调。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09NNo8.png"></p>
+<p>ok，我们来写一个简单的<code>index.html</code>页面，放到<code>html</code>文件夹里面。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;zh&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>AJAX<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>Hello World!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果没有意外，就可以出现我们的初始的页面了。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09URBt.png"></p>
+<p>ok，接下来我们写一个简单的接口，返回一个对象。</p>
+<p>我们稍微改下项目的目录：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">|-- server</span><br><span class="line">  |-- html            // 这里存放Html文件</span><br><span class="line">    |-- index.html</span><br><span class="line">  |-- router          // 放置接口的文件夹</span><br><span class="line">    |-- index.js</span><br><span class="line">  |-- index.js        // server的入口文件</span><br></pre></td></tr></table></figure>
+
+<p>编写<code>router</code>文件下面的<code>index.js</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">KoaRouter</span> = <span class="built_in">require</span>(<span class="string">&quot;koa-router&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> <span class="title class_">KoaRouter</span>();</span><br><span class="line"></span><br><span class="line">router.<span class="title function_">get</span>(<span class="string">&quot;/hello&quot;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router;</span><br></pre></td></tr></table></figure>
+
+<p>在把根下面的<code>index.js</code>文件稍微更改下。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">Koa</span> = <span class="built_in">require</span>(<span class="string">&quot;koa&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> <span class="title class_">KoaStatic</span> = <span class="built_in">require</span>(<span class="string">&quot;koa-static&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// - const KoaRouter = require(&quot;koa-router&quot;);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> <span class="title class_">Koa</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// - const router = new KoaRouter();</span></span><br><span class="line"><span class="comment">// +</span></span><br><span class="line"><span class="keyword">const</span> &#123; router &#125; = <span class="built_in">require</span>(<span class="string">&quot;./router/index.js&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>然后访问<code>/hello</code>，如果显示了<code>hello world！</code>那就证明接口可以调用了。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09dbT0.png"></p>
+<h1 id="XMLHttpRequest-测试"><a href="#XMLHttpRequest-测试" class="headerlink" title="XMLHttpRequest 测试"></a>XMLHttpRequest 测试</h1><p>开始在<code>index.html</code>里面写请求。</p>
+<p>如何去发送一个请求呢，这就要使用<code>open</code>函数。</p>
+<h2 id="open"><a href="#open" class="headerlink" title="open"></a><code>open</code></h2><p><code>open</code>函数有<code>5</code>个参数，但大部分情况下只会说到<code>3</code>个</p>
+<ul>
+<li><code>url</code> 请求的目标地址；</li>
+<li><code>method</code> 请求的方法；</li>
+<li><code>async</code> （可选）请求是否异步，默认为<code>true</code> &#x2F;&#x2F; Tips：一般都不会去指定为<code>false</code>（同步），由于 js 为单线程的模型，线程的阻塞意味着将无法响应页面上的其他操作（比如<code>dom</code>事件，或者其他同步的操作，比如一个<code>while</code>循环）；</li>
+<li><code>user</code> （可选）用户名用于认证用途；</li>
+<li><code>password</code>（可选）密码用于认证用途。</li>
+</ul>
+<p>ok，那我们写出来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>发现没有发送请求，what？</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09DBNt.png"></p>
+<p>没错，<code>open</code>函数只是初始化一个请求而已，此时还没有发送 http 请求。</p>
+<p>为了发送 http 请求，需要在<code>open</code>之后调用<code>send</code>方法。</p>
+<h2 id="send"><a href="#send" class="headerlink" title="send"></a><code>send</code></h2><p><code>send</code>方法有一个参数，该参数也就是我们希望附带在请求上的数据。</p>
+<ul>
+<li><code>body</code> 请求的主体数据，在 MDN 上标注着可以使用的几种类型，<code>Document</code>（发送前被序列化）<code>Blob</code>，<code>BufferSource</code>，<code>FormData</code>，<code>URLSearchParams</code>，<code>USVString</code>。</li>
+</ul>
+<p>我们发送的是<code>get</code>请求，一般不在主题上附带数据，直接指定为<code>null</code>即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p>刷新之后我们发现出现了发送的请求。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/096p80.png"></p>
+<p>但是单单成功发送可不行，我们当然希望可以拿到发送回来的数据。</p>
+<p>这时候，我们就需要监听<code>readystatechange</code>这个事件，给<code>onreadystatechange</code>写上回调。</p>
+<h2 id="onreadystatechange"><a href="#onreadystatechange" class="headerlink" title="onreadystatechange"></a><code>onreadystatechange</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> xhr = <span class="variable language_">this</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(xhr.<span class="property">response</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p>刷新发现，怎么出现了三个输出，其中一个是空白行，两个相同的<code>hello world!</code>。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09RNTg.png"></p>
+<p>这是为啥呢？<code>MDN</code>上有解释</p>
+<blockquote>
+<p>只要<code>readyState</code>属性发生变化，就会调用相应的处理函数。这个回调函数会被用户线程所调用。<code>XMLHttpRequest.onreadystatechange</code>会在<code>XMLHttpRequest</code>的<code>readyState</code>属性发生改变时触发<code>readystatechange</code>事件的时候被调用。</p>
+</blockquote>
+<p>那这个<code>readyState</code>又是什么东西呢？记得我们前面也有在<code>XMLHttpRequest</code>看到这个属性，<code>MDN</code>上给出了解释：</p>
+<blockquote>
+<p><code>XMLHttpRequest.readyState</code>属性返回一个<code>XMLHttpRequest</code>代理当前所处的状态。一个<code>XHR</code>代理总是处于下列状态中的一个。<br><img data-src="https://s1.ax1x.com/2020/09/25/09W9nf.png"></p>
+</blockquote>
+<p>也就是说应该调用五次这个回调函数才对，那么为什么只调用了<code>3</code>次呢？</p>
+<p>我们可以把<code>readyState</code>打印出来看一下：</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09WBUe.png"></p>
+<p>发现只出现了<code>2 3 4</code>，并没有 <code>0 1</code>，看看缺失的<code>0</code>的意思是：<strong>代理被创建，但尚未调用<code>open()</code>方法。</strong></p>
+<p>再看看我们的代码，我们把回调写在了<code>open</code>函数之后，自然就不会调用到了，我们需要把回调的注册提前。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line"><span class="comment">// 把注册回调提前</span></span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> xhr = <span class="variable language_">this</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(xhr.<span class="property">readyState</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09hsXt.png"></p>
+<p>发现还是少了<code>0</code>这个状态，到底是为啥呢？</p>
+<p>原因是回调函数是在<code>readyState</code>改变后才进行回调的。</p>
+<p>也就是从<code>0</code>变为<code>1</code>然后调用回调，所以回调函数中的范围只有<code>1 - 4</code>。</p>
+<p>也就是 <code>0 -&gt; 1 -&gt; callback（此时是1） -&gt; 2 -&gt; callback（此时是2） -&gt; 3 -&gt; callback（此时是3） -&gt; 4 -&gt; callback（此时是4）</code>。</p>
+<p>我们可以在注册回调之前打印<code>readyState</code>的值看看。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(xmlHttpRequest.<span class="property">readyState</span>);</span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> xhr = <span class="variable language_">this</span>;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(xhr.<span class="property">readyState</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/094RDx.png"></p>
+<p>发现出现了<code>0</code>状态。</p>
+<p>所以如果在回调内判断是否为<code>0</code>来执行逻辑的，那么永远都不会执行。</p>
+<p>（PS：看了好多网上的文章，都没讲清楚，懵懵懂懂的 😂，果然还是要实践出真知）</p>
+<p>我也在火狐上面测试了这段代码，发现和谷歌浏览器的行为一致。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/095jyR.png"></p>
+<p>实现者也相当的贴心，已经在<code>XMLHttpRequest</code>构造器上挂载了静态属性供我们使用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">XMLHttpRequest</span>.<span class="property">UNSENT</span>;</span><br><span class="line"><span class="title class_">XMLHttpRequest</span>.<span class="property">OPENED</span>;</span><br><span class="line"><span class="title class_">XMLHttpRequest</span>.<span class="property">HEADERS_RECEIVED</span>;</span><br><span class="line"><span class="title class_">XMLHttpRequest</span>.<span class="property">LOADING</span>;</span><br><span class="line"><span class="title class_">XMLHttpRequest</span>.<span class="property">DONE</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09o9un.png"></p>
+<p>这样子就可以减少魔法值的使用了，好处就是代码的意思更加明朗，并且如果以后这些对应的数字更改的话，对代码完全没有影响。</p>
+<p>清楚之后，我们就明白了只需要判断在<code>DONE</code>状态下就可以拿到传输完成的数据了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">DONE</span> === <span class="variable language_">this</span>.<span class="property">readyState</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">response</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09TQMj.png"></p>
+<p>很好，现在已经可以拿到数据了。</p>
+<p>但是我一个不小心把<code>/hello</code>写错成<code>/hella</code>。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09TbY8.png"></p>
+<p>完蛋，报错，也就是是说<code>DONE</code>状态只是标志了传输的完成而已，并不能保证传输正确。</p>
+<p>在这个基础上，需要其他的状态来保证，这个就是状态码<code>status</code>。</p>
+<p>关于状态码，可以查看：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.faqs.org/rfcs/rfc1945.html">HTTP1.0 的 RFC 文档的第 9 节</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.faqs.org/rfcs/rfc2616.html">HTTP1.1 的 RFC 文档的第 10 节</a></li>
+</ul>
+<p>（虽然英文文档看着痛苦，但还是要看啊 😭）</p>
+<p>这里我们的重点不是状态码的类别，只需要简单地判断是否为<code>200</code>即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">RequestStatus</span> = &#123;</span><br><span class="line">  <span class="attr">OK</span>: <span class="number">200</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">DONE</span> === <span class="variable language_">this</span>.<span class="property">readyState</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">status</span> === <span class="title class_">RequestStatus</span>.<span class="property">OK</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">response</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">        <span class="string">`Sorry啊，出现了一点小错误，错误状态码为：<span class="subst">$&#123;<span class="variable language_">this</span>.status&#125;</span>，原因为：<span class="subst">$&#123;<span class="variable language_">this</span>.response&#125;</span>`</span></span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/09qQhV.png"></p>
+<p>现在基本上就可以发送以及接受请求了，但是还有一些监听的钩子和一些属性没有说。</p>
+<h2 id="其他的监听函数"><a href="#其他的监听函数" class="headerlink" title="其他的监听函数"></a>其他的监听函数</h2><ul>
+<li><code>onabort</code></li>
+<li><code>onerror</code></li>
+<li><code>onload</code></li>
+<li><code>onloadstart</code></li>
+<li><code>onloadend</code></li>
+<li><code>onprogress</code></li>
+<li><code>ontimeout</code></li>
+</ul>
+<p>不管三七二十一，简单地打印点东西，看看是什么东西</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">RequestStatus</span> = &#123;</span><br><span class="line">  <span class="attr">OK</span>: <span class="number">200</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">DONE</span> === <span class="variable language_">this</span>.<span class="property">readyState</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">status</span> === <span class="title class_">RequestStatus</span>.<span class="property">OK</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">response</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">        <span class="string">`Sorry啊，出现了一点小错误，错误状态码为：<span class="subst">$&#123;<span class="variable language_">this</span>.status&#125;</span>，原因为：<span class="subst">$&#123;<span class="variable language_">this</span>.response&#125;</span>`</span></span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="property">onload</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;onload&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line">xmlHttpRequest.<span class="property">onloadstart</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;onloadstart&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// ...其他回调的绑定</span></span><br><span class="line">xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;http://localhost:3030/hello&quot;</span>);</span><br><span class="line">xmlHttpRequest.<span class="title function_">send</span>(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CADoV.png"></p>
+<p>我们发现只打印了三个，其实从名字上，我们也能大致地推断出意思</p>
+<p><code>onloadstart</code> 在数据开始传输的回调<br><code>onload</code> 在数据传输过程中的回调<br><code>onloadend</code> 数据传输结束的回调</p>
+<p>我们试着让连接出错，看看打印了什么回调</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CEoBn.png"></p>
+<p>我们发现依然有<code>onloadstart</code>和<code>onloadend</code>，但是<code>onload</code>变成了<code>onerror</code></p>
+<p>除了这两个，还有一个<code>onabort</code>，<code>onprogress</code>和<code>ontimeout</code></p>
+<h3 id="ontimeout"><a href="#ontimeout" class="headerlink" title="ontimeout"></a><code>ontimeout</code></h3><p>这个看名字其实很容易识别出来，就是连接超时了，就会调用这个回调函数。</p>
+<p>那我们就把这个条件创造出来。</p>
+<p>我们可以指定<code>timeout</code>属性来指定超时的时间，这个属性的值的单位是毫秒。</p>
+<p>所以我们指定<code>500ms</code>之后提示超时。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xmlHttpRequest.<span class="property">timeout</span> = <span class="number">500</span>; <span class="comment">// 这个语句要放在send之前</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们在服务端设置延迟<code>2</code>秒才进行数据的响应。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&quot;/hello&quot;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="title function_">resolve</span>(<span class="string">&quot;hello world!&quot;</span>);</span><br><span class="line">    &#125;, <span class="number">2000</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后我们一刷新网页，就可以发现回调函数被执行了。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CrOjU.png"></p>
+<h3 id="onabort"><a href="#onabort" class="headerlink" title="onabort"></a><code>onabort</code></h3><p><code>abort</code>在英文中是流产和中止的意思，也就是说当我们的请求发出去之后。</p>
+<p>但是我们突然改变想法不想发这个请求了，我们就可以调用<code>abort</code>方法来停止这个请求。</p>
+<p>这是<code>onabort</code>注册的回调函数就会执行。</p>
+<p>为了创造这个条件，我们需要客户端去掉<code>timeout</code>超时的设置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// - xmlHttpRequest.timeout = 500;  // 删除</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们在通过<code>setTimeout</code>延迟一秒来执行<code>abort</code>函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 延迟1秒执行，放在send方法之后</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> xmlHttpRequest.<span class="title function_">abort</span>(), <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>刷新之后就可以看到出现了<code>onabort</code>的回调地执行。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0Csbad.png"></p>
+<p>那么就剩下最后一个回调了。</p>
+<h3 id="onprogress和upload"><a href="#onprogress和upload" class="headerlink" title="onprogress和upload"></a><code>onprogress</code>和<code>upload</code></h3><p>这两个东西负责东西的下载和上传，其中<code>onprogress</code>负责下载，也不能说是下载，就是当我收到数据的时候，会周期性地执行这个回调。</p>
+<p><code>MDN</code>上对<code>onprogress</code>的解释如下</p>
+<blockquote>
+<p><code>progress</code>事件会在请求接收到数据的时候被周期性触发。</p>
+</blockquote>
+<p>（PS：前面的代码没有写入<code>onprogress</code>函数）</p>
+<p>这时我们写上<code>onprogress</code>回调，并且删除客户端<code>setTimeout</code>延迟和服务器的响应数据的延迟</p>
+<p>客户端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记得要写在send方法之前</span></span><br><span class="line">xmlHttpRequest.<span class="property">onprogress</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;onprogress&quot;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>服务器端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&quot;/hello&quot;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="string">&quot;hello world!&quot;</span>;</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>刷新之后可以发现调用了<code>onprogress</code></p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0C6U10.png"></p>
+<p>为了验证他是周期性地执行的，那么需要发送大一点的数据。</p>
+<p>我们选择一张图片，先放到我们服务器上，建立一个<code>images</code>文件夹。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">|-- server</span><br><span class="line">  |-- html            // 这里存放Html文件</span><br><span class="line">    |-- index.html</span><br><span class="line">  |-- images</span><br><span class="line">    |-- 1.jpg</span><br><span class="line">  |-- index.js        // server的入口文件</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CgIfA.png"></p>
+<p>选个漂亮的小姐姐也是个技术活（误 😂）。</p>
+<p>更改服务端代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&quot;/hello&quot;</span>, <span class="title function_">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 同步读取一张图片得到一个buffer</span></span><br><span class="line">  ctx.<span class="property">response</span>.<span class="property">body</span> = fs.<span class="title function_">readFileSync</span>(<span class="string">&quot;./images/1.jpg&quot;</span>);</span><br><span class="line">  <span class="comment">// 要设置类型头部为图片，不然客户端是乱码</span></span><br><span class="line">  ctx.<span class="property">response</span>.<span class="title function_">set</span>(<span class="string">&quot;content-type&quot;</span>, <span class="string">&quot;image/png&quot;</span>);</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">next</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>更改客户端代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">DONE</span> === <span class="variable language_">this</span>.<span class="property">readyState</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">status</span> === <span class="title class_">RequestStatus</span>.<span class="property">OK</span>) &#123;</span><br><span class="line">      <span class="comment">// 如果直接输出的话是乱码，不方便查看</span></span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;响应成功&quot;</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">        <span class="string">`Sorry啊，出现了一点小错误，错误状态码为：<span class="subst">$&#123;<span class="variable language_">this</span>.status&#125;</span>，原因为：<span class="subst">$&#123;<span class="variable language_">this</span>.response&#125;</span>`</span></span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>刷新之后就可以看到调用了多次的<code>onprogress</code>。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CRu5Q.png"></p>
+<p>很多时候需要去查看当前的下载数据的进度，这时候就要通过回调的<code>ev</code>事件对象来获取。</p>
+<p>我们可以打印出来看看是个什么东西。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">xmlHttpRequest.<span class="property">onprogress</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(ev);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0CRXGj.png"></p>
+<p>可以看到里面有两个属性<code>total</code>和<code>loaded</code>，分别对应了全部数据的大小和已加载数据的大小。</p>
+<p>那么我们就可以实现一个简单的下载进度条。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;line line-grey&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width: 0&quot;</span> <span class="attr">class</span>=<span class="string">&quot;line line-blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.line</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">5px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.line-grey</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#c1c1c1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.line-blue</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#4b8cff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">xmlHttpRequest.<span class="property">onprogress</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> loaded = ev.<span class="property">loaded</span>;</span><br><span class="line">  <span class="keyword">const</span> total = ev.<span class="property">total</span>;</span><br><span class="line">  <span class="comment">// 设置样式 取五位小数，乘以100然后加上%</span></span><br><span class="line">  el.<span class="property">style</span>.<span class="title function_">setProperty</span>(<span class="string">&quot;width&quot;</span>, (loaded / total).<span class="title function_">toFixed</span>(<span class="number">5</span>) * <span class="number">100</span> + <span class="string">&quot;%&quot;</span>);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://i.loli.net/2020/09/25/ztm1i9xdKQWTAZS.gif"></p>
+<p>可能有点看的不太清，可以自己搞搞，相信你也可以看到效果。</p>
+<p>上传<code>upload</code>也是照葫芦画瓢，不过回调要绑定在<code>upload</code>对象的属性上。</p>
+<p>进度条我们使用上面那个就行了。</p>
+<p>要加一个<code>input</code>选择文件和一个<code>button</code>按钮，来控制上传流程。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> /&gt;</span> <span class="tag">&lt;<span class="name">button</span>&gt;</span>点我上传<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/25/0C4Rmt.png"></p>
+<p>然后编写<code>js</code>代码来控制控件（因为前面的代码写地有点杂了，就重新写）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">RequestStatus</span> = &#123;</span><br><span class="line">  <span class="attr">OK</span>: <span class="number">200</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> el = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;.line.line-blue&quot;</span>);</span><br><span class="line"><span class="keyword">let</span> file;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;input&quot;</span>)[<span class="number">0</span>].<span class="property">onchange</span> = <span class="keyword">function</span> <span class="title function_">selectFile</span>(<span class="params"></span>) &#123;</span><br><span class="line">  file = <span class="variable language_">this</span>.<span class="property">files</span>[<span class="number">0</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;button&quot;</span>)[<span class="number">0</span>].<span class="property">onclick</span> = <span class="keyword">function</span> <span class="title function_">upload</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(file);</span><br><span class="line">  <span class="comment">// 处理上传</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后尝试着选择一张图片和点击上传按钮，就可以看到已经得到了图片的对象了。</p>
+<p><img data-src="https://i.loli.net/2020/09/26/ry4xGHQ8fiM75N6.png"></p>
+<p>接下来就是完成处理上传的逻辑了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;button&quot;</span>)[<span class="number">0</span>].<span class="property">onclick</span> = <span class="keyword">function</span> <span class="title function_">upload</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(file);</span><br><span class="line">  <span class="comment">// 处理上传</span></span><br><span class="line">  <span class="keyword">const</span> xmlHttpRequest = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span><br><span class="line">  xmlHttpRequest.<span class="property">onreadystatechange</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">readyState</span> === <span class="title class_">XMLHttpRequest</span>.<span class="property">DONE</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">status</span> === <span class="title class_">RequestStatus</span>.<span class="property">OK</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;上传成功&quot;</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(</span><br><span class="line">          <span class="string">`Sorry啊，出现了一点小错误，错误状态码为：<span class="subst">$&#123;<span class="variable language_">this</span>.status&#125;</span>，原因为：<span class="subst">$&#123;<span class="variable language_">this</span>.response&#125;</span>`</span></span><br><span class="line">        );</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 记得这里是绑定的upload对象上的onprogress</span></span><br><span class="line">  xmlHttpRequest.<span class="property">upload</span>.<span class="property">onprogress</span> = <span class="keyword">function</span> (<span class="params">ev</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> loaded = ev.<span class="property">loaded</span>;</span><br><span class="line">    <span class="keyword">const</span> total = ev.<span class="property">total</span>;</span><br><span class="line">    el.<span class="property">style</span>.<span class="title function_">setProperty</span>(<span class="string">&quot;width&quot;</span>, (loaded / total).<span class="title function_">toFixed</span>(<span class="number">5</span>) * <span class="number">100</span> + <span class="string">&quot;%&quot;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">  formData.<span class="title function_">append</span>(<span class="string">&quot;file&quot;</span>, file);</span><br><span class="line">  xmlHttpRequest.<span class="title function_">open</span>(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;http://locahost:3030/hello&quot;</span>);</span><br><span class="line">  xmlHttpRequest.<span class="title function_">send</span>(formData);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>因为是要上传图片，所以使用<code>POST</code>方法，把图片封装在一个<code>FormData</code>对象里面然后发送。</p>
+<p>然后服务器端使用<code>koa-body</code>来处理<code>form</code>表单的数据，这里就不贴出代码了。</p>
+<p>可以看一下下面的效果图：</p>
+<p><img data-src="https://i.loli.net/2020/09/26/awmjrb7DINPq5Mh.gif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>还有一些方法和属性可能没讲到，可以在<code>XMLHttpRequest</code>的<code>W3C</code>标准学习。</p>
+<p><a target="_blank" rel="noopener" href="https://www.w3.org/TR/XMLHttpRequest/">XMLHttpRequest Level 1</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/dcde156bb7d3" title="XMLHttpRequest对象的简单使用">https://prohibitorum.top/dcde156bb7d3</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/XMLHttpRequest/" rel="tag"># XMLHttpRequest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/544981ccac4a" rel="prev" title="CSS之双飞翼布局和圣杯布局">
+                  <i class="fa fa-angle-left"></i> CSS之双飞翼布局和圣杯布局
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d2eb68396294" rel="next" title="Fetch对象的简单使用">
+                  Fetch对象的简单使用 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1600959427"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

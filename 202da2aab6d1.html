@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记一次分析某漫接口密钥。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次分析某漫接口密钥">
+<meta property="og:url" content="https://prohibitorum.top/202da2aab6d1">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次分析某漫接口密钥。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903071533383.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903071640022.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903072052409.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904013345386.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014247529.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014322986.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014529535.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014624128.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015006548.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015543184.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015949268.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904020146316.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904022212267.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904023256662.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904023652407.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904024021475.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904024104215.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904025139845.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904025219687.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909012929275.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013114864.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013159829.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013321488.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013513134.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031828242.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032122826.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032443124.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033500753.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033811814.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033922218.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034003001.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034306620.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034512161.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034559985.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034901504.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909035259125.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909061330088.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909061508821.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909062041460.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909062935680.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063125299.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063607212.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063940951.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064142859.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064411835.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064622464.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909065723903.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910073630452.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074002524.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074308345.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074937776.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910075015211.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910075728697.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910080052355.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910080655069.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083040084.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083303504.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083630094.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083703413.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910084648265.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090431974.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090727825.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090954121.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092045468.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092209266.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092428752.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092515924.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910093028630.avif">
+<meta property="article:published_time" content="2024-09-09T17:16:21.000Z">
+<meta property="article:modified_time" content="2024-09-10T21:13:08.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="React Native">
+<meta property="article:tag" content="API">
+<meta property="article:tag" content="安卓">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903071533383.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/202da2aab6d1.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/202da2aab6d1","path":"202da2aab6d1.html","title":"记一次分析某漫接口密钥"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次分析某漫接口密钥 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">2.1.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%8C%85"><span class="nav-number">2.2.</span> <span class="nav-text">解包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bundle-%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">bundle 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%93%E5%8C%85"><span class="nav-number">2.4.</span> <span class="nav-text">抓包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#token-%E5%92%8C-tokenparam"><span class="nav-number">2.5.</span> <span class="nav-text">token 和 tokenparam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%AF%86%E6%95%B0%E6%8D%AE"><span class="nav-number">2.6.</span> <span class="nav-text">解密数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/202da2aab6d1">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次分析某漫接口密钥 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次分析某漫接口密钥
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-09-09 17:16:21" itemprop="dateCreated datePublished" datetime="2024-09-09T17:16:21+00:00">2024-09-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-10 21:13:08" itemprop="dateModified" datetime="2024-09-10T21:13:08+00:00">2024-09-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次分析某漫接口密钥。</p>
+<span id="more"></span>
+
+<p>对于一个已经年过 25 岁，连女孩子手都没摸过，还经常看纸片人，玩黄油的人来说，某漫真的是一个非常亲民的软件。</p>
+<p>虽然它的内容很好用，但不得不说 APP 和网页做的不尽人意，网页虽然丑了点，但还好，APP 的话各种卡死，闪退。当然，对于一个一分钱没支持的人来说，对 APP 和网页更多地是吐槽性质。</p>
+<p>在网页端，它的数据是服务器直接在 html 中渲染好再返回的，也就是意味着无法自己写一个站点或者软件来替代。</p>
+<p>但是， github 上依然有一些第三方的客户端，能够获取到它的接口。比如：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/niuhuan/jasmine">jasmine</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hect0x7/JMComic-Crawler-Python">JMComic-Crawler-Python</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/tonquer/JMComic-qt">JMComic-qt</a></li>
+</ul>
+<p>那么他们是怎么获取数据的呢，答案是通过分析 APP 请求来得到相关的接口，官方的 APP 应该是基于 RN 的，并且通过 http 来获取数据。</p>
+<p>当然，官方也不是说就那么容易让大家能够拿到数据，所以它在接口上做了一层加密。本文就是从 0 到 1 来还原官方加密的接口。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><p>首先，我们当然需要一个最新的 APK 安装包。本次测试使用的是 1.7.2 版本。</p>
+<p>其次，我们需要 <a target="_blank" rel="noopener" href="https://nodejs.org/">node</a> 环境， <a target="_blank" rel="noopener" href="https://www.oracle.com/hk/java/technologies/downloads/">java</a> 环境，安卓环境，以及解包 apk 的一个工具 <a target="_blank" rel="noopener" href="https://apktool.org/">apk-tool</a> 。</p>
+<p>当然，本文不会在解包打包这一过程上讲的很深入，毕竟我只是个切图仔，这些解包的教程都是来源于网络查找。</p>
+<h2 id="解包"><a href="#解包" class="headerlink" title="解包"></a>解包</h2><p>确定环境变量已经配置了 JDK 。然后我们执行：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar .\apktool_2.<span class="number">9</span>.<span class="number">3</span>.jar d .\<span class="number">1</span>.<span class="number">7</span>.<span class="number">2</span>.apk</span><br></pre></td></tr></table></figure>
+
+<p>这一步是把 apk 解压出来：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903071533383.avif"></p>
+<p>完成之后我们就得到了一个文件夹，它的内容如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903071640022.avif"></p>
+<p>接着，我们找到 <code>assets/index.android.bundle</code> 文件，这个文件就是 RN 相关的代码。</p>
+<h2 id="bundle-文件"><a href="#bundle-文件" class="headerlink" title="bundle 文件"></a>bundle 文件</h2><p>用 VSCode 打开上面解压的文件，可以看到是我们最喜欢的 js 代码。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/03/20240903072052409.avif"></p>
+<p>看到这样的代码，作为一个前端，马上进行格式化，不然看地太头疼了。</p>
+<p>那么我们应该如何去分析呢，首先，直接 node 启动它。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904013345386.avif"></p>
+<p>发现报错了，看来是少了一个 <code>__fbBatchedBridgeConfig</code> 对象，我们直接 ctrl + f 搜索下，发现只有两处，而且一处是报错信息，很好，我们直接加断点：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014247529.avif"></p>
+<p>然后我们查看右侧调用堆栈，直接拉到最末尾，定位到最开始的执行函数：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014322986.avif"></p>
+<p>发现是一个 <code>__r</code> 的函数，传入了一个数字。</p>
+<p>接下来我们需要搞懂 <code>__r</code> 是个什么东西，我们直接在 <code>__r</code> 前面加断点，然后启动：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014529535.avif"></p>
+<p>接着我们单步进入，发现它转到了 34 行的一个名为 <code>o</code> 的函数。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904014624128.avif"></p>
+<p>这里的 <code>t</code> 就是我们的 <code>89</code> ，接着我们看 <code>e</code> 是个什么值。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015006548.avif"></p>
+<p>如果你是前端的话我觉得你应该会很熟悉这些名字，这其实就是模块加载器的那一套。</p>
+<p>这里的 <code>i &amp;&amp; i.isInitialized ? i.publicModule.exports : d(t, i)</code> 很好理解，就是当模块 <code>i</code> 存在且已被初始化过时返回先前的值，不然就执行一次模块初始化 <code>d(t, i)</code> 。</p>
+<p>我们可以单步进入到 <code>d</code> 函数中，发现它的核心代码是执行 <code>v(e, t)</code> ，从逻辑上看是配置了错误处理的函数情况下执行特定的错误处理逻辑而已，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015543184.avif"></p>
+<p>接着我们单步进入 <code>v</code> 函数，这个 <code>v</code> 函数很长，但我们只需要将重点放在下面画框的部分：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904015949268.avif"></p>
+<p>这里的把模块的 <code>factory</code> 赋值给了 <code>g</code> 然后在 try-catch 中执行，我们单步进入 <code>g</code> ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904020146316.avif"></p>
+<p>这时我们就会发现，这个函数被包裹在了 <code>__d</code> 函数内，如果你是前端，那么此时你应该就能很快明白，<code>__d</code> 就是用来定义模块的，而 <code>__r</code> 用来执行模块。</p>
+<p>接着我们搜索 <code>__d</code> 随便在一处位置加断点：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904022212267.avif"></p>
+<p>可以看到它是 11 行的函数，我们单步进入：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904023256662.avif"></p>
+<p>这个函数的三个参数分别是：</p>
+<ul>
+<li><code>r</code> ：工厂函数，包含模块初始化的内容。</li>
+<li><code>i</code> ：模块的 id 。</li>
+<li><code>n</code> ：模块依赖的其他模块的 id 。</li>
+</ul>
+<p>至此，我们大体上理清了代码的组织方式， <code>__d</code> 定义模块， <code>__r</code> 启动模块，全局的入口是通过底部的 <code>__r(89)</code> 和 <code>__r(0)</code> 启动的。</p>
+<p>那么分析这个过程有什么用呢，我们都知道，在编写现代的前端项目的时候，一般我们会进行代码逻辑分层，一般我们会单独把接口写在一个文件（模块）内，这样子有利于后续的维护，而且我们也能将无关的模块排除掉，保留只跟接口相关的模块，方便我们后续的分析。</p>
+<p>OK ，那么接下来我们应该如何分析呢，想到 js 的 http 请求，我们肯定会想到两个对象， <code>XMLHttpRequest</code> 和 <code>Fetch</code> 。这两个可以说是 js 请求的核心。</p>
+<p>我们搜索 <code>XMLHttpRequest</code> ，发现只有 6 个结果，并且 5 个结果都是字符串，只有一个是原始的对象调用，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904023652407.avif"></p>
+<p>往上滚动，可以发现这个模块的代码就是封装了 <code>XMLHttpRequest</code> 对象，在 12242 行，为模块的起始位置：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904024021475.avif"></p>
+<p>结束位置为 12746 ，此时我们可以发现这个模块的 id 为 108 ，且这个模块不依赖其他任何模块，因为它的第三个参数是空数组，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904024104215.avif"></p>
+<p>接着我们来执行一下这个模块，看它返回了什么，我们把原来的两行执行模块的代码注释掉：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904025139845.avif"></p>
+<p>node 执行后结果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/04/20240904025219687.avif"></p>
+<p>可以发现它就是将 <code>XMLHttpRequest</code> 封装成 <code>fetch</code> 了，并且从 <code>fetch</code> 的的 <code>polyfill: true</code> 可以看出这是一个代码垫片，它对应的函数就是我们前面提到的 <code>O</code> 。</p>
+<p>接下来我们应该要做的就是分析哪些模块依赖了这个模块，我们先把整个依赖放到全局环境中，在 29 行，把 <code>e</code> 放到全局环境：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909012929275.avif"></p>
+<p>然后我们在将末尾的 <code>__r</code> 注释掉，换成如下的代码：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013114864.avif"></p>
+<p>接着执行 node ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013159829.avif"></p>
+<p>可以看到只有 107 模块依赖了它，我们在 108 模块的位置往上查找 <code>__d</code> ，发现 107 模块代码非常简单，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013321488.avif"></p>
+<p>可以说就是把 108 重新导出了一遍而已，这样的代码看起来对我们的分析帮助不大。</p>
+<p>我们把查找的模块从 108 切换到 107 ，执行 node ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909013513134.avif"></p>
+<p>发现有两个模块依赖了它，分别是 102 和 130 ，我们用同样的方法定位到这两个模块：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">__d</span>(</span><br><span class="line">  <span class="keyword">function</span> (<span class="params">g, r, i, a, m, e, d</span>) &#123;</span><br><span class="line">    <span class="string">&quot;use strict&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> t,</span><br><span class="line">      n = <span class="title function_">r</span>(d[<span class="number">0</span>]),</span><br><span class="line">      s = <span class="title function_">n</span>(<span class="title function_">r</span>(d[<span class="number">1</span>])),</span><br><span class="line">      u = <span class="title function_">n</span>(<span class="title function_">r</span>(d[<span class="number">2</span>])),</span><br><span class="line">      l = <span class="title function_">n</span>(<span class="title function_">r</span>(d[<span class="number">3</span>])),</span><br><span class="line">      o = <span class="title function_">r</span>(d[<span class="number">4</span>]);</span><br><span class="line">    m.<span class="property">exports</span> = <span class="keyword">function</span> (<span class="params">n</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> c, f, p, h, w, b;</span><br><span class="line">      <span class="keyword">return</span> s.<span class="property">default</span>.<span class="title function_">async</span>(</span><br><span class="line">        <span class="keyword">function</span> (<span class="params">v</span>) &#123;</span><br><span class="line">          <span class="keyword">for</span> (;;)</span><br><span class="line">            <span class="keyword">switch</span> ((v.<span class="property">prev</span> = v.<span class="property">next</span>)) &#123;</span><br><span class="line">              <span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">                <span class="keyword">if</span> (</span><br><span class="line">                  (t || (t = g.<span class="property">fetch</span> || <span class="title function_">r</span>(d[<span class="number">5</span>]).<span class="property">fetch</span>),</span><br><span class="line">                  (c = <span class="title function_">o</span>()).<span class="property">bundleLoadedFromServer</span>)</span><br><span class="line">                ) &#123;</span><br><span class="line">                  v.<span class="property">next</span> = <span class="number">4</span>;</span><br><span class="line">                  <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Bundle was not loaded from the packager&quot;</span>);</span><br><span class="line">              <span class="keyword">case</span> <span class="number">4</span>:</span><br><span class="line">                <span class="keyword">return</span> (</span><br><span class="line">                  (f = n),</span><br><span class="line">                  (p = l.<span class="property">default</span>.<span class="title function_">getConstants</span>()),</span><br><span class="line">                  (h = p.<span class="property">scriptURL</span>) &amp;&amp;</span><br><span class="line">                    ((w = !<span class="number">1</span>),</span><br><span class="line">                    (f = n.<span class="title function_">map</span>(<span class="keyword">function</span> (<span class="params">t</span>) &#123;</span><br><span class="line">                      <span class="keyword">return</span> <span class="literal">null</span> == t.<span class="property">file</span></span><br><span class="line">                        ? t</span><br><span class="line">                        : w ||</span><br><span class="line">                          ((n = t.<span class="property">file</span>), <span class="regexp">/^http/</span>.<span class="title function_">test</span>(n) || !<span class="regexp">/[\\/]/</span>.<span class="title function_">test</span>(n))</span><br><span class="line">                        ? ((w = !<span class="number">0</span>), t)</span><br><span class="line">                        : (<span class="number">0</span>, u.<span class="property">default</span>)(&#123;&#125;, t, &#123; <span class="attr">file</span>: h &#125;);</span><br><span class="line">                      <span class="keyword">var</span> n;</span><br><span class="line">                    &#125;))),</span><br><span class="line">                  (v.<span class="property">next</span> = <span class="number">9</span>),</span><br><span class="line">                  s.<span class="property">default</span>.<span class="title function_">awrap</span>(</span><br><span class="line">                    <span class="title function_">t</span>(c.<span class="property">url</span> + <span class="string">&quot;symbolicate&quot;</span>, &#123;</span><br><span class="line">                      <span class="attr">method</span>: <span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                      <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123; <span class="attr">stack</span>: f &#125;),</span><br><span class="line">                    &#125;)</span><br><span class="line">                  )</span><br><span class="line">                );</span><br><span class="line">              <span class="keyword">case</span> <span class="number">9</span>:</span><br><span class="line">                <span class="keyword">return</span> (b = v.<span class="property">sent</span>), (v.<span class="property">next</span> = <span class="number">12</span>), s.<span class="property">default</span>.<span class="title function_">awrap</span>(b.<span class="title function_">json</span>());</span><br><span class="line">              <span class="keyword">case</span> <span class="number">12</span>:</span><br><span class="line">                <span class="keyword">return</span> v.<span class="title function_">abrupt</span>(<span class="string">&quot;return&quot;</span>, v.<span class="property">sent</span>);</span><br><span class="line">              <span class="keyword">case</span> <span class="number">13</span>:</span><br><span class="line">              <span class="keyword">case</span> <span class="string">&quot;end&quot;</span>:</span><br><span class="line">                <span class="keyword">return</span> v.<span class="title function_">stop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="literal">null</span>,</span><br><span class="line">        <span class="literal">null</span>,</span><br><span class="line">        <span class="literal">null</span>,</span><br><span class="line">        <span class="title class_">Promise</span></span><br><span class="line">      );</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="number">102</span>,</span><br><span class="line">  [<span class="number">8</span>, <span class="number">103</span>, <span class="number">12</span>, <span class="number">105</span>, <span class="number">106</span>, <span class="number">107</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>如果你使用过 babel ，那么你可能会比较熟悉，这段代码看起来就是 babel 编译 js 生成器后的样子。</p>
+<p>而 130 模块为如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">__d</span>(</span><br><span class="line">  <span class="keyword">function</span> (<span class="params">g, r, i, a, m, e, d</span>) &#123;</span><br><span class="line">    <span class="string">&quot;use strict&quot;</span>;</span><br><span class="line">    <span class="keyword">var</span> n = <span class="title function_">r</span>(d[<span class="number">0</span>]).<span class="property">polyfillGlobal</span>;</span><br><span class="line">    <span class="title function_">n</span>(<span class="string">&quot;XMLHttpRequest&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">1</span>]);</span><br><span class="line">    &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;FormData&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">2</span>]);</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;fetch&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">3</span>]).<span class="property">fetch</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;Headers&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">3</span>]).<span class="property">Headers</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;Request&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">3</span>]).<span class="property">Request</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;Response&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">3</span>]).<span class="property">Response</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;WebSocket&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">4</span>]);</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;Blob&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">5</span>]);</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;File&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">6</span>]);</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;FileReader&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">7</span>]);</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;URL&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">8</span>]).<span class="property">URL</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;URLSearchParams&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">8</span>]).<span class="property">URLSearchParams</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;AbortController&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">9</span>]).<span class="property">AbortController</span>;</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title function_">n</span>(<span class="string">&quot;AbortSignal&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">9</span>]).<span class="property">AbortSignal</span>;</span><br><span class="line">      &#125;);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="number">130</span>,</span><br><span class="line">  [<span class="number">117</span>, <span class="number">131</span>, <span class="number">146</span>, <span class="number">107</span>, <span class="number">147</span>, <span class="number">134</span>, <span class="number">150</span>, <span class="number">151</span>, <span class="number">153</span>, <span class="number">154</span>]</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>n</code> 就是给全局打上对应的 polyfill ，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">n</span>(<span class="string">&quot;fetch&quot;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">r</span>(d[<span class="number">3</span>]).<span class="property">fetch</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>比如上面着个代码会把 <code>fetch</code> 的 polyfill 版本挂到全局，在 node 中就是 <code>global.fetch = r(d[3]).fetch</code> 。</p>
+<p>如果我们接着按上面分析的话，其实就很难分析出个什么内容了，这时候我们就要换另一种方式了，也就是抓包。</p>
+<h2 id="抓包"><a href="#抓包" class="headerlink" title="抓包"></a>抓包</h2><p>这里我们使用后 mumu 模拟器和 Reqable 软件来抓包。</p>
+<p>mumu 模拟器要开启 root 权限和系统盘读写，因为我们要放证书到根目录，这样才能抓到 https 包：</p>
+<div class="swiper" id="swiperInst-gyn9sqgq" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031013338.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031128286.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-gyn9sqgq", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-gyn9sqgq .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>接着我们安装 Reqable ，打开菜单点击证书管理：</p>
+<div class="swiper" id="swiperInst-hk7aeyur" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031350810.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031502808.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-hk7aeyur", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-hk7aeyur .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>按提示进行证书安装，也就是把 Reqable 生成的证书放到 <code>/system/etc/security/cacerts</code> 中。</p>
+<p>如果正确操作，那么 Reqable 的页面会有如下提示：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909031828242.avif"></p>
+<p>接着我们点击右下角的按钮，开启 VPN ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032122826.avif"></p>
+<p>然后添加相关的 APP ，这样 Reqable 就只会抓这个 APP 的了。</p>
+<div class="swiper" id="swiperInst-c32eyx7g" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032149943.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032301024.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-c32eyx7g", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-c32eyx7g .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>接着启动 APP ，稍等一会儿，可以看到抓了很多的包：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909032443124.avif"></p>
+<p>当然，有很多的请求都是静态资源和图片的，我们不管，我们筛选下请求，把 Https 和 2xx 勾上：</p>
+<div class="swiper" id="swiperInst-nl9arhgf" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033346318.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033406344.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-nl9arhgf", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-nl9arhgf .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>经过简单的分析之后，我们就能确定相关的 API 为 <code>https://www.jmeadpoolcdn.life</code> ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033500753.avif"></p>
+<p>接着我们找到 <code>/setting</code> 这个接口，这个接口是一个 get 请求，我们可以看到它的响应为加密后的数据：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033811814.avif"></p>
+<p>这时我们再看它的请求头，可以发现两个有意思的头，分别是 <code>token</code> 和 <code>tokenparam</code> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909033922218.avif"></p>
+<p>如果我们直接访问这个接口的话，是不会返回这一串加密后的数据的：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034003001.avif"></p>
+<p>如果我们同样加上这两个头，那么请求就能正常返回：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034306620.avif"></p>
+<p>那么抓包部分已经完成，接下来我们分析 <code>token</code> 和 <code>tokenparam</code> 。</p>
+<h2 id="token-和-tokenparam"><a href="#token-和-tokenparam" class="headerlink" title="token 和 tokenparam"></a>token 和 tokenparam</h2><p>我们打开原来的文件，搜索 <code>token</code> ，发现有 300 多个结果，很难受：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034512161.avif"></p>
+<p>我们换成 <code>tokenparam</code> 再搜索一下，发现之后 7 个结果，非常地 nice ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034559985.avif"></p>
+<p>而且上图定位到的第一项，看起来不就是我们接口的参数吗，看起来胜利的曙光就在眼前了！</p>
+<p>可是一看到周围的代码，不禁一阵哆嗦，这看起来就像是混效过的代码，这也太难受了，但是别急，可以发现，这里的 <code>token</code> 和 <code>tokenparam</code> 对应的 <code>b</code> 和 <code>v</code> 看起来很正常，我们定位过去：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909034901504.avif"></p>
+<p>我们发现这两个东西都是经过一段混淆过后的代码生成的，而且从逻辑上可以看出，<code>token</code> 和 <code>tokenparam</code> 都依赖了一个 <code>P</code> ，而这个 <code>P</code> 调用了 <code>Math</code> 的一个方法，敏锐的搬砖工其实应该明白了，这里的 <code>P</code> 其实就是一个时间戳吗，而 <code>-0x1b05 + 0x17 * -0xdb + 0x329a</code> 就是数字 1000 ，你可以直接把 <code>-0x1b05 + 0x17 * -0xdb + 0x329a</code> 敲到 node 中回车就能看到：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909035259125.avif"></p>
+<p>当然，后面我们会以一种更加明确的方式来确定这段逻辑。</p>
+<p>回到上图， <code>tokenparam</code> 拼接的后半段还有一段 <code>s[_0x9aade5(0x245)]</code> 这个我们从接口得知了，就是 APP 的版本，也就是 <code>1.7.2</code> ，所以 <code>tokenparam</code> 我们完全明白，接下来就是搞定 <code>token</code> 的生成逻辑即可。</p>
+<p>从上图我们可以得知，要弄清楚 <code>b</code> ，我们要知道两个东西，一个是 <code>c[_0x9aade5(0x2d5)]</code> 这个东西是个什么，另一个就是 <code>f</code> 函数是什么逻辑。</p>
+<p>首先看到 f 函数：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909061330088.avif"></p>
+<p>在前面可以看到它执行了某个模块，这个模块的索引为 <code>-0x40b * -0x2 + -0x3 * 0xa86 + 0x223 * 0xb</code> ，放到 node 看一下，值为 5 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909061508821.avif"></p>
+<p>这样就能知道这个模块为 651 ，我们找到 651 ，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909062041460.avif"></p>
+<p>说实话很难分析这段代码，整个代码都是编译后的，这里我们就先不去看，我们回到前面。</p>
+<p>除了 <code>f</code> 之外，另一个需要搞清楚的是 <code>s[_0x9aade5(0x245)]</code> ，这个决定了传给 <code>f</code> 的是什么值。</p>
+<p>但是这里我们又很不好判断 <code>_0x9aade5</code> 是个什么东西，该怎么办呢？</p>
+<p>想一想我们前面使用过的方法，没错，就是 debugger ，我们直接执行这个 648 的模块：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909062935680.avif"></p>
+<p>可以发现它返回了两个方法， <code>fetchGet</code> 和 <code>fetchPost</code> 。而且重要的是它没有报错，这也就意味着，它的初始化逻辑不会有平台相关的代码（比如 react-native 的）。</p>
+<p>接着我们在 <code>token</code> 和 <code>tokenparam</code> 处打上断点：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063125299.avif"></p>
+<p>发现这段逻辑是初始化就需要执行到的，古德古德，那一切就很明白了，无论代码怎样的混淆，它终归是 js 代码。</p>
+<p>我们把断点打到变量 <code>v</code> 前，然后在左侧的监视中填写 <code>P</code> 所需的变量：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063607212.avif"></p>
+<p>那么这个 <code>P</code> 其实就是如下的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">P = <span class="title class_">Math</span>.<span class="title function_">floor</span>(k.<span class="title function_">getTime</span>() / <span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+
+<p>没错，和我们推想的一样，这是一个时间戳。</p>
+<p>接着我们把代码打到 <code>w</code> 前，此时 <code>v</code> 和 <code>b</code> 都已经计算出来了，我们分别监视需要的变量：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909063940951.avif"></p>
+<p>从图中就能看出了 <code>s[_0x9aade5(0x245)]</code> 正是版本信息。而 <code>c[_0x9aade5(0x2d5)]</code> 指向了 <code>c</code> 模块的 <code>token</code> ，它的值为 <code>185Hcomic3PAPP7R</code> ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064142859.avif"></p>
+<p>ok，现在我们基本解决了各个变量的含义，最后需要知道的就是 <code>f</code> 函数究竟干了什么，前面我们提到这个函数不是很好理解，这里我的方法很原始，就是猜：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064411835.avif"></p>
+<p>这里可以看到 <code>b</code> 的值非常像 md5 之后的值，所以我们直接试一下 md5 ，需要 md5 的值为 <code>String(P) + c[_0x9aade5(0x2d5)]</code> ，它的值为 <code>1725863585185Hcomic3PAPP7R</code> ，然后随便找一个在线 md5 的工具：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909064622464.avif"></p>
+<p>可以看到结果完全符合我们的猜想，正是 md5 之后的值。</p>
+<p>至此，我们完成了对接口参数的分析，这时我们可以写一个简单的代码来还原发送请求的流程：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createHash &#125; <span class="keyword">from</span> <span class="string">&quot;node:crypto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ts = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> version = <span class="string">&quot;1.7.2&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> token = <span class="string">&quot;185Hcomic3PAPP7R&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;https://www.jmeadpoolcdn.life/setting&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="attr">tokenparam</span>: <span class="string">`<span class="subst">$&#123;ts&#125;</span>,<span class="subst">$&#123;version&#125;</span>`</span>,</span><br><span class="line">    <span class="attr">token</span>: <span class="title function_">createHash</span>(<span class="string">&quot;md5&quot;</span>)</span><br><span class="line">      .<span class="title function_">update</span>(<span class="string">`<span class="subst">$&#123;ts&#125;</span><span class="subst">$&#123;token&#125;</span>`</span>)</span><br><span class="line">      .<span class="title function_">digest</span>(<span class="string">&quot;hex&quot;</span>)</span><br><span class="line">      .<span class="title function_">toLowerCase</span>(),</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>node 执行：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/09/20240909065723903.avif"></p>
+<p>可以看到确实返回了相关的加密数据。</p>
+<h2 id="解密数据"><a href="#解密数据" class="headerlink" title="解密数据"></a>解密数据</h2><p>OK ，到现在，我们分析出了如何正确地发送请求，但是返回的数据还是加密的，这就是我们接下来要搞的内容。</p>
+<p>前面我们通过 debugger 来分析了一些逻辑，但是核心的 <code>fetchGet</code> 和 <code>fetchPost</code> 我们无法 debugger ，因为它们两个是函数。</p>
+<p>首先我们以 <code>fetchGet</code> 来分析，这个函数有四个参数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fetchGet</span>(<span class="params">_0xfefd55, _0x1d11e4, _0x3242a9, _0x1c5f83</span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看到这个函数，如果熟悉 node 的话，很容易就能理解到这里面有两个参数很有可是回调函数，分别代表 <code>success</code> 和 <code>failure</code> 回调。</p>
+<p>那么我们要如何确定呢，最好的方法就是我们能在运行中打印出这四个变量，但是由于我们并不熟悉安卓方面的知识，所以很难搞。</p>
+<p>回想我们之前的方法，也就是抓包，没错，我们可以把这四个变量以请求的方式发送出来，这样就能被 Reqable 抓到，从而可以分析代码。</p>
+<p>这里我们就要先知道如何将修改后的文件重新打包成 APP 。由于我们不是安卓糕手，这里我们参考了这篇文章：<a target="_blank" rel="noopener" href="https://juejin.cn/post/7073273632952156168">APP 加固添加签名后无法安装</a>。</p>
+<p>这里我贴出解包和打包的脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解包</span></span><br><span class="line">java -jar .\apktool_2.9.3.jar d .\1.7.2.apk</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成自签名，密码为 123456 ，只需执行一次</span></span><br><span class="line">keytool -genkey -<span class="built_in">alias</span> jm.keystore -keyalg RSA -validity 20000 -keystore jm.keystore</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打包</span></span><br><span class="line">java -jar .\apktool_2.9.3.jar b 1.7.2 -o 1.7.2-rebuild.apk</span><br><span class="line"><span class="comment"># 对齐</span></span><br><span class="line">D:\Android\Sdk\build-tools\34.0.0\zipalign.exe -v -p 4 1.7.2-rebuild.apk 1.7.2-rebuild-zipalign.apk</span><br><span class="line"><span class="comment"># 重新签名</span></span><br><span class="line">D:\Android\Sdk\build-tools\34.0.0\apksigner.bat sign --ks jm.keystore --ks-key-alias jm.keystore --ks-pass pass:123456 --v2-signing-enabled <span class="literal">true</span> -v --out 1.7.2-rebuild-zipalign-sign.apk 1.7.2-rebuild-zipalign.apk</span><br></pre></td></tr></table></figure>
+
+<p>最后我们会生成一个 1.7.2-rebuild-zipalign-sign.apk 文件，安装它就好了。</p>
+<p>OK ，回到代码，为了简单进行数据发送，我们需要在代码最前面编写一个工具函数，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> gTestPostFetch = <span class="keyword">function</span>(<span class="params">query</span>) &#123;</span><br><span class="line">  <span class="title function_">fetch</span>(<span class="string">&quot;https://echo.apifox.com/post&quot;</span>, &#123;</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;post&quot;</span>,</span><br><span class="line">    <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(query),</span><br><span class="line">  &#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">fetch</span>(<span class="string">&quot;https://echo.apifox.com/get?error=&quot;</span> + e);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用了 apifox 的一个域名，接口不会 404 ，放到最前面，看起来就是下面的样子：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910073630452.avif"></p>
+<p>接着定位到 <code>fetchGet</code> 的位置，添加上一段代码：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074002524.avif"></p>
+<p>然后打包，在 Reqable 找到 apifox 的请求，查看请求体：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074308345.avif"></p>
+<p>可以发现前两个参数显示出来了，但是第三第四个参数没有了，这是因为 <code>JSON.stringify</code> 会忽略函数字段。这时我们就要改变一下我们的写法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 原来的写法：</span></span><br><span class="line"><span class="title function_">gTestPostFetch</span>(&#123;<span class="attr">_0xfefd55</span>:_0xfefd55,<span class="attr">_0x1d11e4</span>:_0x1d11e4,<span class="attr">_0x3242a9</span>:_0x3242a9,<span class="attr">_0x1c5f83</span>:_0x1c5f83&#125;);</span><br><span class="line"><span class="comment">// 改进后的写法</span></span><br><span class="line"><span class="title function_">gTestPostFetch</span>(&#123;<span class="attr">_0xfefd55</span>:_0xfefd55,<span class="attr">_0x1d11e4</span>:_0x1d11e4,<span class="attr">_0x3242a9</span>:<span class="string">`<span class="subst">$&#123;_0x3242a9&#125;</span>`</span>,<span class="attr">_0x1c5f83</span>:<span class="string">`<span class="subst">$&#123;_0x1c5f83&#125;</span>`</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>为什么要这么写呢，这是因为 <code>Function</code> 的 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Function/toString"><code>toString</code></a> 会返回其源码：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910074937776.avif"></p>
+<p>我们也可以在 node 中简单测试，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910075015211.avif"></p>
+<p>改换写法后，我们再次打包测试，结果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910075728697.avif"></p>
+<p>接下来，我们就需要定位输出的这个函数了，这里我们只分析第三个参数，即 <code>_0x3242a9</code> ，从请求中可以看出它指向了 <code>function (_0x804d2e)</code> ，搜索后只有一个结果：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910080052355.avif"></p>
+<p>接着我们照葫芦画瓢，我们需要分析这个入参，因为对于一个回调函数，入参肯定就是请求成功的数据：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910080655069.avif"></p>
+<p>这时我们发现这个数据已经是解密过后的了，而且我们能确定 <code>n[_0x1ce558(0x15c)][_0x1ce558(0x158)]</code> 这个函数就是 <code>fetchGet</code> ，因为我们是从 <code>fetchGet</code> 出来的。</p>
+<p>这时我们就要回到 <code>fetchGet</code> 的逻辑中了，因为 <code>fetchGet</code> 内部肯定会存在某个调用，将解密后的数据传入回调中。</p>
+<p>接着我们搜索 <code>_0x3242a9</code> ，发现只有 4 个结果，很好：</p>
+<div class="swiper" id="swiperInst-5bj39q72" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910082243809.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910082312054.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910082336299.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-5bj39q72", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-5bj39q72 .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>这里面 1 和 3 我们可以基本确定就是重新调用了 <code>fetchGet</code> ，所以 2 的嫌疑就是最大的了。</p>
+<p>继续照葫芦画瓢，我们需要知道 <code>_0x544b9d[_0x21fa50(0x277)]</code> 和 <code>_0x5b2124</code> 是什么：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083040084.avif"></p>
+<p>这里可以发现 <code>_0x5b2124</code> 已经是解密后的数据了，这里我们放一边，我们先分析 <code>_0x544b9d[_0x21fa50(0x277)]</code> ，从上图可以看出 <code>_0x544b9d[_0x21fa50(0x277)]</code> 指向了 <code>function (_0x2e3af4,_0xa879c0)</code> ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083303504.avif"></p>
+<p>可以看到这个函数只是做了一个透传，传给了 <code>_0x3d0e6e[_0x11a477(0x299)]</code> 这个函数，接着打日志：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083630094.avif"></p>
+<p>发现它指向了 <code>function (_0x217cb4,_0x5e84b3)</code> ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910083703413.avif"></p>
+<p>可以看到这个函数就是把第一个参数当作函数，然后第二个参数当作第一个函数的参数传进去，所以</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_0x544b9d[<span class="title function_">_0x21fa50</span>(<span class="number">0x277</span>)](</span><br><span class="line">  _0x3242a9,</span><br><span class="line">  _0x5b2124</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>其实就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">_0x3242a9</span>(_0x5b2124);</span><br></pre></td></tr></table></figure>
+
+<p>而我们已经知道了 <code>_0x5b2124</code> 就是解密后的数据，所以接下来我们只要知道 <code>_0x5b2124</code> 是如何计算出来的即可。</p>
+<p>ctrl + f 搜索，发现只有几个结果，其中嫌疑最大的是下面这一段：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910084648265.avif"></p>
+<p>为什么说它嫌疑大呢，首先这里将 <code>_0x5b2124[_0x21fa50(0x2e3)]</code> 这个值传入了一个未知的函数，我们都知道， <code>_0x5b2124</code> 是解密后的数据，而且 <code>code</code> 字段是不加密的，那么很有可能就是 <code>_0x21fa50(0x2e3)</code> 值为 <code>&#39;data&#39;</code> ，而且此时的 <code>0x5b2124[&#39;data&#39;]</code> 是加密的，经过了这个函数后生成了解密数据。其次，这里出现了一个 <code>mode</code> 属性，如果经常需要写加密解密逻辑的搬砖工一看，这很明显就是 AES 相关的代码。</p>
+<p>所以这里我们需要分析四个变量，分别是 <code>_0x5b2124[_0x21fa50(0x2e3)]</code> 、 <code>_0x365b18</code> 、 <code>_0x21fa50(0x22e)</code> 、 <code>_0x21fa50(0x2ad)</code> ：</p>
+<div class="swiper" id="swiperInst-o0q8ywj8" style="width: 100%">
+  <div class="swiper-wrapper">
+    
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910085550954.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+
+<div class="swiper-slide">
+  <img
+    class="swiper-slide-img"
+    data-src=https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910085620383.avif 
+    style="aspect-ratio: 1.77778" 
+  />
+</div>
+  
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<script>
+  window.addEventListener("load", () => {
+    const swiper = new Swiper("#swiperInst-o0q8ywj8", {
+      autoHeight: true,
+      direction: "horizontal",
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      }
+    });
+    // fix swiper can't resize height when change slide height in some sences.
+    // such as using detail tag and expend it.
+    const resizeObserver = new ResizeObserver((entries) => {
+      swiper.update();
+    });
+    document
+      .querySelectorAll("#swiperInst-o0q8ywj8 .swiper-slide")
+      .forEach(el => {
+        resizeObserver.observe(el);
+      });
+  })
+</script>
+
+<p>从上图可以看出，确实符合我们的猜想，就是一个 AES 的解密，这里我们已经确定第一个参数就是加密的数据了，现在我们要分析第二个参数，也就是解密的密钥 ，这里的 <code>_0x365b18</code> 参数看起来就是经过 <code>Cryptojs.enc.Utf8.parse</code> 处理后的数据。</p>
+<p>我们稍微往上滚动，就可以发现相关的赋值语句：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090431974.avif"></p>
+<p>这里刚好三个方括号正好对应我们提到的 <code>enc</code> 、 <code>Utf8</code> 、 <code>parse</code> ，我们可以输出验证一下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090727825.avif"></p>
+<p>完全一致！</p>
+<p>那么最后需要知道的就是 <code>_0x3b32c4</code> 这个变量了，是由它生成了密钥 。我们往上滚动，就能看到相应的赋值语句：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910090954121.avif"></p>
+<p>这里我们可以发现一些之前分析过的变量，比如这个 <code>f</code> ，它就是 md5 函数，而 <code>_0x544b9d[_0x21fa50(0x277)]</code> ，其实就是将第二个参数传给第一个函数执行，也就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_0x544b9d[<span class="title function_">_0x21fa50</span>(<span class="number">0x277</span>)](</span><br><span class="line">  f,</span><br><span class="line">  _0x544b9d[<span class="title function_">_0x21fa50</span>(<span class="number">0x201</span>)](P, _0x33c5f8)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>其实就是 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">f</span>(_0x544b9d[<span class="title function_">_0x21fa50</span>(<span class="number">0x201</span>)](P, _0x33c5f8));</span><br></pre></td></tr></table></figure>
+
+<p>而 <code>P</code> 我们之前也分析过了，它是一个时间戳，那么最后我们需要知道的就是两个东西了，一个是 <code>_0x33c5f8</code> ，另一个就是 <code>_0x544b9d[_0x21fa50(0x201)]</code> 这个函数了。</p>
+<p>我们输出一下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092045468.avif"></p>
+<p>可以发现 <code>_0x33c5f8</code> 就是我们之前请求头的那个变量 ，而 <code>_0x544b9d[_0x21fa50(0x201)]</code> 指向了 <code>function (_0x494616,_0x4ba2cf)</code> ，搜索一下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092209266.avif"></p>
+<p>可以发现这个函数也是透传，指向了 <code>_0x3d0e6e[_0x1059b9(0x2db)]</code> ，我们再输出：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092428752.avif"></p>
+<p>可以看到指向了 <code>function (_0x5b0ae2,_0x36ea91)</code> ，搜索一下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910092515924.avif"></p>
+<p>原来就是两个变量相加…</p>
+<p>所以，我们前面已经分析的这个函数：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">f</span>(_0x544b9d[<span class="title function_">_0x21fa50</span>(<span class="number">0x201</span>)](P, _0x33c5f8));</span><br></pre></td></tr></table></figure>
+
+<p>其实就是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">f</span>(P + _0x33c5f8);</span><br></pre></td></tr></table></figure>
+
+<p>而这个函数（解密的密钥 ）的值，其实就是前面提到的请求头的 <code>token</code> 。</p>
+<p>至此，我们基本完成了对响应体解密流程的分析。核心就是通过发送的请求头 <code>token</code> 来生成密钥 ，接着用这个密钥进行 aes 解密即可。</p>
+<p>我们可以用代码还原整个流程了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createHash, createDecipheriv &#125; <span class="keyword">from</span> <span class="string">&quot;node:crypto&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ts = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>);</span><br><span class="line"><span class="keyword">const</span> version = <span class="string">&quot;1.7.2&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> token = <span class="string">&quot;185Hcomic3PAPP7R&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> tokenHash = <span class="title function_">createHash</span>(<span class="string">&quot;md5&quot;</span>)</span><br><span class="line">  .<span class="title function_">update</span>(<span class="string">`<span class="subst">$&#123;ts&#125;</span><span class="subst">$&#123;token&#125;</span>`</span>)</span><br><span class="line">  .<span class="title function_">digest</span>(<span class="string">&quot;hex&quot;</span>)</span><br><span class="line">  .<span class="title function_">toLowerCase</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> algorithm = <span class="string">&quot;aes-256-ecb&quot;</span>; <span class="comment">// 使用 AES-ECB 模式</span></span><br><span class="line"><span class="keyword">const</span> key = <span class="title class_">Buffer</span>.<span class="title function_">from</span>(tokenHash);</span><br><span class="line"></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;https://www.jmeadpoolcdn.life/setting&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="attr">tokenparam</span>: <span class="string">`<span class="subst">$&#123;ts&#125;</span>,<span class="subst">$&#123;version&#125;</span>`</span>,</span><br><span class="line">    <span class="attr">token</span>: tokenHash,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;解密前&quot;</span>, res);</span><br><span class="line">    <span class="keyword">const</span> decipher = <span class="title function_">createDecipheriv</span>(algorithm, key, <span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">let</span> decrypted = decipher.<span class="title function_">update</span>(res.<span class="property">data</span>, <span class="string">&quot;base64&quot;</span>, <span class="string">&quot;utf8&quot;</span>);</span><br><span class="line">    decrypted += decipher.<span class="title function_">final</span>(<span class="string">&quot;utf8&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      ...res,</span><br><span class="line">      <span class="attr">data</span>: decrypted,</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;解密后：&quot;</span>, res);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>执行之后：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2024/09/10/20240910093028630.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>本文仅用于教育、学习和研究目的，旨在帮助开发者和用户理解应用程序的工作原理。本文作者与原始应用程序的开发者、公司或组织无关。所有涉及的代码或技术分析均为个人研究成果，并未用于商业用途或恶意活动。请勿将本文用于任何违反法律或侵犯原开发者权利的活动。本文作者不对他人使用本文内容产生的任何法律或财务后果承担责任。</p>
+<p>本来这篇帖子应该在一年前完成的，当时没什么时间就太监了，趁着最近比较闲所以花了点时间给补上了。</p>
+<p>写这样的帖子真的挺花费精力…</p>
+<p>话说分析这个东西会不会被查水表…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/202da2aab6d1" title="记一次分析某漫接口密钥">https://prohibitorum.top/202da2aab6d1</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/React-Native/" rel="tag"># React Native</a>
+              <a href="/tags/API/" rel="tag"># API</a>
+              <a href="/tags/%E5%AE%89%E5%8D%93/" rel="tag"># 安卓</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"># 网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/c5a6b54e6a5c" rel="prev" title="记一次使用 uniapp 开发微信小程序遇到的疑难杂症">
+                  <i class="fa fa-angle-left"></i> 记一次使用 uniapp 开发微信小程序遇到的疑难杂症
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/10e09992a7cf" rel="next" title="TypeScript 5.6（译）">
+                  TypeScript 5.6（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1725873381"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

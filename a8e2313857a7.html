@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言在 vue3 中集成 eslint9 和 prettier 。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在 vue3 中集成 eslint9 和 prettier">
+<meta property="og:url" content="https://prohibitorum.top/a8e2313857a7">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言在 vue3 中集成 eslint9 和 prettier 。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324112347978.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324112723606.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324114050718.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324143535580.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324152655711.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324155516486.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324094042067.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324163210725.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324165221241.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324165438676.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324170021834.avif">
+<meta property="article:published_time" content="2025-03-24T17:27:36.000Z">
+<meta property="article:modified_time" content="2025-03-24T21:41:57.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Eslint">
+<meta property="article:tag" content="Prettier">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324112347978.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a8e2313857a7.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a8e2313857a7","path":"a8e2313857a7.html","title":"在 vue3 中集成 eslint9 和 prettier"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>在 vue3 中集成 eslint9 和 prettier | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-vue-%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.1.</span> <span class="nav-text">创建 vue 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%89%88-eslint-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">2.2.</span> <span class="nav-text">新版 eslint 配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#files-%E5%92%8C-ignores"><span class="nav-number">2.2.1.</span> <span class="nav-text">files 和 ignores</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rules"><span class="nav-number">2.2.2.</span> <span class="nav-text">rules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plugins"><span class="nav-number">2.2.3.</span> <span class="nav-text">plugins</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#extends"><span class="nav-number">2.2.4.</span> <span class="nav-text">extends</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#languageOptions"><span class="nav-number">2.2.5.</span> <span class="nav-text">languageOptions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%AF%B9%E5%BA%94%E4%BE%9D%E8%B5%96"><span class="nav-number">2.3.</span> <span class="nav-text">安装对应依赖</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a8e2313857a7">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="在 vue3 中集成 eslint9 和 prettier | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          在 vue3 中集成 eslint9 和 prettier
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-03-24 17:27:36 / 修改时间：21:41:57" itemprop="dateCreated datePublished" datetime="2025-03-24T17:27:36+00:00">2025-03-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在 vue3 中集成 eslint9 和 prettier 。</p>
+<span id="more"></span>
+
+<p>eslint8 已于 2024-10-05 进入不维护状态，所以本着没事找事干的准则，本文将在 vue 项目中使用 eslint9 并且集成 prettier 。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="创建-vue-项目"><a href="#创建-vue-项目" class="headerlink" title="创建 vue 项目"></a>创建 vue 项目</h2><p>这一步简单，只需使用如下的命令，按提示即可创建最新的基于 vite 的 vue 项目了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm create vite</span><br></pre></td></tr></table></figure>
+
+<p>如果你是其他的包管理器，把前缀替换下即可。</p>
+<h2 id="新版-eslint-配置文件"><a href="#新版-eslint-配置文件" class="headerlink" title="新版 eslint 配置文件"></a>新版 eslint 配置文件</h2><p>从 eslint8 到 eslint9 ，官方更改了编写配置的规则， eslint9 使用了扁平化（ FlatConfig ）的方式，以 <code>.js</code> 扩展作为配置文件的格式：</p>
+<ul>
+<li><code>eslint.config.js</code></li>
+<li><code>eslint.config.mjs</code></li>
+<li><code>eslint.config.cjs</code></li>
+</ul>
+<p>一般这里用第一个即可，即 <code>eslint.config.js</code> ，当然不用我们手动创建，后面会说。</p>
+<p>配置文件会导出一个数组的配置项，看起来如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> [</span><br><span class="line">  <span class="comment">// 配置</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>如果想要类型提示，可以使用工具函数 <code>defineConfig</code> ：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  <span class="comment">// 配置</span></span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>数组内的每一个项目即为一个完整的配置项，后面的配置项的优先级会比前面的高（针对某个文件类型），每个配置项的结构如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> config = &#123;</span><br><span class="line">  <span class="attr">files</span>: [],</span><br><span class="line">  <span class="attr">ignores</span>: [],</span><br><span class="line">  <span class="attr">languageOptions</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">linterOptions</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">processor</span>: &#123;&#125;,</span><br><span class="line">  <span class="attr">extends</span>: [],</span><br><span class="line">  <span class="attr">plugins</span>: [],</span><br><span class="line">  <span class="attr">rules</span>: [],</span><br><span class="line">  <span class="attr">setting</span>: &#123;&#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里面我们需要注意的配置项有 <code>files</code> ， <code>ignores</code> ， <code>languageOptions</code> ， <code>plugins</code> ， <code>rules</code> 和 <code>extends</code> ，这几个配置项对于开发来说比较常用。</p>
+<h3 id="files-和-ignores"><a href="#files-和-ignores" class="headerlink" title="files 和 ignores"></a>files 和 ignores</h3><p><code>files</code> 用于指定包含哪些文件，而 <code>ignores</code> 则用于排除某些文件。这两个选项都是通过 glob 表达式（相关解析库：<a target="_blank" rel="noopener" href="https://github.com/isaacs/minimatch">minimatch</a>）来识别的</p>
+<p>比如我们想包含 <code>src</code> 下的所有 js 文件，我们的配置文件可以写为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.js&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>如果 <code>src</code> 内的某个 js 是第三方导入的，那可以使用 <code>ignores</code> 排除掉：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.js&quot;</span>],</span><br><span class="line">    <span class="attr">ignores</span>: [<span class="string">&quot;src/assets/js/thrid-lib.js&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p><code>ignores</code> 默认会排除掉 <code>node_modules</code> ，所以不用我们手动指定。</p>
+<h3 id="rules"><a href="#rules" class="headerlink" title="rules"></a>rules</h3><p>这个和之前的基本一样，对象键名为规则名，键值为严重等级，或者一个数组，第一个值为严重等级，后续的值为规则自定义的参数。</p>
+<p>严重等级分为：</p>
+<ul>
+<li><code>error</code>（或者数字 2），违反规则将导致 eslint 检查报错。</li>
+<li><code>warn</code> （或者数字 1），违反规则会出现警告，但不会导致 eslint 报错。</li>
+<li><code>off</code> （或者数字 0），关闭该规则。</li>
+</ul>
+<p>比如此时想要让每行语句都加上分号，每家就报告错误的话，我们可以使用 <code>@stylistic/eslint-plugin</code> 里面的 <a target="_blank" rel="noopener" href="https://eslint.style/rules/js/semi">semi</a> 规则，配置如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> stylistic <span class="keyword">from</span> <span class="string">&quot;@stylistic/eslint-plugin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 这里为了方便演示，只检测 src/main.ts 文件</span></span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/main.ts&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic&quot;</span>: stylistic,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic/semi&quot;</span>: <span class="string">&quot;error&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>这里如果看不懂 <code>plugins</code> 的配置可以先不管，你只要知道 <code>plugins</code> 注册了一个命名空间，这个空间叫 <code>@stylistic</code> ，它来源于我们导入的 <code>stylistic</code> 插件，接着，在 <code>rules</code> 上我们就可以使用这个命名空间内的规则，即 <code>@stylistic/semi</code> 。</p>
+<p>这里我们把严重等级设置为 <code>error</code> ，意味着，现在检查会报错，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324112347978.avif"></p>
+<p>这是执行命令行的检查， eslint 也提示出现错误：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324112723606.avif"></p>
+<p>当然，这个规则的意思是控制分号，而不是禁止分号，默认是禁止分号的功能是因为规则提供了一个默认的参数，这个参数 <code>always</code> 要求语句末必须存在分号，也就是说，上面的配置和下面等价：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> stylistic <span class="keyword">from</span> <span class="string">&quot;@stylistic/eslint-plugin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 这里为了方便演示，只检测 src/main.ts 文件</span></span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/main.ts&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic&quot;</span>: stylistic,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic/semi&quot;</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;always&quot;</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>如果我们把 <code>always</code> 改为 <code>never</code> ，那么就是要求每个语句末不要加分号，除了那些为了消除歧义必须加的分号除外，此时配置如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> stylistic <span class="keyword">from</span> <span class="string">&quot;@stylistic/eslint-plugin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 这里为了方便演示，只检测 src/main.ts 文件</span></span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/main.ts&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic&quot;</span>: stylistic,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;@stylistic/semi&quot;</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;never&quot;</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>此时 eslint 便不再报错，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324114050718.avif"></p>
+<h3 id="plugins"><a href="#plugins" class="headerlink" title="plugins"></a>plugins</h3><p>这个和之前的也基本一样，插件的作用主要是扩展新的规则，你可以简单地理解为，插件就是通过写额外的代码来新增新的规则，但插件默认是不会启用这些规则的，需要你在 <code>rules</code> 中启用，所以在前面的文章中，我们通过 <code>@stylistic/eslint-plugin</code> 来导入插件，然后通过在 <code>rules</code> 中编写 <code>&quot;@stylistic/semi&quot;: [&quot;error&quot;, &quot;never&quot;]</code> 启用了内部的一个规则。</p>
+<p>通过 <code>plugins</code> 注册的插件会指定一个命名空间，这个空间关系到 <code>rules</code> 中规则的名称，比如对于前面的例子，如果我们把命名空间改为 <code>cm</code> ，那么 <code>rules</code> 内相关的规则就要改为 <code>cm</code> 开头：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> stylistic <span class="keyword">from</span> <span class="string">&quot;@stylistic/eslint-plugin&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 这里为了方便演示，只检测 src/main.ts 文件</span></span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/main.ts&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="attr">cm</span>: stylistic,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&quot;cm/semi&quot;</span>: [<span class="string">&quot;error&quot;</span>, <span class="string">&quot;never&quot;</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>这也同时会影响 eslint 插件的提示信息：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324143535580.avif"></p>
+<p>所以一般情况下，使用简化的包名是比较合适的，能快速的知道是哪个插件的规则报错的。</p>
+<h3 id="extends"><a href="#extends" class="headerlink" title="extends"></a>extends</h3><p>前面我们谈及了 eslint 的 <code>plugins</code> 和 <code>rules</code> ，在 eslint 中，很多时候我们不可能一个一个的规则手动的去启用，所以很多的包都会带有预设的配置供我们使用，这时我们使用 eslint 的 <code>extends</code> 来继承这些预设的配置，然后重写部分规则即可。</p>
+<p>比如我们使用 <code>eslint-plugin-vue</code> 这个插件，在这个插件的导出中，提供了一组可选的内置配置：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324152655711.avif"></p>
+<p>其中那些 <code>LegacyConfig</code> 的导出项为 eslint8 所用的，而 eslint9 需要使用下面那些 <code>FlatConfig</code> 。</p>
+<p>这时我们可以用如下的配置来继承：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> stylistic <span class="keyword">from</span> <span class="string">&quot;@stylistic/eslint-plugin&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> eslintPluginVue <span class="keyword">from</span> <span class="string">&quot;eslint-plugin-vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/App.vue&quot;</span>],</span><br><span class="line">    <span class="attr">extends</span>: [</span><br><span class="line">      stylistic.<span class="property">configs</span>.<span class="property">recommended</span>,</span><br><span class="line">      eslintPluginVue.<span class="property">configs</span>[<span class="string">&quot;flat/recommended&quot;</span>],</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>这时候，看 <code>src/App.vue</code> 文件，就可以发现已经出现了相关的提示：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324155516486.avif"></p>
+<h3 id="languageOptions"><a href="#languageOptions" class="headerlink" title="languageOptions"></a>languageOptions</h3><p>这个对象主要是用来配置一些 js 语言选项的配置，具体如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">ecmaVersion</span>: <span class="string">&quot;latest&quot;</span>, <span class="comment">// ecma 版本，默认为最新</span></span><br><span class="line">      <span class="attr">sourceType</span>: <span class="string">&quot;module&quot;</span>, <span class="comment">// 包导入类型，cjs 还是 esm 还是纯 js ，默认为 esm</span></span><br><span class="line">      <span class="attr">parser</span>: &#123;&#125;, <span class="comment">// 指定解析器，不指定使用 eslint 内置解析器 espree</span></span><br><span class="line">      <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="comment">// 配置解析器的选项</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">globals</span>: &#123;</span><br><span class="line">        <span class="comment">// 配置全局合法的对象</span></span><br><span class="line">        <span class="attr">var1</span>: <span class="string">&quot;writable&quot;</span>, <span class="comment">// var1 可写可读</span></span><br><span class="line">        <span class="attr">var2</span>: <span class="string">&quot;readonly&quot;</span>, <span class="comment">// var2 只读</span></span><br><span class="line">        <span class="attr">var3</span>: <span class="string">&quot;off&quot;</span>, <span class="comment">// 不允许使用</span></span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>eslint 内置的 <code>parserOptions</code> 可配置的选项可以查看<a target="_blank" rel="noopener" href="https://eslint.org/docs/latest/use/configure/language-options#specifying-parser-options">此处</a>。</p>
+<p><code>globals</code> 选项有对应的 <code>globals</code> 包，可以方便我们快速导入对应环境的全局变量，这个后面会讲。</p>
+<p><code>ecmaVersion</code> 和 <code>sourceType</code> 在 vue 项目中的话基本就是按默认就行了，即 <code>latest</code> 和 <code>module</code> 。</p>
+<p><code>parser</code> 的话， vue 需要一个专属的 <code>parser</code> 才能解析 <code>.vue</code> 模板，这个后面也会讲。</p>
+<h2 id="安装对应依赖"><a href="#安装对应依赖" class="headerlink" title="安装对应依赖"></a>安装对应依赖</h2><p>由于需要在 vue 下集成 eslint9 和 prettier ，我们需要安装下列的包：</p>
+<ul>
+<li><code>eslint</code></li>
+<li><code>eslint-plugin-prettier</code></li>
+<li><code>eslint-plugin-vue</code></li>
+<li><code>globals</code></li>
+<li><code>prettier</code></li>
+<li><code>typescript-eslint</code></li>
+<li><code>@eslint/js</code></li>
+</ul>
+<p>当然很多我们不用手动装，只需执行如下的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init @eslint/config</span><br></pre></td></tr></table></figure>
+
+<p>注意这里不要用 pnpm ，两者的 init 命令似乎不一样。</p>
+<p>执行后，选第二个，接着下来的选项按需求选即可即可，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324094042067.avif"></p>
+<p>这样子我们就安装了一些需要的包，并且也生成了一个 eslint 的配置文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> globals <span class="keyword">from</span> <span class="string">&quot;globals&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> js <span class="keyword">from</span> <span class="string">&quot;@eslint/js&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> tseslint <span class="keyword">from</span> <span class="string">&quot;typescript-eslint&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> pluginVue <span class="keyword">from</span> <span class="string">&quot;eslint-plugin-vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;**/*.&#123;js,mjs,cjs,ts,vue&#125;&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;**/*.&#123;js,mjs,cjs,ts,vue&#125;&quot;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">globals</span>: globals.<span class="property">browser</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;**/*.&#123;js,mjs,cjs,ts,vue&#125;&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      js,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">extends</span>: [<span class="string">&quot;js/recommended&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  tseslint.<span class="property">configs</span>.<span class="property">recommended</span>,</span><br><span class="line">  pluginVue.<span class="property">configs</span>[<span class="string">&quot;flat/essential&quot;</span>],</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;**/*.vue&quot;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123; <span class="attr">parserOptions</span>: &#123; <span class="attr">parser</span>: tseslint.<span class="property">parser</span> &#125; &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>这里我们可以精简以下 <code>files</code> 字段，因为一般情况下我们不会写 <code>.mjs</code> ， <code>.cjs</code> 和 <code>.js</code> 文件，并且我们希望只针对 <code>src/</code> 下的文件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> globals <span class="keyword">from</span> <span class="string">&quot;globals&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> js <span class="keyword">from</span> <span class="string">&quot;@eslint/js&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> tseslint <span class="keyword">from</span> <span class="string">&quot;typescript-eslint&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> pluginVue <span class="keyword">from</span> <span class="string">&quot;eslint-plugin-vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.&#123;ts,vue&#125;&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.&#123;ts,vue&#125;&quot;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">globals</span>: globals.<span class="property">browser</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.&#123;ts,vue&#125;&quot;</span>],</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      js,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">extends</span>: [<span class="string">&quot;js/recommended&quot;</span>],</span><br><span class="line">  &#125;,</span><br><span class="line">  tseslint.<span class="property">configs</span>.<span class="property">recommended</span>,</span><br><span class="line">  pluginVue.<span class="property">configs</span>[<span class="string">&quot;flat/essential&quot;</span>],</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.vue&quot;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">parser</span>: tseslint.<span class="property">parser</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>进一步，其实我们不需要那么多的配置项，可以合并下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> globals <span class="keyword">from</span> <span class="string">&quot;globals&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> js <span class="keyword">from</span> <span class="string">&quot;@eslint/js&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> tseslint <span class="keyword">from</span> <span class="string">&quot;typescript-eslint&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> pluginVue <span class="keyword">from</span> <span class="string">&quot;eslint-plugin-vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.&#123;ts,vue&#125;&quot;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">globals</span>: globals.<span class="property">browser</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  js.<span class="property">configs</span>.<span class="property">recommended</span>,</span><br><span class="line">  tseslint.<span class="property">configs</span>.<span class="property">recommended</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&quot;src/**/*.vue&quot;</span>],</span><br><span class="line">    <span class="attr">extends</span>: [pluginVue.<span class="property">configs</span>[<span class="string">&quot;flat/recommended&quot;</span>]],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">parser</span>: tseslint.<span class="property">parser</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>该配置几乎已经将 vue 和 eslint9 集成了，这里需要注意是最后一项配置了 <code>parserOptions.parser</code> ，其值为 <code>tseslint.parser</code> ，这是因为上一项的 <code>pluginVue.configs[&quot;flat/essential&quot;]</code> 中使用了 <code>vue-eslint-parser</code> ，这个 <code>parser</code> 不支持 <code>&lt;script setup lang=&quot;ts&quot;&gt;&lt;/script&gt;</code> ，即模板内的 ts 块，所以需要传递 <code>parser</code> 参数，让 <code>vue-eslint-parser</code> 内部使用 <code>tseslint.parser</code> 来解析。</p>
+<p>第二项配置了 <code>globals.browser</code> ，这告诉了 eslint 使用浏览器下的一些全局对象不要报错，如果我们查看该包的源代码，其实它就是一个 json 文件：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324163210725.avif"></p>
+<p>这里的 <code>false</code> 等价于 <code>readonly</code> ，也就是对象默认都是只读的。</p>
+<p>接着，我们安装 prettier 相关的依赖，首先是 <code>eslint-plugin-prettier</code> ，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add eslint-plugin-prettier -D</span><br></pre></td></tr></table></figure>
+
+<p>然后使用 <code>recommended</code> 导出，放到配置的最后一项，确保关闭前面那些和 prettier 相冲突的规则：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig &#125; <span class="keyword">from</span> <span class="string">&quot;eslint/config&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> pluginPrettierRecomended <span class="keyword">from</span> <span class="string">&quot;eslint-plugin-prettier/recommended&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>([</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="comment">// 其他配置</span></span><br><span class="line">  pluginPrettierRecomended,</span><br><span class="line">]);</span><br></pre></td></tr></table></figure>
+
+<p>不过我们会发现 eslint 挂了，我们查看 vscode 的输出面板，查看 eslint 的输出，发现是缺少了 <code>eslint-config-prettier</code> 包：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324165221241.avif"></p>
+<p>这里你可能会好奇，为啥得安装这个包啊，我们查看这个包的<code> package.json</code> 文件，发现 <code>peerDependencies</code> 字段有几个包：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324165438676.avif"></p>
+<p>这意味着在我们项目中必须存在这些依赖，因为这些依赖并不依赖 <code>eslint-plugin-prettier</code> ，而是安装了 <code>eslint-plugin-prettier</code> 的项目。</p>
+<p>所以，除了 <code>eslint-config-prettier</code> ，还需要 <code>prettier</code> 和 <code>@types/eslint</code>（这个类型包倒不是很重要），执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm add eslint-config-prettier prettier @types/eslint -D</span><br></pre></td></tr></table></figure>
+
+<p>这时候我们查看 <code>.vue</code> 文件，发现 prettier 相关的错误已经显示了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/03/24/20250324170021834.avif"></p>
+<p>最后，再在 <code>package.json</code> 加一条 lint 的命令：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;scripts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;lint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eslint --fix&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，vue3 内 集成 eslint9 和 pettier 就完成了，当然还可以继续集成其他的库，比如 git 相关的 lint-staged 和 husky 等。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>之前我也写过集成 eslint 和 prettier 的相关<a href="/ab320da75195">文章</a>，不过当时 eslint 的版本还是 7 还是 8 来着，我对 eslint 的感觉还是比较陌生的，毕竟一个项目一般搞好一次基本也不会频繁改这些东西，其他项目要用到直接拷贝即可。</p>
+<p>不过这次借着这篇文章，也算是对 eslint9 有了个比较基础的认识，知道了常用的每个配置项的意思，其实这些东西文档都有，而且都很详细，就是全英文看久了真的头大…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a8e2313857a7" title="在 vue3 中集成 eslint9 和 prettier">https://prohibitorum.top/a8e2313857a7</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Eslint/" rel="tag"># Eslint</a>
+              <a href="/tags/Prettier/" rel="tag"># Prettier</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/0260e2038d9a" rel="prev" title="一个快 10 倍的 TypeScript">
+                  <i class="fa fa-angle-left"></i> 一个快 10 倍的 TypeScript
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/a928eb1adda2" rel="next" title="即将到来的新版博客~">
+                  即将到来的新版博客~ <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1742808457"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言Vue3.0的API文档  Vue Composition API  来译下Reactivity APIs的部分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue3.0的Reactivity-APIs（译）">
+<meta property="og:url" content="https://prohibitorum.top/a7ffec850800">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言Vue3.0的API文档  Vue Composition API  来译下Reactivity APIs的部分">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-12T10:57:38.000Z">
+<meta property="article:modified_time" content="2023-07-26T23:09:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a7ffec850800.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a7ffec850800","path":"a7ffec850800.html","title":"Vue3.0的Reactivity-APIs（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vue3.0的Reactivity-APIs（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#reactive"><span class="nav-number">2.1.</span> <span class="nav-text">reactive</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ref"><span class="nav-number">2.2.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#computed"><span class="nav-number">2.3.</span> <span class="nav-text">computed</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#readonly"><span class="nav-number">2.4.</span> <span class="nav-text">readonly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watchEffect"><span class="nav-number">2.5.</span> <span class="nav-text">watchEffect</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stopping-the-Watcher-%EF%BC%88%E5%81%9C%E6%AD%A2%E8%A7%82%E5%AF%9F%E8%80%85%EF%BC%89"><span class="nav-number">2.5.1.</span> <span class="nav-text">Stopping the Watcher （停止观察者）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Side-Effect-Invalidation-%EF%BC%88%E5%89%AF%E4%BD%9C%E7%94%A8%E5%A4%B1%E6%95%88%EF%BC%89"><span class="nav-number">2.5.2.</span> <span class="nav-text">Side Effect Invalidation （副作用失效）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Effect-Flush-Timing%EF%BC%88Effect%E5%88%B7%E6%96%B0%E7%9A%84%E6%97%B6%E9%97%B4%E7%82%B9%EF%BC%89"><span class="nav-number">2.5.3.</span> <span class="nav-text">Effect Flush Timing（Effect刷新的时间点）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Watcher-Debugging%EF%BC%88%E8%A7%82%E5%AF%9F%E8%80%85%E8%B0%83%E8%AF%95%EF%BC%89"><span class="nav-number">2.5.4.</span> <span class="nav-text">Watcher Debugging（观察者调试）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#watch"><span class="nav-number">2.6.</span> <span class="nav-text">watch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">2.7.</span> <span class="nav-text">后记</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a7ffec850800">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vue3.0的Reactivity-APIs（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue3.0的Reactivity-APIs（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 10:57:38" itemprop="dateCreated datePublished" datetime="2020-06-12T10:57:38+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-07-26 23:09:43" itemprop="dateModified" datetime="2023-07-26T23:09:43+00:00">2023-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Vue3.0的API文档</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://vue-composition-api-rfc.netlify.app/api.html">Vue Composition API</a></p>
+</blockquote>
+<p>来译下Reactivity APIs的部分</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>这个目录下有六个API，分别是</p>
+<ul>
+<li><code>reactive</code></li>
+<li><code>ref</code></li>
+<li><code>computed</code></li>
+<li><code>readonly</code></li>
+<li><code>watchEffect</code></li>
+<li><code>watch</code></li>
+</ul>
+<h2 id="reactive"><a href="#reactive" class="headerlink" title="reactive"></a><code>reactive</code></h2><p>Takes an object and returns a reactive proxy of the original. This is equivalent to 2.x’s <code>Vue.observable()</code>.</p>
+<p>接收一个对象，返回它的一个响应式代理对象。此API和2.x版本的<code>Vue.observable()</code>相同。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = <span class="title function_">reactive</span>(&#123; <span class="attr">count</span>: <span class="number">0</span> &#125;)</span><br></pre></td></tr></table></figure>
+
+<p>The reactive conversion is “deep”: it affects all nested properties. In the ES2015 Proxy based implementation, the returned proxy is not equal to the original object. It is recommended to work exclusively with the reactive proxy and avoid relying on the original object.</p>
+<p>响应式的转化是”深层次”的：它会影响全部的嵌套属性。在ES2015Proxy的实现下，返回的代理对象和源对象不相等。推荐直接操作响应式代理对象，避免依赖源对象。</p>
+<ul>
+<li>Typing（类型定义）</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> reactive&lt;T <span class="keyword">extends</span> <span class="built_in">object</span>&gt;(<span class="attr">raw</span>: T): T</span><br></pre></td></tr></table></figure>
+
+<h2 id="ref"><a href="#ref" class="headerlink" title="ref"></a><code>ref</code></h2><p>Takes an inner value and returns a reactive and mutable ref object. The ref object has a single property <code>.value</code> that points to the inner value.</p>
+<p>接收一个内部值，返回一个响应式且可变的ref对象，ref对象有一个单一的属性<code>.value</code>，这个属性指向接收的内部值。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 0</span></span><br><span class="line"></span><br><span class="line">count.<span class="property">value</span>++</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>If an object is assigned as a ref’s value, the object is made deeply reactive by the reactive method.</p>
+<p>如果一个对象被分配为一个ref的value，这个对象会通过reactive方法建立深层次的响应式。</p>
+<ul>
+<li><p>Access in Templates（在模板中使用）</p>
+<p>When a ref is returned as a property on the render context (the object returned from <code>setup()</code>) and accessed in the template, it automatically unwraps to the inner value. There is no need to append <code>.value</code> in the template:</p>
+<p>当一个ref对象在渲染上下文中以一个属性返回（这个返回指<code>setup()</code>返回的对象）并且在模板中使用时，它会自动地拆开，指向内部的value。所以不需要再模板中加上<code>.value</code>来取值：</p>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- 这里不用.value取值，自动取到.value --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">count</span>: <span class="title function_">ref</span>(<span class="number">0</span>)</span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Access in Reactive Objects（在响应式对象中使用）</p>
+<p>When a ref is accessed or mutated as a property of a <code>reactive</code> object, it automatically unwraps to the inner value so it behaves like a normal property:</p>
+<p>当一个ref对象作为一个响应式对象被使用和改变时，它会自动地拆开，并指向内部的value，所以它行为上就像一个普通的属性：</p>
+</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123;</span><br><span class="line">  count</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(state.<span class="property">count</span>) <span class="comment">// 0</span></span><br><span class="line"></span><br><span class="line">state.<span class="property">count</span> = <span class="number">1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>  Note that if a new ref is assigned to a property linked to an existing ref, it will replace the old ref:</p>
+<p>  注意如果一个已存在的ref属性被分配给一个新的ref对象时，它会替换掉旧的ref对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> otherCount = <span class="title function_">ref</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">state.<span class="property">count</span> = otherCount</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(state.<span class="property">count</span>) <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>  Note that ref unwrapping only happens when nested inside a reactive <code>Object</code>. There is no unwrapping performed when the ref is accessed from an <code>Array</code> or a native collection type like <code>Map</code>:</p>
+<p>  注意ref对象的拆开只会当发生在嵌套的响应式对象中，当ref对象从一个数组中或者从一个原生的集合类型比如Map中获取时不会表现出拆开这一动作。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = <span class="title function_">reactive</span>([<span class="title function_">ref</span>(<span class="number">0</span>)])</span><br><span class="line"><span class="comment">// need .value here</span></span><br><span class="line"><span class="comment">// 需要.value取值</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(arr[<span class="number">0</span>].<span class="property">value</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> map = <span class="title function_">reactive</span>(<span class="keyword">new</span> <span class="title class_">Map</span>([[<span class="string">&#x27;foo&#x27;</span>, <span class="title function_">ref</span>(<span class="number">0</span>)]]))</span><br><span class="line"><span class="comment">// need .value here</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(map.<span class="title function_">get</span>(<span class="string">&#x27;foo&#x27;</span>).<span class="property">value</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Typing（类型）</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">Ref</span>&lt;T&gt; &#123;</span><br><span class="line">  <span class="attr">value</span>: T</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> ref&lt;T&gt;(<span class="attr">value</span>: T): <span class="title class_">Ref</span>&lt;T&gt;</span><br></pre></td></tr></table></figure>
+
+<p>  Sometimes we may need to specify complex types for a ref’s inner value. We can do that succinctly by passing a generics argument when calling ref to override the default inference:</p>
+<p>  有些时候我们需要为一个ref的内部值指明复杂的类型。我们可以在调用ref函数时通过传递泛型参数来覆盖默认的推断，从而简洁地实现这个效果：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// foo变量可以为string类型或者number类型</span></span><br><span class="line"><span class="keyword">const</span> foo = ref&lt;<span class="built_in">string</span> | <span class="built_in">number</span>&gt;(<span class="string">&#x27;foo&#x27;</span>) <span class="comment">// foo&#x27;s type: Ref&lt;string | number&gt;</span></span><br><span class="line"></span><br><span class="line">foo.<span class="property">value</span> = <span class="number">123</span> <span class="comment">// ok!</span></span><br><span class="line"><span class="comment">// 下面也可以，ts不会出现错误</span></span><br><span class="line">foo.<span class="property">value</span> = <span class="string">&#x27;123&#x27;</span> <span class="comment">// ok!</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="computed"><a href="#computed" class="headerlink" title="computed"></a><code>computed</code></h2><p>Takes a getter function and returns an immutable reactive ref object for the returned value from the getter.</p>
+<p>接收一个getter函数，为这个getter的返回值创建一个可变的响应式ref对象，返回这个响应式ref对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">const</span> plusOne = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> count.<span class="property">value</span> + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(plusOne.<span class="property">value</span>) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line">plusOne.<span class="property">value</span>++ <span class="comment">// error 错误，原因没有setter函数</span></span><br></pre></td></tr></table></figure>
+
+<p>Alternatively, it can take an object with <code>get</code> and <code>set</code> functions to create a writable ref object.</p>
+<p>或者，可以接收<code>get</code>和<code>set</code>函数组成的对象来创建一个可写的ref对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">1</span>)</span><br><span class="line"><span class="keyword">const</span> plusOne = <span class="title function_">computed</span>(&#123;</span><br><span class="line">  <span class="attr">get</span>: <span class="function">() =&gt;</span> count.<span class="property">value</span> + <span class="number">1</span>,</span><br><span class="line">  <span class="attr">set</span>: <span class="function"><span class="params">val</span> =&gt;</span> &#123;</span><br><span class="line">    count.<span class="property">value</span> = val - <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">plusOne.<span class="property">value</span> = <span class="number">1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Typing（类型）</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// read-only</span></span><br><span class="line"><span class="comment">// 只读</span></span><br><span class="line"><span class="keyword">function</span> computed&lt;T&gt;(<span class="attr">getter</span>: <span class="function">() =&gt;</span> T): <span class="title class_">Readonly</span>&lt;<span class="title class_">Ref</span>&lt;<span class="title class_">Readonly</span>&lt;T&gt;&gt;&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment">// writable</span></span><br><span class="line"><span class="comment">// 可写</span></span><br><span class="line"><span class="keyword">function</span> computed&lt;T&gt;(<span class="attr">options</span>: &#123;</span><br><span class="line">  <span class="attr">get</span>: <span class="function">() =&gt;</span> T</span><br><span class="line">  <span class="attr">set</span>: <span class="function">(<span class="params"><span class="attr">value</span>: T</span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">&#125;): <span class="title class_">Ref</span>&lt;T&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="readonly"><a href="#readonly" class="headerlink" title="readonly"></a><code>readonly</code></h2><p>Takes an object (reactive or plain) or a ref and returns a readonly proxy to the original. A readonly proxy is deep: any nested property accessed will be readonly as well.</p>
+<p>接收一个对象（响应式对象或者普通的对象）或者一个ref对象，返回一个原始对象（即传入的对象）的只读的代理对象。一个只读的代理对象为深层次的，使用任何嵌套的属性都将设为只读。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> original = <span class="title function_">reactive</span>(&#123; <span class="attr">count</span>: <span class="number">0</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> copy = <span class="title function_">readonly</span>(original)</span><br><span class="line"></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// works for reactivity tracking</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(copy.<span class="property">count</span>)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating original will trigger watchers relying on the copy</span></span><br><span class="line">original.<span class="property">count</span>++</span><br><span class="line"></span><br><span class="line"><span class="comment">// mutating the copy will fail and result in a warning</span></span><br><span class="line">copy.<span class="property">count</span>++ <span class="comment">// warning!</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="watchEffect"><a href="#watchEffect" class="headerlink" title="watchEffect"></a><code>watchEffect</code></h2><p>Run a function immediately while reactively tracking its dependencies, and re-run it whenever the dependencies have changed.</p>
+<p>立即执行一个函数来响应式地追踪依赖，每当依赖变化时重新执行。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>))</span><br><span class="line"><span class="comment">// -&gt; logs 0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  count.<span class="property">value</span>++</span><br><span class="line">  <span class="comment">// -&gt; logs 1</span></span><br><span class="line">&#125;, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Stopping-the-Watcher-（停止观察者）"><a href="#Stopping-the-Watcher-（停止观察者）" class="headerlink" title="Stopping the Watcher （停止观察者）"></a>Stopping the Watcher （停止观察者）</h3><p>When <code>watchEffect</code> is called during a component’s <code>setup()</code> function or lifecycle hooks, the watcher is linked to the component’s lifecycle, and will be automatically stopped when the component is unmounted.</p>
+<p>当<code>watchEffect</code>在一个组件的setup中或者生命周期的钩子中调用时，这个观察者会连接到组件的生命周期，会在组件卸载时自动地停止。</p>
+<p>In other cases, it returns a stop handle which can be called to explicitly stop the watcher:</p>
+<p>在其他情况下，它会返回一个用于停止的处理程序，这个处理程序可以被调用来显示地停止这个观察者。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> stop = <span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// later</span></span><br><span class="line"><span class="title function_">stop</span>()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Side-Effect-Invalidation-（副作用失效）"><a href="#Side-Effect-Invalidation-（副作用失效）" class="headerlink" title="Side Effect Invalidation （副作用失效）"></a>Side Effect Invalidation （副作用失效）</h3><p>Sometimes the watched effect function will perform async side effects that need to be cleaned up when it is invalidated (i.e state changed before the effects can be completed). The effect function receives an <code>onInvalidate</code> function that can be used to register a invalidation callback. The invalidation callback is called when:</p>
+<p>有时候被观察的effect函数会表现出异步的副作用，这个副作用需要在它失效时被清理（即在effects函数之前完成之前state已经改变）。effect函数接收一个<code>onInvalidate</code>函数，这个函数可以注册一个失效的回调。这个失效的回调将在以下情况被调用：</p>
+<ul>
+<li><p>the effect is about to re-run</p>
+<p>effect即将重新执行</p>
+</li>
+<li><p>the watcher is stopped (i.e. when the component is unmounted if <code>watchEffect</code> is used inside <code>setup()</code> or lifecycle hooks)</p>
+<p>观察者已经停止（即如果<code>watchEffect</code>在<code>setup()</code>函数或者生命周期钩子中使用，组件被卸载时）</p>
+</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">watchEffect</span>(<span class="function"><span class="params">onInvalidate</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> token = <span class="title function_">performAsyncOperation</span>(id.<span class="property">value</span>)</span><br><span class="line">  <span class="title function_">onInvalidate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// id has changed or watcher is stopped.</span></span><br><span class="line">    <span class="comment">// invalidate previously pending async operation</span></span><br><span class="line">    token.<span class="title function_">cancel</span>()</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>We are registering the invalidation callback via a passed-in function instead of returning it from the callback (like React <code>useEffect</code>) because the return value is important for async error handling. It is very common for the effect function to be an async function when performing data fetching:</p>
+<p>我们通过一个传入的函数而不是从回调中返回这个函数来注册一个失效的回调（这里的从返回函数注册失效回调是react的做法），是因为对于异步的错误处理返回值是非常重要的。当执行数据获取时，effect函数作为一个异步的函数是普遍的：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> data = <span class="title function_">ref</span>(<span class="literal">null</span>)</span><br><span class="line"><span class="title function_">watchEffect</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  data.<span class="property">value</span> = <span class="keyword">await</span> <span class="title function_">fetchData</span>(props.<span class="property">id</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>An async function implicitly returns a Promise, but the cleanup function needs to be registered immediately before the Promise resolves. In addition, Vue relies on the returned Promise to automatically handle potential errors in the Promise chain.</p>
+<p>一个异步的函数会隐式地返回一个Promise，但是清理函数需要在Promise解决之前立即注册。此外，Vue依赖返回的Promise去自动地处理位于Promise链中潜在的错误。</p>
+<h3 id="Effect-Flush-Timing（Effect刷新的时间点）"><a href="#Effect-Flush-Timing（Effect刷新的时间点）" class="headerlink" title="Effect Flush Timing（Effect刷新的时间点）"></a>Effect Flush Timing（Effect刷新的时间点）</h3><p>Vue’s reactivity system buffers invalidated effects and flush them asynchronously to avoid unnecessary duplicate invocation when there are many state mutations happening in the same “tick”. Internally, a component’s update function is also a watched effect. When a user effect is queued, it is always invoked after all component update effects:</p>
+<p>Vue的响应式系统缓冲失效的effects，当有多个状态变化发生在同一个”tick”中异步地刷新它们来避免不必要重复的调用。在内部，一个组件的更新函数也是一个被观察的effect。当一个用户的effect进入队列时，它总是会在组件的所有更新effects之后执行：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">      <span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>)</span></span><br><span class="line"><span class="language-javascript">      &#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">      <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        count</span></span><br><span class="line"><span class="language-javascript">      &#125;</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>In this example:</p>
+<p>在这个例子中：</p>
+<ul>
+<li><p>The <code>count</code> will be logged synchronously on initial run.</p>
+<p><code>count</code>变量会在初始执行时同步地打印。</p>
+</li>
+<li><p>When <code>count</code> is mutated, the callback will be called after the component has updated.</p>
+<p>当<code>count</code>被改变时，回调会在组件被更新之后调用。</p>
+</li>
+</ul>
+<p>Note the first run is executed before the component is mounted. So if you wish to access the DOM (or template refs) in a watched effect, do it in the mounted hook:</p>
+<p>注意第一次run在组件被挂载之前执行。所以如果你想在一个观察的effect中获取DOM（或者模板的refs）时，可以在<code>onMounted</code>这个钩子中调用<code>watchEffect</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title function_">watchEffect</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// access the DOM or template refs</span></span><br><span class="line">  &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>In cases where a watcher effect needs to be re-run synchronously or before component updates, we can pass an additional options object with the <code>flush</code> option (default is <code>&amp;#39;post&amp;#39;</code>):</p>
+<p>某些情况下一个观察的effect需要同步的或者在组件更新之前重新执行，可以传入一个带有<code>flush</code>参数的额外的参数对象（<code>flush</code>默认的值为<code>&amp;#39;post&amp;#39;&amp;#39;</code>）</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fire synchronously</span></span><br><span class="line"><span class="title function_">watchEffect</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">flush</span>: <span class="string">&#x27;sync&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// fire before component updates</span></span><br><span class="line"><span class="title function_">watchEffect</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">flush</span>: <span class="string">&#x27;pre&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Watcher-Debugging（观察者调试）"><a href="#Watcher-Debugging（观察者调试）" class="headerlink" title="Watcher Debugging（观察者调试）"></a>Watcher Debugging（观察者调试）</h3><p>The <code>onTrack</code> and <code>onTrigger</code> options can be used to debug a watcher’s behavior.</p>
+<p>使用<code>onTrack</code>和<code>onTrigger</code>参数可以调试一个观察者的行为。</p>
+<ul>
+<li><p><code>onTrack</code> will be called when a reactive property or ref is tracked as a dependency</p>
+<p><code>onTrack</code>将会在当响应式属性或者ref对象作为一个依赖被收集时被调用</p>
+</li>
+<li><p><code>onTrigger</code> will be called when the watcher callback is triggered by the mutation of a dependency</p>
+<p><code>onTrigger</code>将会在当观察者回调在一个依赖改变时触发时被调用。</p>
+</li>
+</ul>
+<p>Both callbacks will receive a debugger event which contains information on the dependency in question. It is recommended to place a <code>debugger</code> statement in these callbacks to interactively inspect the dependency:</p>
+<p>两个回调函数都会接收一个包含相关依赖信息的debugge事件。推荐书写一条<code>debugger</code>语句在这些回调中来互动式地检查这些依赖：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">watchEffect</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* side effect */</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="title function_">onTrigger</span>(<span class="params">e</span>) &#123;</span><br><span class="line">      <span class="keyword">debugger</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>onTrack</code> and <code>onTrigger</code> only works in development mode.</p>
+<p><code>onTrack</code>和<code>onTrigger</code>只能工作在开发模式下。</p>
+<ul>
+<li>Typing（类型）</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">watchEffect</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">effect</span>: (onInvalidate: InvalidateCbRegistrator) =&gt; <span class="built_in">void</span>,</span></span><br><span class="line"><span class="params">  options?: <span class="title class_">WatchEffectOptions</span></span></span><br><span class="line"><span class="params"></span>): <span class="title class_">StopHandle</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">WatchEffectOptions</span> &#123;</span><br><span class="line">  flush?: <span class="string">&#x27;pre&#x27;</span> | <span class="string">&#x27;post&#x27;</span> | <span class="string">&#x27;sync&#x27;</span></span><br><span class="line">  onTrack?: <span class="function">(<span class="params"><span class="attr">event</span>: <span class="title class_">DebuggerEvent</span></span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">  onTrigger?: <span class="function">(<span class="params"><span class="attr">event</span>: <span class="title class_">DebuggerEvent</span></span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">DebuggerEvent</span> &#123;</span><br><span class="line">  <span class="attr">effect</span>: <span class="title class_">ReactiveEffect</span></span><br><span class="line">  <span class="attr">target</span>: <span class="built_in">any</span></span><br><span class="line">  <span class="attr">type</span>: <span class="title class_">OperationTypes</span></span><br><span class="line">  <span class="attr">key</span>: <span class="built_in">string</span> | <span class="built_in">symbol</span> | <span class="literal">undefined</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">InvalidateCbRegistrator</span> = <span class="function">(<span class="params"><span class="attr">invalidate</span>: () =&gt; <span class="built_in">void</span></span>) =&gt;</span> <span class="built_in">void</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">StopHandle</span> = <span class="function">() =&gt;</span> <span class="built_in">void</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="watch"><a href="#watch" class="headerlink" title="watch"></a><code>watch</code></h2><p>The <code>watch</code> API is the exact equivalent of the 2.x <code>this.$watch</code> (and the corresponding <code>watch</code> option). <code>watch</code> requires watching a specific data source, and applies side effects in a separate callback function. It also is lazy by default - i.e. the callback is only called when the watched source has changed.</p>
+<p><code>watch</code>这个API和2.x版本的<code>this.$watch</code>准确的相等（和相应的<code>watch</code>参数）。<code>watch</code>需要观察一个具体的数据源，并在一个分离的回调函数中执行副作用。它也是默认惰性的 - 即回调只有在观察的源被改变时才会执行。</p>
+<ul>
+<li><p>Compared to <code>watchEffect</code>, <code>watch</code> allows us to:</p>
+<p>和<code>watchEffect</code>比较，<code>watch</code>允许我们：</p>
+<pre><code>*   Perform the side effect lazily;
+</code></pre>
+<p>惰性地执行一个副作用的effect；</p>
+<pre><code>*   Be more specific about what state should trigger the watcher to re-run;
+</code></pre>
+<p>在哪一个状态应该触发观察者去重新执行这个方面更加的具体；</p>
+<pre><code>*   Access both the previous and current value of the watched state.
+</code></pre>
+<p>可以获取观察状态的前一个值和当前值。</p>
+</li>
+<li><p>Watching a Single Source</p>
+<p>观察一个单独的源</p>
+<p>A watcher data source can either be a getter function that returns a value, or directly a ref:</p>
+<p>一个观察者的数据源可以是返回一个值的getter函数，或者时直接一个ref对象：</p>
+</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// watching a getter</span></span><br><span class="line"><span class="keyword">const</span> state = <span class="title function_">reactive</span>(&#123; <span class="attr">count</span>: <span class="number">0</span> &#125;)</span><br><span class="line"><span class="title function_">watch</span>(</span><br><span class="line">  <span class="function">() =&gt;</span> state.<span class="property">count</span>,</span><br><span class="line">  <span class="function">(<span class="params">count, prevCount</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">  &#125;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// directly watching a ref</span></span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="title function_">watch</span>(count, <span class="function">(<span class="params">count, prevCount</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Watching Multiple Sources</p>
+<p>观察多个源</p>
+<p>A watcher can also watch multiple sources at the same time using an Array:</p>
+<p>一个观察者也可以使用数组在同一时间观察多个源：</p>
+</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">watch</span>([fooRef, barRef], <span class="function">(<span class="params">[foo, bar], [prevFoo, prevBar]</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Shared Behavior with <code>watchEffect</code></p>
+<p>和<code>watchEffect</code>共享的行为</p>
+<p><code>watch</code> shares behavior with <code>watchEffect</code> in terms of <a href>manual stoppage</a>, <a href>side effect invalidation</a> (with <code>onInvalidate</code> passed to the callback as the 3rd argument instead), <a href>flush timing</a> and <a href>debugging</a>.</p>
+<p><code>watch</code>就手动停止，副作用失效回调（<code>onInvalidate</code>作为回调函数的第三个参数传递进来），刷新时间点和调试方面来说具有共享的行为。</p>
+</li>
+<li><p>Typing（类型）</p>
+</li>
+</ul>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wacthing single source</span></span><br><span class="line"><span class="keyword">function</span> watch&lt;T&gt;(</span><br><span class="line">  <span class="attr">source</span>: <span class="title class_">WatcherSource</span>&lt;T&gt;,</span><br><span class="line">  <span class="attr">callback</span>: <span class="function">(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">value</span>: T,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">oldValue</span>: T,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">onInvalidate</span>: <span class="title class_">InvalidateCbRegistrator</span></span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) =&gt;</span> <span class="built_in">void</span>,</span><br><span class="line">  options?: <span class="title class_">WatchOptions</span></span><br><span class="line">): <span class="title class_">StopHandle</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// watching multiple sources</span></span><br><span class="line"><span class="keyword">function</span> watch&lt;T <span class="keyword">extends</span> <span class="title class_">WatcherSource</span>&lt;<span class="built_in">unknown</span>&gt;[]&gt;(</span><br><span class="line">  <span class="attr">sources</span>: T</span><br><span class="line">  <span class="attr">callback</span>: <span class="function">(<span class="params"></span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">values</span>: <span class="title class_">MapSources</span>&lt;T&gt;,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">oldValues</span>: <span class="title class_">MapSources</span>&lt;T&gt;,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="attr">onInvalidate</span>: <span class="title class_">InvalidateCbRegistrator</span></span></span></span><br><span class="line"><span class="params"><span class="function">  </span>) =&gt;</span> <span class="built_in">void</span>,</span><br><span class="line">  options? : <span class="title class_">WatchOptions</span></span><br><span class="line">): <span class="title class_">StopHandle</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">WatcherSource</span>&lt;T&gt; = <span class="title class_">Ref</span>&lt;T&gt; | (<span class="function">() =&gt;</span> T)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">MapSources</span>&lt;T&gt; = &#123;</span><br><span class="line">  [K <span class="keyword">in</span> keyof T]: T[K] <span class="keyword">extends</span> <span class="title class_">WatcherSource</span>&lt;infer V&gt; ? V : <span class="built_in">never</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// see `watchEffect` typing for shared options</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">WatchOptions</span> <span class="keyword">extends</span> <span class="title class_">WatchEffectOptions</span> &#123;</span><br><span class="line">  immediate?: <span class="built_in">boolean</span> <span class="comment">// default: false</span></span><br><span class="line">  deep?: <span class="built_in">boolean</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>终于翻译完了，有疑问的地方是我在reactivity这个包中没有看见<code>watch</code>和<code>watchEffect</code>这两个API，不过看到了应该是它们两个的基础的<code>effect</code>API，这阵子也在看这个包的源码，也是看懂了一些。</p>
+<p>真的是很奇怪，明明每一行代码基本看得懂，但是连在一起就是一头雾水…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a7ffec850800" title="Vue3.0的Reactivity-APIs（译）">https://prohibitorum.top/a7ffec850800</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/c77fd97768be" rel="prev" title="Vue3.0尝鲜体验">
+                  <i class="fa fa-angle-left"></i> Vue3.0尝鲜体验
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/f070f73fd85c" rel="next" title="Vue3.0Reactivity之reactive">
+                  Vue3.0Reactivity之reactive <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591930658"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言vueuse&#x2F;core 中有 useElementVisibility 以及 useIntersectionObserver 这两个 API 。 刚好可以写写关于图片懒加载的一些实现方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何懒加载图片">
+<meta property="og:url" content="https://prohibitorum.top/1f077da7591b">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言vueuse&#x2F;core 中有 useElementVisibility 以及 useIntersectionObserver 这两个 API 。 刚好可以写写关于图片懒加载的一些实现方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062258499.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062300356.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062328306.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/07/202203070946642.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081158957.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081621412.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091005866.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091010470.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081717560.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091017411.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091023313.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091027183.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081824246.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091053471.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091059499.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091102664.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091451387.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091453045.avif">
+<meta property="article:published_time" content="2022-03-06T22:42:18.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="VueUse">
+<meta property="article:tag" content="Lazy Load Image">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062258499.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/1f077da7591b.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/1f077da7591b","path":"1f077da7591b.html","title":"如何懒加载图片"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何懒加载图片 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.1.</span> <span class="nav-text">什么是图片懒加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%9B%BE%E7%89%87%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.2.</span> <span class="nav-text">为什么要图片懒加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%87%92%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.3.</span> <span class="nav-text">如何实现懒加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E7%9B%91%E5%90%AC-scroll-%E4%BA%8B%E4%BB%B6%E6%9D%A5%E5%88%A4%E6%96%AD%E5%9B%BE%E7%89%87%E6%98%AF%E5%90%A6%E5%9C%A8%E5%8F%AF%E8%A7%86%E5%8C%BA%E5%9F%9F"><span class="nav-number">2.3.1.</span> <span class="nav-text">通过监听 scroll 事件来判断图片是否在可视区域</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87-IntersectionObserver-%E6%9D%A5%E8%A7%82%E5%AF%9F%E5%9B%BE%E7%89%87%E6%98%AF%E5%90%A6%E5%9C%A8%E5%8F%AF%E8%A7%86%E5%8C%BA%E5%9F%9F"><span class="nav-number">2.3.2.</span> <span class="nav-text">通过 IntersectionObserver 来观察图片是否在可视区域</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%99%E4%B8%A4%E7%A7%8D%E6%87%92%E5%8A%A0%E8%BD%BD%E6%96%B9%E6%B3%95%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.4.</span> <span class="nav-text">这两种懒加载方法的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-number">2.4.1.</span> <span class="nav-text">兼容性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD"><span class="nav-number">2.4.2.</span> <span class="nav-text">性能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/1f077da7591b">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何懒加载图片 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何懒加载图片
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-03-06 22:42:18" itemprop="dateCreated datePublished" datetime="2022-03-06T22:42:18+00:00">2022-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>13 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>vueuse/core</code> 中有 <code>useElementVisibility</code> 以及 <code>useIntersectionObserver</code> 这两个 <code>API</code> 。</p>
+<p>刚好可以写写关于图片懒加载的一些实现方法。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="什么是图片懒加载"><a href="#什么是图片懒加载" class="headerlink" title="什么是图片懒加载"></a>什么是图片懒加载</h2><p>可以简单的理解为只有图片在第一次进入用户可视范围时进行加载的一个技术。</p>
+<h2 id="为什么要图片懒加载"><a href="#为什么要图片懒加载" class="headerlink" title="为什么要图片懒加载"></a>为什么要图片懒加载</h2><p>对于比较小型的网站，对于首页的图片资源，大部分情况下都是直接加载的。</p>
+<p>但是当网站首页变复杂，比如超多的展示图的时候，不在用户可视区域的部分的图片其实是可以不去加载的。</p>
+<p>因为这些图片对用户来说不可感知，完全可以在进入用户可视区域之后再发出请求进行加载。</p>
+<p>这就是我们常说的图片懒加载，比如视频网站 <code>Bilibili</code> 。</p>
+<p><code>B</code> 站的首页对于每一个分区都会展示一部分的视频推荐。</p>
+<p>这些视频都会有一张封面，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062258499.avif"></p>
+<p>这一个分区就有 <code>12</code> 张封面图了，而 <code>B</code> 站的分区类型是非常多的，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062300356.avif"></p>
+<p>如果直接展示，即使再怎么去压缩图片质量，图片的加载也是要耗费一定的流量的，而这些图片的加载是完全没必要的。</p>
+<p>因为可能用户就只是打开首页，然后点击进入个人中心，或者直接点击搜索框进行视频搜索。</p>
+<p>至少对于我来说是这样的，我个人很少下拉去查看各个分区的视频。</p>
+<p>所以懒加载这些不在可视区域的图片是非常有必要的。</p>
+<p>一方面，如果是个人网站，没使用 <code>CDN</code> 的话，可以减轻服务器的压力，这样单位时间内服务器可以对更多的用户服务，如果走 <code>CDN</code> 的话，可以减少流量消耗，毕竟走 <code>CDN</code> 的钱也不是大风刮来的，能扣就扣，你说是吧。</p>
+<p>另一方面，可以加快网页的访问速度，现在大部分的网站都还是使用 <code>HTTP/1.1</code> ，而 <code>HTTP/1.1</code> 虽然支持长连接以及 <code>TCP</code> 连接复用，但是依然受限于 <code>TCP</code> 数量的限制，同时请求多个图片，可能把 <code>TCP</code> 连接给占满了，可能会影响后续 <code>js</code> 文件的请求，导致网页无法正常地对用户的操作进行响应。</p>
+<p>而 <code>HTTP/2</code> 很好地解决了 <code>TCP</code> 连接数受限的问题，不过这个不是本文的重点。</p>
+<p><a target="_blank" rel="noopener" href="https://http2.akamai.com/demo">戳这里查看 HTTP&#x2F;2 和 HTTP&#x2F;1.1 的图片加载速度测试 DEMO</a></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/06/202203062328306.avif"></p>
+<p>当然，现在 <code>B</code> 站的图片基本上都是 <code>HTTP/2</code> 的了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/07/202203070946642.avif"></p>
+<h2 id="如何实现懒加载"><a href="#如何实现懒加载" class="headerlink" title="如何实现懒加载"></a>如何实现懒加载</h2><p>根据前面的解释，基本上我们的思路就有了。</p>
+<p>在不可视区域的图片都使用一张占位图，这样除首屏可视图片之外的图片吗，就只要请求一个图片即可。</p>
+<p>在用户滚动的时候，不断的判断页面上的 <code>img</code> 是否出现在用户的可视区域中。</p>
+<p>如果到达了用户的可视区域，那么把 <code>img</code> 的 <code>src</code> 切换为真实的图片地址，然后浏览器就会自动的请求图片了。</p>
+<p>当然已经经过加载的图片，再次经过用户的可视区域的时候，就不应该在执行切换 <code>src</code> 的逻辑了，因为这已经没有意义了。</p>
+<p>经过这段分析，我们可以得出第一种方式。</p>
+<p>PS：这里我们都使用 <code>Vue</code> 组件的方式来编写代码。</p>
+<h3 id="通过监听-scroll-事件来判断图片是否在可视区域"><a href="#通过监听-scroll-事件来判断图片是否在可视区域" class="headerlink" title="通过监听 scroll 事件来判断图片是否在可视区域"></a>通过监听 <code>scroll</code> 事件来判断图片是否在可视区域</h3><p>首先我们需要确认这个 <code>Vue</code> 组件需要什么 <code>props</code>。</p>
+<p>首先必须有一个真实的图片地址。</p>
+<p>其次由于我们使用占位图片来减少图片请求，所以需要另一张占位图片的地址。</p>
+<p>在真实图片访问失败之后，需要一张表示错误的占位图片来展示，所以还需要一张表示加载错误的占位图片地址。</p>
+<p>这样子，我们就可以写出 <code>props</code> 的结构了。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> props = defineProps&lt;&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">src</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">defaultSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">errorSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">&#125;&gt;();</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于组件的方式，就一个 <code>img</code> ，简单。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里需要绑定 <code>img</code> 的 <code>src</code> ，这里初始化一个 <code>currentSrc</code> 的 <code>ref</code> 。</p>
+<p>以及需要一个 <code>ref</code> 来拿到 <code>img</code> 这个元素。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> currentSrc = ref&lt;string&gt;(<span class="string">&#x27;&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> imgRef = ref&lt;<span class="title class_">HTMLImageElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">ref</span>=<span class="string">&quot;imgRef&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">:src</span>=<span class="string">&quot;currentSrc&quot;</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在加载目标图片出现错误的时候启用错误图片的地址。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 添加一个加载错误的回调</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onError</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">errorSrc</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">ref</span>=<span class="string">&quot;imgRef&quot;</span> </span></span><br><span class="line"><span class="tag">    <span class="attr">:src</span>=<span class="string">&quot;currentSrc&quot;</span></span></span><br><span class="line"><span class="tag">    @<span class="attr">error</span>=<span class="string">&quot;onError&quot;</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>默认情况下由于图片不可视，所以要启用默认的占位图片。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 启用默认的占位图片</span></span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">defaultSrc</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接着就是主要的 <code>onScroll</code> 回调的编写了。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// ...</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onScroll</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> rect = imgRef.<span class="property">value</span>!.<span class="title function_">getBoundingClientRect</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> &#123; top, left &#125; = rect;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 这里不仅判断了 top ，也判断了 left ，这样可以在横向滚动的时候也适用</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (top &lt; <span class="variable language_">window</span>.<span class="property">innerHeight</span> &amp;&amp; left &lt; <span class="variable language_">window</span>.<span class="property">innerWidth</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    currentSrc.<span class="property">value</span> = props.<span class="property">src</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// ...</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 执行一次判断，不然已经在可视区域内的图片指向了 defaultSrc ，而不是 src</span></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">onScroll</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 监听</span></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;scroll&quot;</span>, onScroll);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onBeforeUnmount</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 取消监听</span></span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="title function_">removeEventListener</span>(<span class="string">&quot;scroll&quot;</span>, onScroll);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里放下完整的代码。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onBeforeUnmount, onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> props = defineProps&lt;&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">src</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">defaultSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">errorSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">&#125;&gt;();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> currentSrc = ref&lt;string&gt;(<span class="string">&quot;&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> imgRef = ref&lt;<span class="title class_">HTMLImageElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onError</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">errorSrc</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onScroll</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> rect = imgRef.<span class="property">value</span>!.<span class="title function_">getBoundingClientRect</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> &#123; top, left &#125; = rect;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (top &lt; <span class="variable language_">window</span>.<span class="property">innerHeight</span> &amp;&amp; left &lt; <span class="variable language_">window</span>.<span class="property">innerWidth</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    currentSrc.<span class="property">value</span> = props.<span class="property">src</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">defaultSrc</span>;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">onScroll</span>();</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;scroll&quot;</span>, onScroll);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onBeforeUnmount</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="variable language_">window</span>.<span class="title function_">removeEventListener</span>(<span class="string">&quot;scroll&quot;</span>, onScroll);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ref</span>=<span class="string">&quot;imgRef&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:src</span>=<span class="string">&quot;currentSrc&quot;</span></span></span><br><span class="line"><span class="tag">    @<span class="attr">error</span>=<span class="string">&quot;currentSrc === errorSrc ?? onError&quot;</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://sfc.vuejs.org/#eyJBcHAudnVlIjoiPHNjcmlwdCBzZXR1cD5cbmltcG9ydCBMYXp5SW1hZ2UgZnJvbSAnLi9MYXp5SW1hZ2UudnVlJztcbjwvc2NyaXB0PlxuXG48dGVtcGxhdGU+XG4gIDxkaXY+XG4gICAgPExhenlJbWFnZSBcbiAgICAgIHNyYz1cImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9naC9EZWRpY2F0dXM1NDYvaW1hZ2VAbWFpbi8yMDIyMDEyMjE3MzU0NTkuYXZpZlwiIFxuICAgICAgZGVmYXVsdFNyYz1cImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9naC9EZWRpY2F0dXM1NDYvaW1hZ2VAbWFpbi8yMDIyMDMwODE1Mzc0NDMuYXZpZlwiIFxuICAgICAgZXJyb3JTcmM9XCJcIlxuICAgICAgc3R5bGU9XCJ3aWR0aDogMTAwcHg7IG1hcmdpbi10b3A6IDEwMDBweFwiXG4gICAgPlxuICAgIDwvTGF6eUltYWdlPlxuICA8L2Rpdj5cbjwvdGVtcGxhdGU+IiwiaW1wb3J0LW1hcC5qc29uIjoie1xuICBcImltcG9ydHNcIjoge1xuICAgIFwidnVlXCI6IFwiaHR0cHM6Ly9zZmMudnVlanMub3JnL3Z1ZS5ydW50aW1lLmVzbS1icm93c2VyLmpzXCJcbiAgfVxufSIsIkxhenlJbWFnZS52dWUiOiI8c2NyaXB0IHNldHVwPlxuaW1wb3J0IHtyZWYsb25Nb3VudGVkLG9uQmVmb3JlVW5tb3VudH0gZnJvbSAndnVlJztcbiAgXG5jb25zdCBwcm9wcyA9IGRlZmluZVByb3BzKHtcbiAgc3JjOiBTdHJpbmcsXG4gIGRlZmF1bHRTcmM6IFN0cmluZyxcbiAgZXJyb3JTcmM6IFN0cmluZyxcbn0pO1xuXG5jb25zdCBpbWdSZWYgPSByZWYobnVsbCk7XG5jb25zdCBjdXJyZW50U3JjID0gcmVmKCcnKTtcbiAgXG5jb25zdCBvbkVycm9yID0gKCkgPT4ge1xuICBjdXJyZW50U3JjLnZhbHVlID0gcHJvcHMuZXJyb3JTcmM7XG59XG5cbmNvbnN0IG9uU2Nyb2xsID0gKCkgPT4ge1xuICBjb25zdCByZWN0ID0gaW1nUmVmLnZhbHVlLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpO1xuICBjb25zdCB7IHRvcCwgbGVmdCB9ID0gcmVjdDtcbiAgaWYgKHRvcCA8IHdpbmRvdy5pbm5lckhlaWdodCAmJiBsZWZ0IDwgd2luZG93LmlubmVyV2lkdGgpIHtcbiAgICBjdXJyZW50U3JjLnZhbHVlID0gcHJvcHMuc3JjO1xuICB9XG59XG5cbm9uTW91bnRlZCgoKSA9PiB7XG4gIGN1cnJlbnRTcmMudmFsdWUgPSBwcm9wcy5kZWZhdWx0U3JjO1xuICBvblNjcm9sbCgpO1xuICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignc2Nyb2xsJywgb25TY3JvbGwpO1xufSk7XG4gIFxub25CZWZvcmVVbm1vdW50KCgpID0+IHtcbiAgd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoJ3Njcm9sbCcsIG9uU2Nyb2xsKTtcbn0pO1xuPC9zY3JpcHQ+XG5cbjx0ZW1wbGF0ZT5cbiAgPGltZyBcbiAgICByZWY9XCJpbWdSZWZcIlxuICAgIDpzcmM9XCJjdXJyZW50U3JjXCJcbiAgICBAZXJyb3I9XCJvbkVycm9yXCJcbiAgLz5cbjwvdGVtcGxhdGU+In0=">戳这里查看 demo</a></p>
+<p>可以看到，这里的核心的 <code>API</code> 为 <code>getBoundingClientRect</code> ，它能够获取元素当前的大小及其相对于视口的位置。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Element/getBoundingClientRect">Element.getBoundingClientRect() - MDN</a></p>
+</blockquote>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081158957.avif"></p>
+<p>返回的 <code>top</code> ， <code>bottom</code> ， <code>left</code> ， <code>right</code> 这四个属性代表的意义如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081621412.avif"></p>
+<p>这里要注意 <code>onMounted</code> 里面执行一次 <code>onScroll</code> ，原因是，如果我们不在 <code>onMounted</code> 里面执行一次 <code>onScroll</code> 的话，就会出现图片指向了默认图片，然后一滑动就指向真正的图片了。</p>
+<p><a target="_blank" rel="noopener" href="https://sfc.vuejs.org/#eyJBcHAudnVlIjoiPHNjcmlwdCBzZXR1cD5cbmltcG9ydCBMYXp5SW1hZ2UgZnJvbSAnLi9MYXp5SW1hZ2UudnVlJztcbjwvc2NyaXB0PlxuXG48dGVtcGxhdGU+XG4gIOeojeW+ruW+gOS4i+a7muWKqFxuICA8ZGl2IHN0eWxlPVwiaGVpZ2h0OiAxMDAwcHhcIj5cbiAgICA8TGF6eUltYWdlIFxuICAgICAgc3JjPVwiaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L2doL0RlZGljYXR1czU0Ni9pbWFnZUBtYWluLzIwMjIwMTIyMTczNTQ1OS5hdmlmXCIgXG4gICAgICBkZWZhdWx0U3JjPVwiaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L2doL0RlZGljYXR1czU0Ni9pbWFnZUBtYWluLzIwMjIwMzA4MTUzNzQ0My5hdmlmXCIgXG4gICAgICBlcnJvclNyYz1cIlwiXG4gICAgICBzdHlsZT1cIndpZHRoOiAxMDBweFwiXG4gICAgPlxuICAgIDwvTGF6eUltYWdlPlxuICA8L2Rpdj5cbjwvdGVtcGxhdGU+IiwiaW1wb3J0LW1hcC5qc29uIjoie1xuICBcImltcG9ydHNcIjoge1xuICAgIFwidnVlXCI6IFwiaHR0cHM6Ly9zZmMudnVlanMub3JnL3Z1ZS5ydW50aW1lLmVzbS1icm93c2VyLmpzXCJcbiAgfVxufSIsIkxhenlJbWFnZS52dWUiOiI8c2NyaXB0IHNldHVwPlxuaW1wb3J0IHtyZWYsb25Nb3VudGVkLG9uQmVmb3JlVW5tb3VudH0gZnJvbSAndnVlJztcbiAgXG5jb25zdCBwcm9wcyA9IGRlZmluZVByb3BzKHtcbiAgc3JjOiBTdHJpbmcsXG4gIGRlZmF1bHRTcmM6IFN0cmluZyxcbiAgZXJyb3JTcmM6IFN0cmluZyxcbn0pO1xuXG5jb25zdCBpbWdSZWYgPSByZWYobnVsbCk7XG5jb25zdCBjdXJyZW50U3JjID0gcmVmKCcnKTtcbiAgXG5jb25zdCBvbkVycm9yID0gKCkgPT4ge1xuICBjdXJyZW50U3JjLnZhbHVlID0gcHJvcHMuZXJyb3JTcmM7XG59XG5cbmNvbnN0IG9uU2Nyb2xsID0gKCkgPT4ge1xuICBjb25zdCByZWN0ID0gaW1nUmVmLnZhbHVlLmdldEJvdW5kaW5nQ2xpZW50UmVjdCgpO1xuICBjb25zdCB7IHRvcCwgbGVmdCB9ID0gcmVjdDtcbiAgaWYgKHRvcCA8IHdpbmRvdy5pbm5lckhlaWdodCAmJiBsZWZ0IDwgd2luZG93LmlubmVyV2lkdGgpIHtcbiAgICBjdXJyZW50U3JjLnZhbHVlID0gcHJvcHMuc3JjO1xuICB9XG59XG5cbm9uTW91bnRlZCgoKSA9PiB7XG4gIGN1cnJlbnRTcmMudmFsdWUgPSBwcm9wcy5kZWZhdWx0U3JjO1xuICAvLyBvblNjcm9sbCgpO1xuICB3aW5kb3cuYWRkRXZlbnRMaXN0ZW5lcignc2Nyb2xsJywgb25TY3JvbGwpO1xufSk7XG4gIFxub25CZWZvcmVVbm1vdW50KCgpID0+IHtcbiAgd2luZG93LnJlbW92ZUV2ZW50TGlzdGVuZXIoJ3Njcm9sbCcsIG9uU2Nyb2xsKTtcbn0pO1xuPC9zY3JpcHQ+XG5cbjx0ZW1wbGF0ZT5cbiAgPGltZyBcbiAgICByZWY9XCJpbWdSZWZcIlxuICAgIDpzcmM9XCJjdXJyZW50U3JjXCJcbiAgICBAZXJyb3I9XCJvbkVycm9yXCJcbiAgLz5cbjwvdGVtcGxhdGU+In0=">戳这里查看 demo</a></p>
+<p>当然，我们这个代码还有一些瑕疵，比如当图片已经进入过一次可视区域进行加载之后， <code>scroll</code> 事件的绑定函数就应该取消掉了。</p>
+<p>也就是需要在 <code>onScroll</code> 的 <code>if</code> 条件内加上 <code>window.removeEventListner(&#39;scroll&#39;, onScroll)</code> 。</p>
+<p>以及我们现在对于 <code>if</code> 的判断是通过 <code>top</code> 和 <code>left</code> 来判定的。</p>
+<p>我们可以想象一下，如果刚好有这么一张图片，刚打开网页的时候不渲染（理解为 <code>v-if=&quot;false&quot;</code> ），往下拖动到这张图片进入不可视范围的时候，图片开始渲染。</p>
+<p>这时候我们肯定希望它指向默认的占位图片，但实际上它已经指向了真正的图片地址了。</p>
+<p>也就是说，我们不仅要判断 <code>top</code> 和 <code>left</code>， 也要判断 <code>right</code> 和 <code>bottom</code> 。</p>
+<p><code>top</code> 和 <code>left</code> 判断了元素从下方进入可视区域和从右方进入可视区域。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091005866.avif"></p>
+<p>而 <code>bottom</code> 和 <code>right</code> 判断了元素了从上方进入可视区域和从左方进入可视区域。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091010470.avif"></p>
+<p>这时候 <code>if</code> 判断就要修改为如下了：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rect = imgRef.<span class="property">value</span>!.<span class="title function_">getBoundingClientRect</span>();</span><br><span class="line"><span class="keyword">const</span> &#123; top, left, bottom, right &#125; = rect;</span><br><span class="line"><span class="keyword">if</span> (top &lt; <span class="variable language_">window</span>.<span class="property">innerHeight</span> &amp;&amp; left &lt; <span class="variable language_">window</span>.<span class="property">innerWidth</span> &amp;&amp; bottom &gt; <span class="number">0</span> &amp;&amp; right &gt; <span class="number">0</span>) &#123;</span><br><span class="line">  currentSrc.<span class="property">value</span> = props.<span class="property">src</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>vueuse/core</code> 中，正好为我们封装了这样的一个的函数 <code>useElementVisibility</code> 。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/vueuse/vueuse/blob/main/packages/core/useElementVisibility/index.ts">useElementVisibility - vueuse</a></p>
+</blockquote>
+<p>在源码中，我们也可以看到判断是否在可见区域的逻辑。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">elementIsVisible.<span class="property">value</span> = (</span><br><span class="line">  rect.<span class="property">top</span> &lt;= (<span class="variable language_">window</span>.<span class="property">innerHeight</span> || <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientHeight</span>) </span><br><span class="line">    &amp;&amp; rect.<span class="property">left</span> &lt;= (<span class="variable language_">window</span>.<span class="property">innerWidth</span> || <span class="variable language_">document</span>.<span class="property">documentElement</span>.<span class="property">clientWidth</span>)</span><br><span class="line">    &amp;&amp; rect.<span class="property">bottom</span> &gt;= <span class="number">0</span></span><br><span class="line">    &amp;&amp; rect.<span class="property">right</span> &gt;= <span class="number">0</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，和我们上面的逻辑基本一样。</p>
+<p>不过，我们发现存在 <code>window.innerHeight || document.documentElement.clientHeight</code> 这样的写法。</p>
+<p><code>window.innerHeight</code> 返回了浏览器窗口的视口高度，如果有水平滚动条，也包括滚动条高度。</p>
+<p><code>document.documentElement.clientHeight</code> 返回元素内部的高度，包含内边距，但不包括水平滚动条、边框和外边距。</p>
+<p>其中 <code>document.documentElement</code> 可以简单理解为 <code>html</code> 元素即可。</p>
+<p>看起来像是为了兼容 <code>IE</code> 的写法， 可是 <code>vue2</code> 已经不支持 <code>IE8</code> 及以下的版本了。</p>
+<p>查了下 <code>Can I Use</code> 发现 <code>innerWidth</code> 这个属性 <code>IE8</code> 以下不支持。</p>
+<p>似乎没有什么必要啊…难道是滚动条的问题吗？ emmm，不懂…</p>
+<h3 id="通过-IntersectionObserver-来观察图片是否在可视区域"><a href="#通过-IntersectionObserver-来观察图片是否在可视区域" class="headerlink" title="通过 IntersectionObserver 来观察图片是否在可视区域"></a>通过 <code>IntersectionObserver</code> 来观察图片是否在可视区域</h3><p><code>IntersectionObserver</code> 是一个构造器，可以通过创建该类型的对象，可以对元素进行异步地观察，当可见部分超过了预先设置的阈值之后，调用创建该对象时传入的回调函数。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserver">Intersection Observer - MDN</a></p>
+</blockquote>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081717560.avif"></p>
+<p>简单点理解就是浏览器原生实现了 <code>onScroll</code> 这个函数的逻辑。</p>
+<p>那么我们的代码就可以变为如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; onBeforeUnmount, onMounted, ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> props = defineProps&lt;&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">src</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">defaultSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">errorSrc</span>: string;</span></span><br><span class="line"><span class="language-javascript">&#125;&gt;();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> currentSrc = ref&lt;string&gt;(<span class="string">&quot;&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> imgRef = ref&lt;<span class="title class_">HTMLImageElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> <span class="attr">observer</span>: <span class="title class_">IntersectionObserver</span> | <span class="literal">null</span> = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">onError</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">errorSrc</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  currentSrc.<span class="property">value</span> = props.<span class="property">defaultSrc</span>;</span></span><br><span class="line"><span class="language-javascript">  observer = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="function">(<span class="params">[entry]</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      currentSrc.<span class="property">value</span> = props.<span class="property">src</span>;</span></span><br><span class="line"><span class="language-javascript">      observer!.<span class="title function_">unobserve</span>(imgRef.<span class="property">value</span>!)</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">  observer.<span class="title function_">observe</span>(imgRef.<span class="property">value</span>!);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onBeforeUnmount</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  observer!.<span class="title function_">unobserve</span>(imgRef.<span class="property">value</span>!);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">img</span></span></span><br><span class="line"><span class="tag">    <span class="attr">ref</span>=<span class="string">&quot;imgRef&quot;</span></span></span><br><span class="line"><span class="tag">    <span class="attr">:src</span>=<span class="string">&quot;currentSrc&quot;</span></span></span><br><span class="line"><span class="tag">    @<span class="attr">error</span>=<span class="string">&quot;currentSrc === errorSrc ?? onError&quot;</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>看起来相当的简单！</p>
+<p><a target="_blank" rel="noopener" href="https://sfc.vuejs.org/#eyJBcHAudnVlIjoiPHNjcmlwdCBzZXR1cD5cbmltcG9ydCBMYXp5SW1hZ2UgZnJvbSAnLi9MYXp5SW1hZ2UudnVlJztcbjwvc2NyaXB0PlxuXG48dGVtcGxhdGU+XG4gIDxkaXY+XG4gICAgPExhenlJbWFnZSBcbiAgICAgIHNyYz1cImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9naC9EZWRpY2F0dXM1NDYvaW1hZ2VAbWFpbi8yMDIyMDEyMjE3MzU0NTkuYXZpZlwiIFxuICAgICAgZGVmYXVsdFNyYz1cImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9naC9EZWRpY2F0dXM1NDYvaW1hZ2VAbWFpbi8yMDIyMDMwODE1Mzc0NDMuYXZpZlwiIFxuICAgICAgZXJyb3JTcmM9XCJcIlxuICAgICAgc3R5bGU9XCJ3aWR0aDogMTAwcHg7bWFyZ2luLXRvcDogMTAwMHB4XCJcbiAgICA+XG4gICAgPC9MYXp5SW1hZ2U+XG4gIDwvZGl2PlxuPC90ZW1wbGF0ZT4iLCJpbXBvcnQtbWFwLmpzb24iOiJ7XG4gIFwiaW1wb3J0c1wiOiB7XG4gICAgXCJ2dWVcIjogXCJodHRwczovL3NmYy52dWVqcy5vcmcvdnVlLnJ1bnRpbWUuZXNtLWJyb3dzZXIuanNcIlxuICB9XG59IiwiTGF6eUltYWdlLnZ1ZSI6IjxzY3JpcHQgc2V0dXA+XG5pbXBvcnQge3JlZixvbk1vdW50ZWQsb25CZWZvcmVVbm1vdW50fSBmcm9tICd2dWUnO1xuICBcbmNvbnN0IHByb3BzID0gZGVmaW5lUHJvcHMoe1xuICBzcmM6IFN0cmluZyxcbiAgZGVmYXVsdFNyYzogU3RyaW5nLFxuICBlcnJvclNyYzogU3RyaW5nLFxufSk7XG5cbmNvbnN0IGltZ1JlZiA9IHJlZihudWxsKTtcbmNvbnN0IGN1cnJlbnRTcmMgPSByZWYoJycpO1xubGV0IG9ic2VydmVyID0gbnVsbDtcbiAgXG5jb25zdCBvbkVycm9yID0gKCkgPT4ge1xuICBjdXJyZW50U3JjLnZhbHVlID0gcHJvcHMuZXJyb3JTcmM7XG59XG5cbm9uTW91bnRlZCgoKSA9PiB7XG4gIGN1cnJlbnRTcmMudmFsdWUgPSBwcm9wcy5kZWZhdWx0U3JjO1xuICBvYnNlcnZlciA9IG5ldyBJbnRlcnNlY3Rpb25PYnNlcnZlcigoW2VudHJ5XSkgPT4ge1xuICAgIGlmIChlbnRyeS5pc0ludGVyc2VjdGluZykge1xuICAgICAgY3VycmVudFNyYy52YWx1ZSA9IHByb3BzLnNyYztcbiAgICAgIG9ic2VydmVyLnVub2JzZXJ2ZShpbWdSZWYudmFsdWUpO1xuICAgIH1cbiAgfSk7XG4gIG9ic2VydmVyLm9ic2VydmUoaW1nUmVmLnZhbHVlKTtcbn0pO1xuICBcbm9uQmVmb3JlVW5tb3VudCgoKSA9PiB7XG4gIG9ic2VydmVyLnVub2JzZXJ2ZShpbWdSZWYudmFsdWUpO1xufSk7XG48L3NjcmlwdD5cblxuPHRlbXBsYXRlPlxuICA8aW1nIFxuICAgIHJlZj1cImltZ1JlZlwiXG4gICAgOnNyYz1cImN1cnJlbnRTcmNcIlxuICAgIEBlcnJvcj1cIm9uRXJyb3JcIlxuICAvPlxuPC90ZW1wbGF0ZT4ifQ==">戳这里查看 demo</a></p>
+<p>这里需要注意，<code>IntersectionObserver</code> 支持对指定容器进行观察，默认情况下对整个 <code>document</code> 进行观察</p>
+<p><code>IntersectionObserver</code> 使用了 <code>threshold</code> 阈值这个概念，简单理解为就是目标元素与容器元素相交部分的大小占目标元素的大小的比重，值为 <code>0 ~ 1</code> ，默认情况下为 <code>0</code> ，即边框相交就直接调用回调函数。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091017411.avif"></p>
+<p><code>IntersectionObserver</code> 使用了 <code>roomMargin</code> 来扩大或者缩小检测的边框，该值默认为 <code>0px 0px 0px 0px</code> ，即边框就是对应的 <code>width</code> 和 <code>height</code> 。</p>
+<p>举例来说，如果将 <code>roomMargin</code> 设置为 <code>0 0 100px 0</code> 的话，意味着检测的边框向“外”扩大了，即图片会更早地被加载。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091023313.avif"></p>
+<p>相反，如果将 <code>roomMargin</code> 设置为 <code>0 0 -100px 0</code> 的话，意味着检测的边框向“内”收缩了，即图片会更晚地被加载。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091027183.avif"></p>
+<p>如果还是对相关的参数不是很了解，可以直接去 <code>MDN</code> 的相关页面查看解释：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API">Intersection Observer API - MDN</a></p>
+</blockquote>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/08/202203081824246.avif"></p>
+<p>中文页后半部分还没完全翻译好，凑合着看。</p>
+<p>除了第二个参数，我们还在第一个参数的回调中使用数组解构的语法解构出了一个 <code>entry</code> 对象，使用了它的 <code>isIntersecting</code> 属性，这个属性返回 <code>true</code> 意味着从非相交转到相交，返回 <code>false</code> 则相反。</p>
+<p>当然除了 <code>isIntersecting</code> 属性，也有其他一些属性，可以获取相关的布局信息，不过这里用不到，就不详细展开了，可以去 <code>MDN</code> 上查看：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/IntersectionObserverEntry">IntersectionObserverEntry - MDN</a></p>
+</blockquote>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091053471.avif"></p>
+<p>在 <code>vueuse/core</code> 中，也为我们封装了这样的一个的函数 <code>useIntersectionObserver</code> 。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/vueuse/vueuse/blob/main/packages/core/useIntersectionObserver/index.ts">useIntersectionObserver - vueuse</a></p>
+</blockquote>
+<p>其中对是否支持 <code>IntersectionObserver</code> 的判断为 <code>const isSupported = window &amp;&amp; &#39;IntersectionObserver&#39; in window</code> 。</p>
+<p>所以根据这个就可以做一些降级处理，从 <code>IntersectionObserver</code> 降级到 <code>getBoundingClientRect</code> 。</p>
+<h2 id="这两种懒加载方法的区别"><a href="#这两种懒加载方法的区别" class="headerlink" title="这两种懒加载方法的区别"></a>这两种懒加载方法的区别</h2><p>上面我们讲了两种方法</p>
+<ul>
+<li>监听 <code>scroll</code> 事件，通过 <code>getBoundingClientRect</code> 来获取位置，从而进行计算和判断。</li>
+<li>使用原生的 <code>IntersectionObserver</code> 创建对象。</li>
+</ul>
+<h3 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h3><p>兼容性上讲，<code>getBoundingClientRect</code> 的兼容性是完胜 <code>IntersectionObserver</code> 。</p>
+<p><code>IntersectionObserver</code> 的兼容性如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091059499.avif"></p>
+<p><code>getBoundingClientRect</code> 兼容性如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091102664.avif"></p>
+<p>兼容 <code>IE</code> 这点 <code>IntersectionObserver</code> 完败哈哈哈哈。</p>
+<p><code>IntersectionObserver</code> 的兼容性还是相当不错的，所以如果项目对兼容性要求不高的话，大胆地上吧。</p>
+<p>哦对了，回调内的 <code>IntersectionObserverEntry</code> 对象的属性现在还是实验性质的，未来可能还会发生变化，不过就单单 <code>isIntersecting</code> 这个属性，我觉得应该是不会出现什么改动的，嗯，大概…</p>
+<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><p>首先，我们知道 <code>getBoundingClientRect</code> 这个方法是会立即清空（执行）浏览器的重排缓冲队列，如果网站的动画很多的话，可能会增加重排的次数，造成网站卡顿。</p>
+<p>而且调用 <code>getBoundingClientRect</code> 是一个同步的过程，如果操作时间过长，意味着主线程被长时间的占用，可能会影响到用户的其他交互，并且由于 <code>scroll</code> 的调用频率是非常高的，在 <code>scroll</code> 事件中调用 <code>getBoundingClientRect</code> ，在老人机上就完全有可能造成相当严重的卡顿，所以我们可以在这个加个<strong>节流</strong>，一定程度上来缓解 <code>scroll</code> 调用频率过高问题。</p>
+<p>新的 <code>IntersectionObserver</code> 实现是异步的，这意味着不需要在 <code>scroll</code> 事件中进行大量的计算，类似于 <code>requestIdleCallback</code> ，它的优先级是比较低的，这可以防止长时间占用主线程造成的页面无响应。</p>
+<p>这里贴一个 <code>IntersectionObserver</code> 的 <code>polyfill</code> ：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/w3c/IntersectionObserver/blob/cac7ad29d28629f8d25affda853eda3440b05f97/polyfill/intersection-observer.js">polyfill&#x2F;intersection-observer.js - w3c</a></p>
+</blockquote>
+<p>在实现的第 <code>369</code> 和 <code>370</code> 可以看出，降级之后还是通过监听 <code>scroll</code> 和 <code>resize</code> 事件来检测是否相交的。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091451387.avif"></p>
+<p>在 <code>143</code> 行，使用了节流函数 <code>throttle</code> 来包住 <code>_checkForIntersections</code> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/09/202203091453045.avif"></p>
+<p>so，直接上 <code>IntersectionObserver</code> 就完事了，大佬都把降级写好了，拿来引入即可。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果你看到这里了，那么对于第一个通过 <code>scroll</code> 实现的懒加载还是有一个问题。</p>
+<p>那就是没监听 <code>resize</code> 事件，因为窗口大小的变化也会改变元素的可见状态。</p>
+<p>当然，检测可见这种技术不仅可以用在图片懒加载，还可以用在很多地方，比如：</p>
+<ul>
+<li>视频进入可视窗口自动播放</li>
+<li>监听一个占位元素来实现下拉到最后自动刷新</li>
+<li>检测用户对某个区域的停留时长，比如广告，消息区域等等</li>
+<li>在元素可见之后再执行该元素的动画</li>
+<li>…</li>
+</ul>
+<p>虽然它真的很厉害，但是我到现在还没在项目中用到它…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/1f077da7591b" title="如何懒加载图片">https://prohibitorum.top/1f077da7591b</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/VueUse/" rel="tag"># VueUse</a>
+              <a href="/tags/Lazy-Load-Image/" rel="tag"># Lazy Load Image</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/94f450fa1b14" rel="prev" title="computed 可能成为一个错误的工具（译文）">
+                  <i class="fa fa-angle-left"></i> computed 可能成为一个错误的工具（译文）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/e23644b7eddf" rel="next" title="让Vue.draggable支持交换式拖拽（译）">
+                  让Vue.draggable支持交换式拖拽（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1646577738"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

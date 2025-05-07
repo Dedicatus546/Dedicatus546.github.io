@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言感觉很久没写帖子了…老是把上学期的实训还没有做完当借口感觉也不是很行索性就随便写写吧（项目还没有做完，cao！）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次对StarUML-3.2.2的解包">
+<meta property="og:url" content="https://prohibitorum.top/a5a00a4c0119">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言感觉很久没写帖子了…老是把上学期的实训还没有做完当借口感觉也不是很行索性就随便写写吧（项目还没有做完，cao！）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/LsURBaNWz4lFMgb.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/L4WdDYT1XAPgHFq.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/S5toYwOJPWmjNXc.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/f1OrbdWgNDUnIBT.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/vgUYwrQ2OIaMjxd.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/1A7zcp9NBlyXdEL.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/05/3uXfOKYQwC59s6r.png">
+<meta property="article:published_time" content="2020-06-12T09:17:48.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/05/LsURBaNWz4lFMgb.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a5a00a4c0119.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a5a00a4c0119","path":"a5a00a4c0119.html","title":"记一次对StarUML-3.2.2的解包"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次对StarUML-3.2.2的解包 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%86%E5%A4%87"><span class="nav-number">2.</span> <span class="nav-text">准备</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">过程</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a5a00a4c0119">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次对StarUML-3.2.2的解包 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次对StarUML-3.2.2的解包
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 09:17:48" itemprop="dateCreated datePublished" datetime="2020-06-12T09:17:48+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>感觉很久没写帖子了…<br>老是把上学期的实训还没有做完当借口感觉也不是很行<br>索性就随便写写吧<br>（项目还没有做完，cao！）</p>
+<span id="more"></span>
+
+<h1 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h1><p>上系统分析与设计的课需要用到一个StartUML的软件<br>虽然老师已经提供了完整的工具了<br>但是人嘛，总是喜新厌旧的<br>不是最新版这手就不舒服…<br>直接上官网下载了最新版的<br>高高兴兴的替换<br>What the f**k？ 直接黑屏</p>
+<p>不行，上网找找看看有没有新的解决方法<br>emmm，找了一会，找到了好东西</p>
+<blockquote>
+<p>吾爱论坛的一个帖子: <a target="_blank" rel="noopener" href="https://www.52pojie.cn/thread-796683-1-1.html">另一种 StarUML 3.x 完美**的思路</a></p>
+</blockquote>
+<p>感觉能行，<del>是我最擅长的js</del><br>直接开搞</p>
+<blockquote>
+<p>StartXML官网：<a target="_blank" rel="noopener" href="http://staruml.io/">StarUML 3</a></p>
+</blockquote>
+<p>这次使用的版本为最新版，版本号为3.2.2<br>除此之外需要node环境，需要npm的一个asar的一个包<br>这个就不细讲，因为我也不懂emmm…</p>
+<h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>看完吾爱那个帖子还是蛮吃惊的<br>这应用好像是Electron的…<br>简单讲就是套了个谷歌浏览器的桌面应用</p>
+<p>ok那开始，先把最新的app.asar文件解包出来<br><code>asar extract app.asar app</code><br>extract解包，app.asar为需要解包的文件 app为解包的目录</p>
+<p>解包出来<br>emmm，挺熟悉的…</p>
+<p><img data-src="https://i.loli.net/2020/03/05/LsURBaNWz4lFMgb.png"></p>
+<p>马不停蹄，直接奔着<code>about-dialog.js</code>文件去<br>在<code>src/dialogs</code>文件下<br>在这个文件下的<code>showDialog</code>函数下果然找到了这一段代码</p>
+<p><img data-src="https://i.loli.net/2020/03/05/L4WdDYT1XAPgHFq.png"></p>
+<p>这段代码判断根据凭证管理器返回的状态来给模态框设置内容</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (app.<span class="property">licenseManager</span>.<span class="title function_">getStatus</span>() === <span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以现在首要的是找到app这个变量<br>这个变量有着licenseManager的实例<br>ctrl这个变量发现有两处存在这个变量<br>分别是<code>src/main-process/application.js</code>和 <code>src/index.js</code>下</p>
+<p>其中<code>application.js</code>文件的代码段为</p>
+<p><img data-src="https://i.loli.net/2020/03/05/S5toYwOJPWmjNXc.png"></p>
+<p>metadataManager？<br>很明显不是我们的licenseManager<br>直接不管<br>看<code>src/index.js</code>文件</p>
+<p><img data-src="https://i.loli.net/2020/03/05/f1OrbdWgNDUnIBT.png"></p>
+<p><code>new AppContxt()</code> 按照字面意思应该是app的上下文<br>应该是这个不会错<br>点进去发现是一个类<br><code>ctrl+f</code>搜索licenseManager<br>果然在38行发现了引入的凭证管理器</p>
+<p><img data-src="https://i.loli.net/2020/03/05/vgUYwrQ2OIaMjxd.png"></p>
+<p>ok定位到<code>src/enginer/license-manager.js</code>这个文件<br>继续<code>ctrl+f</code>搜索getStatus<br>找到代码，是LicenseManager的一个方法<br>这个方法返回了一个定义在文件中的变量<code>status</code></p>
+<p><img data-src="https://i.loli.net/2020/03/05/1A7zcp9NBlyXdEL.png"></p>
+<p>根据前面我们知道，当status为<code>true</code>，就会往模态框渲染已注册的内容了<br>所以继续搜索status<br>发现一个<code>setStatus</code>函数<br>这个函数不在类中<br>（截图好累，直接贴代码吧….）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Set Registration Status</span></span><br><span class="line"><span class="comment"> * This function is out of LicenseManager class for the security reason</span></span><br><span class="line"><span class="comment"> * (To disable changing License status by API)</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@private</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> &#123;<span class="type">boolean</span>&#125; <span class="variable">newStat</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">string</span>&#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">setStatus</span>(<span class="params">licenseManager, newStat</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (status !== newStat) &#123;</span><br><span class="line">        status = newStat</span><br><span class="line">        licenseManager.<span class="title function_">emit</span>(<span class="string">&#x27;statusChanged&#x27;</span>, newStat)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注释也给出了没写在类方法中的原因</p>
+<blockquote>
+<p>To disable changing License status by API<br>译过来就是：防止通过api的方式去改变凭证</p>
+</blockquote>
+<p>也就是不想让license管理器对象直接设置status状态<br>这也反过来证明这个status状态确实决定注册的状态<br>（有点心虚的味道…）</p>
+<p>这里还可以发现设置状态会广播一个<code>statusChanged</code>的事件<br><code>licenseManager.emit(&#39;statusChanged&#39;, newStat)</code><br>状态根据传进来的newStat决定</p>
+<p>接下来看到底谁调用了<code>setStatus</code>这个函数了<br>搜索发现<code>checkLicenseValidity</code>函数和<code>register</code>函数都调用了</p>
+<p>怎么有两个函数调用…<br>看了看方法，找到猫腻<br>类中有一个方法<code>appReady</code><br>代码是这样的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LicenseManager</span> <span class="keyword">extends</span> <span class="title class_ inherited__">EventEmitter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line"></span><br><span class="line">    <span class="title function_">appReady</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">checkLicenseValidity</span>()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看方法名就知道了，在应用准备的时候调用这个函数<br>那八九不离十是<code>checkLicenseValidity</code>这个函数了<br>而且<code>register</code>函数的注释也让我更加确定</p>
+<blockquote>
+<p>Check the license key in server and store it as license.key file in local<br>通过服务器检查凭证并将它以license.key文件进行储存</p>
+</blockquote>
+<p>不难分析，刚安装的软件肯定是没有注册的<br>需要通过键入密钥来激活<br>也就是这几种情况</p>
+<ul>
+<li>开启app - 有本地文件 - 进行检验 - 显示检验状态</li>
+<li>开启app - 没有本地文件 - 显示未注册</li>
+<li>开启app - 没有本地文件 - 输入密钥 - 成功 - 生成文件方便下次启动的验证</li>
+</ul>
+<p>当然我们手头是没有密钥的，所以<code>register</code>函数关系不大<br>目的是在启动检测的时候假装存在检验文件， 并检测成功</p>
+<p>观察<code>checkLicenseValidity</code>函数，它调用了<code>validate</code>函数进行验证<br>但是<code>validate</code>函数其实已经不重要了<br>为啥呢？<br>因为<code>validate</code>函数没有调用<code>setStatus</code>这个函数了<br>也就是注册状态的变化和<code>validate</code>函数块无关了<br>跟<code>validate</code>函数执行的对应回调有关<br>也就是<code>checkLicenseValidity</code>函数中的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LicenseManager</span> <span class="keyword">extends</span> <span class="title class_ inherited__">EventEmitter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line"></span><br><span class="line">    <span class="title function_">checkLicenseValidity</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">validate</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">setStatus</span>(<span class="variable language_">this</span>, <span class="literal">true</span>)</span><br><span class="line">        &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">setStatus</span>(<span class="variable language_">this</span>, <span class="literal">false</span>)</span><br><span class="line">            <span class="title class_">UnregisteredDialog</span>.<span class="title function_">showDialog</span>()</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到成功就设置状态为true<br>失败设置状态为false并展示一个未注册的展示框</p>
+<p>OK大体上摸清楚了<br>只要把代码这个函数的代码改为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LicenseManager</span> <span class="keyword">extends</span> <span class="title class_ inherited__">EventEmitter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line"></span><br><span class="line">    <span class="title function_">checkLicenseValidity</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">validate</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="title function_">setStatus</span>(<span class="variable language_">this</span>, <span class="literal">true</span>)</span><br><span class="line">        &#125;, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">            <span class="comment">// 失败也设置未注册成功</span></span><br><span class="line">            <span class="title function_">setStatus</span>(<span class="variable language_">this</span>, <span class="literal">true</span>)</span><br><span class="line">            <span class="comment">// 失败不展示失败的模态框</span></span><br><span class="line">            <span class="comment">// UnregisteredDialog.showDialog()</span></span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实大部分工作都已经完成了<br>接下来回到最开始的if判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (app.<span class="property">licenseManager</span>.<span class="title function_">getStatus</span>() === <span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> info = app.<span class="property">licenseManager</span>.<span class="title function_">getLicenseInfo</span>();</span><br><span class="line">    <span class="keyword">var</span> licenseTypeName = <span class="string">&#x27;Unknown&#x27;</span>;</span><br><span class="line">    <span class="keyword">switch</span> (info.<span class="property">licenseType</span>) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;PS&#x27;</span>:</span><br><span class="line">            licenseTypeName = <span class="string">&#x27;Personal&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;CO&#x27;</span>:</span><br><span class="line">            licenseTypeName = <span class="string">&#x27;Commercial&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;ED&#x27;</span>:</span><br><span class="line">            licenseTypeName = <span class="string">&#x27;Educational&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;CR&#x27;</span>:</span><br><span class="line">            licenseTypeName = <span class="string">&#x27;Classroom&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    $license.<span class="title function_">html</span>(<span class="string">&#x27;Licensed to &#x27;</span> + info.<span class="property">name</span>);</span><br><span class="line">    $licenseType.<span class="title function_">html</span>(licenseTypeName + <span class="string">&#x27; License&#x27;</span>);</span><br><span class="line">    $quantity.<span class="title function_">html</span>(info.<span class="property">quantity</span> + <span class="string">&#x27; User(s)&#x27;</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $license.<span class="title function_">html</span>(<span class="string">&#x27;UNREGISTERED&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断成功后会获取凭证的信息<br>在LicenseManager类中也可以找到这个方法<br>也就是只要构造出符合结构的对象就可以了<br>也可以直接在方法体里面改<br>我的话通过返回的对象来改<br>也就是</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">LicenseManager</span> <span class="keyword">extends</span> <span class="title class_ inherited__">EventEmitter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line"></span><br><span class="line">    <span class="title function_">getLicenseInfo</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="comment">// 不返回lincenseInfo了</span></span><br><span class="line">        <span class="keyword">return</span> licenseInfo</span><br><span class="line">        <span class="comment">//这里获取密钥所包含的信息，具体可以看validate函数，里面有对密钥的解析，也就是json格式</span></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">name</span>: <span class="string">&quot;17软件工程&quot;</span>,</span><br><span class="line">            <span class="attr">product</span>: <span class="string">&quot;系统分析与设计&quot;</span>,</span><br><span class="line">            <span class="attr">licenseType</span>: <span class="string">&quot;PS&quot;</span>,</span><br><span class="line">            <span class="attr">quantity</span>: <span class="string">&quot;INDEX&quot;</span>,</span><br><span class="line">            <span class="attr">timestamp</span>: <span class="string">&quot;1583395020&quot;</span>,</span><br><span class="line">            <span class="attr">licenseKey</span>: <span class="string">&quot;仅供学习，请勿用于商业用途&quot;</span>,</span><br><span class="line">            <span class="attr">crackedAuthor</span>: <span class="string">&quot;Dedicatus545&quot;</span></span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里其实基本就完成了<br>最后就是重新打包这个文件<br><code>asar pack app app.asar</code><br>替换之后就完成了</p>
+<p>附上一张截图</p>
+<p><img data-src="https://i.loli.net/2020/03/05/3uXfOKYQwC59s6r.png"></p>
+<p>仅供学习使用，请勿使用于商业用途。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a5a00a4c0119" title="记一次对StarUML-3.2.2的解包">https://prohibitorum.top/a5a00a4c0119</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/5882a36e807b" rel="prev" title="Spring中Bean的配置方式">
+                  <i class="fa fa-angle-left"></i> Spring中Bean的配置方式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/781ed0772306" rel="next" title="Promise A+规范（译）">
+                  Promise A+规范（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591924668"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

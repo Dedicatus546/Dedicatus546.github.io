@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.4（译）">
+<meta property="og:url" content="https://prohibitorum.top/a72ebe7efc58">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.4">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-before.png">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-after.png">
+<meta property="article:published_time" content="2024-03-12T15:51:01.000Z">
+<meta property="article:modified_time" content="2024-03-12T15:51:01.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-before.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a72ebe7efc58.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a72ebe7efc58","path":"a72ebe7efc58.html","title":"TypeScript 5.4（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.4（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8%E9%97%AD%E5%8C%85%E4%B8%AD%E4%BF%9D%E7%95%99%E4%B8%8A%E6%AC%A1%E5%88%86%E9%85%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B6%E7%AA%84%E8%8C%83%E5%9B%B4"><span class="nav-number">2.1.</span> <span class="nav-text">在闭包中保留上次分配类型的收窄范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NoInfer-%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">NoInfer 工具类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-groupBy-%E5%92%8C-Map-groupBy"><span class="nav-number">2.3.</span> <span class="nav-text">Object.groupBy 和 Map.groupBy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%9C%A8-moduleResolution-%E4%B8%BA-bundler-%E5%92%8C-%E2%80%93module-%E4%B8%BA-preserve-%E4%B8%8B%E7%9A%84-required-%E8%B0%83%E7%94%A8"><span class="nav-number">2.4.</span> <span class="nav-text">支持在 moduleResolution 为 bundler 和 –module 为 preserve 下的 required() 调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%AD%E8%A8%80"><span class="nav-number">2.5.</span> <span class="nav-text">检查导入属性和断言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E5%A2%9E%E5%AF%B9%E6%B7%BB%E5%8A%A0%E4%B8%A2%E5%A4%B1%E5%8F%82%E6%95%B0%E7%9A%84%E5%BF%AB%E9%80%9F%E4%BF%AE%E5%A4%8D"><span class="nav-number">2.6.</span> <span class="nav-text">新增对添加丢失参数的快速修复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E6%94%AF%E6%8C%81%E5%AD%90%E8%B7%AF%E5%BE%84%E5%AF%BC%E5%85%A5"><span class="nav-number">2.7.</span> <span class="nav-text">自动导入支持子路径导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B3%E5%B0%86%E5%88%B0%E6%9D%A5%E7%9A%84-TypeScript-5-0-%E5%BA%9F%E5%BC%83%E9%A1%B9"><span class="nav-number">2.8.</span> <span class="nav-text">即将到来的 TypeScript 5.0 废弃项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E8%91%97%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.9.</span> <span class="nav-text">显著的行为变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts-%E5%8F%98%E6%9B%B4"><span class="nav-number">2.9.1.</span> <span class="nav-text">lib.d.ts 变更</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%8A%A0%E5%87%86%E7%A1%AE%E5%9C%B0%E6%9D%A1%E4%BB%B6%E7%B1%BB%E5%9E%8B%E7%BA%A6%E6%9D%9F"><span class="nav-number">2.9.2.</span> <span class="nav-text">更加准确地条件类型约束</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E5%8A%A0%E7%A7%AF%E6%9E%81%E5%9C%B0%E5%87%8F%E5%B0%91%E7%B1%BB%E5%9E%8B%E5%8F%98%E9%87%8F%E5%92%8C%E5%8E%9F%E5%A7%8B%E7%B1%BB%E5%9E%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E4%BA%A4%E9%9B%86"><span class="nav-number">2.9.3.</span> <span class="nav-text">更加积极地减少类型变量和原始类型之间的交集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E8%BF%87%E6%A8%A1%E6%9D%BF%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8F%92%E5%80%BC%E6%9D%A5%E6%94%B9%E8%BF%9B%E6%A3%80%E6%9F%A5"><span class="nav-number">2.9.4.</span> <span class="nav-text">通过模板字符串插值来改进检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E4%BB%85%E7%B1%BB%E5%9E%8B%E5%AF%BC%E5%85%A5%E5%86%B2%E7%AA%81%E6%97%B6%E6%8A%A5%E9%94%99"><span class="nav-number">2.9.5.</span> <span class="nav-text">当局部变量和仅类型导入冲突时报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E6%9E%9A%E4%B8%BE%E5%8F%AF%E5%88%86%E9%85%8D%E9%99%90%E5%88%B6"><span class="nav-number">2.9.6.</span> <span class="nav-text">新的枚举可分配限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%9A%E4%B8%BE%E6%88%90%E5%91%98%E7%9A%84%E5%90%8D%E7%A7%B0%E9%99%90%E5%88%B6"><span class="nav-number">2.9.7.</span> <span class="nav-text">枚举成员的名称限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9-any-%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%89%A9%E4%BD%99%E5%85%83%E7%B4%A0%E4%BF%9D%E7%95%99%E6%9B%B4%E5%A5%BD%E7%9A%84%E6%98%A0%E5%B0%84%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.9.8.</span> <span class="nav-text">对 any 类型的剩余元素保留更好的映射类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.9.9.</span> <span class="nav-text">输出变更</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a72ebe7efc58">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.4（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.4（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-12 15:51:01" itemprop="dateCreated datePublished" datetime="2024-03-12T15:51:01+00:00">2024-03-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>17 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-4/">Announcing TypeScript 5.4</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>今天我们激动地宣布：Typescript 5.4 正式发布。</p>
+<p>如果你还不熟悉 TypeScript 的话，可以简单地理解为， TypeScript 是一门建立在 JavaScript 上的语言，它可以定义和描述类型。通过编写类型我们可以解释代码的意图，使用其他的工具来检查代码从而捕获程序错误，比如拼写错误， <code>null</code> 和 <code>undefined</code> 问题等等。类型也加强了 VS 和 VSCode 中的诸如自动完成，代码导航和重构的功能。实际上，如果你在这两个编辑器中编写过 JavaScript ，那么其实你是一直在使用 TypeScript 的。</p>
+<p>为了开始使用 TypeScript ，可以通过 <a target="_blank" rel="noopener" href="https://www.nuget.org/packages/Microsoft.TypeScript.MSBuild">NuGet</a> 获取，或者通过执行如下的 npm 命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D typescript</span><br></pre></td></tr></table></figure>
+
+<p>以下是 TypeScript 5.4 新增的功能列表！</p>
+<ul>
+<li><a href="#%E5%9C%A8%E9%97%AD%E5%8C%85%E4%B8%AD%E4%BF%9D%E7%95%99%E4%B8%8A%E6%AC%A1%E5%88%86%E9%85%8D%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%94%B6%E7%AA%84%E8%8C%83%E5%9B%B4">在闭包中保留上次分配类型的收窄范围</a></li>
+<li><a href="#noinfer-%E5%B7%A5%E5%85%B7%E7%B1%BB%E5%9E%8B">NoInfer 工具类型</a></li>
+<li><a href="#objectgroupby-%E5%92%8C-mapgroupby">Object.groupBy 和 Map.groupBy</a></li>
+<li><a href="#%E6%94%AF%E6%8C%81%E5%9C%A8-moduleresolution-%E4%B8%BA-bundler-%E5%92%8C---module-%E4%B8%BA-preserve-%E4%B8%8B%E7%9A%84-required-%E8%B0%83%E7%94%A8">支持在 moduleResolution 为 bundler 和 –module 为 preserve 下的 required() 调用</a></li>
+<li><a href="#%E6%A3%80%E6%9F%A5%E5%AF%BC%E5%85%A5%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%AD%E8%A8%80">检查导入属性和断言</a></li>
+<li><a href="#%E6%96%B0%E5%A2%9E%E5%AF%B9%E6%B7%BB%E5%8A%A0%E4%B8%A2%E5%A4%B1%E5%8F%82%E6%95%B0%E7%9A%84%E5%BF%AB%E9%80%9F%E4%BF%AE%E5%A4%8D">新增对添加丢失参数的快速修复</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E5%AF%BC%E5%85%A5%E6%94%AF%E6%8C%81%E5%AD%90%E8%B7%AF%E5%BE%84%E5%AF%BC%E5%85%A5">自动导入支持子路径导入</a></li>
+<li><a href="#%E5%8D%B3%E5%B0%86%E5%88%B0%E6%9D%A5%E7%9A%84-typescript-50-%E5%BA%9F%E5%BC%83%E9%A1%B9">即将到来的 TypeScript 5.0 废弃项</a></li>
+<li><a href="#%E6%98%BE%E8%91%97%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4">显著的行为变更</a></li>
+</ul>
+<h2 id="在闭包中保留上次分配类型的收窄范围"><a href="#在闭包中保留上次分配类型的收窄范围" class="headerlink" title="在闭包中保留上次分配类型的收窄范围"></a>在闭包中保留上次分配类型的收窄范围</h2><p>TypeScript 通常可以执行一个基于变量的检查来推断一个具体的类型。这个过程被称为类型收窄。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">uppercaseStrings</span>(<span class="params">x: string | number</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> x === <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">        <span class="comment">// TypeScript 明白这里的 x 是一个 string 类型</span></span><br><span class="line">        <span class="keyword">return</span> x.<span class="title function_">toUpperCase</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个常见的痛点是，这些收窄的类型无法保留到函数闭包中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getUrls</span>(<span class="params">url: string | URL, names: string[]</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> url === <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">        url = <span class="keyword">new</span> <span class="title function_">URL</span>(url);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> names.<span class="title function_">map</span>(<span class="function"><span class="params">name</span> =&gt;</span> &#123;</span><br><span class="line">        url.<span class="property">searchParams</span>.<span class="title function_">set</span>(<span class="string">&quot;name&quot;</span>, name)</span><br><span class="line">        <span class="comment">//  ~~~~~~~~~~~~</span></span><br><span class="line">        <span class="comment">// 错误！</span></span><br><span class="line">        <span class="comment">// string | URL 类型上不存在 searchParams 属性。</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> url.<span class="title function_">toString</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上面的例子中， TypeScript 会判定，在回调中把 url 变量当成实际上的 URL 对象是不安全的，因为它可以在其他地方被修改。然而，在这个实例中，箭头函数总是在对 url 赋值之后才创建，并且也是最后一个对 url 赋值的。</p>
+<p>TypeScript 5.4 利用这一点来让类型收窄变得更加智能一些。当在一个非<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Glossary/Hoisting">提升</a>的函数中使用参数和 let 定义的变量，类型检查器会寻找最后一次分配变量的位置。如果只找到了一个，那么 TypeScript 会安全地把类型收窄到包含该变量的函数的外部。这意味着上面的例子现在可以正常工作了。</p>
+<p>注意如果变量在一个嵌套的函数中的任意位置赋值，那么类型的收窄将不会生效。这是因为无法确定该函数接下来是否会被调用。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">printValueLater</span>(<span class="params">value: string | <span class="literal">undefined</span></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (value === <span class="literal">undefined</span>) &#123;</span><br><span class="line">        value = <span class="string">&quot;missing!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 修改 value 变量</span></span><br><span class="line">        <span class="comment">// 虽然这个方式不影响它的类型，但是这会使闭包中的类型改进失效。</span></span><br><span class="line">        value = value;</span><br><span class="line">    &#125;, <span class="number">500</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(value.<span class="title function_">toUpperCase</span>());</span><br><span class="line">        <span class="comment">//          ~~~~~</span></span><br><span class="line">        <span class="comment">// 错误！ value 可能为 undefined 类型。</span></span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个特性可以使得很多的典型的 JavaScript 代码更易于表示。你可以在 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56908">Github</a> 上阅读更多的信息。</p>
+<h2 id="NoInfer-工具类型"><a href="#NoInfer-工具类型" class="headerlink" title="NoInfer 工具类型"></a>NoInfer 工具类型</h2><p>当调用一个泛型函数时， TypeScript 能够根据任何传入的内容来推断类型参数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> doSomething&lt;T&gt;(<span class="attr">arg</span>: T) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们可以显式地指定 T 为 string 类型</span></span><br><span class="line">doSomething&lt;string&gt;(<span class="string">&quot;hello!&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 我们也可以让 T 自动推断</span></span><br><span class="line"><span class="title function_">doSomething</span>(<span class="string">&quot;hello!&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然而，问题是并不总是能够清晰地知道要推断地最佳类型。这可能会导致 TypeScript 拒绝合法的调用，接受有问题的调用，或者只是在捕获一个 bug 时报告更加糟糕的错误信息。</p>
+<p>比如，想象一下有个 <code>createStreetLight</code> 函数，它接受一个颜色数组 <code>colors</code> ，以及一个可选的默认颜色 <code>defaultColor</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> createStreetLight&lt;C <span class="keyword">extends</span> <span class="built_in">string</span>&gt;(<span class="attr">colors</span>: C[], defaultColor?: C) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">createStreetLight</span>([<span class="string">&quot;red&quot;</span>, <span class="string">&quot;yellow&quot;</span>, <span class="string">&quot;green&quot;</span>], <span class="string">&quot;red&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>当我们传入一个没有包含在 <code>colors</code> 数组内的默认颜色时会发生什么？在这个函数中， <code>colors</code> 参数应该是一个事实的来源，用来描述可以传给 <code>defaultColor</code> 的内容。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 哎呀！这不符合预期，但确实允许的！</span></span><br><span class="line"><span class="title function_">createStreetLight</span>([<span class="string">&quot;red&quot;</span>, <span class="string">&quot;yellow&quot;</span>, <span class="string">&quot;green&quot;</span>], <span class="string">&quot;blue&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在上面的调用中，类型推断确定 <code>&quot;blue&quot;</code> 与 <code>&quot;red&quot;</code> 、 <code>&quot;yellow&quot;</code> 、 <code>&quot;green&quot;</code> 一样，都是合法的类型。所以 TypeScript 不会拒绝这个调用，而是推断 <code>C</code> 类型为 <code>&quot;red&quot; | &quot;yellow&quot; | &quot;green&quot; | &quot;blue&quot;</code> 。你可以会对这个推断感到震惊。</p>
+<p>当前处理该问题的一种方式是添加一个被现有类型参数限制的单独的类型参数。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> createStreetLight&lt;C <span class="keyword">extends</span> <span class="built_in">string</span>, D <span class="keyword">extends</span> C&gt;(<span class="attr">colors</span>: C[], defaultColor?: D) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">createStreetLight</span>([<span class="string">&quot;red&quot;</span>, <span class="string">&quot;yellow&quot;</span>, <span class="string">&quot;green&quot;</span>], <span class="string">&quot;blue&quot;</span>);</span><br><span class="line"><span class="comment">//                                            ~~~~~~</span></span><br><span class="line"><span class="comment">// 错误！</span></span><br><span class="line"><span class="comment">// blue 类型无法分配给 &quot;red&quot; | &quot;yellow&quot; | &quot;green&quot; | &quot;undefined&quot; 类型</span></span><br></pre></td></tr></table></figure>
+
+<p>这种方式有效，但有那么一点别扭，因为 <code>D</code> 可能不会在 <code>createStreetLight</code> 的签名的其他任何地方被使用到。虽然在这种情况下看起来还行，但是在签名中使用一个只是用一次的类型参数通常会产生异味代码。</p>
+<p>这也就是为什么 TypeScript 5.4 引入了一个新的 <code>NoInfer&lt;T&gt;</code> 工具类型。将一个类型放在 <code>NoInfer</code> 中会给 TypeScript 传递一个信号，这个信号的意思是不要去挖掘并匹配内部的类型来寻找类型推导的候选者。</p>
+<p>我们可以使用 <code>NoInfer</code> 重写下 <code>createStreetLight</code> 这个例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> createStreetLight&lt;C <span class="keyword">extends</span> <span class="built_in">string</span>&gt;(<span class="attr">colors</span>: C[], defaultColor?: <span class="title class_">NoInfer</span>&lt;C&gt;) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">createStreetLight</span>([<span class="string">&quot;red&quot;</span>, <span class="string">&quot;yellow&quot;</span>, <span class="string">&quot;green&quot;</span>], <span class="string">&quot;blue&quot;</span>);</span><br><span class="line"><span class="comment">//                                            ~~~~~~</span></span><br><span class="line"><span class="comment">// 错误！</span></span><br><span class="line"><span class="comment">// blue 类型无法分配给 &quot;red&quot; | &quot;yellow&quot; | &quot;green&quot; | &quot;undefined&quot; 类型</span></span><br></pre></td></tr></table></figure>
+
+<p>将 <code>defaultColor</code> 的类型排除在类型推导之外意味着 <code>&quot;blue&quot;</code> 永远不会成为推导候选者，这样类型检查工具就可以拒绝掉它。</p>
+<p>你可以在这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56794">PR</a> 上查看具体的变更，以及 <a target="_blank" rel="noopener" href="https://github.com/Andarist">Mateusz Burzyński</a> 提供的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/52968">初版实现</a>。</p>
+<h2 id="Object-groupBy-和-Map-groupBy"><a href="#Object-groupBy-和-Map-groupBy" class="headerlink" title="Object.groupBy 和 Map.groupBy"></a>Object.groupBy 和 Map.groupBy</h2><p>TypeScript 5.4 添加了 JavaScript 的两个新静态方法 <code>Object.groupBy</code> 和 <code>Map.groupBy</code> 的定义。</p>
+<p><code>Object.groupBy</code> 接收一个可迭代对象，以及一个函数，这个函数决定用什么来分组。函数需要用一个键来区分不同的组，然后 <code>Object.groupBy</code> 就会使用这个键来创建一个对象，对象的每个键都映射一个包含源数组元素的数组。</p>
+<p>所以下面的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> array = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> myObj = <span class="title class_">Object</span>.<span class="title function_">groupBy</span>(array, <span class="function">(<span class="params">num, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> num % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">&quot;even&quot;</span>: <span class="string">&quot;odd&quot;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>基本上等同于如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myObj = &#123;</span><br><span class="line">    <span class="attr">even</span>: [<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>],</span><br><span class="line">    <span class="attr">odd</span>: [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>Map.groupBy</code> 也类似，但是它产生了一个 Map 对象而不是一个普通的对象。如果你需要保证是 Map 类型，或者使用的 API 需要传入 Map 类型，或者你需要使用任何类型的键来分组，而不仅仅只是只能作为 JavaScript 属性名的键。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myObj = <span class="title class_">Map</span>.<span class="title function_">groupBy</span>(array, <span class="function">(<span class="params">num, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> num % <span class="number">2</span> === <span class="number">0</span> ? <span class="string">&quot;even&quot;</span> : <span class="string">&quot;odd&quot;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>跟前面一样，你可以以相等的方式创建一个 myObj 对象。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> myObj = <span class="keyword">new</span> <span class="title class_">Map</span>();</span><br><span class="line"></span><br><span class="line">myObj.<span class="title function_">set</span>(<span class="string">&quot;even&quot;</span>, [<span class="number">0</span>, <span class="number">2</span>, <span class="number">4</span>]);</span><br><span class="line">myObj.<span class="title function_">set</span>(<span class="string">&quot;odd&quot;</span>, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>注意上面 <code>Object.groupBy</code> 的例子，产生的对象的所有属性都是可选的。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">EvenOdds</span> &#123;</span><br><span class="line">    even?: <span class="built_in">number</span>[];</span><br><span class="line">    odd?: <span class="built_in">number</span>[];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">myObj</span>: <span class="title class_">EvenOdds</span> = <span class="title class_">Object</span>.<span class="title function_">groupBy</span>(...);</span><br><span class="line"></span><br><span class="line">myObj.<span class="property">even</span>;</span><br><span class="line"><span class="comment">//    ~~~~</span></span><br><span class="line"><span class="comment">// 在 strictNullChecks 下访问该属性是错误的。</span></span><br></pre></td></tr></table></figure>
+
+<p>这是因为无法确保所有的键都是由分组产生的。</p>
+<p>而且注意这两个方法只能在 <code>target</code> 设置为 <code>next</code> 或者调整了 <code>lib</code> 设置的情况下才能访问。我们预计它们最终能够在 ES2024 标准中落地。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/bakkot">Kevin Gibbons</a> <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56805">添加了</a>这两个分组方法的声明定义。</p>
+<h2 id="支持在-moduleResolution-为-bundler-和-–module-为-preserve-下的-required-调用"><a href="#支持在-moduleResolution-为-bundler-和-–module-为-preserve-下的-required-调用" class="headerlink" title="支持在 moduleResolution 为 bundler 和 –module 为 preserve 下的 required() 调用"></a>支持在 moduleResolution 为 bundler 和 –module 为 preserve 下的 required() 调用</h2><p>在 TypeScript 中有一个值为 <code>bundler</code> 的 <code>moduleResolution</code> 选项，这个值的意思是用现代捆绑的方式来确定导入路径引用哪个文件进行建模。它的一个限制是必须和 <code>--module esnext</code> 配合，即也就无法使用 <code>import ... = require(...)</code> 的语法。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先前的版本会报错</span></span><br><span class="line"><span class="keyword">import</span> myModule = <span class="built_in">require</span>(<span class="string">&quot;module/path&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>如果你计划只编写标准的 ECMAScript 导入的话这似乎不是一个大问题，但当一个包使用<a target="_blank" rel="noopener" href="https://nodejs.org/api/packages.html#conditional-exports">条件导出</a>的时候会有一些不同。</p>
+<p>在 TypeScript 5.4 中，在 <code>module</code> 设置为新的名为 <code>preserve</code> 的值之后 <code>required()</code> 现在可以在导入语句中使用了。</p>
+<p><code>--module preserve</code> 和 <code>--moduleResolution bundler</code> ，这两者可以更准确地模拟 Bun 等捆绑器和运行时所允许的功能，以及如何执行模块查找。实际上，当指定 <code>--module preserve</code> 时， <code>--moduleResolution</code> 就会显式地指定为 <code>bundler</code> （以及 <code>--esModuleInterop</code> 和 <code>--resolveJsonModule</code> 选项）</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;module&quot;</span><span class="punctuation">:</span> <span class="string">&quot;preserve&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="comment">// ^ also implies:</span></span><br><span class="line">        <span class="comment">// &quot;moduleResolution&quot;: &quot;bundler&quot;,</span></span><br><span class="line">        <span class="comment">// &quot;esModuleInterop&quot;: true,</span></span><br><span class="line">        <span class="comment">// &quot;resolveJsonModule&quot;: true,</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 <code>--module preserve</code> 下， ECMAScript 导入总是会原样输出，而 <code>import ... = require() </code>则会输出为一个 <code>require</code> 调用（虽然在实践中你可能不会使用 TypeScript 来生成代码，因为你可能会在你的代码中使用捆绑器）。无论包含文件的扩展名如何，都是成立的。所以这段代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> foo <span class="keyword">from</span> <span class="string">&quot;some-package/foo&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> bar = <span class="built_in">require</span>(<span class="string">&quot;some-package/bar&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>的输出看起来应该是如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> foo <span class="keyword">from</span> <span class="string">&quot;some-package/foo&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> bar = <span class="built_in">require</span>(<span class="string">&quot;some-package/bar&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这也意味着你选择的语法将指导条件导出的匹配方式。所以在上面的例子中，如果某些包的 <code>package.json</code> 长如下这样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;some-package&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.0.1&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;exports&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;./foo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;import&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./esm/foo-from-import.mjs&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;require&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./cjs/foo-from-require.cjs&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;./bar&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;import&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./esm/bar-from-import.mjs&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;require&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./cjs/bar-from-require.cjs&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>TypeScript 会把这些路径解析为 <code>[...]/some-package/esm/foo-from-import.mjs</code> 和 <code>[...]/some-package/cjs/bar-from-require.cjs</code> 。</p>
+<p>更多的信息可以阅读<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56785">新设置</a>的部分。</p>
+<h2 id="检查导入属性和断言"><a href="#检查导入属性和断言" class="headerlink" title="检查导入属性和断言"></a>检查导入属性和断言</h2><p>导入属性和导入断言现在会根据全局的 <code>ImportAttributes</code> 类型进行检查。这意味着运行时现在可以更加准确描述导入属性。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// In some global file.</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">ImportAttributes</span> &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&quot;json&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在一些其他的模块中</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> ns <span class="keyword">from</span> <span class="string">&quot;foo&quot;</span> <span class="keyword">with</span> &#123; <span class="attr">type</span>: <span class="string">&quot;not-json&quot;</span> &#125;;</span><br><span class="line"><span class="comment">//                                     ~~~~~~~~~~</span></span><br><span class="line"><span class="comment">// error!</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Type &#x27;&#123; type: &quot;not-json&quot;; &#125;&#x27; is not assignable to type &#x27;ImportAttributes&#x27;.</span></span><br><span class="line"><span class="comment">//  Types of property &#x27;type&#x27; are incompatible.</span></span><br><span class="line"><span class="comment">//    Type &#x27;&quot;not-json&quot;&#x27; is not assignable to type &#x27;&quot;json&quot;&#x27;.</span></span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56034">在此</a>查看更多信息。</p>
+<h2 id="新增对添加丢失参数的快速修复"><a href="#新增对添加丢失参数的快速修复" class="headerlink" title="新增对添加丢失参数的快速修复"></a>新增对添加丢失参数的快速修复</h2><p>TypeScript 现在有一个为那些有太多参数的函数添加新参数的一个快速修复。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-before.png"></p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2024/01/add-missing-params-5-4-beta-after.png"></p>
+<p>当对一些存在的函数一个个编写参数的时候会让人感到麻烦，而这个快速修复就很有用。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/a-tarasyuk">Oleksandr Tarasiuk</a> 提供了这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56411">快速修复</a> 。</p>
+<h2 id="自动导入支持子路径导入"><a href="#自动导入支持子路径导入" class="headerlink" title="自动导入支持子路径导入"></a>自动导入支持子路径导入</h2><p>在 Node 中， <code>package.json</code> 文件支持通过 <code>imports</code> 字段的名为子路径导入的特性。这是一种在包内部重新映射路径到其他模块的方式。从概念上讲，这和路径映射相当相似，某些模块捆绑器和加载器支持这个特性（ TypeScript 通过一个 <code>paths</code> 字段来支持它）。唯一的区别就是子路径导入总是必须以一个 # 作为开头。</p>
+<p>TypeScript 的自动导入特性在先前并不考虑 <code>imports</code> 字段内的路径，用户需要在 <code>tsconfig.json</code> 文件中手动定义 <code>paths</code> 字段。而现在 TypeScript 的自动导入支持子路径导入了。</p>
+<p>感谢 <a target="_blank" rel="noopener" href="https://github.com/emmatown">Emma Hamilton</a> 提供该<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/55015">特性</a>。</p>
+<h2 id="即将到来的-TypeScript-5-0-废弃项"><a href="#即将到来的-TypeScript-5-0-废弃项" class="headerlink" title="即将到来的 TypeScript 5.0 废弃项"></a>即将到来的 TypeScript 5.0 废弃项</h2><p>TypeScript 5.0 废弃了以下的选项和行为：</p>
+<ul>
+<li>charset</li>
+<li>target: ES3</li>
+<li>importsNotUsedAsValues</li>
+<li>noImplicitUseStrict</li>
+<li>noStrictGenericChecks</li>
+<li>keyofStringsOnly</li>
+<li>suppressExcessPropertyErrors</li>
+<li>suppressImplicitAnyIndexErrors</li>
+<li>out</li>
+<li>preserveValueImports</li>
+<li>项目引用中的 prepend</li>
+<li>操作系统特定的隐式 newLine</li>
+</ul>
+<p>为了继续使用这些特性，开发者使用的 TypeScript 5.0 和者其他最近的版本，必须指定一个名为 <code>ignoreDeprecations</code> 的新选项，它的值要设为 5.0 。</p>
+<p>但是 TypeScript 5.4 会成为最后的一个版本，这些版本将继续正常运行这些特性，而 TypeScript 5.5（大约在 2024年6月）对这些特性则会硬性报错，使用这些特性的代码就需要进行迁移。</p>
+<p>更多的信息，可以在 Github 上阅读这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/51909">计划</a>，这个计划包含了如何最好地调整代码库的建议。</p>
+<h2 id="显著的行为变更"><a href="#显著的行为变更" class="headerlink" title="显著的行为变更"></a>显著的行为变更</h2><p>本节强调了一部分值得注意的变更，开发者应该确认以及理解这些变更，将他们作为升级的一部分。有些时候会强调废弃，移除或者新的限制。它也包括功能改进的错误修复，但这也可能引入新的错误进而影响到已存在的构建。</p>
+<h3 id="lib-d-ts-变更"><a href="#lib-d-ts-变更" class="headerlink" title="lib.d.ts 变更"></a>lib.d.ts 变更</h3><p>DOM 生成的类型在你的代码库中可能对你的类型检查存在影响。更多的信息，可以查看 TypeScript 5.4 中 DOM 更新的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57027">部分</a>。</p>
+<h3 id="更加准确地条件类型约束"><a href="#更加准确地条件类型约束" class="headerlink" title="更加准确地条件类型约束"></a>更加准确地条件类型约束</h3><p>下面的代码中，在 <code>foo</code> 函数内不在允许第二个变量定义。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">IsArray</span>&lt;T&gt; = T <span class="keyword">extends</span> <span class="built_in">any</span>[] ? <span class="literal">true</span> : <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> foo&lt;U <span class="keyword">extends</span> <span class="built_in">object</span>&gt;(<span class="attr">x</span>: <span class="title class_">IsArray</span>&lt;U&gt;) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="attr">first</span>: <span class="literal">true</span> = x;    <span class="comment">// 错误</span></span><br><span class="line">    <span class="keyword">let</span> <span class="attr">second</span>: <span class="literal">false</span> = x;  <span class="comment">// 错误, 但先前版本不报错</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之前，当 TypeScript 检查 <code>second</code> 变量的初始化时，它需要去判断 <code>IsArray&lt;U&gt;</code> 是否能够分配给 <code>false</code> 类型。当 <code>IsArray&lt;U&gt;</code> 无法以任何方式兼容时， TypeScript 会转去查看类型的约束，对于一个条件类型比如 <code>T extends Foo ? TrueBranch : FalseBranch</code> 来说，这里的 <code>T</code> 是泛型，类型系统会查看 <code>T</code> 的约束，把 <code>T</code> 替代为自身，然后决定是走真分支还是假分支。</p>
+<p>但这个行为是不准确的，因为它过于激进了。尽管假如 <code>T</code> 的约束无法分配给 <code>Foo</code> ，这也不意味着它不会被实例化。所以，在无法证明 <code>T</code> 从不或者总是继承自 <code>Foo</code> 的情况下，更正确的行为是为条件类型约束生成联合类型。</p>
+<p>TypeScript 5.4 采用了这个更准确的行为，在实践中意味着你可能会开始发现某些条件类型实例不再兼容它的分支。</p>
+<p>可以<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56004">在此</a>阅读更多的信息。</p>
+<h3 id="更加积极地减少类型变量和原始类型之间的交集"><a href="#更加积极地减少类型变量和原始类型之间的交集" class="headerlink" title="更加积极地减少类型变量和原始类型之间的交集"></a>更加积极地减少类型变量和原始类型之间的交集</h3><p>TypeScript 现在积极地减少类型变量和原始类型之间的交集，这取决于类型变量的约束如何与这些原语重叠。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">function</span> intersect&lt;T, U&gt;(<span class="attr">x</span>: T, <span class="attr">y</span>: U): T &amp; U;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> foo&lt;T <span class="keyword">extends</span> <span class="string">&quot;abc&quot;</span> | <span class="string">&quot;def&quot;</span>&gt;(<span class="attr">x</span>: T, <span class="attr">str</span>: <span class="built_in">string</span>, <span class="attr">num</span>: <span class="built_in">number</span>) &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// a 之前为 T &amp; string ，而现在只有 T</span></span><br><span class="line">    <span class="keyword">let</span> a = <span class="title function_">intersect</span>(x, str);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// a 之前为 T &amp; number ，而现在只有 never</span></span><br><span class="line">    <span class="keyword">let</span> b = <span class="title function_">intersect</span>(x, num)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// c 之前为 (T &amp; &quot;abc&quot;) | (T &amp; &quot;def&quot;) ，而现在只有 T</span></span><br><span class="line">    <span class="keyword">let</span> c = <span class="title class_">Math</span>.<span class="title function_">random</span>() &lt; <span class="number">0.5</span> ?</span><br><span class="line">        <span class="title function_">intersect</span>(x, <span class="string">&quot;abc&quot;</span>) :</span><br><span class="line">        <span class="title function_">intersect</span>(x, <span class="string">&quot;def&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56515">在此</a>查看更多的信息。</p>
+<h3 id="通过模板字符串插值来改进检查"><a href="#通过模板字符串插值来改进检查" class="headerlink" title="通过模板字符串插值来改进检查"></a>通过模板字符串插值来改进检查</h3><p>TypeScript 现在会更准确地检查字符串是否可以分配给一个模板字符类型的一个展位槽。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> a&lt;T <span class="keyword">extends</span> &#123;<span class="attr">id</span>: <span class="built_in">string</span>&#125;&gt;() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="attr">x</span>: <span class="string">`-<span class="subst">$&#123;keyof T &amp; <span class="built_in">string</span>&#125;</span>`</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 过去会报错，现在不会。</span></span><br><span class="line">    x = <span class="string">&quot;-id&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个行为是更加理想的，但可能对使用类似条件类型的代码造成破坏，这些规则都很容易发现。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56598">在此</a>查看更多的细节。</p>
+<h3 id="当局部变量和仅类型导入冲突时报错"><a href="#当局部变量和仅类型导入冲突时报错" class="headerlink" title="当局部变量和仅类型导入冲突时报错"></a>当局部变量和仅类型导入冲突时报错</h3><p>先前，如果导入的 <code>Something</code> 只引用一个类型的话， TypeScript 会在开启 <code>isolatedModules</code> 的情况下允许如下的代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Something</span> &#125; <span class="keyword">from</span> <span class="string">&quot;./some/path&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> <span class="title class_">Something</span> = <span class="number">123</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然而，即使代码保证在运行时会失败，单文件编译器假设删除导入是否“安全”也是是不安全的。在 TypeScript 5.4 中，这样的代码会抛出如下的一个错误：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Import &#x27;Something&#x27; conflicts with local value, so must be declared with a type-only import when &#x27;isolatedModules&#x27; is enabled.</span><br></pre></td></tr></table></figure>
+
+<p>修复的方法是，给局部变量重命名，或者就如同错误状态所示，添加 <code>type</code> 修饰符到导入语句中：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">Something</span> &#125; <span class="keyword">from</span> <span class="string">&quot;./some/path&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="keyword">type</span> <span class="title class_">Something</span> &#125; <span class="keyword">from</span> <span class="string">&quot;./some/path&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56354">在此</a>查看更多信息。</p>
+<h3 id="新的枚举可分配限制"><a href="#新的枚举可分配限制" class="headerlink" title="新的枚举可分配限制"></a>新的枚举可分配限制</h3><p>当两个枚举定义相同的名称以及枚举成员名称，它们在先前总会被认为是兼容的。但是，当 TypeScript 知晓这个值时，它会静默地允许它们有不同值。</p>
+<p>当读取到它们时，TypeScript 5.4 通过要求值相同来收紧这个限制。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">First</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">enum</span> <span class="title class_">SomeEnum</span> &#123;</span><br><span class="line">        A = <span class="number">0</span>,</span><br><span class="line">        B = <span class="number">1</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Second</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">enum</span> <span class="title class_">SomeEnum</span> &#123;</span><br><span class="line">        A = <span class="number">0</span>,</span><br><span class="line">        B = <span class="number">2</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"><span class="attr">x</span>: <span class="title class_">First</span>.<span class="title class_">SomeEnum</span>, <span class="attr">y</span>: <span class="title class_">Second</span>.<span class="title class_">SomeEnum</span></span>) &#123;</span><br><span class="line">    <span class="comment">// 过去两者兼容，现在则相反</span></span><br><span class="line">    <span class="comment">// TypeScript 会抛出如下错误</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">//  Each declaration of &#x27;SomeEnum.B&#x27; differs in its value, where &#x27;1&#x27; was expected but &#x27;2&#x27; was given.</span></span><br><span class="line">    x = y;</span><br><span class="line">    y = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另外，当某个枚举成员没有静态的已知值时会有新的限制。在这些情况下，其他枚举必须至少是隐式的数字（比如，它没有静态解析的初始值），或者是显式的数字（即 TypeScript 可以解析该值为某些数字）。实际上说，这意味着字符串枚举成员仅与相同值的其他字符串枚举兼容。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">First</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">enum</span> <span class="title class_">SomeEnum</span> &#123;</span><br><span class="line">        A,</span><br><span class="line">        B,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Second</span> &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">declare</span> <span class="keyword">enum</span> <span class="title class_">SomeEnum</span> &#123;</span><br><span class="line">        A,</span><br><span class="line">        B = <span class="string">&quot;some known string&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">foo</span>(<span class="params"><span class="attr">x</span>: <span class="title class_">First</span>.<span class="title class_">SomeEnum</span>, <span class="attr">y</span>: <span class="title class_">Second</span>.<span class="title class_">SomeEnum</span></span>) &#123;</span><br><span class="line">    <span class="comment">// 过去两者兼容，现在则相反</span></span><br><span class="line">    <span class="comment">// TypeScript 会抛出如下错误:</span></span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="comment">//  One value of &#x27;SomeEnum.B&#x27; is the string &#x27;&quot;some known string&quot;&#x27;, and the other is assumed to be an unknown numeric value.</span></span><br><span class="line">    x = y;</span><br><span class="line">    y = x;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更多的信息，可以查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/55924">PR</a> 。</p>
+<h3 id="枚举成员的名称限制"><a href="#枚举成员的名称限制" class="headerlink" title="枚举成员的名称限制"></a>枚举成员的名称限制</h3><p>TypeScript 不再允许枚举成员使用诸如 <code>Infinity</code> 、 <code>-Infinity</code> 或者 <code>NaN</code> 作为名称。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面的三个都会报错，错误如下：</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  An enum member cannot have a numeric name.</span></span><br><span class="line"><span class="keyword">enum</span> E &#123;</span><br><span class="line">    <span class="title class_">Infinity</span> = <span class="number">0</span>,</span><br><span class="line">    <span class="string">&quot;-Infinity&quot;</span> = <span class="number">1</span>,</span><br><span class="line">    <span class="title class_">NaN</span> = <span class="number">2</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56161">在此</a>查看更多信息。</p>
+<h3 id="对-any-类型的剩余元素保留更好的映射类型"><a href="#对-any-类型的剩余元素保留更好的映射类型" class="headerlink" title="对 any 类型的剩余元素保留更好的映射类型"></a>对 any 类型的剩余元素保留更好的映射类型</h3><p>先前，将带有 <code>any</code> 的映射类型传入一个元组中会创建一个 <code>any</code> 的元素类型。这个情况不受欢迎，现在它已被修复了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Promise</span>.<span class="title function_">all</span>([<span class="string">&quot;&quot;</span>, ...([] <span class="keyword">as</span> <span class="built_in">any</span>)])</span><br><span class="line">    .<span class="title function_">then</span>(<span class="function">(<span class="params">result</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> head = result[<span class="number">0</span>];       <span class="comment">// 5.3 版本: any, 5.4 版本: string</span></span><br><span class="line">        <span class="keyword">const</span> tail = result.<span class="title function_">slice</span>(<span class="number">1</span>); <span class="comment">// 5.3 版本: any, 5.4 版本: any[]</span></span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>更多的信息，可以查看这个<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57031">修复</a>以及该行为变更的后续<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/57389">讨论</a>以及进一步的<a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/57389">调整</a>。</p>
+<h3 id="输出变更"><a href="#输出变更" class="headerlink" title="输出变更"></a>输出变更</h3><p>虽然本身不是一个破坏性的变更，但是开发者可能隐式地依赖 TypeScript 的 JavaScript 或者定义文件的输出。以下是显著的变更：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/55820">隐藏时更频繁地保留类型参数的名称</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56296">把异步函数复杂的参数列表移动到生成器的主体中</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/57020">在函数定义文件中不删除绑定别名</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/56395">在 importTypeNode 中，导入属性应该经历相同的输出阶段</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a72ebe7efc58" title="TypeScript 5.4（译）">https://prohibitorum.top/a72ebe7efc58</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/96c76ddd3263" rel="prev" title="以现代的方式在JavaScript中进行深克隆（译）">
+                  <i class="fa fa-angle-left"></i> 以现代的方式在JavaScript中进行深克隆（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/0fcabc4a4465" rel="next" title="封装 vuetify 的 snackbar 组件">
+                  封装 vuetify 的 snackbar 组件 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1710229861"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

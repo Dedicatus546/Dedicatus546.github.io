@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言如何安全地存储一个密码（译）。原文地址：How To Safely Store A Password。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何安全地存储一个密码（译）">
+<meta property="og:url" content="https://prohibitorum.top/389a9bee078c">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言如何安全地存储一个密码（译）。原文地址：How To Safely Store A Password。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-07-26T23:09:00.000Z">
+<meta property="article:modified_time" content="2023-07-26T23:09:00.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="password">
+<meta property="article:tag" content="bcrypt">
+<meta property="article:tag" content="store">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/389a9bee078c.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/389a9bee078c","path":"389a9bee078c.html","title":"如何安全地存储一个密码（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何安全地存储一个密码（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-bcrypt-%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">使用 bcrypt 库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E4%BD%BF%E7%94%A8%E8%AF%B8%E5%A6%82-MD5%EF%BC%8CSHA1%EF%BC%8CSHA2%EF%BC%8CSHA3-%E7%AD%89%E7%AD%89%E7%AE%97%E6%B3%95%EF%BC%9F"><span class="nav-number">2.2.</span> <span class="nav-text">为什么不使用诸如 MD5，SHA1，SHA2，SHA3 等等算法？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E7%9B%90%E5%B9%B6%E4%B8%8D%E8%83%BD%E5%B8%AE%E5%8A%A9%E4%BD%A0"><span class="nav-number">2.3.</span> <span class="nav-text">加盐并不能帮助你</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bcrypt-%E8%A7%A3%E5%86%B3%E4%BA%86%E8%BF%99%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.</span> <span class="nav-text">bcrypt 解决了这些问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2011-02-24-%E6%9B%B4%E6%96%B0"><span class="nav-number">2.6.</span> <span class="nav-text">2011.02.24 更新</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/389a9bee078c">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="如何安全地存储一个密码（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何安全地存储一个密码（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-07-26 23:09:00" itemprop="dateCreated datePublished" datetime="2023-07-26T23:09:00+00:00">2023-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如何安全地存储一个密码（译）。原文地址：<a target="_blank" rel="noopener" href="https://codahale.com/how-to-safely-store-a-password/">How To Safely Store A Password</a>。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="使用-bcrypt-库"><a href="#使用-bcrypt-库" class="headerlink" title="使用 bcrypt 库"></a>使用 bcrypt 库</h2><p>使用 <a target="_blank" rel="noopener" href="https://github.com/kelektiv/node.bcrypt.js">bcrypt</a>。<br>使用 <a target="_blank" rel="noopener" href="https://github.com/kelektiv/node.bcrypt.js">bcrypt</a>。<br>使用 <a target="_blank" rel="noopener" href="https://github.com/kelektiv/node.bcrypt.js">bcrypt</a>。<br>使用 <a target="_blank" rel="noopener" href="https://github.com/kelektiv/node.bcrypt.js">bcrypt</a>。<br>使用 <a target="_blank" rel="noopener" href="https://github.com/kelektiv/node.bcrypt.js">bcrypt</a>。</p>
+<h2 id="为什么不使用诸如-MD5，SHA1，SHA2，SHA3-等等算法？"><a href="#为什么不使用诸如-MD5，SHA1，SHA2，SHA3-等等算法？" class="headerlink" title="为什么不使用诸如 MD5，SHA1，SHA2，SHA3 等等算法？"></a>为什么不使用诸如 MD5，SHA1，SHA2，SHA3 等等算法？</h2><p>这些都是通用的散列函数，它们被设计用来尽可能使用少的时间来计算一个大数据的摘要。这意味着它们能够很好地确保数据完整性，但在存储密码上完全就是垃圾。</p>
+<p>一个现代的服务器每秒可以<a target="_blank" rel="noopener" href="https://cryptopp.com/benchmarks-amd64.html">计算</a> 330MB 大小的 MD5 值。如果你的用户使用 6 位小写字母数字组成的密码的话，你可以在大约 40 秒内对所有可能的密码进行尝试。</p>
+<p>而且这无需投资任何东西。</p>
+<p>如果你愿意的话，花费 2000 刀以及一两周时间来购买 CUDA ，你可以组建你自己的小型超算集群，这样你可以在 1 秒内尝试大约 7 亿个密码。在这样的速度下你将以每秒超过 1 个的速度破解这些密码。</p>
+<h2 id="加盐并不能帮助你"><a href="#加盐并不能帮助你" class="headerlink" title="加盐并不能帮助你"></a>加盐并不能帮助你</h2><p>需要注意的是，加盐对预防字典攻击或者暴力攻击是无效的。你可以使用巨大的盐值或者多个盐值，甚至是手动筛选的，位于阴影处，有机的<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Himalayan_salt">喜马拉雅粉红盐</a>（这里应该是打趣而已，没有搜到关于喜马拉雅粉红盐在编程方面的信息），对于从数据库中给定的散列值和盐值，它并不会影响攻击者尝试候选密码的速度。</p>
+<p>如果你是使用一个通用的为速度设计的散列函数，是否加盐没有意义。</p>
+<h2 id="bcrypt-解决了这些问题"><a href="#bcrypt-解决了这些问题" class="headerlink" title="bcrypt 解决了这些问题"></a>bcrypt 解决了这些问题</h2><p>bcrypt 怎么样？基本上来说它慢的要死。它使用了 Blowfish 加密算法的密钥表的一个变体，并且引入了工作因子，工作因子允许你决定散列函数需要的执行成本。由于引入了它， bcrypt 可以跟上摩尔定律。当电脑执行速度变快，你可以增加工作因子来让散列过程变慢。</p>
+<p>bcrypt 有多慢？对比 MD5 ？这依赖工作因子参数。使用一个值为 12 的工作因子， bcrypt 在我的笔记本上散列一个 <code>yaaa</code> 的密码需要大约 0.3 秒。而 MD5 只需要不超过 1 毫秒。</p>
+<p>所以这里是 5 个左右的数量级。破解一个密码不再是 40 秒，而是要 12 年左右。你的密码可能不需要这样的安全性，并且你可能需要的是一个更快的比较算法，但是 bcrypt 允许你在速度和安全间选择一个平衡，所以，使用它就对了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>使用 bcrypt</strong></p>
+<h2 id="2011-02-24-更新"><a href="#2011-02-24-更新" class="headerlink" title="2011.02.24 更新"></a>2011.02.24 更新</h2><p>在过去的一年中，我收到了很多关于这篇文章的邮件，我觉得我应该在这里解决一些问题，而不是一次又一次的重复对话。</p>
+<blockquote>
+<p>bcrypt 不就是 Blowfish 吗？你是在哪里存储密码的？</p>
+</blockquote>
+<p>请阅读这篇<a target="_blank" rel="noopener" href="http://www.usenix.org/events/usenix99/provos.html">文章</a>。 bcrypt 是一个使用了 Blowfish 密钥表的一个自适应密码散列算法， 不是对称加密算法。</p>
+<blockquote>
+<p>你说盐没有用，那彩虹表呢？<br>为什么你不建议使用盐呢？</p>
+</blockquote>
+<p>正如这篇<a target="_blank" rel="noopener" href="http://www.usenix.org/events/usenix99/provos.html">文章</a>讨论的一样， bcrypt 内置了盐来防止彩虹表攻击。所以我没说盐是没有目的的，我的意思是它们不能防止字典攻击或者暴力攻击。</p>
+<p>尽管在博客帖子中把彩虹表作为主题很受欢迎，但它已经落伍了。 基于 CUDA&#x2F;OPENCL 的密码破解程序可以大量利用 GPU 内的并行能力， <a target="_blank" rel="noopener" href="http://www.golubev.com/hashgpu.htm">1 秒可以验证数十亿个候选密码</a>。你可以按照字面上的意思来测试一个长度不大于 7 的只包含小写的密码，花费的时间不会超过 2 秒。现在你还可以租用硬件，每小时的费用<a target="_blank" rel="noopener" href="http://aws.amazon.com/ec2/#pricing">不超过 3 刀</a>。大约需要每小时 300 刀，你就可以在 1 秒内破解大约 5000 亿个候选密码。</p>
+<p>鉴于加密攻击经济学的巨大转变，对于任何人来说，浪费数 TB 的硬盘空间来希望受害者不使用盐是没有意义的。破解密码要容易的多。即使是一个“好”的比如 SHA2<sub>256</sub> 的散列方案，仍然完全容易受到这些廉价但有效的攻击，因此，像 bcrypt 这样的自适应散列算法就很重要了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这篇文章是我在看 nestjs 文档的时候，在 <a target="_blank" rel="noopener" href="https://docs.nestjs.com/security/authentication">SECURITY - Authentication</a> 一节中看到的，觉得挺有意思的，就写了下来。</p>
+<p>作者的观点还是挺“偏激”的，我是觉得即使 MD5 的计算速度很快，但密码验证依然得基于 client - server 的形式，在 server 上肯定是不会让用户能够以一个极快的速度对一个类似登录验证的接口进行调用的，在接口上完全可以做一些策略来防止这种情况，比如某个 ip 多少次验证登录请求失败就封禁一段时间，给登录加上短信验证，邮箱验证等等。</p>
+<p>不过我也不是专门写后端的，可能还有一些没有想到的情况…，刚好这种情况就是需要强安全的密码散列的。</p>
+<p>不过我们公司目前都是使用加盐 MD5 来进行密码散列的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/389a9bee078c" title="如何安全地存储一个密码（译）">https://prohibitorum.top/389a9bee078c</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/password/" rel="tag"># password</a>
+              <a href="/tags/bcrypt/" rel="tag"># bcrypt</a>
+              <a href="/tags/store/" rel="tag"># store</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/6a849bcfebbe" rel="prev" title="记一次 Safari 下调用 navigator.mediaDevices.getDisplayMedia 获取录屏失败问题">
+                  <i class="fa fa-angle-left"></i> 记一次 Safari 下调用 navigator.mediaDevices.getDisplayMedia 获取录屏失败问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/af62ed0fa525" rel="next" title="使用 composition 事件来检测输入使用输入法">
+                  使用 composition 事件来检测输入使用输入法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1690384140"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

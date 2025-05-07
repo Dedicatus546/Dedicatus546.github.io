@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言ECMAScript2022（es13）新特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript2022（es13）新特性">
+<meta property="og:url" content="https://prohibitorum.top/c9d56f099acf">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言ECMAScript2022（es13）新特性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-27T23:26:53.000Z">
+<meta property="article:modified_time" content="2024-12-27T23:26:53.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/c9d56f099acf.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/c9d56f099acf","path":"c9d56f099acf.html","title":"ECMAScript2022（es13）新特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ECMAScript2022（es13）新特性 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B6%E5%B1%82-await"><span class="nav-number">2.1.</span> <span class="nav-text">顶层 await</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%AE%9E%E4%BE%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E5%A3%B0%E6%98%8E"><span class="nav-number">2.2.</span> <span class="nav-text">类实例的属性声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%AE%9E%E4%BE%8B%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">类实例私有属性和方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E9%9D%99%E6%80%81%E5%B1%9E%E6%80%A7%E5%92%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">类静态属性和方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E9%9D%99%E6%80%81%E5%9D%97"><span class="nav-number">2.5.</span> <span class="nav-text">类静态块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7-in-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.6.</span> <span class="nav-text">类私有属性 in 操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-prototype-at-%E5%92%8C-String-prototype-at"><span class="nav-number">2.7.</span> <span class="nav-text">Array.prototype.at 和 String.prototype.at</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object-hasOwn"><span class="nav-number">2.8.</span> <span class="nav-text">Object.hasOwn</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%88%99-d-%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.9.</span> <span class="nav-text">正则 d 模式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/c9d56f099acf">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ECMAScript2022（es13）新特性 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript2022（es13）新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-27 23:26:53" itemprop="dateCreated datePublished" datetime="2024-12-27T23:26:53+00:00">2024-12-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ECMAScript2022（es13）新特性。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="顶层-await"><a href="#顶层-await" class="headerlink" title="顶层 await"></a>顶层 await</h2><p>在 esm 模块内，在顶层 await 特性出来前，如果一个模块的导出依赖异步操作的话，处理起来就会比较复杂，比如如果我们需要导出一个 <code>db</code> 对象，即连接一个数据库后导出，我们可能会写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// db.mjs</span></span><br><span class="line"><span class="comment">// 第三方引入的创建 db 实例的异步函数</span></span><br><span class="line"><span class="keyword">import</span> &#123; createDB &#125; <span class="keyword">from</span> <span class="string">&quot;db-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> db = <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> initDBPromise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="title function_">async</span> (resolve, reject) =&gt; &#123;</span><br><span class="line">  db = <span class="keyword">await</span> <span class="title function_">createDB</span>();</span><br><span class="line">  <span class="title function_">resolve</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在需要的地方，都得引入 <code>initDBPromise</code> 来确保引入的 <code>db</code> 不为 <code>undefined</code> ，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.mjs</span></span><br><span class="line"><span class="keyword">import</span> &#123; db, initDBPromise &#125; <span class="keyword">from</span> <span class="string">&quot;db.mjs&quot;</span>;</span><br><span class="line"></span><br><span class="line">initDBPromise.<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 使用 db 。</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>又或者直接导出一个 Promise ，resolve 的结果为 <code>db</code> 对象，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// db.mjs</span></span><br><span class="line"><span class="comment">// 第三方引入的创建 db 实例的异步函数</span></span><br><span class="line"><span class="keyword">import</span> &#123; createDB &#125; <span class="keyword">from</span> <span class="string">&quot;db-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> resolveDBPromise = <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="title function_">async</span> (resolve, reject) =&gt; &#123;</span><br><span class="line">  <span class="title function_">resolve</span>(<span class="keyword">await</span> <span class="title function_">createDB</span>());</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>然后使用的时候如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// b.mjs</span></span><br><span class="line"><span class="keyword">import</span> &#123; resolveDBPromise &#125; <span class="keyword">from</span> <span class="string">&quot;db.mjs&quot;</span>;</span><br><span class="line"></span><br><span class="line">resolveDBPromise.<span class="title function_">then</span>(<span class="function">(<span class="params">db</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 使用 db 。</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>虽然能够完成需求，但这会导致一些问题：</p>
+<ul>
+<li>开发者必须了解库作者导出的对象是否可能是异步产生的，是否有对应的 Promise 导出来确保对象已初始化。这会加重理解负担。</li>
+<li>开发者很有可能忘记调用导出的 Promise 来获取已初始化的对象，但代码可能仍然能正常工作，比如正式环境中异步操作可能比开发环境中要慢得多，导致某些某些开发环境中能执行的代码在正式环境中出现了异常。</li>
+<li>如果一个模块 A 依赖了另一个异步导出的模块 B ，那么意味着 A 模块中依赖 B 模块的导出都得成为异步导出，这进一步加重了编写和理解负担。</li>
+</ul>
+<p>所以引入了顶层 await 这个特性。可以理解为上面的写 Promise 的步骤，模块系统帮你实现了。在模块的顶部就可以直接 await 某个 promise 。例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// db.mjs</span></span><br><span class="line"><span class="comment">// 第三方引入的创建 db 实例的异步函数</span></span><br><span class="line"><span class="keyword">import</span> &#123; createDB &#125; <span class="keyword">from</span> <span class="string">&quot;db-lib&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> db = <span class="keyword">await</span> <span class="title function_">createDB</span>();</span><br></pre></td></tr></table></figure>
+
+<p>然后在其他文件中使用：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// c.mjs</span></span><br><span class="line"><span class="keyword">import</span> &#123; db &#125; <span class="keyword">from</span> <span class="string">&quot;db.mjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用 db</span></span><br></pre></td></tr></table></figure>
+
+<p>这里要注意，如果一个模块具有顶层 await ，那么所有依赖它的模块都得等到它阻塞结束后再执行。ESM 的 import 本质上就是一种执行的过程，只有执行完成了，才能确定导出的东西，所以依赖具有顶层 await 的模块都会被阻塞。</p>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-top-level-await">提案</a>的页面，我们也能知道一些很有意思的点，比如：</p>
+<p>关于 ESM 模块的执行顺序，如果不存在顶层 await 模块，那么模块的执行遵循后续遍历，即先遍历左子树，再遍历右子树，最后输出根，比如现在有如下的文件依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">c</span><br><span class="line">|\</span><br><span class="line">a b</span><br></pre></td></tr></table></figure>
+
+<p>这个图的意思是 c 文件 import 了 a 文件和 b 文件。</p>
+<p>那么执行 c 文件，顺序为 a b c ，a 和 b 的顺序取决于你 import 的顺序，如果 b 的 import 在 a 前面，那么执行顺序就变成了 b a c 。</p>
+<p>在加上顶层 await 后，其实这个顺序遍历顺序也是保持不变的，只是在遇到顶层 await 模块后会让出执行逻辑，比如下面这个文件依赖：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">g</span><br><span class="line">|\</span><br><span class="line">| \</span><br><span class="line">|  \</span><br><span class="line">e   f（顶层 await 模块）</span><br><span class="line">|\  |\</span><br><span class="line">a b c d</span><br></pre></td></tr></table></figure>
+
+<p>在这个依赖图中，子树 e 是完全不受顶层 await 影响的，它完全和前面的一样，执行顺序为 a b e ，接着遍历 g 右子树，此时解析完成 c 和 d ，发现 f 是异步模块，那么需要让出执行权，但是 f 已经是 g 在导入顺序上的最后一个模块了，此时只需等待 f 完成即可，最后再遍历 g 本身。</p>
+<p>如果 f 和 e 对调：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">g</span><br><span class="line">|\</span><br><span class="line">| \</span><br><span class="line">|  \</span><br><span class="line">f   e</span><br><span class="line">|\  |\</span><br><span class="line">c d a b</span><br></pre></td></tr></table></figure>
+
+<p>那么执行到 f 阻塞之后，会交出执行权，这时子树 e 开始解析，输出 a b e ，接着等待 f 阻塞完成，最后遍历 g 自身。</p>
+<p>在 <a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-top-level-await?tab=readme-ov-file#faq">FAQ</a> 部分也讨论了其他一些方面，比如异步导入存在死锁问题，以及该特性的语义去糖化，还是相当有意思的，建议作为<del>厕所读物</del>。</p>
+<h2 id="类实例的属性声明"><a href="#类实例的属性声明" class="headerlink" title="类实例的属性声明"></a>类实例的属性声明</h2><p>在 es13 之前，类的属性声明都在构造器中，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">x</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">y</span> = <span class="number">2</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而 es13 支持直接在 class 的块内编写变量声明和赋值：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  x = <span class="number">1</span>;</span><br><span class="line">  y = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="类实例私有属性和方法"><a href="#类实例私有属性和方法" class="headerlink" title="类实例私有属性和方法"></a>类实例私有属性和方法</h2><p>虽然 js 在 es6 引入了 class 特性，不过整体上依然不完整，比如在封装性的方面。</p>
+<p>虽然类可以封装逻辑，但由于 js 的动态性，外部用户可以随意修改类上的属性，可能会导致执行出现异常，这是缺少私有属性导致的，所以 es13 引入了私有属性和方法，以 <code>#</code> 开头的变量都会被当作私有变量和私有方法，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  #a = <span class="number">1</span>;</span><br><span class="line">  b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;#test&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>外部无法访问 <code>#a</code> 这个私有变量或者 <code>#test</code> 这个私有方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> <span class="title function_">A</span>();</span><br><span class="line"></span><br><span class="line">a.#a; <span class="comment">// 报错</span></span><br><span class="line">a.#<span class="title function_">test</span>(); <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<p>内部可以使用 <code>this</code> 正常访问：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  #a = <span class="number">1</span>;</span><br><span class="line">  b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;#test&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#a);</span><br><span class="line">    <span class="variable language_">this</span>.#<span class="title function_">test</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意 <code>#test</code> 和 <code>test</code> 是两个<strong>名字不同</strong>的属性，这意味着它们是能够共存的。</p>
+<h2 id="类静态属性和方法"><a href="#类静态属性和方法" class="headerlink" title="类静态属性和方法"></a>类静态属性和方法</h2><p>es13 也增强了类的静态成员和方法的能力，类也可以定义私有静态属性和方法了：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  <span class="keyword">static</span> #a = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">static</span> #<span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.#a);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    A.#<span class="title function_">test</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> a = <span class="keyword">new</span> <span class="title function_">A</span>();</span><br><span class="line">a.<span class="title function_">test</span>(); <span class="comment">// 输出 1</span></span><br><span class="line">A.#a; <span class="comment">// 报错</span></span><br><span class="line">A.#<span class="title function_">test</span>(); <span class="comment">// 报错</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="类静态块"><a href="#类静态块" class="headerlink" title="类静态块"></a>类静态块</h2><p>在类加强了静态属性和方法后，静态成员的初始化也进一步的加强，通过 static 块可以为静态成员进行复杂的初始化操作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 复杂的操作</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">complex</span> = (<span class="params"></span>) =&gt; &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  <span class="keyword">static</span> #a;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">static</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> c = <span class="title function_">complex</span>();</span><br><span class="line">    <span class="keyword">if</span> (c) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.#a = <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> d = c.<span class="property">property</span></span><br><span class="line">      <span class="variable language_">this</span>.#a = d;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意 static 块的 <code>this</code> 指向的是类本身，而不是类的实例，你可以理解为 static 块内的 <code>this</code> 指向的就是 <code>A</code> ，而非 <code>A</code> 的实例，因为这是对静态数据的初始化，跟实例无关。</p>
+<h2 id="类私有属性-in-操作符"><a href="#类私有属性-in-操作符" class="headerlink" title="类私有属性 in 操作符"></a>类私有属性 in 操作符</h2><p>在前面的引入私有属性和方法的特性之后，就会发现，我很难用一个简介的方法来判断某个类是否含有某个私有字段，这时基于读取私有属性会报错的特性，可以写下如下的方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  #a = <span class="number">1</span>;</span><br><span class="line">  b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;#test&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 读取私有属性的方法一定得在类内，类外读取私有属性都是语法错误的。</span></span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">check</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      obj.#a;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125; <span class="keyword">catch</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A.<span class="title function_">check</span>(<span class="keyword">new</span> <span class="title function_">A</span>()); <span class="comment">// true</span></span><br><span class="line">A.<span class="title function_">check</span>(&#123;&#125;); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>虽然能解决问题，但看起来有点唐，所以 es13 还添加了一个 <code>in</code> 操作来检测私有属性，用法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> &#123;</span><br><span class="line">  #a = <span class="number">1</span>;</span><br><span class="line">  b = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">  #<span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;#test&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 读取私有属性的方法一定得在类内，类外读取私有属性都是语法错误的。</span></span><br><span class="line">  <span class="keyword">static</span> <span class="title function_">check</span>(<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> #a <span class="keyword">in</span> obj;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">A.<span class="title function_">check</span>(<span class="keyword">new</span> <span class="title function_">A</span>()); <span class="comment">// true</span></span><br><span class="line">A.<span class="title function_">check</span>(&#123;&#125;); <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Array-prototype-at-和-String-prototype-at"><a href="#Array-prototype-at-和-String-prototype-at" class="headerlink" title="Array.prototype.at 和 String.prototype.at"></a>Array.prototype.at 和 String.prototype.at</h2><p>这两个 <code>at</code> 函数其实就是方括号的函数形式，用法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">&quot;你好&quot;</span>;</span><br><span class="line">str.<span class="title function_">at</span>(<span class="number">0</span>); <span class="comment">// 输出 你 ，等效于 str[0]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">array.<span class="title function_">at</span>(<span class="number">0</span>); <span class="comment">// 输出 1 ，等效于 array[0]</span></span><br></pre></td></tr></table></figure>
+
+<p>既然是等价的，那为什么还需要 <code>at</code> 函数呢，其实 <code>at</code> 函数还支持负数的调用形式，如果传入的值为负数，那么实际的引用为 <code>index + length</code> ，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">&quot;你好，世界&quot;</span>;</span><br><span class="line">str.<span class="title function_">at</span>(-<span class="number">1</span>); <span class="comment">// 输出 界 ，实际的索引位置为 str.length + (-1) = 4</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> array = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">array.<span class="title function_">at</span>(-<span class="number">2</span>); <span class="comment">// 输出 2 ，实际的索引位置为 array.length + (-2) = 1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Object-hasOwn"><a href="#Object-hasOwn" class="headerlink" title="Object.hasOwn"></a>Object.hasOwn</h2><p><code>Object.prototype.hasOwnProperty.call</code> 的官方省略版…</p>
+<p>不过这里可能有些小伙伴会疑惑，为什么要通过 <code>call</code> 调用，直接调用不行吗？</p>
+<p>诶 🤓，这就要说到 js 的原型链的问题了，如果某个不知名的脚本在你的对象上多加了个 <code>hasOwnProperty</code> 函数，那就会出现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> a = <span class="title class_">Object</span>.<span class="title function_">create</span>(&#123;</span><br><span class="line">  <span class="title function_">hasOwnProperty</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">a.<span class="title function_">hasOwnProperty</span>(<span class="string">&quot;我有这个属性吗&quot;</span>); <span class="comment">// 输出 true</span></span><br></pre></td></tr></table></figure>
+
+<p>所以 <code>Object.prototype.hasOwnProperty.call</code> 可以改变 <code>hasOwnProperty</code> 内的 <code>this</code> ，同时确保检测这件事的逻辑确实来源于 <code>Object.prototype.hasOwnProperty</code> ，不过为了防止运行时修改，大部分的框架都会提前保存一份 <code>Object.prototype.hasOwnProperty</code> 的引用，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> hasOwnProperty = <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">hasOwnProperty</span>;</span><br></pre></td></tr></table></figure>
+
+<p>虽然其他先于该脚本加载的脚本仍有可能复写 <code>Object.prototype.hasOwnProperty</code> ，但算是防御等级最高的了。</p>
+<h2 id="正则-d-模式"><a href="#正则-d-模式" class="headerlink" title="正则 d 模式"></a>正则 d 模式</h2><p>es13 引入了正则的 <code>d</code> 模式，它的作用是对一些接口的返回值添加捕获的索引位置，属性名为 <code>indices</code> ，比如 <code>Regexp.prototype.exec</code> ， <code>String.prototype.match</code> 等，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> re1 = <span class="regexp">/a+(?&lt;Z&gt;z)?/</span>d;</span><br><span class="line"><span class="keyword">const</span> s1 = <span class="string">&quot;xaaaz&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> m1 = re1.<span class="title function_">exec</span>(s1);</span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// [</span></span><br><span class="line"><span class="comment">//   &#x27;aaaz&#x27;,</span></span><br><span class="line"><span class="comment">//   &#x27;z&#x27;,</span></span><br><span class="line"><span class="comment">//   index: 1,</span></span><br><span class="line"><span class="comment">//   input: &#x27;xaaaz&#x27;,</span></span><br><span class="line"><span class="comment">//   groups: [Object: null prototype] &#123; Z: &#x27;z&#x27; &#125;,</span></span><br><span class="line"><span class="comment">//   // 额外返回的 indices 属性，其中第 0 项为整体的匹配，第二项为捕获组的匹配，都是左闭右开的</span></span><br><span class="line"><span class="comment">//   indices: [</span></span><br><span class="line"><span class="comment">//     [ 1, 5 ],</span></span><br><span class="line"><span class="comment">//     [ 4, 5 ],</span></span><br><span class="line"><span class="comment">//     // 如果捕获组是具名的，那么结果会被添加在该属性中</span></span><br><span class="line"><span class="comment">//     groups: [Object: null prototype] &#123; Z: [4, 5] &#125;</span></span><br><span class="line"><span class="comment">//   ]</span></span><br><span class="line"><span class="comment">// ]</span></span><br></pre></td></tr></table></figure>
+
+<p>如果捕获组未被匹配，那么相应的位置会为 undefined ，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> re1 = <span class="regexp">/a+(?&lt;Z&gt;z)?/</span>d;</span><br><span class="line"><span class="keyword">const</span> s1 = <span class="string">&quot;xaaay&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> m1 = re1.<span class="title function_">exec</span>(s1);</span><br><span class="line"><span class="comment">// 输出</span></span><br><span class="line"><span class="comment">// [</span></span><br><span class="line"><span class="comment">//   &#x27;aaa&#x27;,</span></span><br><span class="line"><span class="comment">//   undefined,</span></span><br><span class="line"><span class="comment">//   index: 1,</span></span><br><span class="line"><span class="comment">//   input: &#x27;xaaay&#x27;,</span></span><br><span class="line"><span class="comment">//   groups: [Object: null prototype] &#123; Z: undefined &#125;,</span></span><br><span class="line"><span class="comment">//   indices: [</span></span><br><span class="line"><span class="comment">//     [ 1, 4 ],</span></span><br><span class="line"><span class="comment">//     // 这里是 undefined</span></span><br><span class="line"><span class="comment">//     undefined,</span></span><br><span class="line"><span class="comment">//     // 具名捕获组的位置也为 undefined </span></span><br><span class="line"><span class="comment">//     groups: [Object: null prototype] &#123; Z: undefined &#125;</span></span><br><span class="line"><span class="comment">//   ]</span></span><br><span class="line"><span class="comment">// ]</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/c9d56f099acf" title="ECMAScript2022（es13）新特性">https://prohibitorum.top/c9d56f099acf</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a10425ebbbaa" rel="prev" title="ECMAScript2021（es12）新特性">
+                  <i class="fa fa-angle-left"></i> ECMAScript2021（es12）新特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/518651390e8f" rel="next" title="ECMAScript2023（es14）新特性">
+                  ECMAScript2023（es14）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1734011336"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="HTTP知识笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP知识笔记">
+<meta property="og:url" content="https://prohibitorum.top/e06b336d1e34">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="HTTP知识笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/25/W2xTYQ.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/25/W2xasx.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/WIlwNt.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/26/WhlgMj.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/26/WhlRLn.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/WIexOI.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/WIKHud.png">
+<meta property="og:image" content="https://z3.ax1x.com/2021/07/27/WIKr3F.png">
+<meta property="article:published_time" content="2021-07-25T22:08:42.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="HTTP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://z3.ax1x.com/2021/07/25/W2xTYQ.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/e06b336d1e34.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/e06b336d1e34","path":"e06b336d1e34.html","title":"HTTP知识笔记"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HTTP知识笔记 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-1-0"><span class="nav-number">1.</span> <span class="nav-text">HTTP&#x2F;1.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-1-1"><span class="nav-number">2.</span> <span class="nav-text">HTTP&#x2F;1.1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-2"><span class="nav-number">3.</span> <span class="nav-text">HTTP&#x2F;2</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/e06b336d1e34">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HTTP知识笔记 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HTTP知识笔记
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-07-25 22:08:42" itemprop="dateCreated datePublished" datetime="2021-07-25T22:08:42+00:00">2021-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>HTTP</code>知识笔记</p>
+<span id="more"></span>
+
+<p><code>HTTP</code>版本版本变迁：</p>
+<ul>
+<li><code>HTTP/0.9</code>，<code>1991</code>年，只能使用<code>GET</code>，请求不涉及数据包传输，	没有作为正式的标准；</li>
+<li><code>HTTP/1.0</code>，<code>1996</code>年，传输内容格式不限制，增加<code>PUT</code>、<code>PATCH</code>、<code>HEAD</code>、 <code>OPTIONS</code>、<code>DELETE</code>命令，正式作为标准；</li>
+<li><code>HTTP/1.1</code> <code>1997</code>年，持久连接（长连接）、节约带宽、<code>HOST</code>域、管道机制、分块传输编码，<code>2015</code>年前使用最广泛；</li>
+<li><code>HTTP/2</code>，<code>2015</code>年，多路复用、服务器推送、头信息压缩、二进制协议等，逐渐覆盖市场。</li>
+</ul>
+<p><img data-src="https://z3.ax1x.com/2021/07/25/W2xTYQ.png"></p>
+<p><code>HTTP</code>位于计算机网络模型的应用层，是基于<code>TCP</code>的一个应用层协议。</p>
+<p>虽然<code>TCP</code>是面向连接的，但是<code>HTTP</code>却是无连接的。</p>
+<p>在<code>Akamai</code>公司的演示页面上可以看到<code>HTTP1.1</code>和<code>HTTP2</code>的图片加载速度区别。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://http2.akamai.com/demo">HTTP&#x2F;2 is the future of the Web, and it is here!</a></p>
+</blockquote>
+<p><img data-src="https://z3.ax1x.com/2021/07/25/W2xasx.png"></p>
+<h1 id="HTTP-1-0"><a href="#HTTP-1-0" class="headerlink" title="HTTP/1.0"></a><code>HTTP/1.0</code></h1><ul>
+<li>使用<code>If-Modified-Since</code>，<code>Expires</code>头部来控制缓存；</li>
+<li>不支持部分传输，某些时候我们只需传输文件整个的一段而已，传整个过来浪费了带宽，也容易造成长时间的占用一个连接；</li>
+<li>每次传输数据都需要简历新的一个连接，当数据传输完成，连接就会关闭，无法复用已经传输完成的连接；</li>
+<li>一个服务器绑定唯一一个<code>IP</code>地址；</li>
+<li>队头阻塞，即下一个请求必须在上一个请求完成才能进行传输，否则处于挂起状态。</li>
+</ul>
+<h1 id="HTTP-1-1"><a href="#HTTP-1-1" class="headerlink" title="HTTP/1.1"></a><code>HTTP/1.1</code></h1><ul>
+<li>使用更多的头部来增强缓存控制策略，<code>Entity tag</code>，<code>If-Unmodified-Since</code>, <code>If-Match</code>, <code>If-None-Match</code>；</li>
+<li>支持部分返回，新增<code>206</code>（<code>Partial Content</code>）返回码来表示这是一个部分请求，通过<code>Range</code>头部来指定文件的范围；</li>
+<li>由于虚拟主机的发展，现在一台服务器可以存在多个虚拟主机，它们共享一个<code>IP</code>地址，所以请求和响应头域必须附带<code>Host</code>头域（指定主机名），不然直接返回<code>400</code>错误；</li>
+<li>支持长连接，现在可以复用同一条<code>TCP</code>连接，无需重新建立<code>TCP</code>连接来进行<code>HTTP</code>请求，在头部增加<code>Connection： keep-alive</code>默认开启该特性；</li>
+<li>支持请求流水线，由于支持长连接，现在可以复用同一条<code>TCP</code>连接，流水线，通俗点讲，就是可以在等待上一个资源还未返回结果的时候，进行新的资源请求，不过，资源的接收必须按照发送的顺利；</li>
+<li>细化错误的响应码，如<code>409</code>（<code>Conflict</code>）表示请求的资源与资源的当前状态发生冲突；<code>410</code>（<code>Gone</code>）表示服务器上的某个资源被永久性的删除。</li>
+</ul>
+<h1 id="HTTP-2"><a href="#HTTP-2" class="headerlink" title="HTTP/2"></a><code>HTTP/2</code></h1><p>相关<code>RFC</code>为<code>RFC7540</code>。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.rfc-editor.org/rfc/inline-errata/rfc7540.html">Hypertext Transfer Protocol Version 2 (HTTP&#x2F;2)</a></p>
+</blockquote>
+<ul>
+<li>二进制分帧，<code>HTTP/2</code>通过在应用层和传输层之间增加一个二进制分帧层，使用二进制而非<code>HTTP/1.1</code>的文本格式来传输数据，将请求报文或者响应报文分割成帧来传送；<br><img data-src="https://z3.ax1x.com/2021/07/27/WIlwNt.png"></li>
+<li>流标识，存在于连接中的一个虚拟通道，流可以承载双向消息，每个流都有一个唯一的整数<code>ID</code>，这样可以和其他流区分开；</li>
+<li>多路复用，<code>HTTP/1.1</code>虽然可以复用<code>TCP</code>连接，但是必须顺序的响应请求结果，如果想要并发多个请求，则必须使用多个<code>TCP</code>连接，浏览器对一个域名的<code>TCP</code>连接数有限制，一般为<code>6 - 8</code>个，超出限制的连接就会被挂起等待，等待前面的连接完成后才能进行发送，<code>HTTP/2</code>由于使用了二进制分帧和流标识，使得全部的数据都可以在一条<code>TCP</code>连接上完成，减少了创建多条<code>TCP</code>连接带来的延时以及减少内存消耗；<br><img data-src="https://z3.ax1x.com/2021/07/26/WhlgMj.png"></li>
+<li>服务器推送，在发送<code>HTML</code>页面时，服务器可以主动的<code>HTML</code>附带的<code>CSS</code>和<code>JS</code>一并推送给用户，减少请求次数；<br><img data-src="https://z3.ax1x.com/2021/07/26/WhlRLn.png"></li>
+<li>头部压缩，随着网络的发展，<code>HTTP</code>的请求大小越来越大，每次需要发送的冗余请求头非常多，HTTP&#x2F;2通过在客服端和服务端各自维护一个“首部表”（类似一个<code>Map</code>）来减少重复数据的传送，具体算法为<code>HPACK</code>，具体可以查看相关的<code>RFC</code>文档：<a target="_blank" rel="noopener" href="https://httpwg.org/specs/rfc7541.html">HPACK: Header Compression for HTTP&#x2F;2</a>，这里涉及到哈夫曼编码，通过编码来减少请求头部过大带来的网络消耗。<br><img data-src="https://z3.ax1x.com/2021/07/27/WIexOI.png"></li>
+</ul>
+<p>很多大型应用已经开始转到<code>HTTP/2</code>了，比如：</p>
+<ul>
+<li>百度首页<br><img data-src="https://z3.ax1x.com/2021/07/27/WIKHud.png"></li>
+<li>淘宝首页<br><img data-src="https://z3.ax1x.com/2021/07/27/WIKr3F.png"></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/e06b336d1e34" title="HTTP知识笔记">https://prohibitorum.top/e06b336d1e34</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/3800ed123cd0" rel="prev" title="JavaScript中的垃圾回收">
+                  <i class="fa fa-angle-left"></i> JavaScript中的垃圾回收
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/24b0dddac735" rel="next" title="HTTP强缓存和协商缓存">
+                  HTTP强缓存和协商缓存 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1627222122"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

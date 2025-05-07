@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言👴回来了，这篇主要翻译下w3草案UI Event中的第3小节 - DOM事件体系（DOM Event Architecture） 这一个小节主要讲了事件捕获和冒泡的东西吧，当作一个笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DOM Event Architecture（DOM-Level-3）译文">
+<meta property="og:url" content="https://prohibitorum.top/01194d4ee87a">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言👴回来了，这篇主要翻译下w3草案UI Event中的第3小节 - DOM事件体系（DOM Event Architecture） 这一个小节主要讲了事件捕获和冒泡的东西吧，当作一个笔记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/12/03/iyUC1nhHEOspBGx.png">
+<meta property="og:image" content="https://i.loli.net/2020/12/03/XEqi2o9FM4JpngW.png">
+<meta property="article:published_time" content="2020-12-03T10:50:45.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="DOM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/12/03/iyUC1nhHEOspBGx.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/01194d4ee87a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/01194d4ee87a","path":"01194d4ee87a.html","title":"DOM Event Architecture（DOM-Level-3）译文"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>DOM Event Architecture（DOM-Level-3）译文 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-Event-Architecture-%EF%BC%88DOM%E4%BA%8B%E4%BB%B6%E4%BD%93%E7%B3%BB%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">DOM Event Architecture （DOM事件体系）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-dispatch-and-DOM-event-flow%EF%BC%88%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E5%92%8CDOM%E4%BA%8B%E4%BB%B6%E6%B5%81%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">Event dispatch and DOM event flow（事件分发和DOM事件流）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Default-actions-and-cancelable-events%EF%BC%88%E9%BB%98%E8%AE%A4%E5%8A%A8%E4%BD%9C%E5%92%8C%E5%8F%AF%E5%8F%96%E6%B6%88%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">Default actions and cancelable events（默认动作和可取消的事件）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Synchronous-and-asynchronous-events%EF%BC%88%E5%90%8C%E6%AD%A5%E5%92%8C%E5%BC%82%E6%AD%A5%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">Synchronous and asynchronous events（同步和异步的事件）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Trusted-events%EF%BC%88%E5%8F%AF%E4%BF%A1%E8%B5%96%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">Trusted events（可信赖的事件）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Activation-triggers-and-behavior%EF%BC%88%E6%BF%80%E6%B4%BB%E7%9A%84%E8%A7%A6%E5%8F%91%E5%99%A8%E5%92%8C%E8%A1%8C%E4%B8%BA%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">Activation triggers and behavior（激活的触发器和行为）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Constructing-Mouse-and-Keyboard-Events%EF%BC%88%E6%9E%84%E5%BB%BA%E7%9A%84%E9%BC%A0%E6%A0%87%E5%92%8C%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">Constructing Mouse and Keyboard Events（构建的鼠标和键盘事件）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/01194d4ee87a">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="DOM Event Architecture（DOM-Level-3）译文 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          DOM Event Architecture（DOM-Level-3）译文
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-03 10:50:45" itemprop="dateCreated datePublished" datetime="2020-12-03T10:50:45+00:00">2020-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>👴回来了，这篇主要翻译下w3草案<code>UI Event</code>中的第3小节 - DOM事件体系（DOM Event Architecture）</p>
+<p>这一个小节主要讲了事件捕获和冒泡的东西吧，当作一个笔记</p>
+<span id="more"></span>
+
+<p>原文：<a target="_blank" rel="noopener" href="https://www.w3.org/TR/2019/WD-uievents-20190530">UI Events</a></p>
+<h1 id="DOM-Event-Architecture-（DOM事件体系）"><a href="#DOM-Event-Architecture-（DOM事件体系）" class="headerlink" title="DOM Event Architecture （DOM事件体系）"></a>DOM Event Architecture （DOM事件体系）</h1><blockquote>
+<p>This section is non-normative. Refer to <a target="_blank" rel="noopener" href="https://dom.spec.whatwg.org/">DOM</a> for a normative description of the DOM event architecture</p>
+</blockquote>
+<p>本节是非规范化的。转到DOM标准来获得一个对DOM事件体系的一个规范化的描述。</p>
+<p>个人感觉这个草案讲的比较宏观，而规范那边讲的很细致，就会讲对象的结构和伪代码等</p>
+<p>对于我这种刚刚接触规范，感觉从草案上看会更好~，先对大体有一个认识</p>
+<h2 id="Event-dispatch-and-DOM-event-flow（事件分发和DOM事件流）"><a href="#Event-dispatch-and-DOM-event-flow（事件分发和DOM事件流）" class="headerlink" title="Event dispatch and DOM event flow（事件分发和DOM事件流）"></a>Event dispatch and DOM event flow（事件分发和DOM事件流）</h2><blockquote>
+<p>This section gives a brief overview of the event <strong>dispatch</strong> mechanism and describes how events propagate through the DOM tree. Applications can dispatch event objects using the <code>dispatchEvent()</code> method, and the event object will propagate through the DOM tree as determined by the DOM event flow.</p>
+</blockquote>
+<p>本节简短的概述了事件分发的机制以及事件如何通过DOM树进行传播。应用可以通过使用<code>dispatchEvent()</code>方法来分发事件对象，事件对象通过DOM事件流来确定在DOM树中的传递。</p>
+<p>这里涉及到一个术语：<strong>dispatch</strong></p>
+<hr>
+<p><strong>dispatch</strong></p>
+<blockquote>
+<p>To create an event with attributes and methods appropriate to its type and context, and propagate it through the DOM tree in the specified manner. Interchangeable with the term <code>fire</code>, e.g., <code>fire</code> a <code>click</code> event or <code>dispatch</code> a <code>load</code> event.</p>
+</blockquote>
+<p>创建一个带有适合对应类型和上下文的属性和方法的事件，然后在DOM树中通过特定的方式传递这个事件。可与术语<code>fire</code>互换，比如，比如可以说<code>fire</code>一个点击事件，也可以说<code>dispatch</code>一个加载的事件</p>
+<hr>
+<blockquote>
+<p>Event objects are dispatched to an <strong>event target</strong>. But before dispatch can begin, the event object’s <strong>propagation path</strong> must first be determined.</p>
+</blockquote>
+<p>事件对象被分发到一个事件目标对象上。但在分发过程开始之前，事件对象的传递路径必须先确定下来</p>
+<p>这里涉及到两个术语 <strong>event target</strong> 和 <strong>propagation path</strong></p>
+<hr>
+<p><strong>event target</strong></p>
+<blockquote>
+<p>The object to which an event is targeted using the §3.1 Event dispatch and DOM event flow. The event target is the value of the target attribute.</p>
+</blockquote>
+<p>事件针对的对象（也就是事件的目标对象）。事件目标对象就是<code>target</code>属性的值（也就是我们在函数中使用参数<code>e</code>的<code>e.target</code>值）</p>
+<p><strong>propagation path</strong></p>
+<blockquote>
+<p>The ordered set of current event targets though which an event object will pass sequentially on the way to and back from the event target.<br>As the event propagates, each current event target in the propagation path is in turn set as the currentTarget.<br>The propagation path is initially composed of one or more event phases as defined by the event type, but MAY be interrupted.<br>Also known as an event target chain.</p>
+</blockquote>
+<p>一个事件对象按序的到达事件目标对象以及从事件目标对象离开的过程中当前的事件对象组成的一个有序的集合。当事件传递的时候，每个在传播路径中的当前事件目标对象以及被设置为<code>currentTarget</code>（也就是赋值的一个过程）<br>传播路径最初由一个或者多个由事件类型定义的事件阶段组成，但可能会被打断。也可以理解为一条事件目标对象链。</p>
+<hr>
+<blockquote>
+<p>The <strong>propagation path</strong> is an ordered list of <strong>current event targets</strong> through which the event passes. This <strong>propagation path</strong> reflects the hierarchical tree structure of the document.<br>The last item in the list is the <strong>event target</strong>, and the preceding items in the list are referred to as the target’s ancestors, with the immediately preceding item as the target’s parent.</p>
+</blockquote>
+<p>传递路径是一个事件对象通过的当前事件目标对象的一个有序的集合。这个传递路径反映了文档的分层树的结构。列表中的最后一项为事件目标对象，之前的项称为目标对象的祖先，而直接祖先成为目标对象的父节点。</p>
+<p>这里涉及到一个术语：<strong>current event targets</strong></p>
+<hr>
+<p><strong>current event targets</strong></p>
+<blockquote>
+<p>In an event flow, the current event target is the object associated with the event handler that is currently being dispatched.<br>This object MAY be the event target itself or one of its ancestors.<br>The current event target changes as the event propagates from object to object through the various phases of the event flow.<br>The current event target is the value of the <code>currentTarget</code> attribute.</p>
+</blockquote>
+<p>在一个事件流中，当前事件目标对象为当前正在分发的事件处理器关联的对象<br>这个对象可能可能为事件目标对象本身或者是它的一个祖先。<br>当前事件目标对象在事件通过事件流的几个阶段从对象间传递的过程中改变<br>当前事件目标对象为<code>currentTarget</code>属性的值</p>
+<p>PS：这里提到的<code>current target event</code>和先前的<code>target event</code>对应了每次我们在注册回调函数里面使用的参数<code>e</code>的属性<code>currentTarget</code>和<code>target</code><br><code>target</code>为触发了事件的dom节点，而<code>currentTarget</code>可以理解为指向了你注册回调时的那个dom节点</p>
+<hr>
+<blockquote>
+<p>Once the <strong>propagation path</strong> has been determined, the event object passes through one or more <strong>event phases</strong>.<br>There are three event phases: <strong>capture phase</strong>, <strong>target phase</strong> and <strong>bubble phase</strong>.<br>Event objects complete these phases as described below.<br>A phase will be skipped if it is not supported, or if the event object’s propagation has been stopped.<br>For example, if the <code>bubbles</code> attribute is set to false, the bubble phase will be skipped, and if <code>stopPropagation()</code> has been called prior to the dispatch, all phases will be skipped.</p>
+</blockquote>
+<p>一旦传递路径被确定下来，事件对象传递给一个或多个事件阶段。<br>这里存在三个时间阶段：捕获阶段，目标阶段和冒泡阶段（这里可以对应下面这张图）<br>事件对象按照下面的描述来完成这些阶段。<br>如果某个阶段不被支持，或者事件对象的传播被中止，那么这个阶段会被跳过。<br>比如，如果冒泡属性被设置为<code>false</code>，那么冒泡阶段会被跳过，如果预先在分发前调用了<code>stopPropagation()</code>，所有的阶段会被跳过。</p>
+<p>这里有几个术语：<code>event phases（事件阶段）</code>，<code>capture phase（捕获阶段）</code>,<code>target phase（目标阶段）</code>,<code>bubble phase（冒泡阶段）</code>，这几个术语在这里比较好理解，并且下面的图面也可以很好的展示这三个过程。</p>
+<blockquote>
+<ul>
+<li>The capture phase: The event object propagates through the target’s ancestors from the <code>Window</code> to the target’s parent. This phase is also known as the capturing phase.</li>
+<li>The target phase: The event object arrives at the event object’s <strong>event target</strong>. This phase is also known as the at-target phase. If the <strong>event type</strong> indicates that the event doesn’t bubble, then the event object will halt after completion of this phase.</li>
+<li>The bubble phase: The event object propagates through the target’s ancestors in reverse order, starting with the target’s parent and ending with the <code>Window</code>. This phase is also known as the bubbling phase.</li>
+</ul>
+</blockquote>
+<ul>
+<li>捕获阶段：事件对象从目标对象的组件（Window对象开始）到目标对象的父对象传递。</li>
+<li>目标阶段：事件对象到达它的事件目标对象。如果事件类型表明事件不冒泡的话，那么事件对象会在这个阶段完成之后停止。</li>
+<li>冒泡阶段：事件对象以捕获阶段相反的顺序进行传递，从事件目标对象的父节点开始，然后结束于Window对象。</li>
+</ul>
+<p><img data-src="https://i.loli.net/2020/12/03/iyUC1nhHEOspBGx.png"></p>
+<h2 id="Default-actions-and-cancelable-events（默认动作和可取消的事件）"><a href="#Default-actions-and-cancelable-events（默认动作和可取消的事件）" class="headerlink" title="Default actions and cancelable events（默认动作和可取消的事件）"></a>Default actions and cancelable events（默认动作和可取消的事件）</h2><blockquote>
+<p>Events are typically dispatched by the implementation as a result of a user action, in response to the completion of a task, or to signal progress during asynchronous activity (such as a network request).<br>Some events can be used to control the behavior that the implementation may take next (or undo an action that the implementation already took).<br>Events in this category are said to be cancelable and the behavior they cancel is called their <strong>default action</strong>.<br>Cancelable event objects can be associated with one or more ‘default actions’. To cancel an event, call the <code>preventDefault()</code> method.</p>
+</blockquote>
+<p>事件通常由一个实现了用户行为的操作分发，响应任务的完成，或者在异步活动间作为信号进程（比如一个网络请求）<br>一些事件常用于控制下一步实现可能出现的行为（或者回退一个早已实现的动作）<br>在这个类别的事件被称为可取消的，取消的行为被称为它们的默认动作<br>可取消的事件对象可以被一个或多个‘默认动作’关联。为了取消一个事件，调用<code>preventDefault()</code>方法。</p>
+<p>这里有个术语：<strong>default action</strong></p>
+<hr>
+<p><strong>default action</strong></p>
+<blockquote>
+<p>A default action is an OPTIONAL supplementary behavior that an implementation MUST perform in combination with the dispatch of the event object.<br>Each event type definition, and each specification, defines the default action for that event type, if it has one.<br>An instance of an event MAY have more than one default action under some circumstances, such as when associated with an activation trigger.<br>A default action MAY be cancelled through the invocation of the <code>preventDefault()</code> method.<br>For more details, see §3.2 Default actions and cancelable events.</p>
+</blockquote>
+<p>默认动作是可选的补充行为，实现必须和事件分发结合执行。<br>每个事件类型定义，每个规范，都定义了对应事件类型的默认动作（如果它拥有的话）。<br>每个事件的实例可能在某些情况下存在超过一个的默认动作，比如当和激活触发器关联时。<br>一个默认动作可能会被通过执行<code>preventDefault()</code>方法而取消。<br>更多的细节，可以查看§3.2节（也就是当前这一节）。</p>
+<hr>
+<blockquote>
+<p>EXAMPLE 1<br>A mousedown event is dispatched immediately after the user presses down a button on a pointing device (typically a mouse).<br>One possible <strong>default action</strong> taken by the implementation is to set up a state machine that allows the user to drag images or select text.<br>The <strong>default action</strong> depends on what happens next — for example, if the user’s pointing device is over text, a text selection might begin.<br>If the user’s pointing device is over an image, then an image-drag action could begin.<br>Preventing the <strong>default action</strong> of a mousedown event prevents these actions from occurring.</p>
+</blockquote>
+<p>一个鼠标事件会在用户使用点击设备（通常是一个鼠标）按下一个按钮之后立即被分发。<br>一个可能的采取实现的默认动作会设置一个状态机，允许用户去拖拽图像或者选择文字。<br>默认动作取决于接下来会发生什么 - 比如，如果用户的点击设备放在文字上，那么文字选择的动作就会开始<br>如果用户的点击设备放在一个图像的上面，那么一个图片拖拽的动作就会开始<br>阻止一个按下事件的默认的动作可以防止这些动作的发生</p>
+<blockquote>
+<p><strong>Default actions</strong> are usually performed after the event dispatch has been completed,<br>but in exceptional cases they may also be performed immediately before the event is dispatched.</p>
+</blockquote>
+<p>默认动作通常在事件分发完成之后被执行，但在特殊的场景下可能会在事件分发之前立即执行</p>
+<blockquote>
+<p>EXAMPLE 2<br>The <strong>default action</strong> associated with the click event on <code>&lt;input type=&quot;checkbox&quot;&gt;</code> elements toggles the checked IDL attribute value of that element.<br>If the click event’s <strong>default action</strong> is cancelled, then the value is restored to its former state.</p>
+</blockquote>
+<p>在<code>&lt;input type=&quot;checkbox&quot;&gt;</code>元素上关联点击事件的默认动作为切换这个元素<code>checked</code>属性的值<br>如果点击事件的默认动作被取消，那么值会恢复到之前的状态（也就是不会改变）</p>
+<blockquote>
+<p>When an event is canceled, then the conditional <strong>default actions</strong> associated with the event is skipped (or as mentioned above, if the default actions are carried out before the dispatch, their effect is undone).<br>Whether an event object is cancelable is indicated by the <code>cancelable</code> attribute.<br>Calling <code>preventDefault()</code> stops all related <strong>default actions</strong> of an event object.<br>The <code>defaultPrevented</code> attribute indicates whether an event has already been canceled (e.g., by a prior event listener).<br>If the DOM application itself initiated the dispatch, then the return value of the <code>dispatchEvent()</code> method indicates whether the event object was cancelled.</p>
+</blockquote>
+<p>当一个事件被取消，与事件关联的有条件的默认动作会被跳过（或者就如上面提到的，如果默认动作在分发前被执行，它们的影响会被撤销）<br>事件对象是否可以取消由由<code>cancelable</code>属性来指明。<br>调用<code>preventDefault()</code>来停止一个事件对象的所有相关的默认动作<br><code>defaultPrevented</code>属性表明事件是否已经被取消（比如，通过之前的一个事件监听函数）<br>如果是dom应用本身发起的分发操作，那么<code>dispatchEvent()</code>方法的返回值表明事件对象是否被取消</p>
+<blockquote>
+<p>Many implementations additionally interpret an event listener’s return value, such as the value <code>false</code>,<br>to mean that the <strong>default action</strong> of cancelable events will be cancelled (though <code>window.onerror</code> handlers are cancelled by returning <code>true</code>).</p>
+</blockquote>
+<p>许多实现另外地解释了事件监听函数地返回值，比如值为<code>false</code>，意味着可取消地事件的默认动作被取消（虽然<code>window.onerror</code>以返回<code>true</code>来取消默认的动作）</p>
+<h2 id="Synchronous-and-asynchronous-events（同步和异步的事件）"><a href="#Synchronous-and-asynchronous-events（同步和异步的事件）" class="headerlink" title="Synchronous and asynchronous events（同步和异步的事件）"></a>Synchronous and asynchronous events（同步和异步的事件）</h2><blockquote>
+<p>Events may be dispatched either synchronously or asynchronously.</p>
+</blockquote>
+<p>事件可能以同步或者异步的方式分发。</p>
+<blockquote>
+<p>Events which are synchronous (sync events) are treated as if they are in a virtual queue in a first-in-first-out model,<br>ordered by sequence of temporal occurrence with respect to other events, to changes in the DOM, and to user interaction.<br>Each event in this virtual queue is delayed until the previous event has completed its propagation behavior, or been canceled.<br>Some sync events are driven by a specific device or process, such as mouse button events.<br>These events are governed by the <strong>event order</strong> algorithms defined for that set of events, and <strong>user agents</strong> will dispatch these events in the defined order.</p>
+</blockquote>
+<p>同步的事件被当作放在在一个虚拟的先进先出的队列中，以和其他的事件按时间发生的顺序进行排序，依次执行来改变DOM以及和用户交互。<br>在这个虚队列中每个事件会延迟到之前的事件完成它的传递行为或者被取消之后再执行。<br>一些同步事件由一个特定的设备或者进程来驱动，比如一个鼠标按钮事件<br>这些事件通过为事件集合定义的事件排序算法来管理，用户代理按照定义的顺序分发这些事件</p>
+<p>这里有两个术语：<strong>event order</strong>和<strong>user agents</strong></p>
+<hr>
+<p><strong>event order</strong></p>
+<blockquote>
+<p>The sequence in which events from the same event source or process occur, using the same or related event interfaces.<br>For example, in an environment with a mouse, a track pad, and a keyboard, each of those input devices would constitute a separate event source, and each would follow its own event order.<br>A mousedown event from the trackpad followed by a mouseup event from the mouse would not result in a click event.</p>
+</blockquote>
+<p>相同事件源或者使用了相同或者线管事件接口的处理程序发生时的事件的顺序<br>比如，一个带有鼠标，触控板和键盘的环境，每个输入设备构成了一个分离的事件源，并且遵循它们自己的事件顺序。<br>触控板的一个按下事件，然后一个鼠标的弹起事件不会导致一个点击事件（这里意思是，因为一个点击事件可以看成鼠标按下然后弹起之后触发的事件，但是由于这两个事件的源不同，并不会触发一个点击事件）</p>
+<blockquote>
+<p>There can be interactions between different event orders.<br>For example, a click event might be modified by a concurrent keydown event (e.g., via Shift+click).<br>However, the event orders of these different event sources would be distinct.</p>
+</blockquote>
+<p>在不同的事件顺序中可以进行交互。<br>比如，一个点击事件可能被一个同时的键盘按下事件（比如Shift+click）修改。<br>然而，不同事件源的事件顺序是不同的</p>
+<blockquote>
+<p>The event order of some interfaces are device-independent.<br>For example, a user might change focus using the Tab key, or by clicking the new focused element with the mouse.<br>The event order in such cases depends on the state of the process, not on the state of the device that initiates the state change.</p>
+</blockquote>
+<p>一些实现的事件顺序是设备无关的。<br>比如，一个用户可能使用Tab键来改变焦点，或者通过鼠标点击新的聚焦的元素。<br>事件顺序在这些情况下依赖进程的状态，而不依赖开始状态改变的设备的状态</p>
+<p><strong>user agents</strong></p>
+<blockquote>
+<p>A program, such as a browser or content authoring tool, normally running on a client machine,<br>which acts on a user’s behalf in retrieving, interpreting, executing, presenting, or creating content.<br>Users MAY act on the content using different user agents at different times, for different purposes.<br>See the §1.2.1 Web browsers and other dynamic or interactive user agents and §1.2.2 Authoring tools for details on the requirements for a conforming user agent.</p>
+</blockquote>
+<p>一个程序，比如一个浏览器或者一个内容创作工具，一般运行在客户机器上，<br>在检索，解释，执行，呈现或者内容创建时代表用户进行操作。<br>用户可能为了不同的目的，在不同时间，使用不同的用户代理操作内容。<br>查看1.2.1节和1.2.2节来知道一个符合的用户代理的要求的细节。</p>
+<hr>
+<blockquote>
+<p>Events which are asynchronous (async events) may be dispatched as the results of the action are completed,<br>with no relation to other events, to other changes in the DOM, nor to user interaction.</p>
+</blockquote>
+<p>异步事件可能作为动作完成的结果被分发，和其他事件，DOM中的其他更改或者用户的交互没有关系。</p>
+<blockquote>
+<p>EXAMPLE 3<br>During loading of a document, an inline script element is parsed and executed.  x<br>The load event is queued to be fired asynchronously at the script element.<br>However, because it is an async event, its order with relation to other synchronous events fired during document load (such as the DOMContentLoaded event from <a target="_blank" rel="noopener" href="https://www.w3.org/TR/2019/WD-uievents-20190530/#biblio-html5">HTML5</a>) is not guaranteed.</p>
+</blockquote>
+<p>在文档加载中，一个内联的script元素会被解析和执行。<br>load事件进入队列等待，然后异步地分发到script元素上。<br>然而，由于它是一个异步的事件，在文档加载时（比如HTML5中的DOMContentLoaded事件）不能保证它与其他相关的同步事件的分发的顺序</p>
+<h2 id="Trusted-events（可信赖的事件）"><a href="#Trusted-events（可信赖的事件）" class="headerlink" title="Trusted events（可信赖的事件）"></a>Trusted events（可信赖的事件）</h2><blockquote>
+<p>Events that are generated by the <strong>user agent</strong>, either as a result of user interaction,<br>or as a direct result of changes to the DOM, are trusted by the <strong>user agent</strong> with privileges that are not afforded to events generated by script through the <code>createEvent()</code> method,<br>modified using the <code>initEvent()</code> method, or dispatched via the <code>dispatchEvent()</code> method.<br>The isTrusted attribute of trusted events has a value of true, while untrusted events have a isTrusted attribute value of false.</p>
+</blockquote>
+<p>由用户代理生成的事件，或者用户交互的结果，或者改变DOM的直接结果，会被有特权的用户代理信任（不包括通过<code>createEvent()</code>方法生成的事件，使用<code>initEvent()</code>方法进行修改，或者通过<code>dispatchEvent()</code>方法进行分发）。<br>可信任的事件的<code>isTrusted</code>属性值为<code>true</code>，而不可信任的事件的<code>isTrusted</code>值为<code>false</code></p>
+<blockquote>
+<p>Most untrusted events will not trigger default actions, with the exception of the click event.<br>This event always triggers the <strong>default action</strong>, even if the isTrusted attribute is false (this behavior is retained for backward-compatibility).<br>All other untrusted events behave as if the <code>preventDefault()</code> method had been called on that event.</p>
+</blockquote>
+<p>大多不可信任的事件不会触发默认的动作，除了点击事件。<br>这个事件总是触发默认的动作，即使<code>isTrusted</code>属性为<code>false</code>（这个行为为了向后兼容而保留）<br>所有其他的不可信任的事件的行为撕毁就是在那个事件上调用了<code>preventDefault()</code></p>
+<h2 id="Activation-triggers-and-behavior（激活的触发器和行为）"><a href="#Activation-triggers-and-behavior（激活的触发器和行为）" class="headerlink" title="Activation triggers and behavior（激活的触发器和行为）"></a>Activation triggers and behavior（激活的触发器和行为）</h2><blockquote>
+<p>Certain event targets (such as a link or button element) may have associated <strong>activation behavior</strong> (such as following a link) that implementations perform in response to an activation trigger (such as clicking a link).</p>
+</blockquote>
+<p>某些事件目标对象（比如一个link（链接）或者button（按钮）元素）可能和激活的行为相关（比如跟随一个链接），实现执行来响应一个激活的触发器（比如点击一个链接）</p>
+<blockquote>
+<p>EXAMPLE 4<br>Both HTML and SVG have an <code>&lt;a&gt;</code> element which indicates a link.<br>Relevant activation triggers for an <code>&lt;a&gt;</code> element are a click event on the text or image content of the <code>&lt;a&gt;</code> element,<br>or a keydown event with a key attribute value of “Enter” key when the <code>&lt;a&gt;</code> element has focus.<br>The activation behavior for an <code>&lt;a&gt;</code> element is normally to change the content of the window to the content of the new document,<br>in the case of external links, or to reposition the current document relative to the new anchor, in the case of internal links.</p>
+</blockquote>
+<p>HTML和SVG都有一个<code>&lt;a&gt;</code>标签来表明一个链接。<br>一个<code>&lt;a&gt;</code>元素的相关的激活触发器为在文本或者<code>&lt;a&gt;</code>元素的图像内容上的点击事件，或者当<code>&lt;a&gt;</code>元素被聚焦时一个带有key属性值为<code>Enter</code>的keydown事件。<br>一个<code>&lt;a&gt;</code>标签激活行为一般改变window的内容为新的文档的内容，比如外部的链接，用来重新定位当前文档到一个新的描点，比如内部的链接</p>
+<p>这里有两个术语<strong>activation behavior</strong>和<strong>activation trigger</strong></p>
+<hr>
+<p><strong>activation behavior</strong></p>
+<blockquote>
+<p>The action taken when an event, typically initiated by users through an input device, causes an element to fulfill a defined task.<br>The task MAY be defined for that element by the host language, or by author-defined variables, or both.<br>The default task for any given element MAY be a generic action, or MAY be unique to that element.<br>For example, the activation behavior of an HTML or SVG <code>&lt;a&gt;</code> element is to cause the user agent to traverse the link specified in the href attribute,<br>with the further optional parameter of specifying the browsing context for the traversal (such as the current window or tab, a named window, or a new window).<br>The activation behavior of an HTML <code>&lt;input&gt;</code> element with the type attribute value submit is be to send the values of the form elements to an author-defined IRI by the author-defined HTTP method.<br>See §3.5 Activation triggers and behavior for more details.</p>
+</blockquote>
+<p>当一个事件，通常为通过用户输入设备发起，携带的动作使得一个元素完成一个定义的任务。<br>任务可能通过宿主语言，或者通过作者定义的变量，或者两者都使用来对对应元素定义。<br>任何给定的默认任务可能是一个通用的动作，或者可能唯一存在这个元素。<br>比如，HTML或者SVG的<code>&lt;a&gt;</code>标签元素的激活行为让用户代理遍历指定链接的<code>href</code>属性，遍历带有指定浏览上下文的其他可选的参数（比如当前窗口或者标签页，一个命名的窗口，或者一个新的窗口）<br>HTML的带有type属性值为submit的<code>&lt;input&gt;</code>元素激活行为为通过用户定义的HTTP方法发送form表单的值到一个用户定义的IRI<br>查看3.5节来获得更多细节信息</p>
+<p><strong>activation trigger</strong></p>
+<blockquote>
+<p>An event which is defined to initiate an activation behavior.<br>Refer to §3.5 Activation triggers and behavior for more details.</p>
+</blockquote>
+<p>一个定义的事件发起的一个激活行为<br>导向3.5节获得更多的细节信息</p>
+<hr>
+<h2 id="Constructing-Mouse-and-Keyboard-Events（构建的鼠标和键盘事件）"><a href="#Constructing-Mouse-and-Keyboard-Events（构建的鼠标和键盘事件）" class="headerlink" title="Constructing Mouse and Keyboard Events（构建的鼠标和键盘事件）"></a>Constructing Mouse and Keyboard Events（构建的鼠标和键盘事件）</h2><blockquote>
+<p>Generally, when a constructor of an Event interface, or of an interface inherited from the Event interface, is invoked, the steps described in <a href="">DOM</a> should be followed.<br>However the KeyboardEvent and MouseEvent interfaces provide additional dictionary members for initializing the internal state of the Event object’s key modifiers: specifically, the internal state queried for using the <code>getModifierState()</code> and <code>getModifierState()</code> methods.<br>This section supplements the DOM4 steps for intializing a new Event object with these optional modifier states.</p>
+</blockquote>
+<p>通常情况下，当一个事件接口的构造器，或者一个继承事件接口的接口被执行时，步骤会按照DOM中所描述的。<br>然而键盘事件和鼠标书简接口提供了额外的字典成员来初始化事件对象的关键修饰符的内部状态：特别是，可以使用<code>getModifierState()</code>和<code>getModifierState()</code>方法来查询内部的状态。<br>这个小节补充了DOM4中初始化一个带有可配置的修改师傅状态的事件对象的步骤</p>
+<blockquote>
+<p>For the purposes of constructing a KeyboardEvent, MouseEvent, or object derived from these objects using the algorithm below,<br>all KeyboardEvent, MouseEvent, and derived objects have internal key modifier state which can be set and retrieved using the key modifier names described in the Modifier Keys table in UIEvents-Key.</p>
+</blockquote>
+<p>为了构造一个键盘事件，鼠标事件，或者从这些事件对象派生的对象，使用下面的算法，<br>所有的键盘事件，鼠标事件，和派生对象有内部的关键修饰符状态，这个状态可以使用关键词修饰名字（在UIEvents-Key中修饰关键词表格描述）被设置和重置</p>
+<blockquote>
+<p>The following steps supplement the algorithm defined for constructing events in DOM4:</p>
+<ul>
+<li>If the Event being constructed is a KeyboardEvent or MouseEvent object or an object that derives from either of these, and a EventModifierInit argument was provided to the constructor, then run the following sub-steps:<ul>
+<li>For each EventModifierInit argument, if the dictionary member begins with the string “modifier”, then let the key modifier name be the dictionary member’s name excluding the prefix “modifier”, and set the Event object’s internal key modifier state that matches the key modifier name to the corresponding value.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>下面步骤补充了DOM4中构造事件定义的算法</p>
+<ul>
+<li>如果构造的事件是一个键盘或者鼠标事件或者派生自这两个的事件，那么向构造函数提供一个<code>EventModifierInit</code>参数，然后执行下面的子步骤：<ul>
+<li>遍历<code>EventModifierInit</code>参数，如果字典成员以<code>modifier</code>字符开头，那么设置字典成员名字为不包含<code>modifier</code>前缀的关键修饰符的名字，然后设置匹配关键修饰符名字的事件对象的内部关键修饰符状态为对应的值。</li>
+</ul>
+</li>
+</ul>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>最近打算写个DNF的纸娃娃系统，主要是生成补丁代码以及在线模拟换装的这么一个应用</p>
+<p>原来的<a target="_blank" rel="noopener" href="https://avatar.kritsu.net/">纸娃娃</a>感觉挺多bug的，而且也好像没人维护</p>
+<p>打算以这个为样本，再做一个，主要是黑猫的代码转es的代码可太恶心了…</p>
+<p>附上一张开发的图，用的react + Material UI</p>
+<p><img data-src="https://i.loli.net/2020/12/03/XEqi2o9FM4JpngW.png"></p>
+<p>PS：如果能搞成毕业设计那就有意思了哈哈哈哈哈哈哈哈哈</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/01194d4ee87a" title="DOM Event Architecture（DOM-Level-3）译文">https://prohibitorum.top/01194d4ee87a</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/DOM/" rel="tag"># DOM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/aa08a7e76fb8" rel="prev" title="尝试配置webpack来编译项目">
+                  <i class="fa fa-angle-left"></i> 尝试配置webpack来编译项目
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/3800ed123cd0" rel="next" title="JavaScript中的垃圾回收">
+                  JavaScript中的垃圾回收 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1606963845"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

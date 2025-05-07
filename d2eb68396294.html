@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言百度二面的时候面试官叫我简单的基于fetch封装一个简单的函数 没用过这个API所以当时直接说没用过，然后改成用XMLHttpRequest来封装… 所以写一写来学习下基本的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fetch对象的简单使用">
+<meta property="og:url" content="https://prohibitorum.top/d2eb68396294">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言百度二面的时候面试官叫我简单的基于fetch封装一个简单的函数 没用过这个API所以当时直接说没用过，然后改成用XMLHttpRequest来封装… 所以写一写来学习下基本的使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lCkBq.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lARnH.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lV8QU.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lK0fA.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lrr5j.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lqahn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/01CBmn.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/0lLE3q.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/01PqU0.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/02/01iiUx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03EgRP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03Z90g.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03ZB4A.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03KmTS.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03K0p9.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/10/03/03KqAS.png">
+<meta property="article:published_time" content="2020-10-02T14:22:55.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="前端">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/10/02/0lCkBq.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/d2eb68396294.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/d2eb68396294","path":"d2eb68396294.html","title":"Fetch对象的简单使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Fetch对象的简单使用 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#fetch"><span class="nav-number">2.</span> <span class="nav-text">fetch</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Request%E5%92%8CResponse"><span class="nav-number">3.</span> <span class="nav-text">Request和Response</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Request"><span class="nav-number">3.1.</span> <span class="nav-text">Request</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Response"><span class="nav-number">3.2.</span> <span class="nav-text">Response</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Headers"><span class="nav-number">4.</span> <span class="nav-text">Headers</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">5.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/d2eb68396294">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Fetch对象的简单使用 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Fetch对象的简单使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-02 14:22:55" itemprop="dateCreated datePublished" datetime="2020-10-02T14:22:55+00:00">2020-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>百度二面的时候面试官叫我简单的基于<code>fetch</code>封装一个简单的函数</p>
+<p>没用过这个API所以当时直接说没用过，然后改成用<code>XMLHttpRequest</code>来封装…</p>
+<p>所以写一写来学习下基本的使用</p>
+<span id="more"></span>
+
+<h1 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a><code>fetch</code></h1><p><code>fetch</code>可以看成<code>XMLHttpRequest</code>的新版本，本质上解决的问题是一样的，就是使得网页能够通过js来发送请求和处理响应</p>
+<p>可以在控制台打印下，发现它是一个内建函数</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lCkBq.png"></p>
+<p>通过查看MDN，发现<code>fetch</code>函数有两个参数</p>
+<ul>
+<li><code>input</code> 一个请求地址字符串或者一个<code>Request</code>对象</li>
+<li><code>config</code> 一个配置的对象，我觉得比较常用的是以下<ul>
+<li><code>method</code>: 请求使用的方法</li>
+<li><code>headers</code>: 请求的头信息</li>
+<li><code>body</code>: 请求的 body 信息</li>
+<li><code>credentials</code>: 是否携带cookies</li>
+</ul>
+</li>
+</ul>
+<p>更多参数可以上MDN查看：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/WindowOrWorkerGlobalScope/fetch">WorkerOrGlobalScope.fetch()</a></p>
+<p>并且<code>fetch</code>返回的是一个<code>Promise</code>，这也是他和XHR的重要的区别之一，</p>
+<p>在XHR中，使用绑定事件的回调函数来获取数据，而在<code>fetch</code>中，使用<code>Promise</code></p>
+<p>ok，可以来试下这个API的简单使用了</p>
+<p>（PS：服务器的话使用我们之前的哪个Koa的服务器即可）</p>
+<p>服务器端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/hello&#x27;</span>, <span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="string">&#x27;hello world!&#x27;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>客户端</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 因为这个访问的就是同域下的hello的接口，所以可以省略地址前缀</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(res);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lARnH.png"></p>
+<p>可以看到返回了一个<code>Response</code>对象，里面有些字段也在XHR里面也有</p>
+<p>比如：<code>status</code>（状态码）、<code>statusText</code>（状态码对应的解释文字）</p>
+<p>不过没有看见数据，只看见了一个<code>body</code>的属性，我们点开发现不是一个简单的对象，而是一个<code>ReadableStream</code>对象</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lV8QU.png"></p>
+<p>一个可读的流，基本上可以断定数据就在里面了，如何取出呢？</p>
+<p>经过在MDN上的查找，需要通过<code>ReadableStream</code>对象获取一个<code>Reader</code>，</p>
+<p>然后再在这个<code>Reader</code>上面读取数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="property">body</span>.<span class="title function_">getReader</span>())</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">reader</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 存放Unit8Array数组</span></span><br><span class="line">    <span class="keyword">let</span> result = [];</span><br><span class="line">    reader.<span class="title function_">read</span>().<span class="title function_">then</span>(<span class="keyword">function</span> <span class="title function_">next</span>(<span class="params">&#123;value, done&#125;</span>) &#123;</span><br><span class="line">      <span class="comment">// 函数会接收一个对象，done表示传输是否完成，value表示值</span></span><br><span class="line">      <span class="keyword">if</span> (done) &#123;</span><br><span class="line">        <span class="comment">// 完成了就解决返回的Promise</span></span><br><span class="line">        <span class="comment">// 此时value为undefined</span></span><br><span class="line">        <span class="title function_">resolve</span>(result);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 没完成，还有数据</span></span><br><span class="line">      result.<span class="title function_">push</span>(value);</span><br><span class="line">      <span class="comment">// 读取下一个</span></span><br><span class="line">      reader.<span class="title function_">read</span>().<span class="title function_">then</span>(next);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;)</span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>执行后可以看到如下</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lK0fA.png"></p>
+<p><code>Uint8Array</code>存放的是无符号的8位的整形数组，我们需要把里面的数据转成字符串然后拼接起来</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 省略中间的then</span></span><br><span class="line">.<span class="title function_">then</span>(<span class="function"><span class="params">result</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(result);</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> array <span class="keyword">of</span> result) &#123;</span><br><span class="line">    <span class="comment">// 把每一个8位整数转成字符串并且拼接起来</span></span><br><span class="line">    <span class="keyword">let</span> str = <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(...array);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(str);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>执行之后就可以看到<code>hello world!</code></p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lrr5j.png"></p>
+<p>当然这个解析其实有点问题，因为<code>String.fromCodePoint</code>按照字符对应的<code>unicode</code>编码来进行解析的</p>
+<p>这对于<code>0 - 127</code>的<code>ASCII</code>码没有影响，因为<code>UTF-8</code>对<code>0 - 127</code>的编码和<code>unicode</code>码完全一样</p>
+<p>但是对于比如说中文，或者emoji表情就不是这样了,<code>UTF-8</code>支持变长编码，通过前缀区分，此时编码和UTF-8表示的二进制就完全不一样了</p>
+<p>比如这个笑哭的emoji表情 -&gt; 😂 ，他的<code>unicode</code>编码是<code>11111011000000010</code>（2进制），转为16进制为<code>1f602</code>，</p>
+<p>但是它在UTF-8中的2进制编码为<code>11110000 10011111 10011000 10000010</code>，和它的<code>unicode</code>编码不一样</p>
+<p>如果直接解析，那么会出现乱码，如下图</p>
+<p>服务器代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&#x27;/hello&#x27;</span>, <span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = <span class="string">&#x27;hello world!😂&#x27;</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>乱码现象</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lqahn.png"></p>
+<p>可以看到uint8Array数组最后四个10进制数字分别对应了上面写到的<code>😂</code>这个表情的<code>UTF-8</code>的2进制编码</p>
+<p>解决办法其实不难，就是把<code>UTF-8</code>编码的转为<code>unicode</code>码点即可</p>
+<p><code>UTF-8</code>使用了变长的编码技术，通过前缀1的个数来判断字符占几个字节</p>
+<table>
+<thead>
+<tr>
+<th>Unicode编码(十六进制)</th>
+<th>UTF-8 字节流(二进制)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>000000-00007F</td>
+<td>0xxxxxxx</td>
+</tr>
+<tr>
+<td>000080-0007FF</td>
+<td>110xxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td>000800-00FFFF</td>
+<td>1110xxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+<tr>
+<td>010000-10FFFF</td>
+<td>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</td>
+</tr>
+</tbody></table>
+<p>那么根据这个表进行解析就OK了，代码如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">utf8ToUnicode</span>(<span class="params">utf8Array</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> str = <span class="string">&quot;&quot;</span>;</span><br><span class="line">  <span class="keyword">let</span> n1, n2, n3;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; utf8Array.<span class="property">byteLength</span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> cur = utf8Array[i];</span><br><span class="line">    i++;</span><br><span class="line">    <span class="keyword">switch</span> (cur &gt;&gt; <span class="number">4</span>) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">0</span>:<span class="keyword">case</span> <span class="number">1</span>:<span class="keyword">case</span> <span class="number">2</span>:<span class="keyword">case</span> <span class="number">3</span>:<span class="keyword">case</span> <span class="number">4</span>:<span class="keyword">case</span> <span class="number">5</span>:<span class="keyword">case</span> <span class="number">6</span>:<span class="keyword">case</span> <span class="number">7</span>:</span><br><span class="line">        <span class="comment">// 一个字节直接替换</span></span><br><span class="line">        <span class="comment">// 0xxxxxxx 也就是 0001 - 0111</span></span><br><span class="line">        str += <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(cur);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">12</span>:<span class="keyword">case</span> <span class="number">13</span>:</span><br><span class="line">        <span class="comment">// 两个字节</span></span><br><span class="line">        <span class="comment">// 110xxxxx 也就是 1100 - 1101</span></span><br><span class="line">        n1 = utf8Array[i++];</span><br><span class="line">        str += <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(((cur &amp; <span class="number">0b11111</span>) &lt;&lt; <span class="number">6</span>) | (n1 &amp; <span class="number">0b111111</span>));</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">14</span>:</span><br><span class="line">        <span class="comment">// 三个字节</span></span><br><span class="line">        <span class="comment">// 1110xxxx 也就是 1110</span></span><br><span class="line">        n1 = utf8Array[i++];</span><br><span class="line">        n2 = utf8Array[i++];</span><br><span class="line">        str += <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(</span><br><span class="line">          (</span><br><span class="line">            ((cur &amp; <span class="number">0b1111</span>) &lt;&lt; <span class="number">12</span>)</span><br><span class="line">            | ((n1 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">6</span>)</span><br><span class="line">            | (n2 &amp; <span class="number">0b111111</span>)</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="number">15</span>:</span><br><span class="line">        <span class="comment">// 三个字节</span></span><br><span class="line">        <span class="comment">// 11110xxx 也就是 1111</span></span><br><span class="line">        n1 = utf8Array[i++];</span><br><span class="line">        n2 = utf8Array[i++];</span><br><span class="line">        n3 = utf8Array[i++];</span><br><span class="line">        str += <span class="title class_">String</span>.<span class="title function_">fromCodePoint</span>(</span><br><span class="line">          (</span><br><span class="line">            ((cur &amp; <span class="number">0b111</span>) &lt;&lt; <span class="number">18</span>)</span><br><span class="line">            | ((n1 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">12</span>)</span><br><span class="line">            | ((n2 &amp; <span class="number">0b111111</span>) &lt;&lt; <span class="number">6</span>)</span><br><span class="line">            | (n3 &amp; <span class="number">0b111111</span>)</span><br><span class="line">          )</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以尝试对😂试一试，结果如下</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/01CBmn.png"></p>
+<p>正确地解析了出来</p>
+<p>当然，自带的方法中已经很贴心地为我们解决了这个问题，通过调用<code>text</code>方法即可（还是要懂原理的，这个才是重点）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const req = ...</span></span><br><span class="line"><span class="title function_">fetch</span>(req)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">text</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">str</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(str));</span><br></pre></td></tr></table></figure>
+
+<p>表情可以正常地显示了，也就是正常地解析出来了</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/02/0lLE3q.png"></p>
+<h1 id="Request和Response"><a href="#Request和Response" class="headerlink" title="Request和Response"></a><code>Request</code>和<code>Response</code></h1><p>这两者是<code>fetch</code>中经常会看到的对象</p>
+<h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a><code>Request</code></h2><p><code>fetch</code>的第一个参数可以传入一个<code>Request</code>对象</p>
+<p><code>Request</code>构造函数的参数和<code>fetch</code>基本一样</p>
+<p>也就是上面的代码可以改写成</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&#x27;/hello&#x27;</span>,&#123;</span><br><span class="line">  <span class="comment">// 这里的参数和fetch第二个参数一样</span></span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req)</span><br><span class="line"><span class="comment">// .then... 省略后面的then链</span></span><br></pre></td></tr></table></figure>
+
+<p>运行之后能够得到和上面一样的结果</p>
+<p>既然可以，那么我们就要看看到底是谁优先级更高了（刨根问底😂）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&#x27;/hello&#x27;</span>,&#123;</span><br><span class="line">  <span class="comment">// 这里的参数和fetch第二个参数一样</span></span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;post&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/10/02/01PqU0.png"></p>
+<p>发现发出的是<code>POST</code>请求，也就是说<code>fetch</code>参数的优先级比<code>Request</code>对象参数的优先级高（由于接口是<code>GET</code>的，所以这里报错）</p>
+<p>一个可能还不够证明，我们试试设置一些自定义的请求头</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&#x27;/hello&#x27;</span>,&#123;</span><br><span class="line">  <span class="comment">// 这里的参数和fetch第二个参数一样</span></span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&quot;my-header&quot;</span>:<span class="string">&quot;www.elegy.top&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;post&quot;</span>,</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="string">&quot;my-header&quot;</span>:<span class="string">&quot;www.koi-no-uta.design&quot;</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/10/02/01iiUx.png"></p>
+<p>发现依然<code>fetch</code>参数的优先级比<code>Request</code>对象参数的优先级高</p>
+<h2 id="Response"><a href="#Response" class="headerlink" title="Response"></a><code>Response</code></h2><p><code>fetch</code>返回的<code>Promise</code>的解决结果对象</p>
+<p>除了前面说过的<code>text</code>方法，还有一些其他的方法方便开发者进行数据地转换</p>
+<ul>
+<li><code>json</code> 把数据流转换成<code>json</code>格式，由于js天生支持<code>json</code>格式的对象，所以很多时候都是使用这个办法</li>
+<li><code>formData</code> 把数据转换成<code>FormData</code>类型</li>
+<li><code>blob</code> 把数据流转成<code>Blob</code>类型</li>
+<li><code>arrayBuffer</code> 把数据流转成<code>ArrayBuffer</code>类型</li>
+</ul>
+<p>一般用到<code>json</code>方法会比较多，我们可以试一下</p>
+<p>服务器代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">router.<span class="title function_">get</span>(<span class="string">&quot;/hello&quot;</span>, <span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.<span class="property">body</span> = &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&quot;lwf&quot;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">12</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>客户端代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(res));</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03EgRP.png"></p>
+<p>当然，使用<code>blob</code>方法也能得到相同的结果</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span></span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="title function_">blob</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">blob</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;我是调用的blob方法&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> blob.<span class="title function_">text</span>();</span><br><span class="line">  &#125;)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">str</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">JSON</span>.<span class="title function_">parse</span>(str)));</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03Z90g.png"></p>
+<p>这么做显然没必要，所以使用<code>json</code>方法直接转换即可，<code>blob</code>方法比如在下载，播放媒体这些比较常用</p>
+<p>像B站使用的就是<code>blob</code>的视频流</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03ZB4A.png"></p>
+<p>使用<code>URL.createObjectURL(blob)</code>就可以使得blob对象以一种<code>url</code>的形式展示出来，就可以在文档上通过<code>src</code>来引用了</p>
+<h1 id="Headers"><a href="#Headers" class="headerlink" title="Headers"></a>Headers</h1><p><code>fetch</code>也支持以一个<code>Headers</code>对象来设置请求头</p>
+<p>常见的方法有</p>
+<ul>
+<li><code>append</code> 添加一个请求头</li>
+<li><code>delete</code> 删除一个请求头</li>
+<li><code>entries</code> 返回所有请求头的迭代器对象</li>
+<li><code>get</code> 获取某个请求头的值</li>
+<li><code>has</code> 判断是否含有某个请求头</li>
+</ul>
+<p>可以改下之前的例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用Headers对象</span></span><br><span class="line"><span class="keyword">const</span> headers = <span class="keyword">new</span> <span class="title class_">Headers</span>();</span><br><span class="line">headers.<span class="title function_">append</span>(<span class="string">&quot;x-my-header1&quot;</span>, <span class="string">&quot;lwf&quot;</span>);</span><br><span class="line">headers.<span class="title function_">append</span>(<span class="string">&quot;x-my-header2&quot;</span>, <span class="string">&quot;12&quot;</span>);</span><br><span class="line"><span class="comment">// 使用Request对象</span></span><br><span class="line"><span class="keyword">const</span> req = <span class="keyword">new</span> <span class="title class_">Request</span>(<span class="string">&quot;/hello&quot;</span>, &#123;</span><br><span class="line">  <span class="attr">method</span>: <span class="string">&quot;get&quot;</span>,</span><br><span class="line">  headers</span><br><span class="line">&#125;);</span><br><span class="line"><span class="title function_">fetch</span>(req)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> res.<span class="property">json</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">str</span> =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(str));</span><br></pre></td></tr></table></figure>
+
+<p>可以看见请求头都正确地添加到请求上面了</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03KmTS.png"></p>
+<p>然后试试在控制台上操作一个<code>header</code>的其他方法</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03K0p9.png"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><code>fetch</code>的兼容性还是相当不错的（除了IE，IE全版本不支持，😂）</p>
+<p><img data-src="https://s1.ax1x.com/2020/10/03/03KqAS.png"></p>
+<p>虽然兼容性不错，但是基本上会使用一些上层的库二次地封装，比如<code>axios</code>（基于<code>XMLHttpRequest</code>）</p>
+<p>所以很多时候用不到…</p>
+<p>不过学还是要学的嘛</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/d2eb68396294" title="Fetch对象的简单使用">https://prohibitorum.top/d2eb68396294</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%89%8D%E7%AB%AF/" rel="tag"># 前端</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/dcde156bb7d3" rel="prev" title="XMLHttpRequest对象的简单使用">
+                  <i class="fa fa-angle-left"></i> XMLHttpRequest对象的简单使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/349091160e40" rel="next" title="HTTP1.1状态码（译）">
+                  HTTP1.1状态码（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1601619775"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

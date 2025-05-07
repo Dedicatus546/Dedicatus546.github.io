@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言使用 Github Actions 来自动化部署 hexo 博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Github Actions 来自动化部署 hexo 博客">
+<meta property="og:url" content="https://prohibitorum.top/a2593909b3f0">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言使用 Github Actions 来自动化部署 hexo 博客">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/23/202203231741803.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241154969.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241507850.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241517516.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241521041.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241525121.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241533270.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241556005.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241557613.avif">
+<meta property="article:published_time" content="2022-03-23T17:01:12.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="hexo">
+<meta property="article:tag" content="github actions">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/23/202203231741803.gif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a2593909b3f0.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a2593909b3f0","path":"a2593909b3f0.html","title":"使用 Github Actions 来自动化部署 hexo 博客"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 Github Actions 来自动化部署 hexo 博客 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CI-CD"><span class="nav-number">2.1.</span> <span class="nav-text">CI&#x2F;CD</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CI"><span class="nav-number">2.1.1.</span> <span class="nav-text">CI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CD-delivery"><span class="nav-number">2.1.2.</span> <span class="nav-text">CD(delivery)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CD-development"><span class="nav-number">2.1.3.</span> <span class="nav-text">CD(development)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github-actions"><span class="nav-number">2.2.</span> <span class="nav-text">github actions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99-deploy-yml-%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.</span> <span class="nav-text">编写 deploy.yml 文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a2593909b3f0">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 Github Actions 来自动化部署 hexo 博客 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 Github Actions 来自动化部署 hexo 博客
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-03-23 17:01:12" itemprop="dateCreated datePublished" datetime="2022-03-23T17:01:12+00:00">2022-03-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>8 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>使用 <code>Github Actions</code> 来自动化部署 <code>hexo</code> 博客</p>
+<span id="more"></span>
+
+<p>之前的工作流为</p>
+<ul>
+<li><code>hexo new &quot;xxx&quot;</code> 生成一个 <code>md</code> 文件</li>
+<li>编写 <code>md</code> 文件</li>
+<li><code>hexo generate</code> 生成 <code>docs</code> 文件夹</li>
+<li><code>git add .</code> 添加所有文件</li>
+<li><code>git push</code> 推送到 <code>github</code> 仓库</li>
+</ul>
+<p>由于 <code>github</code> 仓库上设置 <code>docs</code> 文件夹为 <code>git-page</code> 的文件夹</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/23/202203231741803.gif"></p>
+<p>所以推送结束之后也就完成了一次网站的更新</p>
+<p>缺点</p>
+<ul>
+<li>不够 <code>high level</code> （<del>不是</del></li>
+<li>每次都需要本地执行 <code>hexo generate</code> 进行帖子生成，严重浪费我的电脑性能 （<del>不是</del></li>
+<li>在 <code>git push</code> 之前容易忘记先 <code>hexo generate</code></li>
+</ul>
+<p>本着折腾的精神，就在网上找了下 <code>github actions</code> 相关的内容，然后就开始了这一次改造（捣鼓）</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>首先我们要知道什么是 <code>github actions</code> </p>
+<p>在<a target="_blank" rel="noopener" href="https://docs.github.com/cn/actions">官方文档</a>中的解释如下：</p>
+<blockquote>
+<p>在 GitHub Actions 的仓库中自动化、自定义和执行软件开发工作流程。 您可以发现、创建和共享操作以执行您喜欢的任何作业（包括 CI&#x2F;CD），并将操作合并到完全自定义的工作流程中。</p>
+</blockquote>
+<p>这里就要扯到 <code>CI/CD</code> 的内容了</p>
+<h2 id="CI-CD"><a href="#CI-CD" class="headerlink" title="CI&#x2F;CD"></a>CI&#x2F;CD</h2><h3 id="CI"><a href="#CI" class="headerlink" title="CI"></a>CI</h3><p>全称为 <code>continuous integration</code> ，中文表达为<strong>持续集成</strong></p>
+<p>简单点来解释就是：不断对提交到仓库的代码进行可配置化的自动的操作，比如测试，编译等等</p>
+<h3 id="CD-delivery"><a href="#CD-delivery" class="headerlink" title="CD(delivery)"></a>CD(delivery)</h3><p>全称为 <code>continuous delivery</code> ，中文表达为<strong>持续交付</strong></p>
+<p><code>CD</code> 可以理解为 <code>CI</code> 的后续，或者理解为 <code>CI</code> 的一种扩展</p>
+<p>当 <code>CI</code> 走完流程（成功）之后， <code>CD</code> 会和 <code>CI</code> 一样，通过配置自动进行操作，而作为程序员，你需要的就只是点击“按钮”进行部署。</p>
+<h3 id="CD-development"><a href="#CD-development" class="headerlink" title="CD(development)"></a>CD(development)</h3><p>全称为 <code>continuous development</code> ，中文表达为<strong>持续部署</strong></p>
+<p>这个 <code>CD(development)</code> 可以理解为 <code>CD(delivery)</code> 的一种特化</p>
+<p><code>CD(development)</code> 意味着无需程序员无需对部署流程进行干预了，也就是上文我们所说的按下“按钮”进行部署这个操作</p>
+<p>一切都是自动的，当某个新特性完成之后， <code>CI</code> 进行自动测试，<code>CD(development)</code> 进行自动部署，然后用户就能够使用到有新特性的软件了。</p>
+<p>这里放两个帖子的链接，我觉得讲的非常好：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tiantianbyconan/p/9713989.html">理解 CI 和 CD 之间的区别（翻译）</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/64174663">CI&#x2F;CD 的差异</a></li>
+</ul>
+<p>总而言之，无论是 <code>CI</code> ， <code>CD(delivery)</code> ， 还是 <code>CD(development)</code> ，其目的都是一样的。</p>
+<p>就是解放程序员的双手，让程序员尽量降低参与可自动化的步骤的程度，一方面人就是容易犯错误的，另一方面可以让程序员更加专注于功能的实现。</p>
+<h2 id="github-actions"><a href="#github-actions" class="headerlink" title="github actions"></a>github actions</h2><p>知道了 <code>CI/CD</code> 之后， <code>github actions</code> 理解起来就容易多了</p>
+<p>也就是说， <code>github actions</code> 使得我们能够定义工作流（或者理解为脚本），然后自动地执行，这样能够实现 <code>CI</code> 或者 <code>CD</code> ，理解为一种工具即可。</p>
+<h2 id="编写-deploy-yml-文件"><a href="#编写-deploy-yml-文件" class="headerlink" title="编写 deploy.yml 文件"></a>编写 deploy.yml 文件</h2><p>在 <code>github</code> 中，为了创建一个 <code>github actions</code> 工作流，需要在项目的根目录下建立一个 <code>.github</code> 文件夹</p>
+<p>然后在里面建立 <code>workflows</code> 文件夹，在 <code>workflows</code> 就可以新建 <code>yml</code> 文件来创建一个工作流了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241154969.gif"></p>
+<p>我这里建了一个 <code>deploy.yml</code></p>
+<p>然后我们就开始编写内容</p>
+<p>首先要明白 <code>yml</code> 的语法</p>
+<p>这里推荐菜鸟教程的 <a target="_blank" rel="noopener" href="https://www.runoob.com/w3cnote/yaml-intro.html">YAML 入门教程</a> ，大致看一下即可</p>
+<p>以及 <code>github actions</code> 的官方文档：<a target="_blank" rel="noopener" href="https://docs.github.com/cn/actions/quickstart">GitHub Actions 快速入门</a></p>
+<p>了解大概之后，就可以开始编写工作流了</p>
+<p>首先，我们期望的效果是每次 <code>push</code> 一个新的 <code>md</code> </p>
+<p><code>github actions</code> 就帮我们执行 <code>hexo generate</code> 和 <code>hexo deploy</code></p>
+<p>然后把生成的 <code>docs</code> 文件夹提交到一个远程仓库</p>
+<p>明白了这个过程之后，首要步骤就是告诉 <code>github actions</code> ，我要在 <code>push</code> 的时候做一些事情</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># name 随便起</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">deploy</span></span><br><span class="line"><span class="comment"># 在 master 分支 push 的时候</span></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>接着需要定义 <code>jobs</code> 来告诉 <code>github actions</code> 我要干什么</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="comment"># deploy 为一个任务的名字，可以随意的取</span></span><br><span class="line">  <span class="attr">deploy:</span></span><br><span class="line">    <span class="comment"># 运行在最新的 ubuntu 容器中</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="comment"># 定义这个任务的步骤</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">checkout</span> <span class="string">repo</span></span><br><span class="line">        <span class="comment"># 使用封装好的一些 actions</span></span><br><span class="line">        <span class="comment"># 这里的 actions/checkout@v3 的作用为拉取代码到工作区</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">      </span><br><span class="line">      <span class="comment"># 缓存 pnpm 的包，提升构建速度</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">cache</span> <span class="string">pnpm</span> <span class="string">modules</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/cache@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">~/.pnpm-store</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">$&#123;&#123;</span> <span class="string">runner.os</span> <span class="string">&#125;&#125;-$&#123;&#123;</span> <span class="string">hashFiles(&#x27;**/pnpm-lock.yaml&#x27;)</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">restore-keys:</span> <span class="string">|</span></span><br><span class="line"><span class="string">            $&#123;&#123; runner.os &#125;&#125;-</span></span><br><span class="line"><span class="string"></span>      <span class="comment"># 安装 pnpm</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">install</span> <span class="string">pnpm</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">pnpm/action-setup@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">version:</span> <span class="number">6.32</span><span class="number">.3</span></span><br><span class="line">      <span class="comment"># 安装 node</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">setup</span> <span class="string">node</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-node@v2</span></span><br><span class="line">        <span class="comment"># action 可提供的配置写在 with 下</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="number">16</span></span><br><span class="line">      <span class="comment"># 安装依赖</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">install</span> <span class="string">deps</span></span><br><span class="line">        <span class="comment"># 这里为运行脚本，所以使用 run ，而不是 uses</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          pnpm install hexo-cli -g</span></span><br><span class="line"><span class="string">          pnpm install</span></span><br><span class="line"><span class="string"></span>      <span class="comment"># 生成文件</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">generate</span> <span class="string">file</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          pnpm run clean</span></span><br><span class="line"><span class="string">          pnpm run build</span></span><br><span class="line"><span class="string"></span>      <span class="comment"># 配置 git 主要是使用 ssh 的方式来推送文件到远端仓库</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">set</span> <span class="string">git</span> <span class="string">config</span></span><br><span class="line">        <span class="comment"># 注入环境变量</span></span><br><span class="line">        <span class="attr">env:</span></span><br><span class="line">          <span class="comment"># 注入 ssh 的私钥</span></span><br><span class="line">          <span class="attr">DEPLOY_KEY:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.DEPLOY_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          mkdir -p ~/.ssh/</span></span><br><span class="line"><span class="string">          echo &quot;$DEPLOY_KEY&quot; &gt; ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">          chmod 600 ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">          ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts</span></span><br><span class="line"><span class="string">          git config --global user.name &#x27;Dedicatus546&#x27; </span></span><br><span class="line"><span class="string">          git config --global user.email &#x27;1607611087@qq.com&#x27;</span></span><br><span class="line"><span class="string"></span>      <span class="comment"># 推送到远程</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">deploy</span></span><br><span class="line">        <span class="attr">run:</span></span><br><span class="line">          <span class="string">pnpm</span> <span class="string">run</span> <span class="string">deploy</span></span><br></pre></td></tr></table></figure>
+
+<p>这里比较重要的是 <code>set git config</code> 这个步骤（这个名字是随便起的，主要用于描述这个步骤的功能）</p>
+<p>因为我们在 <code>hexo</code> 的 <code>_config.yml</code> 中使用 <code>ssh</code> 的方式来对仓库进行操作的</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241507850.gif"></p>
+<p>如果你已经使用了 <code>ssh</code> 来进行用户验证的话，所需要的配置就很简单</p>
+<p>首先是找到当初生成的 <code>ssh</code> 文件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241517516.avif"></p>
+<p>当初是通过在个人设置里面配置 <code>id_rsa.pub</code> （公钥），然后本地的 <code>id_rsa</code> （私钥）就可以配合完成 <code>ssh</code> 验证</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241521041.avif"></p>
+<p>对于上述 <code>yml</code> 文件中的这一段脚本</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">  mkdir -p ~/.ssh/</span></span><br><span class="line"><span class="string">  echo &quot;$DEPLOY_KEY&quot; &gt; ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">  chmod 600 ~/.ssh/id_rsa</span></span><br><span class="line"><span class="string">  ssh-keyscan github.com &gt;&gt; ~/.ssh/known_hosts</span></span><br></pre></td></tr></table></figure>
+
+<p>可以理解为在容器里面配置了我们的私钥，这样就有了和本机一样的环境了</p>
+<p>所以这里需要解决的就是如何把私钥安全的暴露给 <code>github actions</code> 了</p>
+<p>直接写在脚本里面？当然可以，但是不安全，如果你的项目忘记设置为私有，那么别人就可以通过直接在 <code>yml</code> 拿到你的私钥</p>
+<p>这样意味着就能控制你的 <code>github</code> 仓库了，后果非常的恐怖</p>
+<p>所以这里正确的解决办法是进入项目的 <code>settings</code> 中，在 <code>secrets</code> 中添加一些变量，如下图所示</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241525121.avif"></p>
+<p>其中 <code>name</code> 可以随便起，但是要记住，这里我起的是 <code>DEPLOY_KEY</code> ， <code>value</code> 就对应你的 <code>ssh</code> 的私钥</p>
+<p>然后回到 <code>yml</code> 代码中，就可以通过 <code>secrets.DEPLOY_KEY</code> 拿到对应的值了</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">set</span> <span class="string">git</span> <span class="string">config</span></span><br><span class="line">  <span class="comment"># 注入环境变量</span></span><br><span class="line">  <span class="attr">env:</span></span><br><span class="line">    <span class="attr">DEPLOY_KEY:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.DEPLOY_KEY</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>都配置完成之后，我们就可以提交 <code>.github</code> 目录到远端仓库，这样 <code>github actions</code> 就会自动读取并运行了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241533270.avif"></p>
+<p>点击去就能够查看每个步骤的运行情况了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241556005.avif"></p>
+<p>PS：如果之前未使用过 <code>hexo</code> 的 <code>deploy</code> 功能的，需要先安装 <code>hexo-deployer-git</code> 依赖，配置的 <code>deploy</code> 才能够生效</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/03/24/202203241557613.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>经过一番折腾，现在我们的工作流就变成如下了：</p>
+<ul>
+<li>编写 <code>md</code> 文件</li>
+<li>提交这个 <code>md</code> 文件到远端 <code>blog</code> 仓库</li>
+<li><code>github actions</code> 自动部署，提交到 <code>Dedicatus546.github.io</code> 这个仓库</li>
+<li><code>Dedicatus546.github.io</code> 为 github-page 仓库，也会通过 <code>github actions</code> 部署</li>
+</ul>
+<p>这样就完成了一次网站的更新，可以看到我真正参与的只有前面两个步骤，也是核心的步骤，即写 <code>md</code> 文件</p>
+<p>原来我是一个仓库同时存放 <code>md</code> 源码以及生成的 <code>docs</code> 文件夹的</p>
+<p>这次给拆成了两个仓库，其中一个就是 <code>github-page</code> ，而 <code>md</code> 源码的仓库重新建了一个</p>
+<p>这样提交的时候就不会和生成的 <code>html</code> ， <code>css</code> 等混在一起，对于查看每次提交的 <code>md</code> 的 <code>diff</code> 情况来说是非常友好了</p>
+<p>而且 <code>md</code> 仓库可以设为私有，或者多分支写帖子等，都对 <code>github-page</code> 仓库没有影响 （由于设置了只在 <code>master</code> 分支上执行，所以其他的分支提交到远端不会触发 <code>github actions</code> ）</p>
+<p>总而言之，提升还是非常明显的， 白嫖 <code>github</code> 的机器来打包，何乐而不为呢？</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a2593909b3f0" title="使用 Github Actions 来自动化部署 hexo 博客">https://prohibitorum.top/a2593909b3f0</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/hexo/" rel="tag"># hexo</a>
+              <a href="/tags/github-actions/" rel="tag"># github actions</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/e23644b7eddf" rel="prev" title="让Vue.draggable支持交换式拖拽（译）">
+                  <i class="fa fa-angle-left"></i> 让Vue.draggable支持交换式拖拽（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/e7b9dbe576f5" rel="next" title="Manacher 算法求最长回文子串">
+                  Manacher 算法求最长回文子串 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1648026072"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

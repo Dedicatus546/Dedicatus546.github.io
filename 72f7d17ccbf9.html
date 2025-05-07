@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="JavaScript中的继承">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的继承">
+<meta property="og:url" content="https://prohibitorum.top/72f7d17ccbf9">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="JavaScript中的继承">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/13/9xY625fTbPlFkXU.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/14/XoKQuUDfWEd5Mzx.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/07/14/UNAyes.png">
+<meta property="article:published_time" content="2020-07-13T23:49:20.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="继承">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/13/9xY625fTbPlFkXU.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/72f7d17ccbf9.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/72f7d17ccbf9","path":"72f7d17ccbf9.html","title":"JavaScript中的继承"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JavaScript中的继承 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%80%9F%E7%94%A8%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">借用构造函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E7%BB%A7%E6%89%BF"><span class="nav-number">3.</span> <span class="nav-text">组合继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">4.</span> <span class="nav-text">原型式继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E7%94%9F%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">5.</span> <span class="nav-text">寄生式继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%84%E7%94%9F%E7%BB%84%E5%90%88%E5%BC%8F%E7%BB%A7%E6%89%BF"><span class="nav-number">6.</span> <span class="nav-text">寄生组合式继承</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">7.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/72f7d17ccbf9">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JavaScript中的继承 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript中的继承
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-13 23:49:20" itemprop="dateCreated datePublished" datetime="2020-07-13T23:49:20+00:00">2020-07-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>JavaScript</code>中的继承</p>
+<span id="more"></span>
+
+<h1 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h1><p><code>JavaScript</code>的继承是基于原型链的。</p>
+<p>通俗点讲就是每个对象都可以通过<code>__proto__</code>指向另一个对象。</p>
+<p>在寻找对象的属性的时候，会依次的遍历原型链上的对象。</p>
+<p>找到就返回。</p>
+<p>所有的对象的原型链最后都会指向<code>Object.prototype</code>。</p>
+<p>而<code>Object.prototype</code>的原型对象为空，可以通过<code>__proto__</code>看出来。</p>
+<p><img data-src="https://i.loli.net/2020/07/13/9xY625fTbPlFkXU.png"></p>
+<p>所以所有的对象都可以使用挂载在<code>Object.prototype</code>的方法，前提是你不手贱把对象的原型置为<code>null</code>。</p>
+<p>原型只能是对象或者<code>null</code>。</p>
+<p>如果通过<code>Object.setPrototypeOf</code>设置成基本变量报错。</p>
+<p>如果通过<code>__proto__</code>设置，不会报错，但是无效。</p>
+<p><img data-src="https://i.loli.net/2020/07/14/XoKQuUDfWEd5Mzx.png"></p>
+<p>推荐使用之前说过的<code>Reflect.setPrototypeOf</code>来设置对象的原型。</p>
+<p>因为它的返回更加的符合程序的逻辑，当然该报错的地方一样会报错。</p>
+<p>设置成功<code>Reflect.setPrototypeOf</code>返回的是一个布尔值。</p>
+<p>而<code>Object.setPrototypeOf</code>返回原对象。</p>
+<p><img data-src="https://s1.ax1x.com/2020/07/14/UNAyes.png"></p>
+<p>好像讲偏了…</p>
+<p><code>JavaScript</code>中对于继承的多数方法，基本上都是和原型这一概念打交道。</p>
+<p>在简单的继承体系中，即原型链，对于引用类型的值来说，他的子类共享同一份数据</p>
+<p>导致了修改一个实例化对象的超类的数据，另一个实例化对象的对应数据都会发生变化。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Type</span>(<span class="params"></span>) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Type</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">say</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Type</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">array</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> t1 = <span class="keyword">new</span> <span class="title class_">Type</span>();</span><br><span class="line"><span class="keyword">const</span> t2 = <span class="keyword">new</span> <span class="title class_">Type</span>();</span><br><span class="line"></span><br><span class="line">t1.<span class="property">array</span>.<span class="title function_">push</span>(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">t2.<span class="title function_">say</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(t2.<span class="property">array</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上述代码对于<code>t1</code>的修改影响到了<code>t2</code>，显然这不是我们想看到的</p>
+<h1 id="借用构造函数"><a href="#借用构造函数" class="headerlink" title="借用构造函数"></a>借用构造函数</h1><p>这种方法也叫做<strong>伪造对象</strong>或者<strong>经典继承</strong></p>
+<p>借用构造，借用借用，借别人的构造函数来使用，便是这个方法的原理</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SuperType</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">nums</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">SubType</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  <span class="comment">// 以子类的上下文获取父类上的属性和方法</span></span><br><span class="line">  <span class="title class_">SuperType</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s1 = <span class="keyword">new</span> <span class="title class_">SubType</span>(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> s2 = <span class="keyword">new</span> <span class="title class_">SubType</span>(<span class="string">&quot;lfw&quot;</span>);</span><br><span class="line"></span><br><span class="line">s1.<span class="property">nums</span>.<span class="title function_">push</span>(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1.<span class="property">nums</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s2.<span class="property">nums</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上面这么写其实有一点问题。</p>
+<p>如果父类构造函数中存在<code>name</code>字段的话，在子类中设置的就会被覆盖掉。</p>
+<p>所以需要改变一下调用的顺序。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SubType</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="comment">// 以子类的上下文获取父类上的属性和方法</span></span><br><span class="line">  <span class="title class_">SuperType</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果单纯使用借用构造，那么函数就无法复用。</p>
+<p>一般，如果想去定义一个类，都是在函数体内设置属性。</p>
+<p>然后通过函数对象特有的<code>prototype</code>来挂载方法。</p>
+<p>这样实例化的对象的方法都是指向一个函数，从而实现了复用。</p>
+<p>而直接通过<code>this</code>挂载方法，则每次<code>new</code>对象都会产生新的函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">Type</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">go</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;go go go&quot;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Type</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">say</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> t1 = <span class="keyword">new</span> <span class="title class_">Type</span>(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> t2 = <span class="keyword">new</span> <span class="title class_">Type</span>(<span class="string">&quot;lfw&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(t1.<span class="property">say</span> === t2.<span class="property">say</span>); <span class="comment">// ---&gt; true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(t1.<span class="property">go</span> === t2.<span class="property">go</span>); <span class="comment">// ---&gt; false</span></span><br></pre></td></tr></table></figure>
+
+<p>仅仅使用借用构造，就必须把所有的方法直接挂载在<code>this</code>上。</p>
+<p>因为借用构造无法获取父类原型上的方法和属性。</p>
+<h1 id="组合继承"><a href="#组合继承" class="headerlink" title="组合继承"></a>组合继承</h1><p>组合继承也成为<strong>伪经典继承</strong>。</p>
+<p>借鉴了借用构造和原型链各自的优势，组合起来。</p>
+<p>借用构造的优势是解决了父类引用属性的共享问题。</p>
+<p>原型链解决了函数的复用问题。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">SuperType</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">nums</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">SuperType</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">go</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;go go go!&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">SubType</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="title class_">SuperType</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">SubType</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title class_">SuperType</span>();</span><br><span class="line"><span class="comment">// constructor 属性会丢失，需要手动挂载上去</span></span><br><span class="line"><span class="title class_">SubType</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">constructor</span> = <span class="title class_">SubType</span>;</span><br><span class="line"><span class="comment">// 接下来就可以愉快的在原型上挂载方法了</span></span><br><span class="line"><span class="title class_">SubType</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">say</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Hello ?&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s1 = <span class="keyword">new</span> <span class="title class_">SubType</span>(<span class="string">&quot;lwf&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> s2 = <span class="keyword">new</span> <span class="title class_">SubType</span>(<span class="string">&quot;fwl&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1.<span class="property">nums</span> === s2.<span class="property">nums</span>); <span class="comment">// --&gt; false</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1.<span class="property">say</span> === s2.<span class="property">say</span>); <span class="comment">// --&gt; true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1.<span class="property">go</span> === s2.<span class="property">go</span>); <span class="comment">// --&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<p>这时候整条链条是这样的</p>
+<p><code>s1 --&gt; SubType.prototype(SuperType实例化的对象) --&gt; SuperType.prototype --&gt; Object.prototype</code></p>
+<p>这时候<code>instanceof</code>和<code>isPrototypeOf</code>都能够符合预期正常地工作</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1 <span class="keyword">instanceof</span> <span class="title class_">SubType</span>); <span class="comment">// --&gt; true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(s1 <span class="keyword">instanceof</span> <span class="title class_">SuperType</span>); <span class="comment">// --&gt; true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">SuperType</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="title function_">isPrototypeOf</span>(s1)); <span class="comment">// --&gt; true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">SubType</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="title function_">isPrototypeOf</span>(s1)); <span class="comment">// --&gt; true</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="原型式继承"><a href="#原型式继承" class="headerlink" title="原型式继承"></a>原型式继承</h1><p>因为<code>JavaScript</code>是一门很灵活的语言。</p>
+<p>很多时候对象的结构可以很容易的改变。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = &#123;&#125;;</span><br><span class="line">o.<span class="property">name</span> = <span class="string">&quot;lwf&quot;</span>; <span class="comment">// 新增一个属性</span></span><br><span class="line"><span class="keyword">delete</span> o.<span class="property">name</span>; <span class="comment">// 删除一个属性</span></span><br></pre></td></tr></table></figure>
+
+<p>原型式继承不创建自定义的类型，而是通过原型链来生成匿名子类，从而生成子对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">object</span>(<span class="params">o</span>) &#123;</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">F</span>(<span class="params"></span>) &#123;&#125;</span><br><span class="line">  F.<span class="property"><span class="keyword">prototype</span></span> = o;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title function_">F</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数内部定义临时函数<code>F</code>。</p>
+<p>改变<code>F</code>的原型对象（<code>prototype</code>）。</p>
+<p>通过<code>F</code>生成新的对象并返回。</p>
+<p>在内置的函数中<code>Object.create</code>和这个函数的行为一致。</p>
+<p>区别是<code>Object.create</code>第二个参数可以传入属性描述符对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = <span class="title class_">Object</span>.<span class="title function_">create</span>(</span><br><span class="line">  &#123;&#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">name</span>: &#123;</span><br><span class="line">      <span class="attr">value</span>: <span class="string">&quot;lwf&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(o.<span class="property">name</span>); <span class="comment">// --&gt; lwf</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="寄生式继承"><a href="#寄生式继承" class="headerlink" title="寄生式继承"></a>寄生式继承</h1><p>寄生式继承可以说是在原型式继承的基础上而来的。</p>
+<p>寄生式继承封装了由原型式继承创建而来的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">create</span>(<span class="params">o</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> _o = <span class="title function_">object</span>(o); <span class="comment">// 原型式继承</span></span><br><span class="line">  _o.<span class="property">name</span> = <span class="string">&quot;lwf&quot;</span>; <span class="comment">// 封装属性</span></span><br><span class="line">  _o.<span class="property">say</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 封装方法</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">return</span> _o; <span class="comment">// 返回</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很容易看出寄生式继承也无法复用函数，因为它是直接挂载在实例化对象上面的。</p>
+<h1 id="寄生组合式继承"><a href="#寄生组合式继承" class="headerlink" title="寄生组合式继承"></a>寄生组合式继承</h1><p>寄生组合式继承对组合继承进行了优化。</p>
+<p>在组合继承中，在子类的构造函数中调用了一次父类的构造函数<code>SuperType.call</code>。</p>
+<p>而在设置原型链中，又调用了一次父类的构造函数<code>new SuperType</code>。</p>
+<p>这样子类的原型上其实存在了和子类一样的属性。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">SubType</span>(<span class="params">name</span>) &#123;</span><br><span class="line">  <span class="comment">// 第一次</span></span><br><span class="line">  <span class="title class_">SuperType</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二次</span></span><br><span class="line"><span class="title class_">SubType</span>.<span class="property"><span class="keyword">prototype</span></span> = <span class="keyword">new</span> <span class="title class_">SuperType</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>对于设置子类的原型，没有必要去实例化一个父类的对象。</p>
+<p>我们只需要一个指向父类原型对象的对象即可。</p>
+<p>而这部分就通过原型式来实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">extend</span>(<span class="params">superType, subType</span>) &#123;</span><br><span class="line">  <span class="comment">// 通过原型式生成对象</span></span><br><span class="line">  <span class="keyword">const</span> prototype = <span class="title function_">object</span>(superType);</span><br><span class="line">  <span class="comment">// 修复constructor属性丢失</span></span><br><span class="line">  prototype.<span class="property">constructor</span> = subType;</span><br><span class="line">  <span class="comment">// 设置原型</span></span><br><span class="line">  subType.<span class="property"><span class="keyword">prototype</span></span> = prototype;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样子就只在子类的构造函数中调用了一次父类的构造函数。</p>
+<p>而且也可以复用方法，属性也不会出现在原型链中了。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><code>JavaScript</code>中继承的最优解应该就是最后一种方式 - 寄生组合式继承。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/72f7d17ccbf9" title="JavaScript中的继承">https://prohibitorum.top/72f7d17ccbf9</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E7%BB%A7%E6%89%BF/" rel="tag"># 继承</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/03235456147e" rel="prev" title="Redux源码解读 - bindActionCreators篇（完结）">
+                  <i class="fa fa-angle-left"></i> Redux源码解读 - bindActionCreators篇（完结）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/fb64e7798736" rel="next" title="ECMAScript2015（es6）新特性">
+                  ECMAScript2015（es6）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1594655360"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

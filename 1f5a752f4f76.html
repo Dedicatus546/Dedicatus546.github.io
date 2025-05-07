@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言RxJS 一些有趣的 operate 操作符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RxJS 一些有趣的 operate 操作符">
+<meta property="og:url" content="https://prohibitorum.top/1f5a752f4f76">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言RxJS 一些有趣的 operate 操作符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161508772.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161517604.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161533362.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161547041.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161617122.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161642324.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161700658.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161717782.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161730994.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161731297.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161741888.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161757529.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171129866.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171140642.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201043177.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171652731.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171724608.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171742679.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171800313.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201040103.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201057038.gif">
+<meta property="article:published_time" content="2022-06-16T14:41:08.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="RxJavaScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161508772.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/1f5a752f4f76.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/1f5a752f4f76","path":"1f5a752f4f76.html","title":"RxJS 一些有趣的 operate 操作符"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RxJS 一些有趣的 operate 操作符 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%B1%BB%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">创建类操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fromEvent"><span class="nav-number">2.1.1.</span> <span class="nav-text">fromEvent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interval"><span class="nav-number">2.1.2.</span> <span class="nav-text">interval</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#of"><span class="nav-number">2.1.3.</span> <span class="nav-text">of</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range"><span class="nav-number">2.1.4.</span> <span class="nav-text">range</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#generate"><span class="nav-number">2.1.5.</span> <span class="nav-text">generate</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#merge"><span class="nav-number">2.1.6.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forkJoin"><span class="nav-number">2.1.7.</span> <span class="nav-text">forkJoin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#concat"><span class="nav-number">2.1.8.</span> <span class="nav-text">concat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#race"><span class="nav-number">2.1.9.</span> <span class="nav-text">race</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip"><span class="nav-number">2.1.10.</span> <span class="nav-text">zip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#combineLatest"><span class="nav-number">2.1.11.</span> <span class="nav-text">combineLatest</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E9%81%93%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text">管道操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#takeUntil"><span class="nav-number">2.2.1.</span> <span class="nav-text">takeUntil</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#distinct"><span class="nav-number">2.2.2.</span> <span class="nav-text">distinct</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#distinctUntilChanged"><span class="nav-number">2.2.3.</span> <span class="nav-text">distinctUntilChanged</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#retry"><span class="nav-number">2.2.4.</span> <span class="nav-text">retry</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#elementAt"><span class="nav-number">2.2.5.</span> <span class="nav-text">elementAt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#single"><span class="nav-number">2.2.6.</span> <span class="nav-text">single</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#combineLatestAll-concatAll-mergeAll"><span class="nav-number">2.2.7.</span> <span class="nav-text">combineLatestAll, concatAll, mergeAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exhaustAll"><span class="nav-number">2.2.8.</span> <span class="nav-text">exhaustAll</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switchAll"><span class="nav-number">2.2.9.</span> <span class="nav-text">switchAll</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/1f5a752f4f76">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RxJS 一些有趣的 operate 操作符 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RxJS 一些有趣的 operate 操作符
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-06-16 14:41:08" itemprop="dateCreated datePublished" datetime="2022-06-16T14:41:08+00:00">2022-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>11 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>RxJS</code> 一些有趣的 <code>operate</code> 操作符</p>
+<span id="more"></span>
+
+<p>之前我们写了关于 <code>RxJS</code> 中的几个概念，<code>Observable</code>, <code>Subject</code>, <code>pipe</code>, <code>Scheduler</code> 等</p>
+<p>而 <code>RxJS</code> 之所以很方便，很大程度上取决于它封装好的一些 <code>operate</code> 操作符</p>
+<p>前文的 <code>pipe</code> 管道也属于操作符的一种</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p><code>RxJS</code> 中，个人理解其实就是两大类的操作符，一类是创建类操作符，一类就是管道类</p>
+<p>不过文档中给它分类的更加详细</p>
+<blockquote>
+<p>There are operators for different purposes, and they may be categorized as: <strong>creation, transformation, filtering, joining, multicasting, error handling, utility, etc</strong>. In the following list you will find all the operators organized in categories.</p>
+</blockquote>
+<h2 id="创建类操作符"><a href="#创建类操作符" class="headerlink" title="创建类操作符"></a>创建类操作符</h2><p>在 <code>RxJS</code> 中，创建类的操作符其实不多，有几个比较常见的</p>
+<h3 id="fromEvent"><a href="#fromEvent" class="headerlink" title="fromEvent"></a>fromEvent</h3><p><code>fromEvent</code> 使得我们能够进行 <code>dom</code> 元素事件的绑定</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 给 window 绑定点击事件</span></span><br><span class="line"><span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(e));</span><br></pre></td></tr></table></figure>
+
+<p>这样子每次我们点击就可以输出一次值，该值为事件 <code>event</code> 对象</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161508772.avif"></p>
+<p>如果我们想要解绑该事件</p>
+<p>我们可以调用返回的 <code>Subscription</code> 的 <code>unsubscribe</code> 方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(e));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解绑</span></span><br><span class="line">subscription.<span class="title function_">unsubscribe</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="interval"><a href="#interval" class="headerlink" title="interval"></a>interval</h3><p><code>setInterval</code> 的一个包装，使得我们可以启用一个定时器</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; interval &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每 1s 执行一次</span></span><br><span class="line"><span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>每次会输出该次对应的索引（从 <code>0</code> 开始）</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161517604.avif"></p>
+<p>取消该定时器，同样调用 <code>Subscription</code> 的 <code>unsubscribe</code> 方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; interval &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> subscription = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 取消定时器</span></span><br><span class="line">subscription.<span class="title function_">unsubscribe</span>();</span><br></pre></td></tr></table></figure>
+
+<h3 id="of"><a href="#of" class="headerlink" title="of"></a>of</h3><p>把传入的每个值都经过 <code>Observable</code> 发送出来</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="keyword">of</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>传入 <code>1, 2, 3, 4</code> ，那么输出就是 <code>1, 2, 3, 4</code> 了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161533362.avif"></p>
+<h3 id="range"><a href="#range" class="headerlink" title="range"></a>range</h3><p>生成一个序列，然后经由 <code>Observable</code> 发送出来</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; range &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">range</span>(<span class="number">2</span>, <span class="number">5</span>).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>注意，这里的参数不是起始和结束，而是起始和个数</p>
+<p>即输出不是 <code>2, 3, 4, 5</code> 而是 <code>2, 3, 4, 5, 6</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161547041.avif"></p>
+<h3 id="generate"><a href="#generate" class="headerlink" title="generate"></a>generate</h3><p>能够像 <code>for</code> 那样生成值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; generate &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">generate</span>(&#123;</span><br><span class="line">  <span class="attr">initialState</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">condition</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> v &lt; <span class="number">5</span>,</span><br><span class="line">  <span class="attr">iterate</span>: <span class="function">(<span class="params">v</span>) =&gt;</span> v + <span class="number">1</span>,</span><br><span class="line">&#125;).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码表示初始值为 <code>1</code>， 结束条件为值小于 <code>5</code> ， 然后每次都会自增 <code>1</code></p>
+<p>和下面的代码等价</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">    subscriber.<span class="title function_">next</span>(i);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>这样子我们就能从 <code>1</code> 输出到 <code>4</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161617122.avif"></p>
+<h3 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，然后一一输出对应的值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, map, merge &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(<span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>));</span><br><span class="line"></span><br><span class="line"><span class="title function_">merge</span>(click$, interval$).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>经过 <code>merge</code> 之后，新的 <code>Observable</code> 会在每次点击和间隔 <code>1s</code> 输出一次对应的值</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161642324.avif"></p>
+<h3 id="forkJoin"><a href="#forkJoin" class="headerlink" title="forkJoin"></a>forkJoin</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，收集每个 <code>Observable</code> 完成前的一个值，然后输出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; forkJoin, fromEvent, interval, map, take &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="title function_">forkJoin</span>([click$, interval$]).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>在点击两次且等待超过三秒之后，会输出一个数组，这个数组包含二者的值</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161700658.avif"></p>
+<h3 id="concat"><a href="#concat" class="headerlink" title="concat"></a>concat</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，和 <code>merge</code> 不同的是，<code>concat</code> 会在第一个 <code>Observable</code> 完成之后再订阅第二个 <code>Observable</code> ，以此类推</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; concat, fromEvent, interval, map, take &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="title function_">concat</span>(click$, interval$).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>这里我们必须点击两次之后，定时器才会启动，如果点击事件不使用 <code>take(2)</code> 限定次数的话，那么定时器永远不会开始</p>
+<p>因为点击事件永远无法完成</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161717782.avif"></p>
+<h3 id="race"><a href="#race" class="headerlink" title="race"></a>race</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，只会输出一个发出值的 <code>Observable</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, map, race, take &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="title function_">race</span>(click$, interval$).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>此时如果立马进行点击，那么定时器就不会输出，如果等到定时器输出第一个值，那么点击事件就不会生效</p>
+<p>定时器“赢”</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161730994.avif"></p>
+<p>点击事件“赢”</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161731297.avif"></p>
+<h3 id="zip"><a href="#zip" class="headerlink" title="zip"></a>zip</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，每个 <code>Observable</code> 发出的每个值会组成一个数组作为新的值发出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, map, take, zip &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="title function_">zip</span>(click$, interval$).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>每个点击和每次定时器执行作为值发送出去，新值数量由这些 <code>Observable</code> 发出的值的最少的个数来确定</p>
+<p>在这里点击事件只会发生两次，所以新的 <code>Observable</code> 只会发出两个值</p>
+<p>定时器的第三个值无法被匹配，故不会发送到新的 <code>Observable</code> 对象中</p>
+<p>一旦某个传入的 <code>Observable</code> 完成，其他传入的 <code>Observable</code> 会被 <code>unsubscribe</code> ，所以不用担心资源释放问题</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161741888.avif"></p>
+<h3 id="combineLatest"><a href="#combineLatest" class="headerlink" title="combineLatest"></a>combineLatest</h3><p>合并多个 <code>Observable</code> 为单个 <code>Observable</code> ，与 <code>zip</code> 类似，但是 <code>combineLatest</code> 会取最近的一次值组成一个新值然后发出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; combineLatest, fromEvent, interval, map, take, zip &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>));</span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="title function_">combineLatest</span>([click$, interval$]).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>这里假如我们等三秒之后在点击，那么输出的值是 <code>[event, &#39;定时器：2&#39;]</code></p>
+<p>而 <code>zip</code> 这里会输出 <code>[event, &#39;定时器：0&#39;]</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/16/202206161757529.avif"></p>
+<p>除了上面这些常用的， <code>RxJS</code> 还封装了 <code>ajax</code> ，不过前端一般都是用 <code>axios</code> 来进行 <code>http</code> 请求</p>
+<p>所以感觉用处不大</p>
+<p>还有一些比较少见的创建操作符，比如 <code>defer</code>, <code>timer</code>, <code>iif</code> 等，都不难，看一下文档一下子就懂了</p>
+<h2 id="管道操作符"><a href="#管道操作符" class="headerlink" title="管道操作符"></a>管道操作符</h2><p>在之前的文章 <a href="/c64018267a73" title="RxJS 使用之 pipe 管道">RxJS 使用之 pipe 管道</a> 中，我们已经列举了一些常见的管道操作符了</p>
+<p>比如 <code>map</code>, <code>filter</code>, <code>first</code>, <code>last</code> 等</p>
+<p>这些一般都比较容易理解</p>
+<p>现在我们来列举一些高级一点的管道</p>
+<h3 id="takeUntil"><a href="#takeUntil" class="headerlink" title="takeUntil"></a>takeUntil</h3><p>传入一个 <code>Observable</code> ，在这个 <code>Observable</code> 完成时，源 <code>Observable</code> 则完成</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, map, take, takeUntil &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> interval$ = <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="string">`定时器：<span class="subst">$&#123;val&#125;</span>`</span>),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">3</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> click$ = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>).<span class="title function_">pipe</span>(<span class="title function_">takeUntil</span>(interval$));</span><br><span class="line"></span><br><span class="line">click$.<span class="title function_">subscribe</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(e));</span><br></pre></td></tr></table></figure>
+
+<p>这里如果我们等 <code>3s</code> 之后再点击，那么点击事件不会生效，因为定时器已经完成了</p>
+<p>在 <code>3s</code> 内的点击事件都是可以发出的</p>
+<p>之前我们在 <code>Subject</code> 那一章讲过这个管道，在 <code>antd</code>（ <code>angular</code> 版本） 中非常常见</p>
+<p>在需要对全局可观察对象订阅的地方，加上 <code>pipe(takeUntil(destroy$))</code> ，然后在 <code>ngOnDestroy</code> 钩子中完成 <code>destroy$</code> 即可比较优雅的管理这些订阅过程</p>
+<h3 id="distinct"><a href="#distinct" class="headerlink" title="distinct"></a>distinct</h3><p>对于源 <code>Observable</code> 发送的一系列的值，会经过去重之后再发送出来</p>
+<p>对于基本类型来说，使用起来非常简单</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; distinct, <span class="keyword">of</span>&#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">distinct</span>())</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>这里源 <code>Observable</code> 发出 <code>1, 2, 3, 3, 4, 4</code></p>
+<p>经过去重之后会输出 <code>1, 2, 3, 4</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171129866.avif"></p>
+<p>对于引用类型，可以通过一个函数来提取唯一的部分进行比较，一般都是以对象的某个属性来去重，比如唯一 <code>id</code> 等</p>
+<p>当然如果不传，那么就是按照引用的地址进行比较，即 <code>obj1 === obj2</code> 这种形式</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; distinct, <span class="keyword">of</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s1 = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;lwf&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s2 = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;lwx&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> s3 = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;lwx&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">of</span>(s1, s2, s3)</span><br><span class="line">  .<span class="title function_">pipe</span>(</span><br><span class="line">    <span class="comment">// 这里用 id 作为唯一标识进行去重</span></span><br><span class="line">    <span class="title function_">distinct</span>(<span class="function">(<span class="params">s</span>) =&gt;</span> s.<span class="property">id</span>)</span><br><span class="line">  )</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>由于 <code>s2</code> 和 <code>s3</code> 的 <code>id</code> 是一样的，所以最终只会输出 <code>s1</code> 和 <code>s2</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171140642.avif"></p>
+<h3 id="distinctUntilChanged"><a href="#distinctUntilChanged" class="headerlink" title="distinctUntilChanged"></a>distinctUntilChanged</h3><p>这个就比较有意思了，从名字上看，也是去重，但是去重的模式不一样</p>
+<p>这个管道的去重指和前一个值进行比较，如果相同，那么该值就不会被输出</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; distinctUntilChanged, <span class="keyword">of</span> &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">distinctUntilChanged</span>())</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>如果我们使用 <code>distinct</code> ，上面的代码输出为 <code>1, 2</code></p>
+<p>而 <code>distinctUntilChanged</code> 会输出 <code>1, 2, 1, 2</code></p>
+<p>当然这个管道也支持传入函数来确定唯一的值</p>
+<p>比如，现在我们希望在窗口水平 <code>resize</code> 的时候进行一些操作，可以这么写</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; distinctUntilChanged, fromEvent, map &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;resize&quot;</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(</span><br><span class="line">    <span class="comment">// 拿到每一次 resize 的窗口大小</span></span><br><span class="line">    <span class="title function_">map</span>(<span class="function">() =&gt;</span> (&#123;</span><br><span class="line">      <span class="attr">width</span>: <span class="variable language_">window</span>.<span class="property">innerWidth</span>,</span><br><span class="line">      <span class="attr">height</span>: <span class="variable language_">window</span>.<span class="property">innerHeight</span>,</span><br><span class="line">    &#125;)),</span><br><span class="line">    <span class="comment">// 在 width 发生改变时</span></span><br><span class="line">    <span class="title function_">distinctUntilChanged</span>(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> pre.<span class="property">width</span> === cur.<span class="property">width</span>)</span><br><span class="line">  )</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;width change&quot;</span>));</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201043177.gif"></p>
+<p>当然，如果你想换成垂直 <code>resize</code> ，只要更改为 <code>distinctUntilChanged((pre, cur) =&gt; pre.height === cur.height)</code> 即可</p>
+<p>可以想象一下如果我们不使用 <code>RxJS</code> 的话，这段逻辑写起来还是挺复杂的，而且免不得得产生一些局部变量（记录 <code>pre</code> 值）</p>
+<h3 id="retry"><a href="#retry" class="headerlink" title="retry"></a>retry</h3><p>在 <code>Observable</code> 发生错误的时候可以重新订阅</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span>, retry &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Observable</span>(<span class="function">(<span class="params">subscriber</span>) =&gt;</span> &#123;</span><br><span class="line">  subscriber.<span class="title function_">next</span>(<span class="number">1</span>);</span><br><span class="line">  subscriber.<span class="title function_">next</span>(<span class="number">2</span>);</span><br><span class="line">  subscriber.<span class="title function_">error</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;error&quot;</span>));</span><br><span class="line">&#125;)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">retry</span>(<span class="number">2</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(&#123;</span><br><span class="line">    <span class="title function_">next</span>(<span class="params">val</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(val);</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">error</span>(<span class="params">e</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">error</span>(e);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>在这里我们使用 <code>retry(2)</code> 表示如果源 <code>Observable</code> 发生了错误，那么重新订阅，最大次数为 <code>2</code> 次</p>
+<p>也就是两次后，如果成功了，那无事发生，如果还是报错，那么错误就会通过 <code>error</code> 回调抛出</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171652731.avif"></p>
+<p>可以看到前两次的 <code>error</code> 并没有被抛出，只有最后一次的 <code>error</code> 被抛出</p>
+<p>这个管道对于 <code>http</code> 请求还是挺有用的，直接就可以设置重拾次数</p>
+<h3 id="elementAt"><a href="#elementAt" class="headerlink" title="elementAt"></a>elementAt</h3><p>直接取某个索引的元素，很像 <code>js</code> 中通过 <code>[]</code> 取值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; elementAt, range &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">range</span>(<span class="number">1</span>, <span class="number">5</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">elementAt</span>(<span class="number">2</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>取索引 <code>2</code> 的值，对于 <code>1, 2, 3, 4, 5</code> ，也就是数字 <code>3</code></p>
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171724608.avif"></p>
+<h3 id="single"><a href="#single" class="headerlink" title="single"></a>single</h3><p>只有在匹配到一个值的时候才会输出，其他情况下，没有值匹配或者匹配了多个值，则会报错</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="keyword">of</span>, single &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匹配成功</span></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">single</span>(<span class="function">(<span class="params">v</span>) =&gt;</span> v === <span class="number">1</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 匹配多个</span></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">single</span>(<span class="function">(<span class="params">v</span>) =&gt;</span> v === <span class="number">5</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 未匹配</span></span><br><span class="line"><span class="title function_">of</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(<span class="title function_">single</span>(<span class="function">(<span class="params">v</span>) =&gt;</span> v === <span class="number">1</span>))</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val));</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171742679.avif"></p>
+<h3 id="combineLatestAll-concatAll-mergeAll"><a href="#combineLatestAll-concatAll-mergeAll" class="headerlink" title="combineLatestAll, concatAll, mergeAll"></a>combineLatestAll, concatAll, mergeAll</h3><p>和 <code>combineLatest</code> 的效果一样，不过 <code>combineLatestAll</code> 作为管道主要用于高阶 <code>Observable</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, map, interval, take, combineLatestAll &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> clicks = <span class="title function_">fromEvent</span>(<span class="variable language_">window</span>, <span class="string">&quot;click&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> higherOrder = clicks.<span class="title function_">pipe</span>(</span><br><span class="line">  <span class="title function_">map</span>(<span class="function">() =&gt;</span> <span class="title function_">interval</span>(<span class="number">0</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>))),</span><br><span class="line">  <span class="title function_">take</span>(<span class="number">2</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">higherOrder.<span class="title function_">pipe</span>(<span class="title function_">combineLatestAll</span>()).<span class="title function_">subscribe</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(x));</span><br></pre></td></tr></table></figure>
+
+<p>这里每次点击产生一个定时器，每个定时器只输出两个值，只响应两次点击事件</p>
+<p>意味着会有两个定时器，然后通过 <code>combineLatestAll</code> 结合两个定时器，完全可以看成如下代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; combineLatest &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">combineLatest</span>([<span class="title function_">interval</span>(<span class="number">0</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>)), <span class="title function_">interval</span>(<span class="number">0</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">2</span>))]).<span class="title function_">subscribe</span>(</span><br><span class="line">  <span class="function">(<span class="params">val</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(val)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/17/202206171800313.avif"></p>
+<p>除了 <code>combineLatestAll</code> ，其他的一些创建类操作符也有其对应的管道操作符</p>
+<ul>
+<li><code>concat</code> 对应 <code>concatAll</code></li>
+<li><code>merge</code> 对应 <code>mergeAll</code></li>
+</ul>
+<h3 id="exhaustAll"><a href="#exhaustAll" class="headerlink" title="exhaustAll"></a>exhaustAll</h3><p>用于高阶 <code>Observable</code> ，当订阅第一个 <code>Observable</code> ，接下来在这个 <code>Observable</code> 完成前就订阅的 <code>Observable</code> 被抛弃</p>
+<p>感觉很绕，我们可以写个例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, take, map, exhaustAll &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fromEvent</span>(<span class="variable language_">document</span>, <span class="string">&quot;click&quot;</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(</span><br><span class="line">    <span class="title function_">map</span>(<span class="function">() =&gt;</span> <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">3</span>))),</span><br><span class="line">    <span class="title function_">exhaustAll</span>()</span><br><span class="line">  )</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(x));</span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用 <code>map</code> 让生成的 <code>Observable</code> 成为高阶的，然后使用 <code>exhaustAll</code></p>
+<p>当我们点击的时候，会输出 <code>0, 1, 2</code> ，如果在 <code>0, 1, 2</code> 输出还没完成的时候，继续点击，那么这个 <code>Observable</code> 是会被抛弃的</p>
+<p>也就是只有等到 <code>0, 1, 2</code> 输出完成，我们再次点击，那么才会继续输出 <code>0, 1, 2</code></p>
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201040103.gif"></p>
+<h3 id="switchAll"><a href="#switchAll" class="headerlink" title="switchAll"></a>switchAll</h3><p>用于高阶 <code>Observable</code> ，这个和 <code>exhaustAll</code> 相反，如果在前一个 <code>Observable</code> 还未完成时，得到了下一个 <code>Observable</code> </p>
+<p>那么当前订阅的 <code>Observable</code> 会被完成，然后去订阅这个新的 <code>Observable</code> </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; fromEvent, interval, take, map, tap, switchAll &#125; <span class="keyword">from</span> <span class="string">&quot;rxjs&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fromEvent</span>(<span class="variable language_">document</span>, <span class="string">&quot;click&quot;</span>)</span><br><span class="line">  .<span class="title function_">pipe</span>(</span><br><span class="line">    <span class="title function_">map</span>(<span class="function">() =&gt;</span> <span class="title function_">interval</span>(<span class="number">1000</span>).<span class="title function_">pipe</span>(<span class="title function_">take</span>(<span class="number">3</span>))),</span><br><span class="line">    <span class="title function_">switchAll</span>()</span><br><span class="line">  )</span><br><span class="line">  .<span class="title function_">subscribe</span>(<span class="function">(<span class="params">x</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(x));</span><br></pre></td></tr></table></figure>
+
+<p>这个例子和 <code>exhaustAll</code> 的一样，只不过我们使用 <code>switchAll</code> 来合并 <code>Observable</code> </p>
+<p>在输出 <code>0, 1, 2</code> 输出未完成之前，继续点击的话，那么会重新输出 <code>0, 1, 2</code></p>
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/06/20/202206201057038.gif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><code>RxJS</code> 的系列基本就结束了，接下来学习 <code>Angular</code> ，在 <code>RxJS</code> 方面应该就问题不大了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/1f5a752f4f76" title="RxJS 一些有趣的 operate 操作符">https://prohibitorum.top/1f5a752f4f76</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/RxJavaScript/" rel="tag"># RxJavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d38a7218363c" rel="prev" title="RxJS 使用之 Scheduler">
+                  <i class="fa fa-angle-left"></i> RxJS 使用之 Scheduler
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ddb2cb406b9e" rel="next" title="在 Angular 中引入 NgRx（Angular-Redux） 全局状态管理库">
+                  在 Angular 中引入 NgRx（Angular-Redux） 全局状态管理库 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1655361668"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

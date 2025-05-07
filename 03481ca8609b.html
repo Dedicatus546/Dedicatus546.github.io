@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Redux源码解读 - combineReducers篇。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux源码解读 - combineReducers篇">
+<meta property="og:url" content="https://prohibitorum.top/03481ca8609b">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="Redux源码解读 - combineReducers篇。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/11/1c2k9VtiE8UIosj.png">
+<meta property="article:published_time" content="2020-07-11T09:54:40.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Redux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/11/1c2k9VtiE8UIosj.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/03481ca8609b.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/03481ca8609b","path":"03481ca8609b.html","title":"Redux源码解读 - combineReducers篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Redux源码解读 - combineReducers篇 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#combineReducers"><span class="nav-number">1.</span> <span class="nav-text">combineReducers</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/03481ca8609b">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Redux源码解读 - combineReducers篇 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redux源码解读 - combineReducers篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-11 09:54:40" itemprop="dateCreated datePublished" datetime="2020-07-11T09:54:40+00:00">2020-07-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>Redux</code>源码解读 - <code>combineReducers</code>篇。</p>
+<span id="more"></span>
+
+<p>这次讲讲<code>combineReducers</code>这个函数。</p>
+<p>其实之前学习过<code>React</code>，也用过和<code>React</code>配套的<code>React-Redux</code>。</p>
+<h1 id="combineReducers"><a href="#combineReducers" class="headerlink" title="combineReducers"></a><code>combineReducers</code></h1><p>既然不知道它是干嘛的。</p>
+<p>直接上官网找找文档就行了。</p>
+<p>以下是在中文网摘过来的一段话。</p>
+<blockquote>
+<p>随着应用变得越来越复杂，可以考虑将 reducer 函数 拆分成多个单独的函数，拆分后的每个函数负责独立管理<code>state</code>的一部分。<br><code>combineReducers</code>辅助函数的作用是，把一个由多个不同<code>reducer</code>函数作为<code>value</code>的<code>object</code>，合并成一个最终的 <code>reducer</code>函数，然后就可以对这个<code>reducer</code>调用<code>createStore</code>方法。合并后的<code>reducer</code>可以调用各个子<code>reducer</code>，并把它们返回的结果合并成一个<code>state</code>对象。<br>由<code>combineReducers()</code>返回的<code>state</code>对象，会将传入的每个<code>reducer</code>返回的<code>state</code>按其传递给<code>combineReducers()</code>时对应的<code>key</code>进行命名。</p>
+</blockquote>
+<p>不是很难理解。</p>
+<p>如果把全部的处理<code>action</code>的逻辑写在一个<code>reducer</code>，这个<code>reducer</code>就会显得很臃肿，也不容易维护。</p>
+<p>合并不同处理逻辑的<code>reducer</code>，返回一个新的<code>reducer</code>，通过新的<code>reducer</code>来创建<code>store</code>。</p>
+<p>可以写个小例子来看看这个函数的效果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">aReducer</span> = (<span class="params">state = &#123; val: <span class="number">1</span> &#125;, action</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.<span class="property">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;increment&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        <span class="attr">val</span>: state.<span class="property">val</span> + <span class="number">1</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;decrement&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        <span class="attr">val</span>: state.<span class="property">val</span> - <span class="number">1</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">bReducer</span> = (<span class="params">state = &#123; val: <span class="number">2</span> &#125;, action</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.<span class="property">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;increment&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        <span class="attr">val</span>: state.<span class="property">val</span> + <span class="number">2</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;decrement&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        ...state,</span><br><span class="line">        <span class="attr">val</span>: state.<span class="property">val</span> - <span class="number">2</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = <span class="title function_">combineReducers</span>(&#123;</span><br><span class="line">  aReducer,</span><br><span class="line">  bReducer,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(reducer);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">subscribe</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">dispatch</span>(&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;increment&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行之后可以出现：</p>
+<p><img data-src="https://i.loli.net/2020/07/11/1c2k9VtiE8UIosj.png"></p>
+<p>到这里基本就可以明白基本的流程了。</p>
+<p>每个<code>reducer</code>都有自己的一个命名，这个命名会在<code>state</code>中体现。</p>
+<p>每次<code>dispatch</code>，会遍历每一个传入的<code>reducer</code>，更新<code>state</code>。</p>
+<p>ok，那先把源码贴上来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">combineReducers</span>(<span class="params">reducers</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> reducerKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(reducers);</span><br><span class="line">  <span class="keyword">const</span> finalReducers = &#123;&#125;;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; reducerKeys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> key = reducerKeys[i];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> reducers[key] === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">        <span class="title function_">warning</span>(<span class="string">`No reducer provided for key &quot;<span class="subst">$&#123;key&#125;</span>&quot;`</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> reducers[key] === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">      finalReducers[key] = reducers[key];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> finalReducerKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(finalReducers);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// This is used to make sure we don&#x27;t warn about the same</span></span><br><span class="line">  <span class="comment">// keys multiple times.</span></span><br><span class="line">  <span class="keyword">let</span> unexpectedKeyCache;</span><br><span class="line">  <span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">    unexpectedKeyCache = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> shapeAssertionError;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="title function_">assertReducerShape</span>(finalReducers);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">    shapeAssertionError = e;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">combination</span>(<span class="params">state = &#123;&#125;, action</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (shapeAssertionError) &#123;</span><br><span class="line">      <span class="keyword">throw</span> shapeAssertionError;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> warningMessage = <span class="title function_">getUnexpectedStateShapeWarningMessage</span>(</span><br><span class="line">        state,</span><br><span class="line">        finalReducers,</span><br><span class="line">        action,</span><br><span class="line">        unexpectedKeyCache</span><br><span class="line">      );</span><br><span class="line">      <span class="keyword">if</span> (warningMessage) &#123;</span><br><span class="line">        <span class="title function_">warning</span>(warningMessage);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> hasChanged = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">const</span> nextState = &#123;&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; finalReducerKeys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> key = finalReducerKeys[i];</span><br><span class="line">      <span class="keyword">const</span> reducer = finalReducers[key];</span><br><span class="line">      <span class="keyword">const</span> previousStateForKey = state[key];</span><br><span class="line">      <span class="keyword">const</span> nextStateForKey = <span class="title function_">reducer</span>(previousStateForKey, action);</span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> nextStateForKey === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> errorMessage = <span class="title function_">getUndefinedStateErrorMessage</span>(key, action);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(errorMessage);</span><br><span class="line">      &#125;</span><br><span class="line">      nextState[key] = nextStateForKey;</span><br><span class="line">      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;</span><br><span class="line">    &#125;</span><br><span class="line">    hasChanged =</span><br><span class="line">      hasChanged || finalReducerKeys.<span class="property">length</span> !== <span class="title class_">Object</span>.<span class="title function_">keys</span>(state).<span class="property">length</span>;</span><br><span class="line">    <span class="keyword">return</span> hasChanged ? nextState : state;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看起来很长，拆开开其实就会很清晰。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducerKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(reducers);</span><br><span class="line"><span class="keyword">const</span> finalReducers = &#123;&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; reducerKeys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> key = reducerKeys[i];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> reducers[key] === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">      <span class="title function_">warning</span>(<span class="string">`No reducer provided for key &quot;<span class="subst">$&#123;key&#125;</span>&quot;`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> reducers[key] === <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">    finalReducers[key] = reducers[key];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> finalReducerKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(finalReducers);</span><br></pre></td></tr></table></figure>
+
+<p>第一段代码。</p>
+<p>先是获取了每个<code>reducer</code>的名字，存到<code>reducerKeys</code>里面。</p>
+<p>定义了一个字面对象量<code>finalReducers</code>。</p>
+<p>然后根据<code>reducerKeys</code>的长度做了一个循环。</p>
+<p>这个循环两个判断。</p>
+<p>第一个判断，如果传入了一个值为<code>undefined</code>的属性，非生产环境下就会有一个警告。</p>
+<p>第二个判断，只把值的类型为<code>function</code>的才添加到<code>finalReducers</code>里面。</p>
+<p>循环结束后获取<code>finalReducers</code>的属性名组成的数组，存到<code>finalReducerKeys</code>。</p>
+<p>这段的作用就是防止传入不符合规则的对象。</p>
+<p>比如下面这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">combineReducers</span>(&#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="literal">undefined</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">c</span>: <span class="string">&quot;abc&quot;</span>,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这些属性名对应的值都是不符合规则的，都要排除掉。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> unexpectedKeyCache;</span><br><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">  unexpectedKeyCache = &#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二段代码。</p>
+<p>就在非生产环境下初始化一个字面对象变量<code>unexpectedKeyCache</code>而已，现在还不知是干什么的，先跳过。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> shapeAssertionError;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="title function_">assertReducerShape</span>(finalReducers);</span><br><span class="line">&#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">  shapeAssertionError = e;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第三段代码</p>
+<p>往函数<code>assertReducerShape</code>传入了<code>finalReducers</code>变量。</p>
+<p>对函数<code>assertReducerShape</code>的运行进行了异常捕获。</p>
+<p>来看看<code>assertReducerShape</code>这个函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">assertReducerShape</span>(<span class="params">reducers</span>) &#123;</span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">keys</span>(reducers).<span class="title function_">forEach</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> reducer = reducers[key];</span><br><span class="line">    <span class="keyword">const</span> initialState = <span class="title function_">reducer</span>(<span class="literal">undefined</span>, &#123; <span class="attr">type</span>: <span class="title class_">ActionTypes</span>.<span class="property">INIT</span> &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> initialState === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">        <span class="string">`Reducer &quot;<span class="subst">$&#123;key&#125;</span>&quot; returned undefined during initialization. `</span> +</span><br><span class="line">          <span class="string">`If the state passed to the reducer is undefined, you must `</span> +</span><br><span class="line">          <span class="string">`explicitly return the initial state. The initial state may `</span> +</span><br><span class="line">          <span class="string">`not be undefined. If you don&#x27;t want to set a value for this reducer, `</span> +</span><br><span class="line">          <span class="string">`you can use null instead of undefined.`</span></span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      <span class="keyword">typeof</span> <span class="title function_">reducer</span>(<span class="literal">undefined</span>, &#123;</span><br><span class="line">        <span class="attr">type</span>: <span class="title class_">ActionTypes</span>.<span class="title function_">PROBE_UNKNOWN_ACTION</span>(),</span><br><span class="line">      &#125;) === <span class="string">&quot;undefined&quot;</span></span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">        <span class="string">`Reducer &quot;<span class="subst">$&#123;key&#125;</span>&quot; returned undefined when probed with a random type. `</span> +</span><br><span class="line">          <span class="string">`Don&#x27;t try to handle <span class="subst">$&#123;ActionTypes.INIT&#125;</span> or other actions in &quot;redux/*&quot; `</span> +</span><br><span class="line">          <span class="string">`namespace. They are considered private. Instead, you must return the `</span> +</span><br><span class="line">          <span class="string">`current state for any unknown actions, unless it is undefined, `</span> +</span><br><span class="line">          <span class="string">`in which case you must return the initial state, regardless of the `</span> +</span><br><span class="line">          <span class="string">`action type. The initial state may not be undefined, but can be null.`</span></span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里面主要对每个<code>reducer</code>做了两个判断。</p>
+<p>第一个判断，初始化时对于传进的初始状态<code>undefined</code>不能返回<code>undefined</code>。</p>
+<p>必须在<code>Redux</code>内部初始化时（调用一次<code>dispatch</code>，<code>action</code>为<code>ActionTypes.INIT</code>，<code>ActionTypes.INIT</code>为<code>Redux</code>内部的<code>action</code>）。</p>
+<p>每一个<code>reducer</code>都不能返回<code>undefined</code>。</p>
+<p>第二个判断其实我并不是很能理解，不过从抛出错误的信息可以知道。</p>
+<p>大意就是要求我们不要去处理<code>Redux</code>内部的<code>action</code>，对于未知的<code>aciton</code>都要返回一个不是<code>undefined</code>的数据。</p>
+<p><code>Redux</code>内部的<code>action</code>有三个。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">randomString</span> = (<span class="params"></span>) =&gt;</span><br><span class="line">  <span class="title class_">Math</span>.<span class="title function_">random</span>().<span class="title function_">toString</span>(<span class="number">36</span>).<span class="title function_">substring</span>(<span class="number">7</span>).<span class="title function_">split</span>(<span class="string">&quot;&quot;</span>).<span class="title function_">join</span>(<span class="string">&quot;.&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">ActionTypes</span> = &#123;</span><br><span class="line">  <span class="attr">INIT</span>: <span class="string">`@@redux/INIT<span class="subst">$&#123;randomString()&#125;</span>`</span>,</span><br><span class="line">  <span class="attr">REPLACE</span>: <span class="string">`@@redux/REPLACE<span class="subst">$&#123;randomString()&#125;</span>`</span>,</span><br><span class="line">  <span class="attr">PROBE_UNKNOWN_ACTION</span>: <span class="function">() =&gt;</span> <span class="string">`@@redux/PROBE_UNKNOWN_ACTION<span class="subst">$&#123;randomString()&#125;</span>`</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>第三部分的代码到这里就结束，主要对<code>reducer</code>的返回值做了断言，并将断言的结果保存在<code>shapeAssertionError</code>中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="keyword">function</span> <span class="title function_">combination</span>(<span class="params">state = &#123;&#125;, action</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (shapeAssertionError) &#123;</span><br><span class="line">    <span class="keyword">throw</span> shapeAssertionError;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> warningMessage = <span class="title function_">getUnexpectedStateShapeWarningMessage</span>(</span><br><span class="line">      state,</span><br><span class="line">      finalReducers,</span><br><span class="line">      action,</span><br><span class="line">      unexpectedKeyCache</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">if</span> (warningMessage) &#123;</span><br><span class="line">      <span class="title function_">warning</span>(warningMessage);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> hasChanged = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">const</span> nextState = &#123;&#125;;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; finalReducerKeys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">const</span> key = finalReducerKeys[i];</span><br><span class="line">    <span class="keyword">const</span> reducer = finalReducers[key];</span><br><span class="line">    <span class="keyword">const</span> previousStateForKey = state[key];</span><br><span class="line">    <span class="keyword">const</span> nextStateForKey = <span class="title function_">reducer</span>(previousStateForKey, action);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> nextStateForKey === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> errorMessage = <span class="title function_">getUndefinedStateErrorMessage</span>(key, action);</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(errorMessage);</span><br><span class="line">    &#125;</span><br><span class="line">    nextState[key] = nextStateForKey;</span><br><span class="line">    hasChanged = hasChanged || nextStateForKey !== previousStateForKey;</span><br><span class="line">  &#125;</span><br><span class="line">  hasChanged =</span><br><span class="line">    hasChanged || finalReducerKeys.<span class="property">length</span> !== <span class="title class_">Object</span>.<span class="title function_">keys</span>(state).<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">return</span> hasChanged ? nextState : state;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>第四部分代码。</p>
+<p>就是返回一个新的<code>reducer</code>函数了。</p>
+<p>开始就先对之前保存的断言就行了判断，如果发现<code>reducer</code>不符合规则，直接抛出错误。</p>
+<p>接下来。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (process.<span class="property">env</span>.<span class="property">NODE_ENV</span> !== <span class="string">&quot;production&quot;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> warningMessage = <span class="title function_">getUnexpectedStateShapeWarningMessage</span>(</span><br><span class="line">    state,</span><br><span class="line">    finalReducers,</span><br><span class="line">    action,</span><br><span class="line">    unexpectedKeyCache</span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">if</span> (warningMessage) &#123;</span><br><span class="line">    <span class="title function_">warning</span>(warningMessage);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这一段代码传入了旧的<code>state</code>，<code>reducers</code>数组，请求的<code>action</code>，和之前没用过的一个空的<code>unexpectedKeyCache</code>对象。</p>
+<p>看看<code>getUnexpectedStateShapeWarningMessage</code>这个函数的实现。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getUnexpectedStateShapeWarningMessage</span>(<span class="params"></span></span><br><span class="line"><span class="params">  inputState,</span></span><br><span class="line"><span class="params">  reducers,</span></span><br><span class="line"><span class="params">  action,</span></span><br><span class="line"><span class="params">  unexpectedKeyCache</span></span><br><span class="line"><span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 获取reducers的属性名组成的数组</span></span><br><span class="line">  <span class="keyword">const</span> reducerKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(reducers);</span><br><span class="line">  <span class="comment">// 初始化state还是更新state</span></span><br><span class="line">  <span class="keyword">const</span> argumentName =</span><br><span class="line">    action &amp;&amp; action.<span class="property">type</span> === <span class="title class_">ActionTypes</span>.<span class="property">INIT</span></span><br><span class="line">      ? <span class="string">&quot;preloadedState argument passed to createStore&quot;</span></span><br><span class="line">      : <span class="string">&quot;previous state received by the reducer&quot;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// reducers为空，即 reducers = &#123;&#125;</span></span><br><span class="line">  <span class="keyword">if</span> (reducerKeys.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="string">&quot;Store does not have a valid reducer. Make sure the argument passed &quot;</span> +</span><br><span class="line">      <span class="string">&quot;to combineReducers is an object whose values are reducers.&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// state必须为一个字面对象量</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isPlainObject</span>(inputState)) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="string">`The <span class="subst">$&#123;argumentName&#125;</span> has unexpected type of &quot;`</span> +</span><br><span class="line">      &#123;&#125;.<span class="property">toString</span>.<span class="title function_">call</span>(inputState).<span class="title function_">match</span>(<span class="regexp">/\s([a-z|A-Z]+)/</span>)[<span class="number">1</span>] +</span><br><span class="line">      <span class="string">`&quot;. Expected argument to be an object with the following `</span> +</span><br><span class="line">      <span class="string">`keys: &quot;<span class="subst">$&#123;reducerKeys.join(<span class="string">&#x27;&quot;, &quot;&#x27;</span>)&#125;</span>&quot;`</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// reducers.hasOwnProperty(key)</span></span><br><span class="line">  <span class="comment">// 找到那些inputState里面有的但是在reducers自身没有的属性名</span></span><br><span class="line">  <span class="comment">// 即 inputState = &#123;a: 1, b: 2&#125;  reducers = &#123;a: aReducer&#125;</span></span><br><span class="line">  <span class="comment">// 那么b就会被传入unexpectedKeys中</span></span><br><span class="line">  <span class="comment">// unexpectedKeyCache[key]</span></span><br><span class="line">  <span class="comment">// 之前已经确认为不包括的属性名就不用再找出来了</span></span><br><span class="line">  <span class="keyword">const</span> unexpectedKeys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(inputState).<span class="title function_">filter</span>(</span><br><span class="line">    <span class="function">(<span class="params">key</span>) =&gt;</span> !reducers.<span class="title function_">hasOwnProperty</span>(key) &amp;&amp; !unexpectedKeyCache[key]</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在unexpectedKeyCache中标记这些新的不包括在reducers内的属性名</span></span><br><span class="line">  unexpectedKeys.<span class="title function_">forEach</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</span><br><span class="line">    unexpectedKeyCache[key] = <span class="literal">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果action为替换reducer那就没事，因为替换也意味着reducers的结构也会发生改变</span></span><br><span class="line">  <span class="keyword">if</span> (action &amp;&amp; action.<span class="property">type</span> === <span class="title class_">ActionTypes</span>.<span class="property">REPLACE</span>) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果unexpectedKeys存在项，即inputState存在了不包括在reducers中的属性名</span></span><br><span class="line">  <span class="keyword">if</span> (unexpectedKeys.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">      <span class="string">`Unexpected <span class="subst">$&#123;unexpectedKeys.length &gt; <span class="number">1</span> ? <span class="string">&quot;keys&quot;</span> : <span class="string">&quot;key&quot;</span>&#125;</span> `</span> +</span><br><span class="line">      <span class="string">`&quot;<span class="subst">$&#123;unexpectedKeys.join(<span class="string">&#x27;&quot;, &quot;&#x27;</span>)&#125;</span>&quot; found in <span class="subst">$&#123;argumentName&#125;</span>. `</span> +</span><br><span class="line">      <span class="string">`Expected to find one of the known reducer keys instead: `</span> +</span><br><span class="line">      <span class="string">`&quot;<span class="subst">$&#123;reducerKeys.join(<span class="string">&#x27;&quot;, &quot;&#x27;</span>)&#125;</span>&quot;. Unexpected keys will be ignored.`</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数主要就是检查<code>inputState</code>的结构是否符合<code>reducers</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> hasChanged = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">const</span> nextState = &#123;&#125;;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; finalReducerKeys.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  <span class="keyword">const</span> key = finalReducerKeys[i];</span><br><span class="line">  <span class="keyword">const</span> reducer = finalReducers[key];</span><br><span class="line">  <span class="keyword">const</span> previousStateForKey = state[key];</span><br><span class="line">  <span class="keyword">const</span> nextStateForKey = <span class="title function_">reducer</span>(previousStateForKey, action);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> nextStateForKey === <span class="string">&quot;undefined&quot;</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> errorMessage = <span class="title function_">getUndefinedStateErrorMessage</span>(key, action);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(errorMessage);</span><br><span class="line">  &#125;</span><br><span class="line">  nextState[key] = nextStateForKey;</span><br><span class="line">  hasChanged = hasChanged || nextStateForKey !== previousStateForKey;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个循环便是整个返回函数中最重要的部分了。</p>
+<p>定义了一个标志变量和<code>hasChange</code>和一个下一个状态的对象<code>nextState</code>。</p>
+<p>循环已经筛选过的<code>reducers</code>，也就是<code>finalReducerKeys</code>。</p>
+<ul>
+<li><code>key</code> <code>reducer</code>的名字；</li>
+<li><code>reducer</code> <code>key</code>对应的<code>reducer</code>；</li>
+<li><code>previousStateForKey</code> <code>reducer</code>对应的旧状态；</li>
+<li><code>nextStateForKey</code> <code>reducer</code>执行后的新状态。</li>
+</ul>
+<p>然后判断新的状态是不是<code>undefined</code>，是的话报错，因为这是不符合规则的。</p>
+<p>然后在新的状态对象上添加对应<code>key</code>为<code>nextState</code>。</p>
+<p>最后确定新的状态是不是和旧的状态是否相同，保存在<code>hasChange</code>中。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hasChanged =</span><br><span class="line">  hasChanged || finalReducerKeys.<span class="property">length</span> !== <span class="title class_">Object</span>.<span class="title function_">keys</span>(state).<span class="property">length</span>;</span><br><span class="line"><span class="keyword">return</span> hasChanged ? nextState : state;</span><br></pre></td></tr></table></figure>
+
+<p>最后就是确定要不要返回新的状态，如果每个<code>reducer</code>返回的都和旧状态相同的话。</p>
+<p>逻辑上整个状态就应该和原来相同。</p>
+<p>除了循环内的判断，最后做了一个<code>finalReducerKeys.length !== Object.keys(state).length</code>判断。</p>
+<p>只要旧的<code>state</code>的<code>key</code>值集合长度和<code>finalReducerKeys</code>的长度不一致就返回<code>nextState</code>。</p>
+<p>到这里基本上就把这个函数看完了。</p>
+<p>需要注意的是，在文档中有对这函数的一个注意事项。</p>
+<blockquote>
+<p>本函数设计的时候有点偏主观，就是为了避免新手犯一些常见错误。也因些我们故意设定一些规则，但如果你自己手动编写根<code>redcuer</code>时并不需要遵守这些规则。<br>每个传入 <code>combineReducers</code> 的 reducer 都需满足以下规则：</p>
+<ul>
+<li>所有未匹配到的<code>action</code>，必须把它接收到的第一个参数也就是那个<code>state</code>原封不动返回。</li>
+<li>永远不能返回<code>undefined</code>。当过早<code>return</code>时非常容易犯这个错误，为了避免错误扩散，遇到这种情况时<code>combineReducers</code>会抛异常。</li>
+<li>如果传入的<code>state</code>就是<code>undefined</code>，一定要返回对应<code>reducer</code>的初始<code>state</code>。根据上一条规则，初始<code>state</code>禁止使用<code>undefined</code>。使用<code>ES6</code>的默认参数值语法来设置初始<code>state</code>很容易，但你也可以手动检查第一个参数是否为 <code>undefined</code>。</li>
+</ul>
+<p>虽然<code>combineReducers</code>自动帮你检查<code>reducer</code>是否符合以上规则，但你也应该牢记，并尽量遵守。即使你通过 <code>Redux.createStore(combineReducers(...), initialState)</code> 指定初始<code>state</code>，<code>combineReducers</code> 也会尝试通过传递 <code>undefined</code>的<code>state</code>来检测你的<code>reducer</code>是否符合规则。因此，即使你在代码中不打算实际接收值为<code>undefined</code>的<code>state</code>，也必须保证你的<code>reducer</code>在接收到<code>undefined</code>时能够正常工作。</p>
+</blockquote>
+<p>所以在源码中可以看到很多判断语句。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/03481ca8609b" title="Redux源码解读 - combineReducers篇">https://prohibitorum.top/03481ca8609b</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d2273ba5e08d" rel="prev" title="Redux源码解读 - applyMiddleware篇">
+                  <i class="fa fa-angle-left"></i> Redux源码解读 - applyMiddleware篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/03235456147e" rel="next" title="Redux源码解读 - bindActionCreators篇（完结）">
+                  Redux源码解读 - bindActionCreators篇（完结） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1594432480"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

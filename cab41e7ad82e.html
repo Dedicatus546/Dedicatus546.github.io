@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言这应该就是Vuex的最后一篇了。 本篇主要写Vuex方便开发者把相关state，getter，mutation，action以一种简单的方式混入组件中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vuex@next源码解析 - helpers篇">
+<meta property="og:url" content="https://prohibitorum.top/cab41e7ad82e">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言这应该就是Vuex的最后一篇了。 本篇主要写Vuex方便开发者把相关state，getter，mutation，action以一种简单的方式混入组件中。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/29/utLfoZKnSNVhlmk.png">
+<meta property="article:published_time" content="2020-10-29T10:47:22.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Vuex">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/29/utLfoZKnSNVhlmk.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/cab41e7ad82e.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/cab41e7ad82e","path":"cab41e7ad82e.html","title":"Vuex@next源码解析 - helpers篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vuex@next源码解析 - helpers篇 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#helpers"><span class="nav-number">2.</span> <span class="nav-text">helpers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#mapStates"><span class="nav-number">2.1.</span> <span class="nav-text">mapStates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapGetters"><span class="nav-number">2.2.</span> <span class="nav-text">mapGetters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapMutations"><span class="nav-number">2.3.</span> <span class="nav-text">mapMutations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapActions"><span class="nav-number">2.4.</span> <span class="nav-text">mapActions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#createNamespacedHelpers"><span class="nav-number">2.5.</span> <span class="nav-text">createNamespacedHelpers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#normalizeMap"><span class="nav-number">2.6.</span> <span class="nav-text">normalizeMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isValidMap"><span class="nav-number">2.7.</span> <span class="nav-text">isValidMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#normalizeNamespace"><span class="nav-number">2.8.</span> <span class="nav-text">normalizeNamespace</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getModuleByNamespace"><span class="nav-number">2.9.</span> <span class="nav-text">getModuleByNamespace</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/cab41e7ad82e">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vuex@next源码解析 - helpers篇 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vuex@next源码解析 - helpers篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-29 10:47:22" itemprop="dateCreated datePublished" datetime="2020-10-29T10:47:22+00:00">2020-10-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这应该就是<code>Vuex</code>的最后一篇了。</p>
+<p>本篇主要写<code>Vuex</code>方便开发者把相关<code>state</code>，<code>getter</code>，<code>mutation</code>，<code>action</code>以一种简单的方式混入组件中。</p>
+<span id="more"></span>
+
+<h1 id="helpers"><a href="#helpers" class="headerlink" title="helpers"></a>helpers</h1><p><code>helpers.js</code>位于<code>src</code>文件夹下</p>
+<p><img data-src="https://i.loli.net/2020/10/29/utLfoZKnSNVhlmk.png"></p>
+<h2 id="mapStates"><a href="#mapStates" class="headerlink" title="mapStates"></a><code>mapStates</code></h2><p>现在我们有如下的一个<code>store</code>，并且注入到<code>Vue</code>中了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">state</span>: &#123;</span><br><span class="line">    <span class="attr">name</span>: <span class="string">&quot;lwf&quot;</span>,</span><br><span class="line">    <span class="attr">age</span>: <span class="number">22</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>想使用<code>store</code>上的某个<code>state</code>，一般而言可以。</p>
+<ul>
+<li><code>this.$store.state[stateName]</code></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Test&quot;</span>,</span><br><span class="line">  <span class="attr">methods</span>: &#123;</span><br><span class="line">    <span class="title function_">test</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>.<span class="property">name</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>.<span class="property">age</span>);</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">test</span>();</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过<code>computed</code>进行包装</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Test&quot;</span>,</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">    <span class="title function_">name</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>.<span class="property">name</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">age</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>.<span class="property">age</span>;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">age</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看出，每次去特定的状态，需要写<code>this.$store.state.xxx</code>这样子的代码。</p>
+<p>一两个地方还好，一多起来，代码就会让人感觉很<strong>丑</strong>。</p>
+<p>如果是嵌套的状态那就更恐怖了，比如<code>this.$store.state.m1.m2.m3.m4.propertyName</code>。</p>
+<p>而第二种方式使得对状态的引用更加的直接，但是还是有一个问题。</p>
+<p>就是在<code>computed</code>中的代码太类似了，如果对多个状态都这样子写，还是很<strong>丑</strong>。</p>
+<p>所以，<code>Vuex</code>很贴心的给了我们一个工具函数，让我们能够以函数调用的形式来表达这种映射关系，使得整体的代码更加的简洁，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapState &#125; <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Test&quot;</span>,</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">    ...<span class="title function_">mapState</span>([<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>]),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">age</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码能够运行，也得归功于<code>ES6</code>的展开运算符<code>...</code>。</p>
+<p>OK，把代码贴上来，看看实现是如何做到的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mapState = <span class="title function_">normalizeNamespace</span>(<span class="function">(<span class="params">namespace, states</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> res = &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="title function_">isValidMap</span>(states)) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">&quot;[vuex] mapState: mapper parameter must be either an Array or an Object&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">normalizeMap</span>(states).<span class="title function_">forEach</span>(<span class="function">(<span class="params">&#123; key, val &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    res[key] = <span class="keyword">function</span> <span class="title function_">mappedState</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">let</span> state = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>;</span><br><span class="line">      <span class="keyword">let</span> getters = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">getters</span>;</span><br><span class="line">      <span class="keyword">if</span> (namespace) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="title function_">getModuleByNamespace</span>(<span class="variable language_">this</span>.<span class="property">$store</span>, <span class="string">&quot;mapState&quot;</span>, namespace);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">module</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        state = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">state</span>;</span><br><span class="line">        getters = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">getters</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&quot;function&quot;</span></span><br><span class="line">        ? val.<span class="title function_">call</span>(<span class="variable language_">this</span>, state, getters)</span><br><span class="line">        : state[val];</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// mark vuex getter for devtools</span></span><br><span class="line">    res[key].<span class="property">vuex</span> = <span class="literal">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>最前面定义了一个<code>res</code>对象，用于保存所有的映射结果，最后返回的就是这个对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="title function_">isValidMap</span>(states)) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">    <span class="string">&quot;[vuex] mapState: mapper parameter must be either an Array or an Object&quot;</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>if</code>来判断第二个参数是不是合法的映射对象，不是就要报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">normalizeMap</span>(states).<span class="title function_">forEach</span>(<span class="function">(<span class="params">&#123; key, val &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  res[key] = <span class="keyword">function</span> <span class="title function_">mappedState</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// mark vuex getter for devtools</span></span><br><span class="line">  res[key].<span class="property">vuex</span> = <span class="literal">true</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>normalizeMap</code>函数把第二个参数标准化了，然后遍历标准化后的数组，取到里面的每一个对象。</p>
+<p>在<code>res</code>上挂载每个<code>key</code>，每个<code>key</code>对应的值是一个函数。</p>
+<p><code>res[key].vuex = true</code>用于让调试工具识别，这里可以忽略不管。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">res[key] = <span class="keyword">function</span> <span class="title function_">mappedState</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> state = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">state</span>;</span><br><span class="line">  <span class="keyword">let</span> getters = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">getters</span>;</span><br><span class="line">  <span class="keyword">if</span> (namespace) &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="title function_">getModuleByNamespace</span>(<span class="variable language_">this</span>.<span class="property">$store</span>, <span class="string">&quot;mapState&quot;</span>, namespace);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">module</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    state = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">state</span>;</span><br><span class="line">    getters = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">getters</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&quot;function&quot;</span></span><br><span class="line">    ? val.<span class="title function_">call</span>(<span class="variable language_">this</span>, state, getters)</span><br><span class="line">    : state[val];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里可能有人有疑问，为什么可以<code>mappedState</code>函数中可以使用<code>this</code>。</p>
+<p>这时因为，<code>res</code>是我们最终返回的结果，而最终我们会在组件内的<code>computed</code>中展开这个对象。</p>
+<p>也就是说可以这个函数理解成写在<code>computed</code>上的一个函数。</p>
+<p>而<code>Vue</code>会自动的对<code>computed</code>上的属性进行上下文的绑定，所以就能使用<code>this.$store</code>来取到<code>store</code>了。</p>
+<p>这也表示了这个地方不能使用箭头函数，因为箭头函数的上下文在书写的时候已经确定了。</p>
+<p>回到函数中，内部先取到总的<code>state</code>，以及全部的<code>getters</code>。</p>
+<p>如果存在命名空间，那么要使用该命名空间对应模块（通过<code>getModuleByNamespace</code>函数来获取）对象的一个<code>state</code>和<code>getters</code>。</p>
+<p>然后判断传进来的是否为一个函数，因为如果只是简单的映射，属性值可以直接为一个字符串，这时直接从<code>state</code>中取值，表示<code>store</code>中的<code>state</code>名。</p>
+<p>也可以是一个函数，从而可以进行更加复杂地计算。</p>
+<h2 id="mapGetters"><a href="#mapGetters" class="headerlink" title="mapGetters"></a><code>mapGetters</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mapGetters = <span class="title function_">normalizeNamespace</span>(<span class="function">(<span class="params">namespace, getters</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> res = &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="title function_">isValidMap</span>(getters)) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">&quot;[vuex] mapGetters: mapper parameter must be either an Array or an Object&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">normalizeMap</span>(getters).<span class="title function_">forEach</span>(<span class="function">(<span class="params">&#123; key, val &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// The namespace has been mutated by normalizeNamespace</span></span><br><span class="line">    val = namespace + val;</span><br><span class="line">    res[key] = <span class="keyword">function</span> <span class="title function_">mappedGetter</span>(<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (</span><br><span class="line">        namespace &amp;&amp;</span><br><span class="line">        !<span class="title function_">getModuleByNamespace</span>(<span class="variable language_">this</span>.<span class="property">$store</span>, <span class="string">&quot;mapGetters&quot;</span>, namespace)</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (__DEV__ &amp;&amp; !(val <span class="keyword">in</span> <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">getters</span>)) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`[vuex] unknown getter: <span class="subst">$&#123;val&#125;</span>`</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">getters</span>[val];</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">// mark vuex getter for devtools</span></span><br><span class="line">    res[key].<span class="property">vuex</span> = <span class="literal">true</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>mapXXX</code>这几个函数的逻辑很相像，如果已经掌握<code>mapState</code>了，那么其他类似的函数也可以很容易地理解</p>
+<p><code>mapGetters</code>和<code>mapState</code>函数基本相同</p>
+<p>开始定义了<code>res</code>来保存结果集用于返回，通过<code>isValidMap</code>来对映射进行验证</p>
+<p>然后通过<code>normalizeMap</code>来遍历<code>key-val</code>值，不同点在于</p>
+<p>对于<code>getter</code>的获取，是在<code>store.getters</code>上进行查找的，<code>getter</code>的名字需要结合命名空间名，也就是对应<code>val = namespace + val</code>这句</p>
+<p>这里依然判断了该命名空间的模块是否存在，但是其实不用使用到这个模块，进一步判断了对应的名字是否在<code>store.getters</code>中</p>
+<p>最后通过直接取值并返回<code>store.getters[val]</code></p>
+<p>注意在<code>mapGetters</code>中是不能使用函数作为属性的，因为源码上并没有实现这样的功能</p>
+<h2 id="mapMutations"><a href="#mapMutations" class="headerlink" title="mapMutations"></a><code>mapMutations</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mapMutations = <span class="title function_">normalizeNamespace</span>(<span class="function">(<span class="params">namespace, mutations</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> res = &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="title function_">isValidMap</span>(mutations)) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">&quot;[vuex] mapMutations: mapper parameter must be either an Array or an Object&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">normalizeMap</span>(mutations).<span class="title function_">forEach</span>(<span class="function">(<span class="params">&#123; key, val &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    res[key] = <span class="keyword">function</span> <span class="title function_">mappedMutation</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">      <span class="comment">// Get the commit method from store</span></span><br><span class="line">      <span class="keyword">let</span> commit = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">commit</span>;</span><br><span class="line">      <span class="keyword">if</span> (namespace) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="title function_">getModuleByNamespace</span>(</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$store</span>,</span><br><span class="line">          <span class="string">&quot;mapMutations&quot;</span>,</span><br><span class="line">          namespace</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">module</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        commit = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">commit</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&quot;function&quot;</span></span><br><span class="line">        ? val.<span class="title function_">apply</span>(<span class="variable language_">this</span>, [commit].<span class="title function_">concat</span>(args))</span><br><span class="line">        : commit.<span class="title function_">apply</span>(<span class="variable language_">this</span>.<span class="property">$store</span>, [val].<span class="title function_">concat</span>(args));</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>mapMutations</code>支持属性值为函数的情况，这时第一个参数为该命名空间下的<code>commit</code>函数</p>
+<p>如果不是函数，那么直接<code>commit</code>掉传入的属性值，以及附带的参数。</p>
+<p>注意<code>mapMutations</code>是展开到组件的<code>method</code>下的，而不是<code>computed</code>下</p>
+<h2 id="mapActions"><a href="#mapActions" class="headerlink" title="mapActions"></a><code>mapActions</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> mapActions = <span class="title function_">normalizeNamespace</span>(<span class="function">(<span class="params">namespace, actions</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> res = &#123;&#125;;</span><br><span class="line">  <span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="title function_">isValidMap</span>(actions)) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">&quot;[vuex] mapActions: mapper parameter must be either an Array or an Object&quot;</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="title function_">normalizeMap</span>(actions).<span class="title function_">forEach</span>(<span class="function">(<span class="params">&#123; key, val &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">    res[key] = <span class="keyword">function</span> <span class="title function_">mappedAction</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">      <span class="comment">// get dispatch function from store</span></span><br><span class="line">      <span class="keyword">let</span> dispatch = <span class="variable language_">this</span>.<span class="property">$store</span>.<span class="property">dispatch</span>;</span><br><span class="line">      <span class="keyword">if</span> (namespace) &#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="variable language_">module</span> = <span class="title function_">getModuleByNamespace</span>(</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">$store</span>,</span><br><span class="line">          <span class="string">&quot;mapActions&quot;</span>,</span><br><span class="line">          namespace</span><br><span class="line">        );</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable language_">module</span>) &#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        dispatch = <span class="variable language_">module</span>.<span class="property">context</span>.<span class="property">dispatch</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> val === <span class="string">&quot;function&quot;</span></span><br><span class="line">        ? val.<span class="title function_">apply</span>(<span class="variable language_">this</span>, [dispatch].<span class="title function_">concat</span>(args))</span><br><span class="line">        : dispatch.<span class="title function_">apply</span>(<span class="variable language_">this</span>.<span class="property">$store</span>, [val].<span class="title function_">concat</span>(args));</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>mapActions</code>和<code>mapMutations</code>基本逻辑一模一样，不同点为使用<code>dispatch</code>进行分发而不是使用<code>commit</code></p>
+<p>注意<code>mapActions</code>是展开到组件的<code>method</code>下的，而不是<code>computed</code>下</p>
+<h2 id="createNamespacedHelpers"><a href="#createNamespacedHelpers" class="headerlink" title="createNamespacedHelpers"></a><code>createNamespacedHelpers</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title function_">createNamespacedHelpers</span> = (<span class="params">namespace</span>) =&gt; (&#123;</span><br><span class="line">  <span class="attr">mapState</span>: mapState.<span class="title function_">bind</span>(<span class="literal">null</span>, namespace),</span><br><span class="line">  <span class="attr">mapGetters</span>: mapGetters.<span class="title function_">bind</span>(<span class="literal">null</span>, namespace),</span><br><span class="line">  <span class="attr">mapMutations</span>: mapMutations.<span class="title function_">bind</span>(<span class="literal">null</span>, namespace),</span><br><span class="line">  <span class="attr">mapActions</span>: mapActions.<span class="title function_">bind</span>(<span class="literal">null</span>, namespace),</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这个函数实现非常简单，返回一个对象，对象上就是四个<code>mapXXX</code>的方法</p>
+<p>只不过这四个方法，通过<code>bind</code>绑定了第一个参数（第一个参数为传入的<code>namespace</code>）</p>
+<h2 id="normalizeMap"><a href="#normalizeMap" class="headerlink" title="normalizeMap"></a><code>normalizeMap</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">normalizeMap</span>(<span class="params">map</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isValidMap</span>(map)) &#123;</span><br><span class="line">    <span class="keyword">return</span> [];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="title function_">isArray</span>(map)</span><br><span class="line">    ? map.<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> (&#123; key, <span class="attr">val</span>: key &#125;))</span><br><span class="line">    : <span class="title class_">Object</span>.<span class="title function_">keys</span>(map).<span class="title function_">map</span>(<span class="function">(<span class="params">key</span>) =&gt;</span> (&#123; key, <span class="attr">val</span>: map[key] &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于映射，在<code>mapXXX</code>的 API 中，可以传入一个对象，也可以传入一个字符数组</p>
+<p>这个函数统一的转换成一个对象数组，对象中包含<code>key</code>和<code>val</code>键，用来表明需要映射的状态<code>val</code>和映射到组件中的名字<code>key</code>，比如</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下面这种情况对应需要映射的属性名和映射到组件中的属性名是一样的</span></span><br><span class="line"><span class="title function_">normalizeMap</span>([<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>]); <span class="comment">// [ &#123; key: &#x27;name&#x27;, val: &#x27;name&#x27; &#125;, &#123; key: &#x27;age&#x27;, val: &#x27;age&#x27; &#125; ]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下面这种就可以自定义映射到组件中的属性名</span></span><br><span class="line"><span class="title function_">normalizeMap</span>(&#123; <span class="attr">myName</span>: <span class="string">&quot;name&quot;</span>, <span class="attr">myAge</span>: <span class="string">&quot;age&quot;</span> &#125;); <span class="comment">// [ &#123; key: &#x27;myName&#x27;, val: &#x27;name&#x27; &#125;, &#123; key: &#x27;myAge&#x27;, val: &#x27;age&#x27; &#125; ]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="isValidMap"><a href="#isValidMap" class="headerlink" title="isValidMap"></a><code>isValidMap</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isValidMap</span>(<span class="params">map</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="title function_">isArray</span>(map) || <span class="title function_">isObject</span>(map);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果是从上面看下来的话，那么这个函数被使用在哪个地方应该非常的明朗</p>
+<p>这个函数在<code>mapXXX</code>函数上，基本上在第一行就使用到，用来校验第二个参数为一个<code>Array</code>或者一个<code>Object</code></p>
+<p>使用了内置对象<code>Array</code>的<code>isArray</code>和工具函数<code>isObject</code>来进行验证。</p>
+<h2 id="normalizeNamespace"><a href="#normalizeNamespace" class="headerlink" title="normalizeNamespace"></a><code>normalizeNamespace</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">normalizeNamespace</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">namespace, map</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> namespace !== <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">      map = namespace;</span><br><span class="line">      namespace = <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (namespace.<span class="title function_">charAt</span>(namespace.<span class="property">length</span> - <span class="number">1</span>) !== <span class="string">&quot;/&quot;</span>) &#123;</span><br><span class="line">      namespace += <span class="string">&quot;/&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">fn</span>(namespace, map);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在每个<code>mapXXX</code>的函数，都会通过这个函数进行包装</p>
+<p>这个函数的开头，有一段注释</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Return a function expect two param contains namespace and map.</span><br><span class="line"> * it will normalize the namespace and then</span><br><span class="line"> * the param&#x27;s function will handle the new namespace and the map.</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+
+<p>大意就是返回一个接收<code>namespace</code>和<code>map</code>的一个函数</p>
+<p>这个函数会标准化命名空间参数<code>namespace</code>，使得传入的函数可以处理新的命名空间<code>namespace</code>和一个映射对象 map</p>
+<p>大白话就是包装一个函数，添加了一段对参数的逻辑判断 🤣</p>
+<p>在 Vuex 中，如果是嵌套比较深的模块，那么如果使用<code>mapXXX</code>这类函数传参会比较的<strong>丑</strong></p>
+<p>比如现在有一个<code>store</code>，如下（已经注册到<code>Vue</code>中，注意这里开启了命名空间）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(&#123;</span><br><span class="line">  <span class="attr">modules</span>: &#123;</span><br><span class="line">    <span class="attr">m1</span>: &#123;</span><br><span class="line">      <span class="attr">namespaced</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">modules</span>: &#123;</span><br><span class="line">        <span class="attr">m2</span>: &#123;</span><br><span class="line">          <span class="attr">namespaced</span>: <span class="literal">true</span>,</span><br><span class="line">          <span class="attr">modules</span>: &#123;</span><br><span class="line">            <span class="attr">m3</span>: &#123;</span><br><span class="line">              <span class="attr">namespaced</span>: <span class="literal">true</span>,</span><br><span class="line">              <span class="attr">state</span>: &#123;</span><br><span class="line">                <span class="attr">name</span>: <span class="string">&quot;lwf&quot;</span>,</span><br><span class="line">                <span class="attr">age</span>: <span class="number">22</span>,</span><br><span class="line">              &#125;,</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>现在我们想把模块<code>m3</code>的<code>state</code>映射到组件中，可能会这样写（这时无法直接传入单个数组进行映射了，这种传法只对根模块有效）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapState &#125; <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Test&quot;</span>,</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">    ...<span class="title function_">mapState</span>(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">m1</span>.<span class="property">m2</span>.<span class="property">m3</span>.<span class="property">name</span>,</span><br><span class="line">      <span class="attr">age</span>: <span class="function">(<span class="params">state</span>) =&gt;</span> state.<span class="property">m1</span>.<span class="property">m2</span>.<span class="property">m3</span>.<span class="property">age</span>,</span><br><span class="line">    &#125;),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">age</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以发现配置属性的函数时，要重复编写<code>state.m1.m2.m3</code>，还是<strong>丑</strong></p>
+<p>所以可以使用两个参数的情况，如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; mapState &#125; <span class="keyword">from</span> <span class="string">&quot;vuex&quot;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">name</span>: <span class="string">&quot;Test&quot;</span>,</span><br><span class="line">  <span class="attr">computed</span>: &#123;</span><br><span class="line">    ...<span class="title function_">mapState</span>(<span class="string">&quot;m1/m2/m3&quot;</span>, [<span class="string">&quot;name&quot;</span>, <span class="string">&quot;age&quot;</span>]),</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">mounted</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">name</span>);</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">this</span>.<span class="property">age</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>第一个参数指定命名空间，第二个参数指定该空间下的状态名数组</p>
+<p>回到<code>normalizeNamespace</code>函数，只有一段<code>if-elseif</code>的逻辑</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> namespace !== <span class="string">&quot;string&quot;</span>) &#123;</span><br><span class="line">  map = namespace;</span><br><span class="line">  namespace = <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (namespace.<span class="title function_">charAt</span>(namespace.<span class="property">length</span> - <span class="number">1</span>) !== <span class="string">&quot;/&quot;</span>) &#123;</span><br><span class="line">  namespace += <span class="string">&quot;/&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果第一个参数传的不是字符串，那么也就是只传一个映射<code>map</code>而已，</p>
+<p>如果第一个参数传的是字符串且它的最后一个字符不是<code>/</code>的话，加上一个斜杠，这个处理主要是为了用户考虑吧我感觉</p>
+<p>对于一般人说，对嵌套模块的书写是<code>m1/m2/m3</code>，而不是<code>m1/m2/m3/</code></p>
+<p>但是 Vuex 对命名空间模块的注册（在<code>_modulesNamespaceMap</code>上注册，使用了第二种方式）</p>
+<p>所以这里<code>Vuex</code>对于传入命名，可以第一种写法也可以第二种，因为第一种会自动的加上<code>/</code>，第二个判断的作用就是如此</p>
+<p>而且从这里也可以理解，为什么可以传一个数组默认就是取根模块的状态，因为直接传入一个数组，此时的<code>namespace</code>就是空字符串</p>
+<p>而空字符是假值，在<code>mapState</code>中不会去查找对应模块，而是直接使用根模块的<code>state</code>来取值</p>
+<h2 id="getModuleByNamespace"><a href="#getModuleByNamespace" class="headerlink" title="getModuleByNamespace"></a><code>getModuleByNamespace</code></h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">getModuleByNamespace</span>(<span class="params">store, helper, namespace</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable language_">module</span> = store.<span class="property">_modulesNamespaceMap</span>[namespace];</span><br><span class="line">  <span class="keyword">if</span> (__DEV__ &amp;&amp; !<span class="variable language_">module</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">`[vuex] module namespace not found in <span class="subst">$&#123;helper&#125;</span>(): <span class="subst">$&#123;namespace&#125;</span>`</span></span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">module</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>根据命名空间来获取对应的<code>Module</code>对象，此时<code>helper</code>（值为<code>mapState</code>，<code>mapGetters</code>，<code>mapMutations</code>，<code>mapActions</code>这其中的一个）只用于生成一个报错字符串的而已</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>每天进步一点点~</p>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=461301621&auto=0&height=66"></iframe>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/cab41e7ad82e" title="Vuex@next源码解析 - helpers篇">https://prohibitorum.top/cab41e7ad82e</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Vuex/" rel="tag"># Vuex</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/24f26b743454" rel="prev" title="Vuex@next源码解析 - 工具函数篇篇">
+                  <i class="fa fa-angle-left"></i> Vuex@next源码解析 - 工具函数篇篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2ee3094db30f" rel="next" title="Typescript中的工具类型">
+                  Typescript中的工具类型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1603939642"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言使用 canvas 来实现简单的批注功能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 canvas 来实现简单的批注功能">
+<meta property="og:url" content="https://prohibitorum.top/648f3f0c7d1a">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言使用 canvas 来实现简单的批注功能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/04/23/202304231418182.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041118161.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041114792.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041150201.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041557968.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041600812.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041628659.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041630662.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041635508.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041636564.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041646070.gif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041658300.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041731755.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/06/202305061536206.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081000842.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081031579.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081036959.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081042348.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081045933.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081054398.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081143286.gif">
+<meta property="article:published_time" content="2023-05-08T15:38:24.000Z">
+<meta property="article:modified_time" content="2023-05-08T15:38:24.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="canvas">
+<meta property="article:tag" content="批注">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/04/23/202304231418182.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/648f3f0c7d1a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/648f3f0c7d1a","path":"648f3f0c7d1a.html","title":"使用 canvas 来实现简单的批注功能"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>使用 canvas 来实现简单的批注功能 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dom-%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">dom 结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E5%BD%A2%E6%A0%87%E6%B3%A8"><span class="nav-number">2.2.</span> <span class="nav-text">矩形标注</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%AD%E5%A4%B4%E6%A0%87%E6%B3%A8"><span class="nav-number">2.3.</span> <span class="nav-text">箭头标注</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/648f3f0c7d1a">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="使用 canvas 来实现简单的批注功能 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用 canvas 来实现简单的批注功能
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-08 15:38:24" itemprop="dateCreated datePublished" datetime="2023-05-08T15:38:24+00:00">2023-05-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>使用 canvas 来实现简单的批注功能。</p>
+<span id="more"></span>
+
+<p>最近，公司需要做（抄）一个和剪映相似的页面，<a target="_blank" rel="noopener" href="https://www.capcut.cn/share/7225119904112973093">点我直达</a>。</p>
+<p>在剪映中，有一个批注的功能，能够对视频画面进行标注，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/04/23/202304231418182.avif"></p>
+<p>在经过我对 dom 的分析之后，我发现这个功能是经过 canvas 实现。</p>
+<p>具体就是在视频容器的区域内套一个 <code>canvas</code> 元素，然后在上面绘制。</p>
+<p>在这篇文章中，我们主要是分析如何画出指向和方框这两种批注。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="dom-结构"><a href="#dom-结构" class="headerlink" title="dom 结构"></a>dom 结构</h2><p>首先，我们先创建一个 <code>canvas</code> 节点，这里我们用 vue 项目来实现。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> canvasRef = ref&lt;<span class="title class_">HTMLCanvasElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">ref</span>=<span class="string">&quot;canvasRef&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1280&quot;</span> <span class="attr">height</span>=<span class="string">&quot;720&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里我们固定了宽高，当然实际上在 <code>resize</code> 事件（或者 <code>ResizeObserver</code> 观察器）时，我们可能需要重新设置 <code>canvas</code> 的宽高，这里我们简单处理。</p>
+<p>接着我们要处理事件，这里我们主要需要三个事件，<code>mousedown</code> , <code>mousemove</code> 和 <code>mouseup</code> ，这里我们用了 <code>vueuse/core</code> ，主要是使用 <code>useEventListener</code> 这个组合式 api 。</p>
+<p>这样我们可以专注于逻辑，而不用去在意事件的绑定与解绑。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; useEventListener &#125; <span class="keyword">from</span> <span class="string">&quot;@vueuse/core&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> canvasRef = ref&lt;<span class="title class_">HTMLCanvasElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> mousedown = <span class="literal">false</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(canvasRef, <span class="string">&quot;mousedown&quot;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  mousedown = <span class="literal">true</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(<span class="string">&quot;mousemove&quot;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (!mousedown) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// TODO</span></span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(<span class="string">&quot;mouseup&quot;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  mousedown = <span class="literal">false</span>;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来我们要考虑下存储的数据结构，在剪映中，数据结构如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> <span class="title class_">AnnotationItem</span> &#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;rect&quot;</span> | <span class="string">&quot;arrow&quot;</span>;</span><br><span class="line">  <span class="attr">from</span>: &#123;</span><br><span class="line">    <span class="attr">x</span>: <span class="built_in">number</span>;</span><br><span class="line">    <span class="attr">y</span>: <span class="built_in">number</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="attr">to</span>: &#123;</span><br><span class="line">    <span class="attr">x</span>: <span class="built_in">number</span>;</span><br><span class="line">    <span class="attr">y</span>: <span class="built_in">number</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// 一些其他的字段  </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这里我们只保留一些核心的字段，在剪映中还有一些额外的字段，比如批注的颜色 <code>color</code> 字段，这里我们从简，统一使用 <code>#ff0000</code> 红色。</p>
+<p>然后我们需要有两个变量来保存批注对象，其中一个为 <code>annotationList</code> ，保存已经不再变化的批注对象，另一个为 <code>currentAnnotationItem</code> ， 保存当前正在创建的批注对象</p>
+<p>这里我们需要一些坐标相关的计算，需要使用 <code>vueuse/core</code> 的 <code>useElementBounding</code> 来获取 <code>canvas</code> 的盒子信息</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; useEventListener &#125; <span class="keyword">from</span> <span class="string">&quot;@vueuse/core&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">interface <span class="title class_">AnnotationItem</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">type</span>: <span class="string">&quot;rect&quot;</span> | <span class="string">&quot;arrow&quot;</span>;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">from</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">x</span>: number;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">y</span>: number;</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">to</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">x</span>: number;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">y</span>: number;</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 一些其他的字段</span></span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> canvasRef = ref&lt;<span class="title class_">HTMLCanvasElement</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> mousedown = <span class="literal">false</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> annotationList = ref&lt;<span class="title class_">AnnotationItem</span>[]&gt;([]);</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> currentAnnotationItem = ref&lt;<span class="title class_">AnnotationItem</span> | <span class="literal">null</span>&gt;(<span class="literal">null</span>);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">left</span>: canvasLeft,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">top</span>: canvasTop,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">width</span>: canvasWidth,</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">height</span>: canvasHeight,</span></span><br><span class="line"><span class="language-javascript">&#125; = <span class="title function_">useElementBounding</span>(canvasRef);</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(canvasRef, <span class="string">&quot;mousedown&quot;</span>, <span class="function">(<span class="params">&#123; clientX, clientY &#125;: MouseEvent</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  mousedown = <span class="literal">true</span>;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 记录起始点信息</span></span></span><br><span class="line"><span class="language-javascript">  currentAnnotationItem.<span class="property">value</span> = &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">type</span>: <span class="string">&quot;rect&quot;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">from</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">x</span>: clientX - canvasLeft.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">y</span>: clientY - canvasTop.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">to</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">x</span>: <span class="number">0</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">y</span>: <span class="number">0</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;,</span></span><br><span class="line"><span class="language-javascript">  &#125;;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(<span class="string">&quot;mousemove&quot;</span>, <span class="function">(<span class="params">&#123; clientX, clientY &#125;: MouseEvent</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (!mousedown) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 实时更新当前结束点坐标</span></span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">Object</span>.<span class="title function_">assign</span>(currentAnnotationItem.<span class="property">value</span>!.<span class="property">to</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">x</span>: clientX - canvasLeft.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">y</span>: clientY - canvasTop.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">useEventListener</span>(<span class="string">&quot;mouseup&quot;</span>, <span class="function">(<span class="params">&#123; clientX, clientY &#125;: MouseEvent</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (mousedown) &#123;</span></span><br><span class="line"><span class="language-javascript">    mousedown = <span class="literal">false</span>;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 记录结束点信息</span></span></span><br><span class="line"><span class="language-javascript">    <span class="title class_">Object</span>.<span class="title function_">assign</span>(currentAnnotationItem.<span class="property">value</span>!.<span class="property">to</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">x</span>: clientX - canvasLeft.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">y</span>: clientY - canvasTop.<span class="property">value</span>,</span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 存到数组中</span></span></span><br><span class="line"><span class="language-javascript">    annotationList.<span class="property">value</span>.<span class="title function_">push</span>(<span class="title class_">Object</span>.<span class="title function_">assign</span>(&#123;&#125;, currentAnnotationItem.<span class="property">value</span>));</span></span><br><span class="line"><span class="language-javascript">    currentAnnotationItem.<span class="property">value</span> = <span class="literal">null</span>;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>现在我们已经得到了一个批注对象，接下来我们就需要将这个对象画到画布上面。</p>
+<p>上面的代码中，在 <code>mousedown</code> 中使用了 <code>type = &quot;rect&quot;</code> 来初始化批注对象。</p>
+<p>所以我们先来讲讲怎么画矩形标注。</p>
+<h2 id="矩形标注"><a href="#矩形标注" class="headerlink" title="矩形标注"></a>矩形标注</h2><p>在 Canvas 的 2D 上下文中，已经有一个现成的绘制矩形的 API 了，即 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/strokeRect">strokeRect(x, y, w, h)</a> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041118161.avif"></p>
+<p>这四个参数分别是，起始点的横坐标，起始点的纵坐标，矩形的宽，矩形的高。</p>
+<p>这里我们可以看到剪映用的也是这个 API 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041114792.avif"></p>
+<p>现在我们的代码中保存了 <code>currentAnnotationItem</code> 这个对象，这个对象里面有起始点坐标和结束点坐标。</p>
+<p>所以 API 需要的四个参数我们都能通过计算得到，我们写一个 <code>drawRect</code> 函数来绘制 <code>currentAnnotationItem</code> 所表示的矩形。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">drawRect</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = canvasRef.<span class="property">value</span>!.<span class="title function_">getContext</span>(<span class="string">&quot;2d&quot;</span>)!;</span><br><span class="line">  <span class="keyword">const</span> &#123; <span class="keyword">from</span>, to &#125; = currentAnnotationItem.<span class="property">value</span>!;</span><br><span class="line">  <span class="keyword">const</span> width = <span class="title class_">Math</span>.<span class="title function_">abs</span>(<span class="keyword">from</span>.<span class="property">x</span> - to.<span class="property">x</span>);</span><br><span class="line">  <span class="keyword">const</span> height = <span class="title class_">Math</span>.<span class="title function_">abs</span>(<span class="keyword">from</span>.<span class="property">y</span> - to.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">beginPath</span>();</span><br><span class="line">  ctx.<span class="property">strokeStyle</span> = <span class="string">&quot;#ff0000&quot;</span>;</span><br><span class="line">  ctx.<span class="property">lineWidth</span> = <span class="number">2</span>;</span><br><span class="line">  ctx.<span class="title function_">strokeRect</span>(<span class="keyword">from</span>.<span class="property">x</span>, <span class="keyword">from</span>.<span class="property">y</span>, width, height);</span><br><span class="line">  ctx.<span class="title function_">closePath</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在 <code>mousemove</code> 事件中加上对这个函数的调用</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEventListener</span>(<span class="string">&quot;mousemove&quot;</span>, <span class="function">(<span class="params">&#123; clientX, clientY &#125;: <span class="title class_">MouseEvent</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!mousedown) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 实时更新当前结束点坐标</span></span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">assign</span>(currentAnnotationItem.<span class="property">value</span>!.<span class="property">to</span>, &#123;</span><br><span class="line">    <span class="attr">x</span>: clientX - canvasLeft.<span class="property">value</span>,</span><br><span class="line">    <span class="attr">y</span>: clientY - canvasTop.<span class="property">value</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 绘制</span></span><br><span class="line">  <span class="title function_">drawRect</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041150201.gif"></p>
+<p>可以发现现在的绘制存在两个问题：</p>
+<ul>
+<li>问题 1 ：每次绘制都会保留上次绘制的结果，导致显示错误。</li>
+<li>问题 2 ：由于我们固定起始点 <code>from</code> 为 <code>strokeRect</code> 的头两个参数，导致当结束点 <code>to</code> 在 <code>from</code> 的左上角时会出现绘制错误。</li>
+</ul>
+<p>针对问题 1 ，我们需要在每次 <code>mousemove</code> 回调中的绘制前清除画布，我们实现一个 <code>clearCanvas</code> 函数，来清除画布上的当前内容。</p>
+<p>清除画布的方法可以是调用 2D 上下文的 <code>clearRect</code> ，或者重新给 <code>canvas</code> 元素的宽高赋值，这里由于我们需要清空整个画布，所以用哪个都没差，这里我们使用后面的方法。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">clearCanvas</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> el = canvasRef.<span class="property">value</span>!;</span><br><span class="line">  el.<span class="property">width</span> = el.<span class="property">width</span>;</span><br><span class="line">  el.<span class="property">height</span> = el.<span class="property">height</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们在 <code>mousemove</code> 中的 <code>drawRect</code> 之前调用一次 <code>clearCanvas</code> 。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">useEventListener</span>(<span class="string">&quot;mousemove&quot;</span>, <span class="function">(<span class="params">&#123; clientX, clientY &#125;: <span class="title class_">MouseEvent</span></span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!mousedown) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 实时更新当前结束点坐标</span></span><br><span class="line">  <span class="title class_">Object</span>.<span class="title function_">assign</span>(currentAnnotationItem.<span class="property">value</span>!.<span class="property">to</span>, &#123;</span><br><span class="line">    <span class="attr">x</span>: clientX - canvasLeft.<span class="property">value</span>,</span><br><span class="line">    <span class="attr">y</span>: clientY - canvasTop.<span class="property">value</span>,</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 清空画布</span></span><br><span class="line">  <span class="title function_">clearCanvas</span>();</span><br><span class="line">  <span class="comment">// 绘制</span></span><br><span class="line">  <span class="title function_">drawRect</span>();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041557968.gif"></p>
+<p>可以看到现在不会出现重叠的情况了。</p>
+<p>接下来我们开始解决问题 2 ，从上面的图可能看不出来问题 2 的症状，下面这个图就比较清晰了。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041600812.gif"></p>
+<p>在我们从右下往左上拖动的时候，矩形绘制的区域明显错误了。</p>
+<p>这个问题的根本原因在于我们固定了 <code>currentAnnotationItem.from</code> 作为矩形的起始点。</p>
+<p>绘制的时候我们总共会出现四个绘制方向，分别是：</p>
+<ul>
+<li>最常见的就是<strong>左上</strong>到<strong>右下</strong></li>
+<li><strong>左下</strong>到<strong>右上</strong></li>
+<li><strong>右上</strong>到<strong>左下</strong></li>
+<li><strong>右下</strong>到<strong>左上</strong></li>
+</ul>
+<p>接着我们一个个分析。</p>
+<p>1. <strong>左上</strong>到<strong>右下</strong></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041628659.avif"></p>
+<p>很明显此时绘制矩形的顶点就是 <code>from</code> 的坐标，这个很容易看出来。</p>
+<p>2. <strong>左下</strong>到<strong>右上</strong></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041630662.avif"></p>
+<p>此时矩形的顶点是 <code>(from.x, to.y)</code> 。</p>
+<p>3.<strong>右上</strong>到<strong>左下</strong></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041635508.avif"></p>
+<p>此时矩形的顶点是 <code>(to.x, from.y)</code> 。</p>
+<p>4.<strong>右下</strong>到<strong>左上</strong></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041636564.avif"></p>
+<p>此时矩形的顶点是 <code>to</code> 的坐标。</p>
+<p>经过分析之后，我们可以发现我们应该分别取 <code>from</code> 和 <code>to</code> 两者横纵坐标的较小值，这样绘制出来的矩形才是正确的</p>
+<p>所以我们改动下 <code>drawRect</code> 代码</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">drawRect</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = canvasRef.<span class="property">value</span>!.<span class="title function_">getContext</span>(<span class="string">&quot;2d&quot;</span>)!;</span><br><span class="line">  <span class="keyword">const</span> &#123; <span class="keyword">from</span>, to &#125; = currentAnnotationItem.<span class="property">value</span>!;</span><br><span class="line">  <span class="keyword">const</span> width = <span class="title class_">Math</span>.<span class="title function_">abs</span>(<span class="keyword">from</span>.<span class="property">x</span> - to.<span class="property">x</span>);</span><br><span class="line">  <span class="keyword">const</span> height = <span class="title class_">Math</span>.<span class="title function_">abs</span>(<span class="keyword">from</span>.<span class="property">y</span> - to.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">beginPath</span>();</span><br><span class="line">  ctx.<span class="property">strokeStyle</span> = <span class="string">&quot;#ff0000&quot;</span>;</span><br><span class="line">  ctx.<span class="property">lineWidth</span> = <span class="number">2</span>;</span><br><span class="line">  ctx.<span class="title function_">strokeRect</span>(</span><br><span class="line">    <span class="comment">// 改动部分开始</span></span><br><span class="line">    <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="keyword">from</span>.<span class="property">x</span>, to.<span class="property">x</span>), </span><br><span class="line">    <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="keyword">from</span>.<span class="property">y</span>, to.<span class="property">y</span>),</span><br><span class="line">    <span class="comment">// 改动部分结束</span></span><br><span class="line">    width, </span><br><span class="line">    height</span><br><span class="line">  );</span><br><span class="line">  ctx.<span class="title function_">closePath</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>经过修改之后，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041646070.gif"></p>
+<p>现在矩形绘制基本上正确了</p>
+<h2 id="箭头标注"><a href="#箭头标注" class="headerlink" title="箭头标注"></a>箭头标注</h2><p>这应该是本文最难的一个点了，在刚开始我也是不会的，不过我也是看了剪映里面的绘制代码，调试了很久才勉强懂得了过程。</p>
+<p>这里我们先放一下剪映的代码。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041658300.avif"></p>
+<p>看起来还是相当复杂的，涉及了三角函数。</p>
+<p>当然，这其中的基础是 2d 上下文的 <code>moveTo</code> , <code>lineTo</code> , <code>fill</code> API，分别是：</p>
+<ul>
+<li><code>moveTo(x, y)</code> 移动画笔到点 <code>(x, y)</code> 。</li>
+<li><code>lineTo(x, y)</code> 从起始点到 <code>(x, y)</code> 连接一条路径。</li>
+<li><code>fill()</code> 填充绘制路径围成的区域。</li>
+</ul>
+<p>在剪映的代码中，最后就是调用这 3 个 API 来绘制图形</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">t.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">draw</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  e.<span class="title function_">beginPath</span>();</span><br><span class="line">  e.<span class="property">fillStyle</span> = c;</span><br><span class="line">  e.<span class="title function_">moveTo</span>(l.<span class="property">x</span>, l.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">lineTo</span>(_.<span class="property">x</span>, _.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">lineTo</span>(b.<span class="property">x</span>, b.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">lineTo</span>(f.<span class="property">x</span>, f.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">lineTo</span>(w.<span class="property">x</span>, w.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">lineTo</span>(E.<span class="property">X</span>, E.<span class="property">y</span>);</span><br><span class="line">  e.<span class="title function_">fill</span>();</span><br><span class="line">  e.<span class="title function_">closePath</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的每个点就是箭头标注的点，总共 6 个点，即 7 条边。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/04/202305041731755.avif"></p>
+<p>那么我们现在就是要求出这 6 个点的坐标，其他就水到渠成了。</p>
+<p>其中两个点其实我们已经得到了，分别是 <code>from</code> 和 <code>to</code> ，对应的代码为 <code>e.moveTo(l.x, l.y)</code> 和 <code>e.lineTo(f.x, f.y)</code> 。</p>
+<p>我们可以把剪映的代码稍稍转换一下，如下：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">t.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">draw</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  d = <span class="title class_">Math</span>.<span class="title function_">sqrt</span>(<span class="title class_">Math</span>.<span class="title function_">pow</span>(to.<span class="property">x</span> - <span class="keyword">from</span>.<span class="property">x</span>, <span class="number">2</span>) + <span class="title class_">Math</span>.<span class="title function_">pow</span>(to.<span class="property">y</span> - <span class="keyword">from</span>.<span class="property">y</span>, <span class="number">2</span>));</span><br><span class="line">  h = <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="number">.2</span> * d, <span class="number">35</span>);</span><br><span class="line">  p = <span class="number">.7</span> * h;</span><br><span class="line">  y = <span class="title class_">Math</span>.<span class="title function_">atan</span>(<span class="title class_">Math</span>.<span class="title function_">abs</span>(to.<span class="property">y</span> - <span class="keyword">from</span>.<span class="property">y</span>) / <span class="title class_">Math</span>.<span class="title function_">abs</span>(to.<span class="property">x</span> - <span class="keyword">from</span>.<span class="property">x</span>));</span><br><span class="line">  v = <span class="title class_">Math</span>.<span class="property">PI</span> / <span class="number">4</span>;</span><br><span class="line">  m = to.<span class="property">x</span> &gt; <span class="keyword">from</span>.<span class="property">x</span> ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">  g = to.<span class="property">y</span> &gt; <span class="keyword">from</span>.<span class="property">y</span> ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">  b = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - h * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v - y) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> + h * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v - y) * g</span><br><span class="line">  &#125;;</span><br><span class="line">  w = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - h * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v + y) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> - h * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v + y) * g</span><br><span class="line">  &#125;;</span><br><span class="line">  _ = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - p * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v - y - v / <span class="number">2</span>) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> + p * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v - y - v / <span class="number">2</span>) * g</span><br><span class="line">  &#125;;</span><br><span class="line">  E = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - p * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v + y - v / <span class="number">2</span>) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> - p * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v + y - v / <span class="number">2</span>) * g</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>首先变量 <code>d</code> 很容易看出来是计算点 <code>from</code> 和点 <code>to</code> 围成矩形的对角线的长度，这个公式是我们很熟悉的勾股定理 <code>z<sup>2</sup> = x<sup>2</sup> + y<sup>2</sup></code> 。</p>
+<p>变量 <code>h</code> 和 <code>p</code> 分别是根据变量 <code>d</code> 计算的一个的长度，往下看，可以发现分别对应去计算了两个点的坐标，其中变量 <code>h</code> 对应变量 <code>b</code> 和变量 <code>w</code> ，变量 <code>p</code> 对应变量 <code>_</code> 和变量 <code>E</code> 。</p>
+<p><code>y</code> 则是矩形的对角线和横向形成的对角线，即下图的角 <code>θ</code> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/06/202305061536206.avif"></p>
+<p><a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/atan">Math.atan()</a> 就是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Math/tan">Math.tan()</a> 的“相反面”，它有一个专业的术语，叫反正切。</p>
+<p>对于 <code>Math.tan()</code> ，传入角度，得到对边与领边的比值，而 <code>Math.atan()</code> 则是传入对边与领边的比值，得到角度。</p>
+<p><code>v</code> 则是 <code>Math.PI</code> 的 1&#x2F;4 ，<code>Math.PI</code> 表示 180° ， 1&#x2F;4 也就是 45° 。</p>
+<p><code>m</code> 和 <code>g</code> 则是用来补偿正负判断的。</p>
+<p>接下来我们假设从左下移动到右上，且夹角为 30° ，此时正负补偿都是 1 ，我们可以忽略这两个变量。</p>
+<p>我们以下半部分的箭头来分析，此时如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081000842.avif"></p>
+<p>接下来我们分析下下图中标的点，这里我们标为点 <code>t</code> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081031579.avif"></p>
+<p>结合代码可以发现，由于四个待求的点 <code>b</code>, <code>w</code>, <code>_</code>, <code>E</code> 都是通过目标点 <code>to</code> 来进行转化的，而此时点 <code>t</code> 的横纵坐标应该都要小于 <code>to</code> ，即 <code>to</code> 的横纵坐标都要减去某个值来得到点 <code>t</code> 。</p>
+<p>那么此时可以排除 <code>b</code> 和 <code>_</code> ，剩下 <code>w</code> 和 <code>E</code> 。</p>
+<p>在箭头的一边包含两个点，除了点 <code>t</code> ，还有一个 点 <code>l</code> ，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081036959.avif"></p>
+<p>那么 <code>w</code> 和 <code>E</code> 应该就对应了这两个点。</p>
+<p>此时我们假设 <code>w</code> 对应点 <code>t</code> ，然后我们分析是否符合。</p>
+<p>此时 <code>w</code> 的计算如下（正负补偿已忽略）：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">w = &#123;</span><br><span class="line">  <span class="attr">x</span>: to.<span class="property">x</span> - h * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v + y),</span><br><span class="line">  <span class="attr">y</span>: to.<span class="property">y</span> - h * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v + y)</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以发现通过 <code>h</code> 来以及正余弦来得出偏移量，那么我们可以确此时 <code>h</code> 就是斜边，而 <code>h * Math.cos(v + y)</code> 和 <code>h * Math.sin(v + y)</code> 就是直角边。</p>
+<p>那么我们可以得出此时构造的直角三角形应该如下图所示：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081042348.avif"></p>
+<p>此时<code>角 α + 角 β </code>的值即为 <code>y + v（45°）</code> ，所以 <code>h * Math.cos(v + y)</code> 得出了偏移量 <code>px</code> ，<code>h * Math.sin(v + y)</code> 得出了偏移量 <code>py</code> 。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081045933.avif"></p>
+<p>那么 <code>t</code> 的坐标也就的出来了。</p>
+<p>同理我们分析 <code>l</code> 坐标，我们可以同样构造三角形，但是我们发现角度额外减少了 <code>22.5°</code>， 即 <code>v（45°）/ 2</code> 。</p>
+<p>以及使用 <code>p（ =0.7 * h ）</code> 来作为斜边，而不是 <code>h</code> ，此时我们把点 <code>l</code> 和 点 <code>to</code> 连接起来，此时两点的长度就是 <code>p</code> 。</p>
+<p>我们直接上图，更容易理解：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081054398.avif"></p>
+<p>此时 <code>角 α + 角 β </code>的值即为 <code>y + v / 2（22.5°）</code> 。</p>
+<p>其他的就和点 <code>t</code> 的计算过程一样了。</p>
+<p>当然这里需要注意的是，<code>v</code> 的角度其实是可以自定义的，即如果你增大了 <code>v</code> 值，那么箭头顶部就会更加往外扩大，而如果你减小 <code>v</code> 值，那么箭头顶部就会往内收敛。</p>
+<p>除此之外，<code>h</code> 和 <code>p</code> 也是可以自定义的，这两者决定了箭头的形状以及大小范围。</p>
+<p>理解了计算过程后，我们就可以模仿（照抄）剪映写出 <code>drawArrow</code> 的代码了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">drawArrow</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = canvasRef.<span class="property">value</span>!.<span class="title function_">getContext</span>(<span class="string">&quot;2d&quot;</span>)!;</span><br><span class="line">  <span class="keyword">const</span> &#123; <span class="keyword">from</span>, to &#125; = currentAnnotationItem.<span class="property">value</span>!;</span><br><span class="line">  <span class="keyword">const</span> d = <span class="title class_">Math</span>.<span class="title function_">sqrt</span>(<span class="title class_">Math</span>.<span class="title function_">pow</span>(<span class="keyword">from</span>.<span class="property">y</span> - to.<span class="property">y</span>, <span class="number">2</span>) + <span class="title class_">Math</span>.<span class="title function_">pow</span>(<span class="keyword">from</span>.<span class="property">x</span> - to.<span class="property">x</span>, <span class="number">2</span>));</span><br><span class="line">  <span class="keyword">const</span> h = <span class="title class_">Math</span>.<span class="title function_">min</span>(d * <span class="number">0.2</span>, <span class="number">35</span>);</span><br><span class="line">  <span class="keyword">const</span> v = <span class="title class_">Math</span>.<span class="property">PI</span> / <span class="number">4</span>;</span><br><span class="line">  <span class="keyword">const</span> y = <span class="title class_">Math</span>.<span class="title function_">atan</span>(<span class="title class_">Math</span>.<span class="title function_">abs</span>(to.<span class="property">y</span> - <span class="keyword">from</span>.<span class="property">y</span>) / <span class="title class_">Math</span>.<span class="title function_">abs</span>(to.<span class="property">x</span> - <span class="keyword">from</span>.<span class="property">x</span>));</span><br><span class="line">  <span class="keyword">const</span> p = <span class="number">0.7</span> * h;</span><br><span class="line">  <span class="keyword">const</span> m = to.<span class="property">x</span> &gt; <span class="keyword">from</span>.<span class="property">x</span> ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> g = to.<span class="property">y</span> &gt; <span class="keyword">from</span>.<span class="property">y</span> ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> p1 = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - h * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v - y) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> + h * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v - y) * g,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> p2 = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - h * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v + y) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> - h * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v + y) * g,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> p3 = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - p * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v - y - v / <span class="number">2</span>) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> + p * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v - y - v / <span class="number">2</span>) * g,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">const</span> p4 = &#123;</span><br><span class="line">    <span class="attr">x</span>: to.<span class="property">x</span> - p * <span class="title class_">Math</span>.<span class="title function_">cos</span>(v + y - v / <span class="number">2</span>) * m,</span><br><span class="line">    <span class="attr">y</span>: to.<span class="property">y</span> - p * <span class="title class_">Math</span>.<span class="title function_">sin</span>(v + y - v / <span class="number">2</span>) * g,</span><br><span class="line">  &#125;;</span><br><span class="line">  ctx.<span class="title function_">beginPath</span>();</span><br><span class="line">  ctx.<span class="property">fillStyle</span> = <span class="string">&quot;#ff0000&quot;</span>;</span><br><span class="line">  ctx.<span class="title function_">moveTo</span>(<span class="keyword">from</span>.<span class="property">x</span>, <span class="keyword">from</span>.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">lineTo</span>(p3.<span class="property">x</span>, p3.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">lineTo</span>(p1.<span class="property">x</span>, p1.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">lineTo</span>(to.<span class="property">x</span>, to.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">lineTo</span>(p2.<span class="property">x</span>, p2.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">lineTo</span>(p4.<span class="property">x</span>, p4.<span class="property">y</span>);</span><br><span class="line">  ctx.<span class="title function_">fill</span>();</span><br><span class="line">  ctx.<span class="title function_">closePath</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们可以看下效果图，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/05/08/202305081143286.gif"></p>
+<p>相关的代码已经上传到我的<a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/annotation-canvas-vue-demo">仓库</a>了，可以自行拉下来跑跑试试看。</p>
+<p>当然，如果你想把代码放到业务中，可能还需要改一下，首先就是不能使用绝对值坐标来存，而应该使用百分比，因为每个人的屏幕分辨率可能不一样，这也是目前剪映的实现方法。</p>
+<p>另外，也可以多自定义变量，比如颜色，方框的粗细等。</p>
+<p>当然，标注的画布应该保持一个固定的长宽比，不然缩小屏幕可能会出现错位的情况。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>三角函数不用真的都快忘光了，虽然从 0 到 1 我不是很行，但是从 0.99 到 1 我还是可以的😂。</p>
+<p>目前也已经把剪映这个页面的功能都搬到了我们公司的项目上。</p>
+<p>不过我挺讨厌抄的…</p>
+<p>嘛，不过工作嘛，完成工作而已，不要想太多。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/648f3f0c7d1a" title="使用 canvas 来实现简单的批注功能">https://prohibitorum.top/648f3f0c7d1a</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/canvas/" rel="tag"># canvas</a>
+              <a href="/tags/%E6%89%B9%E6%B3%A8/" rel="tag"># 批注</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/713d0a17c169" rel="prev" title="2023年4月新番个人推荐">
+                  <i class="fa fa-angle-left"></i> 2023年4月新番个人推荐
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d174a34ab7a5" rel="next" title="TypeScript 5.0（译）">
+                  TypeScript 5.0（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1683531504"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言经典算法之 Manacher（马拉车） 算法求最长回文子串">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Manacher 算法求最长回文子串">
+<meta property="og:url" content="https://prohibitorum.top/e7b9dbe576f5">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言经典算法之 Manacher（马拉车） 算法求最长回文子串">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/01/202204011743806.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021033925.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021037507.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021130180.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032313463.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032331174.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032332794.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032333191.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032334595.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041001146.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041013354.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041017480.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041033398.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041050137.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041052239.avif">
+<meta property="article:published_time" content="2022-04-01T17:04:23.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="回文">
+<meta property="article:tag" content="字符串">
+<meta property="article:tag" content="Manacher算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/01/202204011743806.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/e7b9dbe576f5.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/e7b9dbe576f5","path":"e7b9dbe576f5.html","title":"Manacher 算法求最长回文子串"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Manacher 算法求最长回文子串 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%96%87%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.1.</span> <span class="nav-text">回文字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2"><span class="nav-number">2.2.</span> <span class="nav-text">回文子串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2"><span class="nav-number">2.3.</span> <span class="nav-text">最长回文子串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/e7b9dbe576f5">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Manacher 算法求最长回文子串 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Manacher 算法求最长回文子串
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-04-01 17:04:23" itemprop="dateCreated datePublished" datetime="2022-04-01T17:04:23+00:00">2022-04-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>经典算法之 <code>Manacher</code>（马拉车） 算法求最长回文子串</p>
+<span id="more"></span>
+
+<p>最近刷了刷 <code>leetcode</code> 的题目，不刷不知道，一刷吓一跳，都忘得差不多了</p>
+<p>吓得我一身冷汗，可不敢松懈<del>躺平</del>啊</p>
+<p>不过好像也没记多少啊（逃</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="回文字符串"><a href="#回文字符串" class="headerlink" title="回文字符串"></a>回文字符串</h2><p>回文字符串的意思就是正着读和反着读的结果是相同的</p>
+<p>比如 <code>abcba</code> , <code>abccba</code></p>
+<p>对于判断是否为回文字符串，一般都使用以下的简单算法来判断</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isPalindrome</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> i = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> j = str.<span class="property">length</span> - <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str[i] !== str[j]) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    i++;</span><br><span class="line">    j--;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>核心原理为使用两个指针分别从开头和结尾向中间遍历</p>
+<p>依次判断每一步下对应的两位字符是否相等，不相等即不为回文字符串</p>
+<p>当循环结束，证明所有两两对应的字符都相等，则该字符串为回文字符串</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/01/202204011743806.avif"></p>
+<p>这里有一点要注意，回文字符串在奇偶长度下存在一定的差异</p>
+<p>在奇数长度下，比如 <code>abcdcba</code> ，它的中点为 <code>d</code> ，此时它的左边和右边对称，可以理解为 <code>d</code> 为对称轴</p>
+<p>而在偶数长度下，比如 <code>abcddcba</code> ，它没有所谓的对称轴，或者说它的对称轴为 <code>dd</code> ，<code>dd</code> 的左右两边对称</p>
+<p>如果只是对于判断是否回文来说，这个差异其实影响不大，因为 <code>isPalindrome</code> 函数对奇偶都能正确地判断</p>
+<p>奇数长度， <code>while</code> 循环退出时为 <code>i === j</code> ，对于 <code>i</code> （或者是 <code>j</code> ） 来说没必要判断</p>
+<p>而偶数长度， <code>while</code> 循环退出时为 <code>i === j + 1</code> ，此时全部的字符都判断到了</p>
+<h2 id="回文子串"><a href="#回文子串" class="headerlink" title="回文子串"></a>回文子串</h2><blockquote>
+<p>伟大的学者鲁迅曾经说过：每创造出一种特定格式的字符串，我们可以在其前面加上“子”，从而生成另一种问题</p>
+</blockquote>
+<p>在字符串中找回文子串，很暴力的算法就是我们去遍历每个子串，判断是否为回文串，是的话再进行下一部的操作</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 字符串</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">subPalindrome</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> len = str.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> j = i; j &lt; len; j++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="title function_">isPalindrome</span>(str, i, j)) &#123;</span><br><span class="line">        <span class="comment">// 做操作</span></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 判断字符串的某个范围是否为回文串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> i &#123;number&#125; 起始判断位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> j &#123;number&#125; 结束判断位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">boolean</span>&#125; 该范围是否为回文串</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isPalindrome</span>(<span class="params">str, i, j</span>) &#123;</span><br><span class="line">  <span class="keyword">while</span> (i &lt; j) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str[i] !== str[j]) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    i++;</span><br><span class="line">    j--;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过两层 <code>for</code> 循环，确定起始位置 <code>i</code> 和结束位置 <code>j</code> ，然后判断该子串是否回文</p>
+<p>这类问题可以延申出各种提问，比如</p>
+<ul>
+<li>求字符串 <code>s</code> 的回文子串结果集</li>
+<li>求字符串 <code>s</code> 的回文子串个数</li>
+<li>求字符串 <code>s</code> 的最长的回文子串</li>
+</ul>
+<p>对于第一个提问，只需在 <code>if (isPalindrome(str, i, j)) &#123; /* ... */&#125;</code> 内部剪切该子串，然后添加到结果数组即可</p>
+<p>对于第二个提问，只需自增一个变量即可</p>
+<p>对于第三个提问，只需每次和之前的最长回文子串判断长度即可</p>
+<p>可以说这种算法，泛用性很高，但是致命的缺点是它的复杂度太高了，光两层 <code>for</code> 循环就是 <code>O(n<sup>2</sup>)</code> 的复杂度</p>
+<p>再加上判断子串是否回文的时候又遍历了一次字符串，那么这个算法的时间复杂度就达到了惊人的 <code>O(n<sup>3</sup>)</code></p>
+<p>字符串一旦很长，就非常容易出现超时结果</p>
+<p>前面我们使用了确定头尾节点的方式来遍历所有的子串</p>
+<p>另一种思路是我们根据对称轴的方式来遍历所有的子串</p>
+<p>这里我们以计算回文子串的个数来作例子</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">number</span>&#125; 回文子串的个数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">subPalindrome</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> len = str.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">    count += <span class="title function_">palindromeCount</span>(str, i, i + <span class="number">1</span>);</span><br><span class="line">    count += <span class="title function_">palindromeCount</span>(str, i, i);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 计算以 i j 为中点的回文串的个数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> i &#123;number&#125; 左中点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> j &#123;number&#125; 右中点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">number</span>&#125; 返回回文串的个数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">palindromeCount</span>(<span class="params">str, i, j</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (i &lt; <span class="number">0</span> || i &gt;= str.<span class="property">length</span> || j &lt; <span class="number">0</span> || j &gt;= str.<span class="property">length</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (i &gt;= <span class="number">0</span> &amp;&amp; j &lt; str.<span class="property">length</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (str[i] === str[j]) &#123;</span><br><span class="line">      count++;</span><br><span class="line">    &#125;</span><br><span class="line">    i--;</span><br><span class="line">    j++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于我们以通过对称轴的方式来遍历子串，由原来的两层 <code>for</code> 循环降低到一层，总体的时间复杂度降为 <code>O(n<sup>2</sup>)</code></p>
+<p>其中需要注意的是 <code>palindromeCount(str, i, i + 1)</code> 和 <code>palindromeCount(str, i, i)</code> 分别对应偶数长度和奇数长度的情况</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021033925.avif"></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021037507.avif"></p>
+<h2 id="最长回文子串"><a href="#最长回文子串" class="headerlink" title="最长回文子串"></a>最长回文子串</h2><p>通过上面的分析，使用上面提到的 <code>O(n<sup>2</sup>)</code> 即可求出最长的回文子串，但是一旦字符串过长，依然会产生超时的问题</p>
+<p>那么能不能用 <code>O(n)</code> 的复杂度求出最长的回文子串呢</p>
+<p>答案是可以的，这也就是本文所要提到的 <code>Manacher</code> （马拉车）算法</p>
+<p>该算法能在 <code>O(n)</code> 的时间内算出最长回文子串，但此时需要的空间复杂度由 <code>O(1)</code> 提升到 <code>O(n)</code> ，属于空间换时间的算法</p>
+<p>首先 <code>Manacher</code> 算法通过添加分隔符来解决奇偶长度下的回文串的差异</p>
+<p>比如，现在我们存在一个 <code>cbcbaa</code> 的字符串，该算法的第一步就是将该字符串变为 <code>#c#b#c#b#a#a#</code></p>
+<p>经过这样的变换，现在字符串的回文子串都会变成奇数回文子串</p>
+<p>比如 <code>bcb</code> 为原字符串的一个回文子串，经过变化后为 <code>#b#c#b#</code> ，此时长度为 <code>7(3 + 4)</code></p>
+<p>而 <code>aa</code> 经过变化后为 <code>#a#a#</code> ，此时长度为 <code>5(2 + 3)</code></p>
+<p>接着我们需要开一个数组 <code>p[]</code> ，这个数组的长度为经过变化后字符串的长度</p>
+<p>对于每个 <code>i</code> ， <code>p[i]</code> 对应的意义为，以 <code>p[i]</code> 为中心的<strong>最长回文串的半径</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">#</th>
+<th align="center">c</th>
+<th align="center">#</th>
+<th align="center">b</th>
+<th align="center">#</th>
+<th align="center">c</th>
+<th align="center">#</th>
+<th align="center">b</th>
+<th align="center">#</th>
+<th align="center">a</th>
+<th align="center">#</th>
+<th align="center">a</th>
+<th align="center">#</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">1</td>
+</tr>
+</tbody></table>
+<p>可能通过表看起来不是很明显，可以通过下面这个图来理解<strong>最长回文串的半径</strong></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/02/202204021130180.avif"></p>
+<p>现在我们先不管这个 <code>p[]</code> 数组是怎么求出来的</p>
+<p>在得到 <code>p[]</code> 数组之后，可以发现 <code>p[i] - 1</code> 就是以该点为中点所能形成的最长子回文串的长度（去掉 <code>#</code> 号后）</p>
+<p>比如 <code>#c#b#c#</code> 中点 <code>b</code> 对应的 <code>p[i]</code> 为 <code>4</code> ， 此时去掉 <code>#</code> 号后结果为 <code>cbc</code> ，长度为 <code>3</code> ，即 <code>3 = 4 - 1</code></p>
+<p>比如 <code>#a#a#</code> 中点 <code>#</code> 对应的 <code>p[i]</code> 为 <code>3</code> ，此时去掉 <code>#</code> 号后结果为 <code>aa</code> ，长度为 <code>2</code> ，即 <code>2 = 3 - 1</code></p>
+<p>现在回过头来，我们需要去计算 <code>p[]</code> 这个数组，只要 <code>p[]</code> 数组求出来，那么我们就可以遍历这个 <code>p[]</code> 数组（ <code>O(n)</code> 时间下）得到最长的回文串了</p>
+<p>首先，我们先以中心扩展的方法来讲一下如何更快的计算 <code>p[i]</code> 的值</p>
+<p>假设现在有一个字符串为 <code>#a#b#c#d#c#b#a#</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032313463.avif"></p>
+<p>我们先用中心扩展计算到 <code>i</code> 为 <code>7</code> 的结果，此时表格为</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032331174.avif"></p>
+<p>当我们计算到 <code>i</code> 为 <code>8</code> 的时候，此时用中心扩展可以求出该位置对应的值</p>
+<p>但是我们求出过 <code>i</code> 为 <code>7</code> 的 <code>p[i]</code> 值为 <code>8</code></p>
+<p>根据回文串对称的特性，此时它的左右两侧是对称的，这意味着，<strong>如果 <code>i</code> 的左侧存在回文子串，那么右侧也一定存在相应的回文子串</strong></p>
+<p>即计算 <code>i</code> 为 <code>8</code> 的 <code>p[i]</code> 的值，可以计算 <code>i</code> 为 <code>8</code> 相对于 <code>i</code> 为 <code>7</code> 的对称点，即 <code>i</code> 为 <code>6</code> 的 <code>p[i]</code> 的值</p>
+<p>该值是计算过的，所以可以在 <code>O(1)</code> 的时间复杂度内计算出来</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032332794.avif"></p>
+<p>我们可以计算一下 <code>i</code> 为 <code>9</code> 时的表格，结果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032333191.avif"></p>
+<p><code>i</code> 为 <code>11</code> 的时候表格如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/03/202204032334595.avif"></p>
+<p>看起来似乎没什么问题，但是，当字符串为 <code>#c#d#c#b#c#d#c#b#c#</code> 时</p>
+<p>假设我们计算到 <code>i</code> 为 <code>11</code> 的第二个 <code>d</code> 此时的 <code>p[i]</code> ，此时表格如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041001146.avif"></p>
+<p>然后此时我们推断 <code>i</code> 为 <code>15</code> 的 <code>p[i]</code> 的值，由于 <code>i</code> 为 <code>15</code> 关于 i 为 <code>11</code> 的对称点为 <code>i</code> 为 <code>7</code></p>
+<p>此时我们会把 <code>p[15]</code> 赋值为 <code>p[7]</code> ，即 <code>p[15] = 7</code> ，但是很明显，该值是错误的，为什么呢，我们可以标记以下 <code>p[7]</code> 的范围 和 <code>p[11]</code> 的范围</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041013354.avif"></p>
+<p>表格中黑色线为 <code>p[11]</code> 的范围，红色线为 <code>p[7]</code> 的范围</p>
+<p>错误的原因即 <code>p[7]</code> 的范围有一部分是超出 <code>p[11]</code> 的范围的，所以，此时只能最长取到 <code>p[11]</code> 最左边的部分，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041017480.avif"></p>
+<p>此时只能取到蓝色的部分，所以此时 <code>p[15]</code> 应该为 <code>4</code></p>
+<p>这个过程可以理解为<strong>确定下界</strong>，即可以复用之前的值，但是该值必须收缩到合理的范围内</p>
+<p>我们再举一个例子，此时目标字符串为 <code>#c#b#c#d#c#b#c#b#c</code></p>
+<p>我们计算到 <code>i</code> 为 <code>7</code> 的 <code>p[i]</code> 的值为 <code>8</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041033398.avif"></p>
+<p>然后我们计算 <code>i</code> 为 <code>13</code> 的 <code>p[i]</code> 的值</p>
+<p>根据回文串的对称性，我们可以很方便的找到 <code>i</code> 为 <code>13</code> 关于 <code>i</code> 为 <code>7</code> 的对称点，即 <code>i</code> 为 <code>1</code></p>
+<p>此时 <code>p[1]</code> 为 <code>2</code> ，那么 <code>p[13]</code> 应该也为 <code>2</code></p>
+<p>但是很明显不是，我们标出 <code>p[7]</code> 和 <code>p[13]</code> 的范围看看</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041050137.avif"></p>
+<p>此时 <code>p[13]</code> 的范围超出了 <code>p[7]</code> 的范围，我们能取到的范围为蓝色部分，如下图：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/04/04/202204041052239.avif"></p>
+<p>此时我们应该使用中心扩展继续对蓝色的两端进行遍历，确定 <code>p[13]</code> 能够达到的最大范围</p>
+<p>即继续判断 <code>char[11]</code> 和 <code>char[15]</code> 是否相等，相等继续判断 <code>char[10]</code> 和 <code>char[16]</code> 是否相等</p>
+<p>这个过程可以理解为<strong>确定上界</strong>，即通过下界确定的值可能不是该 <code>i</code> 能够达到的最大 <code>p[i]</code> 值，需要继续对两端进行扩展来确定最大的值</p>
+<p>至此，我们其实讨论了三种情况下如何进行 <code>p[i]</code> 的快速计算</p>
+<p>记 <code>maxIndex</code> 为当前最长的回文子串的中心索引</p>
+<p>记 <code>i</code> 关于 <code>maxIndex</code> 的对称点为 <code>i&#39;</code></p>
+<ul>
+<li>当 <code>i&#39; - p[i&#39;] &lt; maxIndex - p[maxIndex]</code> 时，此时 <code>p[i] = maxIndex + p[maxIndex] - i</code> ，此时 <code>maxIndex + p[maxIndex]</code><br>为 <code>maxIndex</code> 对应的最长回文串的右边界的索引</li>
+<li>当 <code>i&#39; - p[i&#39;] == maxIndex - p[maxIndex]</code> 时，此时 <code>p[i]</code> 依然为 <code>maxIndex + p[maxIndex] - i</code> ，但 <code>p[i]</code><br>此时可能还能扩展，所以需要继续使用中心扩展来计算该位置的最大值</li>
+<li>当 <code>i&#39; - p[i&#39;] &gt; maxIndex - p[maxIndex]</code> 时，此时 <code>p[i] = p[i&#39;]</code> ，且无法继续扩展</li>
+</ul>
+<p>转化成代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 需要计算最长回文子串长度的字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">number</span>&#125; 最长回文串长度</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">manacher</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (str.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 加 # 号</span></span><br><span class="line">  str = <span class="title function_">addHash</span>(str);</span><br><span class="line">  <span class="keyword">const</span> p = [];</span><br><span class="line">  <span class="keyword">let</span> ans = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> maxIndex = <span class="number">0</span>;</span><br><span class="line">  p[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> len = str.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; len; i++) &#123;</span><br><span class="line">    <span class="comment">// maxIndex 对应回文子串的右边界</span></span><br><span class="line">    <span class="keyword">const</span> rightIndex = maxIndex + p[maxIndex] - <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 小于右边界，可以使用对称性加快查找</span></span><br><span class="line">    <span class="keyword">if</span> (i &lt;= rightIndex) &#123;</span><br><span class="line">      <span class="comment">// 计算 i 关于 maxIndex 的对称点 symmetryI</span></span><br><span class="line">      <span class="keyword">const</span> symmetryI = <span class="number">2</span> * maxIndex - i;</span><br><span class="line">      <span class="comment">// 对称点对应回文子串的左边界</span></span><br><span class="line">      <span class="keyword">const</span> symmetryILeftIndex = symmetryI - p[symmetryI] + <span class="number">1</span>;</span><br><span class="line">      <span class="comment">// maxIndex 对应回文子串的左边界</span></span><br><span class="line">      <span class="keyword">const</span> leftIndex = maxIndex - p[maxIndex] + <span class="number">1</span>;</span><br><span class="line">      <span class="comment">// 对称点左边界大于 maxIndex 左边界</span></span><br><span class="line">      <span class="keyword">if</span> (symmetryILeftIndex &gt; leftIndex) &#123;</span><br><span class="line">        <span class="comment">// 直接取值</span></span><br><span class="line">        p[i] = p[symmetryI];</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 对称点左边界等于 maxIndex 左边界</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex === leftIndex) &#123;</span><br><span class="line">        <span class="comment">// 直接取值</span></span><br><span class="line">        p[i] = p[symmetryI];</span><br><span class="line">        <span class="comment">// 但是需要中心扩展</span></span><br><span class="line">        <span class="keyword">while</span> (</span><br><span class="line">          i - p[i] &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">          i + p[i] &lt; len &amp;&amp;</span><br><span class="line">          str[i - p[i]] === str[i + p[i]]</span><br><span class="line">          ) &#123;</span><br><span class="line">          p[i]++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 更新右边界，尽可能使用对称性加快查找</span></span><br><span class="line">        <span class="keyword">if</span> (i + p[i] &gt; maxIndex + p[maxIndex]) &#123;</span><br><span class="line">          maxIndex = i;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 对称点左边界小于 maxIndex 左边界</span></span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex &lt; leftIndex) &#123;</span><br><span class="line">        <span class="comment">// 需要收缩</span></span><br><span class="line">        p[i] = symmetryI - leftIndex + <span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 无法使用对称性</span></span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 初始置为1</span></span><br><span class="line">      p[i] = <span class="number">1</span>;</span><br><span class="line">      <span class="comment">// 尝试中心扩展</span></span><br><span class="line">      <span class="keyword">while</span> (</span><br><span class="line">        i - p[i] &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">        i + p[i] &lt; len &amp;&amp;</span><br><span class="line">        str[i - p[i]] === str[i + p[i]]</span><br><span class="line">        ) &#123;</span><br><span class="line">        p[i]++;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 更新右边界，尽可能使用对称性加快查找</span></span><br><span class="line">      <span class="keyword">if</span> (i + p[i] &gt; maxIndex + p[maxIndex]) &#123;</span><br><span class="line">        maxIndex = i;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ans += <span class="title class_">Math</span>.<span class="title function_">floor</span>(p[i] / <span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> str &#123;string&#125; 需要添加 # 号的字符串</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> &#123;<span class="type">string</span>&#125; 添加 # 号后的字符串</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">addHash</span>(<span class="params">str</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;#&quot;</span> + str.<span class="title function_">split</span>(<span class="string">&quot;&quot;</span>).<span class="title function_">join</span>(<span class="string">&quot;#&quot;</span>) + <span class="string">&quot;#&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到此该算法的实现就结束</p>
+<p>可能有人会问，你这个代码怎么和我网上看的代码不一样</p>
+<p>我们贴一个 <code>leetcode</code> 官方题解的 <code>manacher</code> 算法代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> countSubstrings = <span class="keyword">function</span> (<span class="params">s</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> n = s.<span class="property">length</span>;</span><br><span class="line">  <span class="keyword">let</span> t = [<span class="string">&#x27;$&#x27;</span>, <span class="string">&#x27;#&#x27;</span>];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">    t.<span class="title function_">push</span>(s.<span class="title function_">charAt</span>(i));</span><br><span class="line">    t.<span class="title function_">push</span>(<span class="string">&#x27;#&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  n = t.<span class="property">length</span>;</span><br><span class="line">  t.<span class="title function_">push</span>(<span class="string">&#x27;!&#x27;</span>);</span><br><span class="line">  t = t.<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> f = <span class="keyword">new</span> <span class="title class_">Array</span>(n);</span><br><span class="line">  <span class="keyword">let</span> iMax = <span class="number">0</span>, rMax = <span class="number">0</span>, ans = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">    <span class="comment">// 初始化 f[i]</span></span><br><span class="line">    f[i] = i &lt;= rMax ? <span class="title class_">Math</span>.<span class="title function_">min</span>(rMax - i + <span class="number">1</span>, f[<span class="number">2</span> * iMax - i]) : <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 中心拓展</span></span><br><span class="line">    <span class="keyword">while</span> (t.<span class="title function_">charAt</span>(i + f[i]) == t.<span class="title function_">charAt</span>(i - f[i])) &#123;</span><br><span class="line">      ++f[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 动态维护 iMax 和 rMax</span></span><br><span class="line">    <span class="keyword">if</span> (i + f[i] - <span class="number">1</span> &gt; rMax) &#123;</span><br><span class="line">      iMax = i;</span><br><span class="line">      rMax = i + f[i] - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 统计答案, 当前贡献为 (f[i] - 1) / 2 上取整</span></span><br><span class="line">    ans += <span class="title class_">Math</span>.<span class="title function_">floor</span>(f[i] / <span class="number">2</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>对于一些边界的设置这里不讲，比如添加了 <code>$</code> 和 <code>!</code> 来作为头尾符号，这样可以在中心扩展时不用判断索引在数组位置的合法性</p>
+<p>我们主要讲 <code>for</code> 循环内部的写法</p>
+<p>第一句为</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">f[i] = i &lt;= rMax ? <span class="title class_">Math</span>.<span class="title function_">min</span>(rMax - i + <span class="number">1</span>, f[<span class="number">2</span> * iMax - i]) : <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>i &lt;= rMax</code> 不用解释，主要是 <code>Math.min(rMax - i + 1, f[2 * iMax - i])</code></p>
+<p>我们写的代码中</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (symmetryILeftIndex &gt; leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 直接取值</span></span><br><span class="line">  p[i] = p[symmetryI];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对称点左边界等于 maxIndex 左边界</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex === leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 直接取值</span></span><br><span class="line">  p[i] = p[symmetryI];</span><br><span class="line">  <span class="comment">// other code ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对称点左边界小于 maxIndex 左边界</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex &lt; leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 需要收缩</span></span><br><span class="line">  p[i] = symmetryI - leftIndex + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以发现，只有当 <code>symmetryILeftIndex &lt; leftIndex</code> 才会执行不一样的逻辑</p>
+<p>而这个逻辑是一个收缩的过程，也就是说，无论如何，我们都能够复用对称点的值，但确保它收缩到 <code>maxIndex</code> 对应回文串的左边界内部即可</p>
+<p>这里 <code>rMax - i + 1</code> 和 <code>symmetryI - leftIndex + 1</code> 意思相等</p>
+<p><code>f[2 * iMax - i]</code> 和 <code>p[symmetryI]</code> 意思相等</p>
+<p>接着我们发现，无论如何他都进行了中心扩展和更新最大回文子串的中点和右边界这个步骤</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">  <span class="comment">// other code ....</span></span><br><span class="line">  <span class="comment">// 中心拓展</span></span><br><span class="line">  <span class="keyword">while</span> (t.<span class="title function_">charAt</span>(i + f[i]) == t.<span class="title function_">charAt</span>(i - f[i])) &#123;</span><br><span class="line">    ++f[i];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 动态维护 iMax 和 rMax</span></span><br><span class="line">  <span class="keyword">if</span> (i + f[i] - <span class="number">1</span> &gt; rMax) &#123;</span><br><span class="line">    iMax = i;</span><br><span class="line">    rMax = i + f[i] - <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// other code ....</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其实不难理解，如果可以中心扩展的话，就能够使得循环走下去，如果不行，循环就退出</p>
+<p>反应到我们写的代码来看，其实我们对每个 <code>if</code> 判断添加中心扩展也是可以的</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (symmetryILeftIndex &gt; leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 直接取值</span></span><br><span class="line">  p[i] = p[symmetryI];</span><br><span class="line">  <span class="comment">// 尝试中心扩展</span></span><br><span class="line">  <span class="keyword">while</span> (</span><br><span class="line">    i - p[i] &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">    i + p[i] &lt; len &amp;&amp;</span><br><span class="line">    str[i - p[i]] === str[i + p[i]]</span><br><span class="line">    ) &#123;</span><br><span class="line">    p[i]++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 更新右边界，尽可能使用对称性加快查找</span></span><br><span class="line">  <span class="keyword">if</span> (i + p[i] &gt; maxIndex + p[maxIndex]) &#123;</span><br><span class="line">    maxIndex = i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对称点左边界等于 maxIndex 左边界</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex === leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 直接取值</span></span><br><span class="line">  p[i] = p[symmetryI];</span><br><span class="line">  <span class="comment">// 尝试中心扩展</span></span><br><span class="line">  <span class="keyword">while</span> (</span><br><span class="line">    i - p[i] &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">    i + p[i] &lt; len &amp;&amp;</span><br><span class="line">    str[i - p[i]] === str[i + p[i]]</span><br><span class="line">    ) &#123;</span><br><span class="line">    p[i]++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 更新右边界，尽可能使用对称性加快查找</span></span><br><span class="line">  <span class="keyword">if</span> (i + p[i] &gt; maxIndex + p[maxIndex]) &#123;</span><br><span class="line">    maxIndex = i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对称点左边界小于 maxIndex 左边界</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (symmetryILeftIndex &lt; leftIndex) &#123;</span><br><span class="line">  <span class="comment">// 需要收缩</span></span><br><span class="line">  p[i] = symmetryI - leftIndex + <span class="number">1</span>;</span><br><span class="line">  <span class="comment">// 尝试中心扩展</span></span><br><span class="line">  <span class="keyword">while</span> (</span><br><span class="line">    i - p[i] &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">    i + p[i] &lt; len &amp;&amp;</span><br><span class="line">    str[i - p[i]] === str[i + p[i]]</span><br><span class="line">    ) &#123;</span><br><span class="line">    p[i]++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 更新右边界，尽可能使用对称性加快查找</span></span><br><span class="line">  <span class="keyword">if</span> (i + p[i] &gt; maxIndex + p[maxIndex]) &#123;</span><br><span class="line">    maxIndex = i;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是经过分析之后我们明白，只有相等情况下中心扩展才是有意义的，大于或小于中心扩展的循环都是直接退出的，没有意义</p>
+<p>对每种情况进行中心扩展，最终情况下，只有 <code>symmetryILeftIndex === leftIndex</code> 能走到循环里面，其他都是直接退出</p>
+<p>维护 <code>iMax</code> 和 <code>rMax</code> 是同理的，只有当 <code>symmetryILeftIndex === leftIndex</code> 时，才有可能中心扩展出去，这样 <code>iMax</code> 和 <code>rMax</code> 才有可能更新，其他情况都是直接退出</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>如果你已经明白了这个算法的原理，那么点击下面的连接，可以直接进行练习</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/a7VOhD/">剑指 Offer II 020. 回文子字符串的个数 - 力扣（LeetCode）</a></p>
+<p>在这里也非常感谢以下文章的帮助：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ethsonliu.com/2018/04/manacher.html">Manacher 算法 - 刘毅</a></li>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2">最长回文子串 - 维基百科</a></li>
+</ul>
+<p>对于算法复杂度的证明，可以点击第一个链接，在后半部分有作者相关的分析</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/e7b9dbe576f5" title="Manacher 算法求最长回文子串">https://prohibitorum.top/e7b9dbe576f5</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%9E%E6%96%87/" rel="tag"># 回文</a>
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="tag"># 字符串</a>
+              <a href="/tags/Manacher%E7%AE%97%E6%B3%95/" rel="tag"># Manacher算法</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a2593909b3f0" rel="prev" title="使用 Github Actions 来自动化部署 hexo 博客">
+                  <i class="fa fa-angle-left"></i> 使用 Github Actions 来自动化部署 hexo 博客
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/e7b90d509ef1" rel="next" title="心之形、心之色、心之声">
+                  心之形、心之色、心之声 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1648803863"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

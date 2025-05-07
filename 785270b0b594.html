@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记一次通过 github 创建自己的图床以及压缩图片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次通过github创建自己的图床以及压缩图片">
+<meta property="og:url" content="https://prohibitorum.top/785270b0b594">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次通过 github 创建自己的图床以及压缩图片">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242324821.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241410527.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241424757.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241425098.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241433139.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241435826.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241436054.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241439921.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241425098.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241454432.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241452507.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242248269.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242251033.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242253805.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242254380.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242255179.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242315309.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242317955.avif">
+<meta property="article:published_time" content="2022-01-24T11:24:32.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="图床">
+<meta property="article:tag" content="图片压缩">
+<meta property="article:tag" content="PicGo">
+<meta property="article:tag" content="sharp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242324821.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/785270b0b594.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/785270b0b594","path":"785270b0b594.html","title":"记一次通过github创建自己的图床以及压缩图片"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次通过github创建自己的图床以及压缩图片 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E5%BA%8A%E6%90%AD%E5%BB%BA"><span class="nav-number">2.1.</span> <span class="nav-text">图床搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.2.</span> <span class="nav-text">图片压缩</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/785270b0b594">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次通过github创建自己的图床以及压缩图片 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次通过github创建自己的图床以及压缩图片
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-01-24 11:24:32" itemprop="dateCreated datePublished" datetime="2022-01-24T11:24:32+00:00">2022-01-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次通过 <code>github</code> 创建自己的图床以及压缩图片</p>
+<span id="more"></span>
+
+<p>之前一直有这个想法，之前帖子的图床为</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://sm.ms/">sm.ms</a></li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/">路过图床</a></li>
+</ul>
+<p>两个混用，本来应该是只用 <code>sm.ms</code> 的，但是有一阵子图片加载巨慢</p>
+<p>就换成路过图床了，其实不是很想折腾</p>
+<p>但是路过图床有一些问题，对于 <code>ACG</code> 之类的图片，很容易被检测，然后被删除</p>
+<p>上次换了个头像，下面这个，一天就给我删了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242324821.avif"></p>
+<p>这图也不是 <code>18+</code> 图片吧，不过路过图床也是规定了的，没啥好说的</p>
+<p>由于是 <code>AI</code> 检测，图存在误杀，人工感觉不实际，为了大部分用户，这么做<strong>理解</strong></p>
+<p>如果不是和 <code>ACG</code> 相关的图片，路过图床绝对是不错的选择</p>
+<p>所以，由于以后可能要写一些 <code>ACG</code> 类的帖子</p>
+<p>用三方的图床可能会麻烦，而且不好备份，故搞个 <code>github</code> 的图床</p>
+<p>这样子定时往本地拉一拉即可，而且也不会被无故删除，当然前提是不要传色图，不然大概率也是无</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="图床搭建"><a href="#图床搭建" class="headerlink" title="图床搭建"></a>图床搭建</h2><p>网上关于 <code>github</code> 的图床一大堆了，这里简单写下即可</p>
+<p>这里用的是 <code>PicGo</code> 这个软件，一个基于 <code>electron</code> + <code>Vue</code> 的图床工具，可以配置各种类型的图床，比如上面的 <code>sm.ms</code> 和路过图床，它都支持</p>
+<p>当然它也支持 <code>github</code> 的图床，只需简单的配置即可</p>
+<p><a target="_blank" rel="noopener" href="https://molunerfinn.com/PicGo/">PicGo官网</a></p>
+<p>下载的话要去 <a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/picgo/releases">PicGo github仓库</a></p>
+<p>目前最新的版本为 <code>2.3.0</code>，目前有 <code>beta</code> 版，不过没必要，稳定版即可</p>
+<p>下载安装完成之后，打开后的界面如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241410527.avif"></p>
+<p>界面非常简单，然后这里我们不用内置的 <code>github</code> 图床</p>
+<p>因为删除的时候没有同步仓库，会造成仓库冗余</p>
+<p>直接找 <code>githubPlus</code> 插件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241424757.avif"></p>
+<p>安装完会提示你重启，按提示就行了</p>
+<p>然后进入图床设置里的 <code>githubPlus</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241425098.avif"></p>
+<p>然后就先放着，去github创建个 <code>token </code>和图床仓库</p>
+<p>先进入个人 <code>setting</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241433139.avif"></p>
+<p>左侧列表找到 <code>developer settings</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241435826.avif"></p>
+<p>进入之后点击左侧的 <code>personal access tokens</code>，在点击右上角的 <code>generate new token</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241436054.avif"></p>
+<p><code>Note</code> 随便写，第二个过期日期，可以选永久，不过 <code>github</code> 不推荐，我是选了 <code>90</code> 天</p>
+<p>下面的 <code>repo</code> 要勾上，其他不用管</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241439921.avif"></p>
+<p>然后拉到最下面，点击 <code>generate</code> 即可</p>
+<p>成功之后会给你一个 <code>token</code> ，要记住，因为配置要用到</p>
+<p>然后我们创建一个 <code>repo</code>，这部分就不截图了，很简单</p>
+<p>建完之后回到 <code>PicGo</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241425098.avif"></p>
+<ul>
+<li><code>repo</code> 填写 <code>$&#123;github用户名&#125;/$&#123;仓库名&#125;</code> ，比如我们仓库叫 <code>image</code> ，我的用户名叫 <code>Dedicatus546</code>，那么我就要填 <code>Dedicatus546/image</code></li>
+<li><code>branch</code> 分支名，使用 <code>main</code> 主分支即可</li>
+<li><code>token</code> <code>github api token</code> 刚才创建的那个，黏贴进去</li>
+<li><code>path</code> 不管</li>
+<li><code>customUrl</code> 这里可用 <code>jsdelivr</code> 的公共 <code>cdn</code> ，填写格式 <code>https://fastly.jsdelivr.net/gh/$&#123;github用户名&#125;/$&#123;仓库名&#125;@$&#123;分支名&#125;</code> ，我的是 <code>https://fastly.jsdelivr.net/gh/Dedicatus546/image@main</code></li>
+<li><code>origin</code> 选 <code>github</code> 即可</li>
+</ul>
+<p>然后记得点确定，成功的话右下角会有提示设置成功</p>
+<p>最后一步，设置一下 <code>PicGo</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241454432.avif"></p>
+<p>个人推荐开时间戳重命名以及上传后自动复制 <code>url</code> 这两个选项</p>
+<p>点击上传区就可以开始愉快的传图片了，我使用的是微信的截图，所以需要点击右下角的剪切板图片来上传</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201241452507.avif"></p>
+<p>成功之后，会自动复制相关的格式到剪切板</p>
+<p>然后黏贴到文章里就完成了</p>
+<h2 id="图片压缩"><a href="#图片压缩" class="headerlink" title="图片压缩"></a>图片压缩</h2><p>其实搞完图床就差不多了，但是真正的搬砖工是不会止步于此的</p>
+<p>接下来我们来搞图片压缩</p>
+<p>实现图片压缩，我们需要为 <code>PicGo</code> 写一个插件，在拿到图片后上传前进行压缩</p>
+<p>本来想看有没有现成的插件可用的，搜了一下，真有</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/imbillow/picgo-plugin-sharp">picgo-plugin-sharp</a></p>
+<p>遗憾的是，这个插件已经不维护了，而且是 <code>cli</code> 插件，有点不足</p>
+<p><code>sharp</code> 版本有点老了, <code>PicGo</code> 的版本还是 <code>1.4.0</code></p>
+<p>所以，我们直接在这个插件上二次开发即可</p>
+<p>第一步就是把依赖更新一下，主要是 <code>sharp</code> 和 <code>PicGo</code></p>
+<p>然后就是改动核心文件 <code>index.ts</code> 了</p>
+<p>代码简单，我直接把仓库放 <code>github</code> 上了，直接拉下来即可</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/picgo-plugin-sharp">Dedicatus546&#x2F;picgo-plugin-sharp</a></p>
+<p>拉下来之后，点击插件页面的右上角导入本地的插件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242248269.avif"></p>
+<p>导入完就有第二个插件 <code>sharp</code> 了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242251033.avif"></p>
+<p>点击插件的右下角的设置按钮，最后一个选项如果关闭了就把它打开，如上图</p>
+<p>点击倒数第二个选项，就可以设置压缩格式了，默认为 <code>avif</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242253805.avif"></p>
+<p>默认情况下使用 <code>sharp</code> 的默认压缩参数，如果想要自定义的话，需要配置 <code>PicGo</code> 的配置</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242254380.avif"></p>
+<p>然后找到如下的配置，按格式配置即可</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242255179.avif"></p>
+<p>比如上图 <code>avif</code> 的配置，<code>quality</code>为 <code>100</code> ，表示压缩质量最高</p>
+<p><code>lossless</code> 为 <code>true</code>，表示开启无损压缩</p>
+<p><code>speed</code> 为 <code>0</code> ，表示使用更长的 <code>CPU</code> 时间生成更小的文件</p>
+<p><strong>PS：配置完记得重启 <code>PicGo</code></strong></p>
+<p>相关的配置可以查找 <code>sharp</code> 的官方文档进行查看</p>
+<p><a target="_blank" rel="noopener" href="https://sharp.pixelplumbing.com/api-output">sharp - High performance Node.js image processing</a></p>
+<p>比如 <code>avif</code> 的官方的配置</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242315309.avif"></p>
+<p>经过压缩之后，图片小了很多，相当的nice </p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/01/24/202201242317955.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>其实还可以再做一个插件直接进行本地备份的，难度不大，就是在上传之前存到指定目录即可</p>
+<p>有空再搞搞吧</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/785270b0b594" title="记一次通过github创建自己的图床以及压缩图片">https://prohibitorum.top/785270b0b594</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BA%8A/" rel="tag"># 图床</a>
+              <a href="/tags/%E5%9B%BE%E7%89%87%E5%8E%8B%E7%BC%A9/" rel="tag"># 图片压缩</a>
+              <a href="/tags/PicGo/" rel="tag"># PicGo</a>
+              <a href="/tags/sharp/" rel="tag"># sharp</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/41f0a7b1afd8" rel="prev" title="Riddle Joker">
+                  <i class="fa fa-angle-left"></i> Riddle Joker
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/b69de134d899" rel="next" title="2022年1月新番个人推荐">
+                  2022年1月新番个人推荐 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1642994672"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

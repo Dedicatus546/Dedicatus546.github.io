@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言针对Vue@next对组件的编写上的提案–&lt;script setup&gt;，以及ref的语法糖 这个提案感觉尤大很喜欢，大部分对&lt;script setup&gt;的特性很喜欢，因为减少了重复代码的编写 针对ref语法糖下面的回复基本上不喜欢的居多 本文翻译下提案以及尤大的相关回复，挺有趣的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue@next提案之script setup和ref sugar">
+<meta property="og:url" content="https://prohibitorum.top/89a850efd727">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言针对Vue@next对组件的编写上的提案–&lt;script setup&gt;，以及ref的语法糖 这个提案感觉尤大很喜欢，大部分对&lt;script setup&gt;的特性很喜欢，因为减少了重复代码的编写 针对ref语法糖下面的回复基本上不喜欢的居多 本文翻译下提案以及尤大的相关回复，挺有趣的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-07T23:01:44.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/89a850efd727.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/89a850efd727","path":"89a850efd727.html","title":"Vue@next提案之script setup和ref sugar"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Vue@next提案之script setup和ref sugar | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Summary%EF%BC%88%E6%91%98%E8%A6%81%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">Summary（摘要）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-example%EF%BC%88%E5%9F%BA%E6%9C%AC%E4%BE%8B%E5%AD%90%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">Basic example（基本例子）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#now-directly-exposes-top-level-bindings-to-template"><span class="nav-number">2.2.1.</span> <span class="nav-text">&lt;script setup&gt; now directly exposes top level bindings to template</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ref-sugar-makes-use-of-refs-more-succinct"><span class="nav-number">2.2.2.</span> <span class="nav-text">ref: sugar makes use of refs more succinct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation%EF%BC%88%E5%8A%A8%E6%9C%BA%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">Motivation（动机）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Detailed-Design%EF%BC%88%E8%AF%A6%E7%BB%86%E7%9A%84%E8%AE%BE%E8%AE%A1%EF%BC%89"><span class="nav-number">2.4.</span> <span class="nav-text">Detailed Design（详细的设计）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-number">2.4.1.</span> <span class="nav-text">&lt;script setup&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Drawbacks%EF%BC%88%E7%BC%BA%E7%82%B9%EF%BC%89"><span class="nav-number">2.4.2.</span> <span class="nav-text">Drawbacks（缺点）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Alternatives%EF%BC%88%E5%8F%AF%E9%80%89%E6%96%B9%E6%A1%88%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">Alternatives（可选方案）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adoption-strategy%EF%BC%88%E9%87%87%E7%BA%B3%E7%9A%84%E7%AD%96%E7%95%A5%EF%BC%89"><span class="nav-number">2.6.</span> <span class="nav-text">Adoption strategy（采纳的策略）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unresolved-questions%EF%BC%88%E6%9C%AA%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%EF%BC%89"><span class="nav-number">2.7.</span> <span class="nav-text">Unresolved questions（未解决的问题）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Appendix%EF%BC%88%E9%99%84%E5%BD%95%EF%BC%89"><span class="nav-number">2.8.</span> <span class="nav-text">Appendix（附录）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%84%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">评论</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1"><span class="nav-number">3.1.</span> <span class="nav-text">1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2"><span class="nav-number">3.2.</span> <span class="nav-text">2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3"><span class="nav-number">3.3.</span> <span class="nav-text">3</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">4.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/89a850efd727">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Vue@next提案之script setup和ref sugar | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Vue@next提案之script setup和ref sugar
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-07 23:01:44" itemprop="dateCreated datePublished" datetime="2020-11-07T23:01:44+00:00">2020-11-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>12k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>44 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>针对<code>Vue@next</code>对组件的编写上的提案–<code>&lt;script setup&gt;</code>，以及<code>ref</code>的语法糖</p>
+<p>这个提案感觉尤大很喜欢，大部分对<code>&lt;script setup&gt;</code>的特性很喜欢，因为减少了重复代码的编写</p>
+<p>针对<code>ref</code>语法糖下面的回复基本上不喜欢的居多</p>
+<p>本文翻译下提案以及尤大的相关回复，挺有趣的</p>
+<span id="more"></span>
+
+<p>针对此RFC的讨论：<a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/222">New script setup and ref sugar</a><br>完整的RFC：<a target="_blank" rel="noopener" href="https://github.com/vuejs/vue-next/pull/2532">rfcs&#x2F;0000-script-setup.md at script-setup</a></p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="Summary（摘要）"><a href="#Summary（摘要）" class="headerlink" title="Summary（摘要）"></a>Summary（摘要）</h2><blockquote>
+<p>Introduce a new script type in Single File Components: <code>&lt;script setup&gt;</code>, which exposes all its top level bindings to the template.<br>Introduce a compiler-based syntax sugar for using refs without <code>.value</code> inside <code>&lt;script setup&gt;</code>.<br>Note: this is intended to replace the current <code>&lt;script setup&gt;</code> as proposed in #182.</p>
+</blockquote>
+<p>针对单文件组件的<code>script</code>标签的新的属性：<code>&lt;script setup&gt; ... &lt;/script&gt;</code>，暴露了它自身所有的顶层变量，绑定到模板<code>template</code>上<br>在<code>&lt;script setup&gt;</code>中，一个针对使用<code>refs</code>无需<code>.value</code>的基于编译时的语法糖。<br>注意：这个提案的目的是为了取代<a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/182">#182</a>提案中的<code>&lt;script setup&gt;</code>部分</p>
+<h2 id="Basic-example（基本例子）"><a href="#Basic-example（基本例子）" class="headerlink" title="Basic example（基本例子）"></a>Basic example（基本例子）</h2><h3 id="now-directly-exposes-top-level-bindings-to-template"><a href="#now-directly-exposes-top-level-bindings-to-template" class="headerlink" title="&lt;script setup&gt; now directly exposes top level bindings to template"></a><code>&lt;script setup&gt;</code> now directly exposes top level bindings to template</h3><p><code>&lt;script setup&gt;</code>现在会直接暴露顶层变量绑定到模板上，例子如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// imported components are also directly usable in template</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 导入的组件也可以直接在模板内使用</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Foo</span> <span class="keyword">from</span> <span class="string">&#x27;./Foo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// write Composition API code just like in a normal setup()</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// but no need to manually return everything</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 就像一个正常的setup()函数一样编写Composition API</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 但是不需要手动地返回任何东西</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">inc</span> = (<span class="params"></span>) =&gt; &#123; count.<span class="property">value</span>++ &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--使用了Foo组件，类型为ref的count变量，以及inc函数--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Foo</span> <span class="attr">:count</span>=<span class="string">&quot;count&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Foo</span> <span class="keyword">from</span> <span class="string">&#x27;./Foo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">1</span>)</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> <span class="title function_">inc</span> = (<span class="params"></span>) =&gt; &#123; count.<span class="property">value</span>++ &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="title class_">Foo</span>, <span class="comment">// see note below</span></span></span><br><span class="line"><span class="language-javascript">      count,</span></span><br><span class="line"><span class="language-javascript">      inc</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Foo</span> <span class="attr">:count</span>=<span class="string">&quot;count&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="ref-sugar-makes-use-of-refs-more-succinct"><a href="#ref-sugar-makes-use-of-refs-more-succinct" class="headerlink" title="ref: sugar makes use of refs more succinct"></a><code>ref:</code> sugar makes use of refs more succinct</h3><p><code>ref:</code>语法糖使得refs对象的使用变得更加的简洁，例子如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// declaring a variable that compiles to a ref</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 声明一个在编译时转为ref类型的一个变量</span></span></span><br><span class="line"><span class="language-javascript"><span class="attr">ref</span>: count = <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// the variable can be used like a plain value</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 变量可以像一个普通的值一样使用</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 注：ref在模板中是可以自动拆箱的，但是如果我们在setup函数内的逻辑，是需要.value来取值进行操作的</span></span></span><br><span class="line"><span class="language-javascript">  count++</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// access the raw ref object by prefixing with $</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 通过添加前缀$来获取一个原ref对象</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">console</span>.<span class="title function_">log</span>($count.<span class="property">value</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">1</span>)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">      count.<span class="property">value</span>++</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      count,</span></span><br><span class="line"><span class="language-javascript">      inc</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Motivation（动机）"><a href="#Motivation（动机）" class="headerlink" title="Motivation（动机）"></a>Motivation（动机）</h2><blockquote>
+<p>This proposal has two main goals:</p>
+</blockquote>
+<p>这个提案主要有两个目的</p>
+<blockquote>
+<p>Reduce verbosity of Single File Component <code>&lt;script&gt;</code> by directly exposing its context to the template.</p>
+</blockquote>
+<blockquote>
+<p>We have a prior proposal for <code>&lt;script setup&gt;</code> <a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/blob/sfc-improvements/active-rfcs/0000-sfc-script-setup.md">here</a>, which is currently implemented (but marked as experimental). The old proposal opted for the <code>export</code> syntax so that the code would play well with unused variable checks.</p>
+</blockquote>
+<blockquote>
+<p>This proposal takes a different direction based on the premise that we can offer customized linter rules in <code>eslint-plugin-vue</code>. This allows us to aim for the most succinct syntax possible.</p>
+</blockquote>
+<p>通过直接暴露自身上下文给模板来减少单文件组件中冗长的<code>&lt;script&gt;</code>标签中的代码</p>
+<p>之前有过一个对<code>&lt;script setup&gt;</code>的提案，<a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/blob/sfc-improvements/active-rfcs/0000-sfc-script-setup.md">点我跳转</a>，现在这个特性已经实现了（但是标记为实验性质的特性）。旧的提案选择了<code>export</code>语法，因此代码可以在没有使用变量检查的情况下很好的运行。</p>
+<p>这个提案选择了一个不同的方向，基于如果我们可以在<code>eslint-plugin-vue</code>提供一个定制的linter规则。这样使得我们可以尽可能使用最简单的语法。</p>
+<blockquote>
+<p>Improve ergonomics of refs with the <code>ref:</code> syntax sugar.</p>
+</blockquote>
+<blockquote>
+<p>Ever since the introduction of the Composition API, one of the primary unresolved questions is the use of refs vs. reactive objects. It can be cumbersome to use <code>.value</code> everywhere, and it is easy to miss if not using a type system. Some users specifically lean towards using <code>reactive()</code> exclusively so that they don’t have to deal with refs.</p>
+</blockquote>
+<blockquote>
+<p>The existence of ref is mostly a design trade-off due to the constraints of the language we are working with: JavaScript. JavaScript does not provide a native way to pass reactive bindings around without wrapping it with an object. This means that <strong>it is impossible to use refs like normal variable bindings without altering or augmenting JavaScript semantics</strong>.</p>
+</blockquote>
+<p>通过<code>ref:</code>语法糖使得refs类型更加符合人的直觉。</p>
+<p>自从Composition API的产生，一个没有解决的主要问题就是使用ref还是reactive。在每个地方<code>.value</code>是很麻烦的，在没有使用类型系统的情况下很容易忘记添加<code>.value</code>。一些用户明确只使用<code>reactive()</code>这样就可以避免去处理ref情况</p>
+<p>由于我们所使用的JavaScript语言的约束，ref的存在大体上是的一个设计权衡。JavaScript无法提供一个原生的方式，即无法在没有通过一个对象包装的情况下进行响应式地绑定。这意味着在<strong>没有改变和增加JavaScript语义的情况下像正常变量绑定一样使用ref是不可能的</strong></p>
+<blockquote>
+<ul>
+<li>There has been a proposal for <a target="_blank" rel="noopener" href="https://github.com/rbuckton/proposal-refs">adding native refs to JavaScript</a>, but it was designed to address a slightly different problem and doesn’t seem to have received much attention.</li>
+<li>A prominent example of altering JavaScript semantics in return for succinct syntax is <code>Svelte</code>. It <a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/blob/script-setup/active-rfcs/0000-script-setup.md#svelte-syntax-details">appropriates a number of JavaScript syntax to express framework-specific behavior</a>.</li>
+</ul>
+</blockquote>
+<ul>
+<li>虽然有一个添加原生JavaScript的ref类型的提案，但是它只是被用于解决一个略微不同的问题，似乎没有受到太多的关注</li>
+<li>改变JavaScript返回语义使其简洁的一个著名的例子是<code>Svelte</code>，它挪用了JavaScript中的数字语法来表示框架特定的行为。</li>
+</ul>
+<blockquote>
+<p>In the past, we have tried to stick to strict JavaScript semantics as much as possible. Deviating from standard JavaScript semantics has number of drawbacks, but we believe there is room for a pragmatic trade-off where “breaking out of the box” a little bit can result in substantial improvements in developer experience.</p>
+</blockquote>
+<p>在过去，我们试着尽可能地坚持严格的JavaScript语义。偏离标准地JavaScript语义会带来许多的缺点，但是我们相信稍微的跳出一点实用权衡“屋子”可以为开发者的实践带来实质性的改善。</p>
+<h2 id="Detailed-Design（详细的设计）"><a href="#Detailed-Design（详细的设计）" class="headerlink" title="Detailed Design（详细的设计）"></a>Detailed Design（详细的设计）</h2><h3 id=""><a href="#" class="headerlink" title="&lt;script setup&gt;"></a><code>&lt;script setup&gt;</code></h3><blockquote>
+<p>To opt-in to the syntax, add the setup attribute to the <code>&lt;script&gt;</code> block:</p>
+</blockquote>
+<p>为了加入语法，在<code>&lt;script&gt;</code>块上加入<code>setup</code>属性</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// syntax enabled</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Top level bindings are exposed to template</strong></p>
+</blockquote>
+<blockquote>
+<p>Any top-level bindings (both variables and imports) declared inside <code>&lt;script setup&gt;</code> are directly exposed to the template render context:</p>
+</blockquote>
+<p><strong>顶层的绑定会暴露给模板</strong></p>
+<p>声明在<code>&lt;script setup&gt;</code>块中的任何顶层的绑定（变量和import）会直接暴露给模板渲染的上下文</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Foo</span> <span class="keyword">from</span> <span class="string">&#x27;./Foo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> msg = <span class="string">&#x27;Hello!&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--使用了Foo组件和msg变量--&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Foo</span>&gt;</span>&#123;&#123; msg &#125;&#125;<span class="tag">&lt;/<span class="name">Foo</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Foo</span> <span class="keyword">from</span> <span class="string">&#x27;./Foo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> msg = <span class="string">&#x27;Hello!&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// 导出了组件</span></span></span><br><span class="line"><span class="language-javascript">      <span class="title class_">Foo</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// 导出了变量</span></span></span><br><span class="line"><span class="language-javascript">      msg</span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Foo</span>&gt;</span>&#123;&#123; msg &#125;&#125;<span class="tag">&lt;/<span class="name">Foo</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note: The SFC compiler also extracts binding metadata from <code>&lt;script setup&gt;</code> and use it during template compilation. Therefore in the template, <code>Foo</code> can be used as a component even though it’s returned from <code>setup()</code> instead of registered via <code>components</code> option.</p>
+</blockquote>
+<p>注意：单文件组件编译器也会提取<code>&lt;script setup&gt;</code>中绑定的元数据，并在模板编译的时候使用。因此在模板中，<code>Foo</code>可以被当成一个组件来使用，即使它是通过<code>setup()</code>返回的而不是在<code>components</code>选项中注册的。</p>
+<blockquote>
+<p><strong>Setup Signature</strong></p>
+</blockquote>
+<blockquote>
+<p>The value of the <code>setup</code> attribute will be used as the arguments of the <code>setup()</code> function:</p>
+</blockquote>
+<p><strong><code>setup</code>标识</strong></p>
+<p><code>setup</code>属性的值被用作<code>setup()</code>函数的参数</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--这里给setup设置的值可以理解为和setup()函数的参数一样--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>=<span class="string">&quot;props, &#123; emit &#125;&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 使用props</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">console</span>.<span class="title function_">log</span>(props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript"><span class="title function_">emit</span>(<span class="string">&#x27;foo&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params">props, &#123; emit &#125;</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">log</span>(props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">emit</span>(<span class="string">&#x27;foo&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Declaring Component Options</strong></p>
+</blockquote>
+<blockquote>
+<p><code>export default</code> can still be used inside <code>&lt;script setup&gt;</code> for declaring component options such as props. Note that the exported expression will be hoisted out of <code>setup()</code> scope so it won’t be able to reference variables declared in <code>&lt;script setup&gt;</code> (a compile error will be emitted in this case).</p>
+</blockquote>
+<p><strong>声明组件的选项</strong></p>
+<p><code>export default</code>仍然可以在<code>&lt;script setup&gt;</code>中使用，来声明组件的选项比如props。注意导出表达式会被提升到<code>setup()</code>作用域之外，所以它不能引用到声明在<code>&lt;script setup&gt;</code>的变量。（在这个情况下会报编译错误）</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>=<span class="string">&quot;props&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">props</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">msg</span>: <span class="title class_">String</span></span></span><br><span class="line"><span class="language-javascript">  &#125; </span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">console</span>.<span class="title function_">log</span>(props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  ...(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">props</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">msg</span>: <span class="title class_">String</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;),</span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params">props</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">log</span>(props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Top level await</strong></p>
+</blockquote>
+<blockquote>
+<p>Top level <code>await</code> can be used inside <code>&lt;script setup&gt;</code>. The resulting <code>setup()</code> function will be made <code>async</code>:</p>
+</blockquote>
+<p>顶层的await</p>
+<p>在<code>&lt;script setup&gt;</code>内顶层使用<code>await</code>语法，最终的<code>setup()</code>函数会被设置为<code>async</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> post = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`/api/post/1`</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> r.<span class="title function_">json</span>())</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">async</span> <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> post = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`/api/post/1`</span>).<span class="title function_">then</span>(<span class="function"><span class="params">r</span> =&gt;</span> r.<span class="title function_">json</span>())</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123; post &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Ref Syntax</strong></p>
+</blockquote>
+<blockquote>
+<p>Code inside <code>&lt;script setup&gt;</code> can use a special <code>ref:</code> declaration to declare variables that can be used as a normal variable, but are compiled into refs:</p>
+</blockquote>
+<p><strong>Ref语法</strong></p>
+<p>在<code>&lt;script setup&gt;</code>内可以使用特殊的<code>ref:</code>声明来声明正常的变量，但是会被编译成ref类型</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="attr">ref</span>: count = <span class="number">0</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  count++</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>ref: count = 0</code> is a <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/label">labeled statement</a> which is syntactically valid in both JS&#x2F;TS. However, we are using it as a variable declaration here. The compiler will:</p>
+<ol>
+<li>Convert it to a proper variable declaration</li>
+<li>Wrap its initial value with ref()</li>
+<li>Rewrite all references to count into count.value.</li>
+</ol>
+</blockquote>
+<p><code>ref: count = 0</code>是基于标记语句，这种语句在JS和TS上都是语义上合法的，然而在这里我们把它作为变量声明来使用，经过编译后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span><br><span class="line">      count.<span class="property">value</span>++</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      count,</span><br><span class="line">      inc</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note that the syntax is opt-in: all Composition APIs can be used inside <code>&lt;script setup&gt;</code> without ref sugar:</p>
+</blockquote>
+<p>注意语法是可选的，所有的Composition API可以在<code>&lt;script setup&gt;</code>内不使用ref的语法糖</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  count.<span class="property">value</span>++</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span>&gt;</span>&#123;&#123; count &#125;&#125;<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Accessing Raw Ref</strong></p>
+</blockquote>
+<blockquote>
+<p>It is common for an external composition function to expect a raw ref object as argument, so we need a way to access the raw underlying ref object for bindings declared via <code>ref:</code>. To deal with that, every <code>ref:</code> binding will have a corresponding <code>$</code>-prefixed counter part that exposes the raw ref:</p>
+</blockquote>
+<p><strong>获取原来的ref</strong></p>
+<p>在一个外部的composition函数接收一个原生的ref对象作为参数是很常见的行为，所以我们需要有一种方式来获取通过<code>ref:</code>声明的原生的底层ref对象进行绑定。为了解决这个问题，每个<code>ref:</code>绑定会有一个相应的前缀<code>$</code>名称来暴露原生的ref</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ref</span>: count = <span class="number">1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>($count.<span class="property">value</span>) <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// $count 表示原生的ref对象，可以使用.value来进行取值</span></span><br><span class="line">$count.<span class="property">value</span>++</span><br><span class="line"><span class="comment">// 直接输出，会被编译成count.value</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">watch</span>($count, <span class="function"><span class="params">newCount</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;new count is: &#x27;</span>, newCount)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">1</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 1</span></span><br><span class="line"></span><br><span class="line">count.<span class="property">value</span>++</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(count.<span class="property">value</span>) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">watch</span>(count, <span class="function"><span class="params">newCount</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;new count is: &#x27;</span>, newCount)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Interaction with Non-Literals</strong></p>
+</blockquote>
+<blockquote>
+<p><code>ref:</code> will wrap assignment values with <code>ref()</code>. If the value is already a ref, it will be returned as-is. This means we can use <code>ref:</code> with any function that returns a ref, for example <code>computed:</code></p>
+</blockquote>
+<p><strong>非字面量相互作用（emmm，这里不知道要怎么翻译…）</strong></p>
+<p><code>ref:</code>会通过<code>ref()</code>函数包装分配的值，如果值早已是一个ref对象，它会按原样被返回，这意味着我们可以在任何返回一个ref对象的函数使用<code>ref:</code>，比如<code>computed</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; computed &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">ref</span>: count = <span class="number">0</span></span><br><span class="line"><span class="attr">ref</span>: plusOne = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> count + <span class="number">1</span>)</span><br><span class="line"><span class="comment">// 直接使用plusOne，而不需要plusOne.value</span></span><br><span class="line"><span class="comment">// 也就是ref: 定义不管值是基本类型还是ref类型，一律可以直接使用（无需.value），会自动编译成.value</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(plusOne) <span class="comment">// 1</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; computed, ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"><span class="comment">// `ref()` around `computed()` is a no-op here since return value</span></span><br><span class="line"><span class="comment">// from `computed()` is already a ref.</span></span><br><span class="line"><span class="comment">// `ref()`包装`computed()`并不会产生操作，因为从`computed()`返回的值已经是一个ref对象了。</span></span><br><span class="line"><span class="comment">// 也就是说，下面的语句，等同于const plusOne = computed(() =&gt; count.value + 1)，并且这两个对象相等（===）</span></span><br><span class="line"><span class="comment">// 因为在创建ref时，会判断对象上是否存在__v_isRef标志，如果有直接返回，而computed的返回值是存在这个标志的，可以说成computed是一种特殊的ref</span></span><br><span class="line"><span class="keyword">const</span> plusOne = <span class="title function_">ref</span>(<span class="title function_">computed</span>(<span class="function">() =&gt;</span> count.<span class="property">value</span> + <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Or, any custom composition function that returns a ref:</p>
+</blockquote>
+<p>或者，任何返回一个ref的composition函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useMyRef &#125; <span class="keyword">from</span> <span class="string">&#x27;./composables&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">ref</span>: myRef = <span class="title function_">useMyRef</span>()</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myRef) <span class="comment">// 不需要去 .value</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; useMyRef &#125; <span class="keyword">from</span> <span class="string">&#x27;./composables&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// if useMyRef() returns a ref, it will be untouched</span></span><br><span class="line"><span class="comment">// otherwise it&#x27;s wrapped into a ref</span></span><br><span class="line"><span class="comment">// 如果useMyRef()返回了一个ref，那么不变，否则会被包装成一个ref对象</span></span><br><span class="line"><span class="keyword">const</span> myRef = <span class="title function_">ref</span>(<span class="title function_">useMyRef</span>())</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(myRef.<span class="property">value</span>)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note: if using TypeScript, this behavior creates a typing mismatch which we will discuss in TypeScript Integration below.</p>
+</blockquote>
+<p>注意：如果使用Typescript，这种行为导致类型不匹配，我们将会在下文的TypeScript Integration进行讨论</p>
+<blockquote>
+<p><strong>Destructuring</strong></p>
+</blockquote>
+<blockquote>
+<p>It is common for a composition function to return an object of refs. To declare multiple ref bindings with destructuring, we can use <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment">Destructuring Assignment</a>:</p>
+</blockquote>
+<p><strong>解构</strong></p>
+<p>对于一个composition函数来说，返回一个ref对象是很常见的，为了使用解构来声明多重ref绑定，我们可以使用解构赋值</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ref</span>: (&#123; x, y &#125; = <span class="title function_">useMouse</span>())</span><br></pre></td></tr></table></figure>
+
+<p>经过编译之后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; <span class="attr">x</span>: __x, <span class="attr">y</span>: __x &#125; = <span class="title function_">useMouse</span>()</span><br><span class="line"><span class="keyword">const</span> x = <span class="title function_">ref</span>(__x)</span><br><span class="line"><span class="keyword">const</span> y = <span class="title function_">toRef</span>(__y)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Note: object destructuring must be wrapped in parens - this is JavaScript’s own syntax requirement to avoid ambiguity with a block statement.</p>
+</blockquote>
+<p>注意，对象解构必须用括号包起来，这时Js自身语法的要求，为了避免在一个块声明中产生模棱两可的语义。</p>
+<blockquote>
+<p><strong>TypeScript Integration</strong></p>
+</blockquote>
+<blockquote>
+<p>To type setup arguments like props, slots and emit, simply declare them:</p>
+</blockquote>
+<p><strong>TypeScript集成</strong></p>
+<p>为了给setup的参数，比如props，slots和emit赋予类型，可以简单地声明</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>=<span class="string">&quot;props, &#123; emit, slots &#125;&quot;</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">VNode</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// declare props using TypeScript syntax</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// this will be auto compiled into runtime equivalent!</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 使用TypeScript声明props，</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 在运行环境会被自动编译</span></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">const</span> <span class="attr">props</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">msg</span>: string</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// declare allowed emit signatures via overload</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 声明允许emit签名进行重载</span></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">function</span> <span class="title function_">emit</span>(<span class="params">e: <span class="string">&#x27;add&#x27;</span>, msg: string</span>): <span class="keyword">void</span></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">function</span> <span class="title function_">emit</span>(<span class="params">e: <span class="string">&#x27;remove&#x27;</span>, id: number</span>): <span class="keyword">void</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// you can even declare slot types</span></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 甚至可以声明slot的类型</span></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">const</span> <span class="attr">slots</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">default</span>: <span class="function">() =&gt;</span> <span class="title class_">VNode</span>[]</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">emit</span>(<span class="string">&#x27;add&#x27;</span>, props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Runtime props and emits declaration is automatically generated from TS typing to remove the need of double declaration and still ensure correct runtime behavior. Note that the props type declaration value cannot be an imported type, because the SFC compiler does not process external files to extract the prop names.</p>
+</blockquote>
+<p>运行时props和emits的声明从TS类型中自动生成，删除重复的声明以确保正确的运行时的行为。注意，props类型声明不能是一个导入的类型，因为单文件组件编译器无法处理外部的文件来提取prop的字段</p>
+<p>经过编译后如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">VNode</span>, defineComponent &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">function</span> <span class="title function_">__emit__</span>(<span class="params">e: <span class="string">&#x27;add&#x27;</span>, msg: string</span>): <span class="keyword">void</span></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">function</span> <span class="title function_">__emit__</span>(<span class="params">e: <span class="string">&#x27;remove&#x27;</span>, id: number</span>): <span class="keyword">void</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">declare <span class="keyword">const</span> <span class="attr">slots</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">default</span>: <span class="function">() =&gt;</span> <span class="title class_">VNode</span>[]</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineComponent</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// runtime declaration for props</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 运行时的props声明，在编译前是没写这个的</span></span></span><br><span class="line"><span class="language-javascript">  <span class="attr">props</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">msg</span>: &#123; <span class="attr">type</span>: <span class="title class_">String</span>, <span class="attr">required</span>: <span class="literal">true</span> &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125; <span class="keyword">as</span> unknown <span class="keyword">as</span> <span class="literal">undefined</span>,</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// runtime declaration for emits</span></span></span><br><span class="line"><span class="language-javascript">  <span class="comment">// 运行时的emit声明</span></span></span><br><span class="line"><span class="language-javascript">  <span class="attr">emits</span>: [<span class="string">&quot;add&quot;</span>] <span class="keyword">as</span> unknown <span class="keyword">as</span> <span class="literal">undefined</span>,</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="title function_">setup</span>(<span class="params">props: &#123; msg: string &#125;, &#123; emit &#125;: &#123;</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">    emit: <span class="keyword">typeof</span> __emit__,</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">    slots: slots,</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">    attrs: Record&lt;string, any&gt;</span></span></span><br><span class="line"><span class="params"><span class="language-javascript">  &#125;</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title function_">emit</span>(<span class="string">&#x27;add&#x27;</span>, props.<span class="property">msg</span>)</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">return</span> &#123;&#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript">&#125;)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Details on runtime props generation:</p>
+<ul>
+<li>In dev mode, the compiler will try to infer corresponding runtime validation from the types. For example here <code>msg: String</code> is inferred from the <code>msg: string</code> type.</li>
+<li>In prod mode, the compiler will generate the array format declaration to reduce bundle size (the props here will be compiled into <code>[&#39;msg&#39;]</code>)</li>
+<li>The generated props declaration is force casted into <code>undefined</code> to ensure the user provided type is used in the emitted code.</li>
+<li>The emitted code is still TypeScript with valid typing, which can be further processed by other tools.</li>
+</ul>
+</blockquote>
+<p>在生成的运行时props的细节</p>
+<ul>
+<li>开发模式下，编译器尝试从类型中推断对应的运行时校验。比如例子的<code>msg: String</code>，从<code>msg: string</code>类型推导而来。</li>
+<li>生产模式下，编译器会生成数组格式的props声明，目的为减少打包生成的体积（在这里props会被编译成<code>[&#39;msg&#39;]</code>）</li>
+<li>生成的props声明被强制转成<code>undefined</code>，以确保生成的代码使用了用户提供的类型。</li>
+<li>生成的代码仍然是合法类型的Typescript，可以被其他工具进一步的处理。</li>
+</ul>
+<blockquote>
+<p><strong>Ref Declaration and Raw Ref Access</strong></p>
+</blockquote>
+<blockquote>
+<p>Unlike normal variable declarations, the <code>ref:</code> syntax has some special behavior in terms of typing:</p>
+<ul>
+<li>The declared variable always has the raw value type, regardless of whether the assigned value is a <code>Ref</code> type or not (always unwraps)</li>
+<li>The accompanying <code>$</code>-prefixed raw access variable always has a <code>Ref</code> type. If the right hand side value type already extends <code>Ref</code>, it will be used as-is; otherwise it will be wrapped as <code>Ref&lt;T&gt;</code>.<br>The following table demonstrates the resulting types of different usage:</li>
+</ul>
+</blockquote>
+<p><strong>Ref的声明以及原生Ref对象的获取</strong></p>
+<p>和普通的变量声明不同，就类型而言<code>ref:</code>语法有一些特别的行为：</p>
+<ul>
+<li>声明变量总是含有原始值的类型，尽管被分配的值是一个Ref类型或则不是一个Ref类型（总是会被解除包装）</li>
+<li>伴随的<code>$</code>前缀的原生访问的变量总为一个<code>Ref</code>类型。如果右值类型早已为一个继承自Ref的类型，将会直接使用它，否则将会被<code>Ref&lt;T&gt;</code>函数所包装</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">source</th>
+<th align="left">resulting type for <code>count</code></th>
+<th align="left">esulting type for <code>$count</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>ref: count = 1</code></td>
+<td align="left"><code>number</code></td>
+<td align="left"><code>Ref&lt;number&gt;</code></td>
+</tr>
+<tr>
+<td align="left"><code>ref: count = ref(1)</code></td>
+<td align="left"><code>number</code></td>
+<td align="left"><code>Ref&lt;number&gt;</code></td>
+</tr>
+<tr>
+<td align="left"><code>ref: count = computed(() =&gt; 1)</code></td>
+<td align="left"><code>number</code></td>
+<td align="left"><code>ComputedRef&lt;number&gt;</code></td>
+</tr>
+<tr>
+<td align="left"><code>ref: count = computed(&#123; get:()=&gt;1, set:_=&gt;_ &#125;)</code></td>
+<td align="left"><code>number</code></td>
+<td align="left"><code>WritableComputedRef&lt;number&gt;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>How to support this in Vetur is discussed in the appendix.</p>
+</blockquote>
+<p>如何使得Vetur支持这个特性在附录中讨论</p>
+<blockquote>
+<p><strong>Usage alongside normal <code>&lt;script&gt;</code></strong></p>
+</blockquote>
+<blockquote>
+<p>There are some cases where the code must be executed in the module scope, for example:</p>
+<ul>
+<li>Declaring named exports</li>
+<li>Global side effects that should only execute once.<br>In such cases, a normal <code>&lt;script&gt;</code> block can be used alongside <code>&lt;script setup&gt;</code>:</li>
+</ul>
+</blockquote>
+<p><strong>和正常的<code>&lt;script&gt;</code>标签使用</strong></p>
+<p>在一些情况代码必须在模块作用域下执行，比如</p>
+<ul>
+<li>声明具名的导出</li>
+<li>只会执行一次的全局副作用<br>在这些情况下，一个正常的<code>&lt;script&gt;</code>块可以与<code>&lt;script setup&gt;</code>一起使用</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">performGlobalSideEffect</span>()</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// this can be imported as `import &#123; named &#125; from &#x27;./*.vue&#x27;`</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">const</span> named = <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> count = <span class="number">0</span></span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>经过编译后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; ref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">performGlobalSideEffect</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> named = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      count</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Usage restrictions</strong></p>
+</blockquote>
+<blockquote>
+<p>Due to the difference in module execution semantics, code inside <code>&lt;script setup&gt;</code> relies on the context of an SFC. When moved into external <code>.js</code> or <code>.ts</code> files, it may lead to confusions for both developers and tools. Therefore, <code>&lt;script setup&gt;</code> cannot be used with the <code>src</code> attribute.</p>
+</blockquote>
+<p><strong>限制条件</strong></p>
+<p>由于模块执行语义的不同，在<code>&lt;script setup&gt;</code>中的代码依赖单文件组件的上下文。当移动到外部的<code>.js</code>或者<code>.ts</code>文件时，它会使开发者和工具发生混乱，因此，<code>&lt;script setup&gt;</code>不能和src属性一起使用</p>
+<h3 id="Drawbacks（缺点）"><a href="#Drawbacks（缺点）" class="headerlink" title="Drawbacks（缺点）"></a>Drawbacks（缺点）</h3><p><strong>Non-standard semantics</strong></p>
+<p><strong>非标准的语义</strong></p>
+<blockquote>
+<p>Some users may have strong aversion against non-standard semantics in their code. Many of the Vue team members held such concerns as well. However, consider that:</p>
+</blockquote>
+<p>一些用户可能强烈地厌恶代码中的非标准语义。许多Vue团队成员也有这样的顾虑，然而，考虑：</p>
+<blockquote>
+<ul>
+<li>Single file components look like HTML but isn’t actually HTML. It already has its own required structure and implied behavior on how it works as a Vue component. When you see a <code>*.vue</code> file, you know it works differently from plain HTML.</li>
+<li>Vue templates are syntactically valid HTML, but the directives are essentially syntax extensions to express framework-specific intent.</li>
+<li>JSX has a spec, but isn’t a standard. It’s a non-standard syntax extension to JavaScript.</li>
+<li>TypeScript isn’t a standard. It’s a proprietary superset of JavaScript.</li>
+<li>Decorators has struggled to advance into the spec, yet is being widely used and Angular is completely built on top of it.</li>
+</ul>
+</blockquote>
+<ul>
+<li>单文件组件看起来像HTML但是实际上不是HTML，它早已拥有自己需要的结构和隐含的行为，隐含行为指它如何以一个Vue组件进行工作。当你看见一个<code>*.vue</code>文件，你明白它的运作与普通的HTML不同。</li>
+<li>Vue的模板语法上是合法的HTML，但是指令本质上是为了表达框架特定的意图的语法的扩展</li>
+<li>JSX是一种规范，但不是一种标准。是一种扩展了JavaScript的非标准语法</li>
+<li>TypeScript不是一种标准。是JavaScript的一个专门的超集。</li>
+<li>装饰器特性还在努力地进入规范，但是它已经被广泛使用并且Angular在此之上进行完整构建</li>
+</ul>
+<blockquote>
+<p>Granted, adding non-standard semantics to JavaScript still creates added learning cost and mental overhead, so we should carefully evaluate the trade-offs of each addition.</p>
+</blockquote>
+<p>即使这样，给JavaScript添加一个非标准的语义仍然增加了学习成本和精神负担，所以我们对每个添加的特性都小心地评估权衡。</p>
+<blockquote>
+<p>With that in mind, we believe <code>ref:</code>‘s ergonomics value easily outweighs the cost. This is also why we are limiting this proposal to <code>ref:</code> only, since ref access is the only problem that requires alternative semantics to solve.</p>
+</blockquote>
+<p>考虑到这一点，我们相信<code>ref:</code>的工程价值简单地胜过成本。这也是为什么我们仅限制提案为<code>ref:</code>，因为ref的访问是需要选择使用语义来解决的唯一问题。</p>
+<blockquote>
+<p>It can also be argued that the <code>ref:</code> syntax isn’t far too removed from standard JavaScript. The following code is actually valid JavaScript in non-strict mode - if you copy it into an <code>.html</code> file, it will run as expected:</p>
+</blockquote>
+<p>也可以说<code>ref:</code>语法和标准的JavaScript相距不远。下面的代码实际上在非严格模式下是合法的JavaScript代码，如果你把它复制到一个html文件中，它会按照预期执行</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="attr">ref</span>: count = <span class="number">0</span></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">console</span>.<span class="title function_">log</span>(count)</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Yet Another Way of Doing Things</strong></p>
+</blockquote>
+<p><strong>另一种编码方式</strong></p>
+<blockquote>
+<p>Some may think that Vue already has Options API, Composition API, and Class API (outside of core, as a library) - and this RFC is adding yet another way of authoring a component. This is a valid concern, but it does not warrant an instant dismissal. When we talk about the drawbacks of “different ways of doing the same thing”, the more fundamental issue is the learning cost incurred when a user encounters code written in another format he&#x2F;she is not familiar with. It is therefore important to evaluate the addition based on the trade-off between:</p>
+</blockquote>
+<p>一些用于可能认为Vue已经有了基于配置的API, 基于组合的API, 和基于类的API（在核心代码外部，作为一个库），现在这个RFC又添加了另一种书写组件的方式。这是合理的忧虑，但是并不能保证立即得到解决。当我们讨论做相同事情的不同方式的缺点时，更基本的问题是带来了学习成本，用户会遇到以另一种他不熟悉的格式书写的代码，因此，通过以下方面的权衡来评估添加进来的特性非常的重要</p>
+<blockquote>
+<ul>
+<li>How much benefit does the new way provide?</li>
+<li>How much learning cost does the new way introduce?</li>
+</ul>
+</blockquote>
+<ul>
+<li>新方式可以提供多大的益处</li>
+<li>新方式的学习成本有多高</li>
+</ul>
+<blockquote>
+<p>This is what we did with the Composition API because we believed the scaling benefits provided by Composition API outweighs its learning cost.</p>
+</blockquote>
+<p>我们使用Composition API因为我们认为Composition API带来的优势超过了它的学习成本。</p>
+<blockquote>
+<p>Unlike the relatively significant paradigm difference between Options API and Composition API, this RFC is merely syntax sugar with the primary goal of reducing verbosity. It does not fundamentally alter the mental model. Without the ref sugar, Composition API code inside <code>&lt;script setup&gt;</code> will be 100% the same with normal Composition API usage (except for the lack of the return object, which is tedious and unnecessary in the first place). The <code>ref:</code> sugar is an extension of the ref concept: for a user with prior knowledge of Composition API, it shouldn’t be difficult to quickly understand how it works.</p>
+</blockquote>
+<p>不像Options API和Composition API那样相对重大的样式差距，这个RFC仅仅是一个主要目的为减少冗长的一个语法糖，并不会从根本上改变心智模型。没有ref语法糖，在<code>&lt;script setup&gt;</code>书写的Composition API和普通的Composition API用法100%相同（除了缺少一个返回的对象，首先它就是啰嗦和没有必要的）。<code>ref:</code>语法糖是对ref概念的扩展，对于有先了解过Composition API的用户来说，快速地理解它地工作方式应该不会困难。</p>
+<blockquote>
+<p>That is to say - the syntax proposed in this RFC will not make the code more difficult to understand for someone who already knows Composition API. The initial time needed for a user to learn the syntax should be trivial compared to the improved DX in the long run.</p>
+</blockquote>
+<p>也就是说，本RFC地语法提案不会使得那些已经知道Composition API的用户理解代码变得更困难。刚开始对于用户去学习语法与长远上改善相比是不重要的。</p>
+<blockquote>
+<p><strong>Requires dedicated tooling support</strong></p>
+</blockquote>
+<p><strong>需要专门的工具支持</strong></p>
+<blockquote>
+<p>Appropriating the labeled statement syntax creates a semantic mismatch that leads to integration issues with tooling (linter, TypeScript, IDE support).</p>
+</blockquote>
+<p>挪用了标签语句语法造成语义不匹配，导致工具整合问题（工具包括linter，TypeScript，IDE支持插件）</p>
+<blockquote>
+<p>This was also one of the primary reservations we had about Svelte 3’s design when it was initially proposed. However since then, the Svelte team has managed to provide good tooling&#x2F;IDE support via its language tools, even for TypeScript.</p>
+</blockquote>
+<p>在提案最初提出时，借用了Svelte 3的设计也是一个主要的预想，但是自从那时起，Svelte的团队设法通过它的语言工具提供很棒的工具或者IDE的支持甚至是TypeScript支持。</p>
+<blockquote>
+<p>Vue’s single file component also already requires dedicated tooling like <code>eslint-plugin-vue</code> and Vetur. The team has already discussed the technical feasibility of providing such support and there should be no hard technical blocks to make it work. We are confident that we can provide:</p>
+</blockquote>
+<p>Vue的单文件组件也已经需要专用的工具比如<code>eslint-plugin-vue</code>和Vetur。Vue团队已经讨论提供支持的技术可行性，使它能够工作应该没有技术难点。我们有信心能够提供如下的特性：</p>
+<blockquote>
+<ul>
+<li>Special syntax highlight of <code>ref:</code> declared variables in Vetur (so that it’s more obvious it’s a reactive variable)</li>
+<li>Proper type check via Vetur and dedicated command line checker</li>
+<li>Proper linting via <code>eslint-plugin-vue</code></li>
+</ul>
+</blockquote>
+<ul>
+<li>在Vetur中，对<code>ref:</code>定义的变量有特殊的语法高亮。（以便更明显的表示它是一个响应式的变量）</li>
+<li>通过Vetur可以有正确的类型检查以及专门的命令行检查工具</li>
+<li>通过<code>eslint-plugin-vue</code>可以有正确的代码规范</li>
+</ul>
+<blockquote>
+<p><strong>Extracting in-component logic</strong></p>
+</blockquote>
+<p><strong>提取组件内的逻辑</strong></p>
+<blockquote>
+<p>The <code>ref:</code> syntax sugar is only available inside single file components. Different syntax in and out of components makes it difficult to extract and reuse cross-component logic from existing components.</p>
+</blockquote>
+<p><code>ref:</code>语法糖只能在单文件组件中使用。组件内外的不同语法使得从存在的组件中提取和重用跨组件的逻辑变得困难。</p>
+<blockquote>
+<p>This is still an issue for Svelte, since Svelte compilation strategy only works inside Svelte components. The generated code assumes a component context and isn’t human-maintainable.</p>
+</blockquote>
+<p>对于Svelte这仍然是一个问题，因为Svelte编译策略只可以在Svelte组件中工作。生成的代码是组件的上下文了，也就是无法进行人为的维护。</p>
+<blockquote>
+<p>In Vue’s case, what we are proposing here is a very thin syntax sugar on top of idiomatic Composition API code. The most important thing to note here is that the code written with the sugar can be easily de-sugared into what a developer would have written without the sugar, and extracted into external JavaScript files for composition.</p>
+</blockquote>
+<p>在Vue的情况下，这个提案是常用Composition API代码中的一个非常薄的语法糖。最重要的是书写带有语法糖的代码可以被简单地去糖，就像开发者编写不带语法糖的代码，然后提取到外部的文件中进行整合。</p>
+<blockquote>
+<p>Given a piece of code written using the <code>ref:</code> sugar, the workflow of extracting it into an external composition function could be:</p>
+</blockquote>
+<p>一段使用了<code>ref:</code>语法糖的代码，提取到外部组合函数的工作流如下：</p>
+<blockquote>
+<ul>
+<li>Select code range for the code to be extracted</li>
+<li>In VSCode command input: <code>&gt;vetur de-sugar ref usage</code></li>
+<li>Code gets de-sugared</li>
+<li>Cut-paste code into external file and wrap into an exported function</li>
+<li>Import the function in original file and replace original code.</li>
+</ul>
+</blockquote>
+<ul>
+<li>选择提取代码的范围</li>
+<li>在VSCode命令行输入<code>&gt;vetur de-sugar ref usage</code></li>
+<li>代码被去糖</li>
+<li>粘贴代码到外部文件中，包裹在一个导出函数中</li>
+<li>在源文件中导入函数，然后取代源代码</li>
+</ul>
+<h2 id="Alternatives（可选方案）"><a href="#Alternatives（可选方案）" class="headerlink" title="Alternatives（可选方案）"></a>Alternatives（可选方案）</h2><blockquote>
+<p><strong>Comment-based syntax</strong></p>
+</blockquote>
+<p>基于注释的语法</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Foo</span> <span class="keyword">from</span> <span class="string">&#x27;./Foo.vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; computed &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// 添加&#x27;@ref&#x27;注释来表示</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="comment">// @ref</span></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">let</span> count = <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">function</span> <span class="title function_">inc</span>(<span class="params"></span>) &#123;</span></span><br><span class="line"><span class="language-javascript">  count++</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Foo</span> <span class="attr">:count</span>=<span class="string">&quot;count&quot;</span> @<span class="attr">click</span>=<span class="string">&quot;inc&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Other related proposals</strong></p>
+</blockquote>
+<p>其他相关的提案</p>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/182">https://github.com/vuejs/rfcs/pull/182</a> (current <code>&lt;script setup&gt;</code> implementation（当前<code>&lt;script setup&gt;</code>的实现）)</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/213">https://github.com/vuejs/rfcs/pull/213</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/214">https://github.com/vuejs/rfcs/pull/214</a></li>
+</ul>
+</blockquote>
+<h2 id="Adoption-strategy（采纳的策略）"><a href="#Adoption-strategy（采纳的策略）" class="headerlink" title="Adoption strategy（采纳的策略）"></a>Adoption strategy（采纳的策略）</h2><blockquote>
+<p>This feature is opt-in. Existing SFC usage is unaffected.</p>
+</blockquote>
+<p>本特性是可选的，已存在的单文件组件用法不受影响。</p>
+<h2 id="Unresolved-questions（未解决的问题）"><a href="#Unresolved-questions（未解决的问题）" class="headerlink" title="Unresolved questions（未解决的问题）"></a>Unresolved questions（未解决的问题）</h2><blockquote>
+<p>Ref Usage in Nested Function Scopes</p>
+</blockquote>
+<p>嵌套函数作用域下Ref的用法。</p>
+<blockquote>
+<p>Technically, <code>ref:</code> doesn’t have to be limited to root level scope and can be used anywhere <code>let</code> declarations can be used, including nested function scope:</p>
+</blockquote>
+<p>在技术上，<code>ref:</code>不能被限制在根作用下，应该可以在<code>let</code>定义之后的任何地方使用，包括嵌套的函数作用域：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">useMouse</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="attr">ref</span>: x = <span class="number">0</span></span><br><span class="line">  <span class="attr">ref</span>: y = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">update</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    x = e.<span class="property">pageX</span></span><br><span class="line">    y = e.<span class="property">pageY</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mousemove&#x27;</span>, update))</span><br><span class="line">  <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> <span class="variable language_">window</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;mousemove&#x27;</span>, update))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">x</span>: $x,</span><br><span class="line">    <span class="attr">y</span>: $y</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>经过编译后如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">useMouse</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> x = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line">  <span class="keyword">const</span> y = <span class="title function_">ref</span>(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">update</span>(<span class="params">e</span>) &#123;</span><br><span class="line">    x.<span class="property">value</span> = e.<span class="property">pageX</span></span><br><span class="line">    y.<span class="property">value</span> = e.<span class="property">pageY</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> <span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;mousemove&#x27;</span>, update))</span><br><span class="line">  <span class="title function_">onUnmounted</span>(<span class="function">() =&gt;</span> <span class="variable language_">window</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;mousemove&#x27;</span>, update))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    x,</span><br><span class="line">    y</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This will make the compilation (and accompanying linter &#x2F; language service support) more complicated - I’m not sure if it’s better to limit <code>ref:</code> usage to top scope bindings only.</p>
+</blockquote>
+<p>这会使得编译过程（伴随检测&#x2F;语言服务的支持）变得复杂。我不确定限制<code>ref:</code>只在顶层作用域绑定的用法是否更好。</p>
+<h2 id="Appendix（附录）"><a href="#Appendix（附录）" class="headerlink" title="Appendix（附录）"></a>Appendix（附录）</h2><blockquote>
+<p><strong>Transform API</strong></p>
+</blockquote>
+<blockquote>
+<p>The <code>@vue/compiler-sfc</code> package exposes the <code>compileScript</code> method for processing <code>&lt;script setup&gt;</code>:</p>
+</blockquote>
+<p><strong>转换的API</strong></p>
+<p><code>@vue/compiler-sfc</code>包暴露了编译脚本的方法来处理<code>&lt;script setup&gt;</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; parse, compileScript &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/compiler-sfc&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> descriptor = <span class="title function_">parse</span>(<span class="string">`...`</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (descriptor.<span class="property">script</span> || descriptor.<span class="property">scriptSetup</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> result = <span class="title function_">compileScript</span>(descriptor) <span class="comment">// returns SFCScriptBlock</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="property">code</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="property">bindings</span>) <span class="comment">// see next section</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>The compilation requires the entire descriptor to be provided, and the resulting code will include sources from both <code>&lt;script setup&gt;</code> and normal <code>&lt;script&gt;</code> (if present). It is the higher level tools’ (e.g. vite or vue-loader) responsibility to properly assemble the compiled output.</p>
+</blockquote>
+<p>编译过程需要提供整个描述符，结果代码将会包含从<code>&lt;script setup&gt;</code>和正常<code>&lt;script&gt;</code>（如果存在的话）的源代码。正确地组合编译输出地代码是一个高级工具（比如<code>vite</code>或者<code>vue-loader</code>）的责任</p>
+<blockquote>
+<p><strong>Template binding optimization</strong></p>
+</blockquote>
+<blockquote>
+<p>The <code>SFCScriptBlock</code> returned by <code>compiledScript</code> also exposes a <code>bindings</code> object, which is the exported binding metadata gathered during the compilation. For example, given the following <code>&lt;script setup&gt;</code>:</p>
+</blockquote>
+<p><strong>模板绑定优化</strong></p>
+<p>通过<code>compiledScript</code>返回的单文件组件的脚本块暴露了一个<code>bindings</code>对象，这个对象导出了绑定的在编译时收集的元数据。比如下面这段<code>&lt;script setup&gt;</code>代码</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span>=<span class="string">&quot;props&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">const</span> foo = <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="attr">props</span>: [<span class="string">&#x27;bar&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>The <code>bindings</code> object will be:</p>
+</blockquote>
+<p><code>bindings</code>对象将会是：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">foo</span>: <span class="string">&#x27;setup&#x27;</span>,</span><br><span class="line">  <span class="attr">bar</span>: <span class="string">&#x27;props&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This object can then be passed to the template compiler:</p>
+</blockquote>
+<p>这个对象之后可以传递给模板编译器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; compile &#125; <span class="keyword">from</span> <span class="string">&#x27;@vue/compiler-dom&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="title function_">compile</span>(template, &#123;</span><br><span class="line">  <span class="attr">bindingMetadata</span>: bindings</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>With the binding metadata available, the template compiler can generate code that directly access template variables from the corresponding source, without having to go through the render context proxy:</p>
+</blockquote>
+<p>通过获得的元数据，模板编译器可以生成直接从对应源文件获取模板变量的代码，无需再去查找渲染上下文：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;&#123; foo + bar &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// code generated without bindingMetadata</span></span><br><span class="line"><span class="comment">// here _ctx is a Proxy object that dynamically dispatches property access</span></span><br><span class="line"><span class="comment">// 没有绑定元数据的代码</span></span><br><span class="line"><span class="comment">// 这里 _ctx 是一个代理对象，可以动态地取出属性</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span>(<span class="params">_ctx</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createVNode</span>(<span class="string">&#x27;div&#x27;</span>, <span class="literal">null</span>, _ctx.<span class="property">foo</span> + _ctx.<span class="property">bar</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// code generated with bindingMetadata</span></span><br><span class="line"><span class="comment">// bypasses the render context proxy</span></span><br><span class="line"><span class="comment">// 绑定了元数据的代码</span></span><br><span class="line"><span class="comment">// 绕过了渲染上下文代理对象</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">render</span>(<span class="params">_ctx, _cache, $setup, $props, $data</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createVNode</span>(<span class="string">&#x27;div&#x27;</span>, <span class="literal">null</span>, $setup.<span class="property">foo</span> + $props.<span class="property">bar</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Ref TypeScript Support Implementation Details</strong></p>
+</blockquote>
+<blockquote>
+<p>There are two issues that prevent <code>ref:</code> from working out of the box with TypeScript. Given the following code:</p>
+</blockquote>
+<p><strong>Ref的TypeScript支持的实现细节</strong></p>
+<p>这有两个问题在防止<code>ref:</code>与TypeScript直接使用。比如下面代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ref</span>: count = x</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<ul>
+<li>TS won’t know <code>count</code> should be treated as a local variable</li>
+<li>If <code>x</code> has type <code>Ref&lt;T&gt;</code>, there will be a type mismatch since we expect to use <code>count</code> as <code>T</code>.</li>
+</ul>
+</blockquote>
+<ul>
+<li>TS不知道<code>count</code>应该被当成一个局部变量来处理</li>
+<li>如果x的类型为<code>Ref&lt;T&gt;</code>，当我们希望使用count作为泛型T时会产生类型不匹配</li>
+</ul>
+<blockquote>
+<p>The general idea is to pre-transform the code into alternative TypeScript for type checking only (different from runtime-oriented output), get the diagnostics, and map them back. This will be performed by Vetur for IDE intellisense, and via a dedicated command line tool for type checking <code>*.vue</code> files (e.g. VTI or <code>@vuedx/typecheck</code>).</p>
+</blockquote>
+<p>一般的想法是预先把代码转换为只为了类型检查的TypeScript代码（与面向运行时的输出不同）。得到检查结果，然后映射回去。这个过程会被Vetur执行由IDE进行提示。通过一个专门的命令行工具对<code>*.vue</code>文件进行类型检查（比如VTI或者<code>@vuedx/typecheck</code>）。</p>
+<p>例子如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源代码</span></span><br><span class="line"><span class="attr">ref</span>: count = x</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换之后</span></span><br><span class="line"><span class="keyword">import</span> &#123; ref, unref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> count = <span class="title function_">unref</span>(x)</span><br><span class="line"><span class="keyword">let</span> $count = <span class="title function_">ref</span>(x)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>ref</code> and <code>unref</code> here are used solely for type conversion purposes since their signatures are:</p>
+</blockquote>
+<p><code>ref</code>和<code>unref</code>方法仅用作对类型转换因为它们的函数签名为：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> ref&lt;T&gt;(<span class="attr">value</span>: T): T <span class="keyword">extends</span> <span class="title class_">Ref</span> ? T : <span class="title class_">Ref</span>&lt;T&gt;</span><br><span class="line"><span class="keyword">function</span> unref&lt;T&gt;(<span class="attr">value</span>: T): T <span class="keyword">extends</span> <span class="title class_">Ref</span>&lt;infer V&gt; ? V : T</span><br></pre></td></tr></table></figure>
+
+<p>对于解构</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源代码</span></span><br><span class="line"><span class="attr">ref</span>: (&#123; foo, bar &#125; = <span class="title function_">useX</span>())</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换之后</span></span><br><span class="line"><span class="keyword">import</span> &#123; ref, unref &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> &#123; <span class="attr">foo</span>: __foo, <span class="attr">bar</span>: __bar &#125; = <span class="title function_">useX</span>()</span><br><span class="line"><span class="keyword">let</span> foo = <span class="title function_">unref</span>(__foo)</span><br><span class="line"><span class="keyword">let</span> $foo = <span class="title function_">ref</span>(__foo)</span><br><span class="line"><span class="keyword">let</span> bar = <span class="title function_">unref</span>(__bar)</span><br><span class="line"><span class="keyword">let</span> $bar = <span class="title function_">ref</span>(__bar)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>Svelte Syntax Details</strong></p>
+</blockquote>
+<p><strong>Svelte语法的细节</strong></p>
+<blockquote>
+<ul>
+<li><code>export</code> is used to created component props <a target="_blank" rel="noopener" href="https://svelte.dev/docs#1_export_creates_a_component_prop">[details]</a></li>
+<li><code>let</code> bindings are considered reactive (invalidation calls are automatically injected after assignments to <code>let</code> bindings during compilation). <a target="_blank" rel="noopener" href="https://svelte.dev/docs#2_Assignments_are_reactive">[details]</a></li>
+<li>Labeled statements starting with <code>$</code> are used to denote computed values &#x2F; reactive statements. <a target="_blank" rel="noopener" href="https://svelte.dev/docs#3_$_marks_a_statement_as_reactive">[details]</a></li>
+<li>Imported svelte stores (the loose equivalent of a ref in Vue) can be used like a normal variable by using its <code>$</code>-prefixed counterpart. <a target="_blank" rel="noopener" href="https://svelte.dev/docs#4_Prefix_stores_with_$_to_access_their_values">[details]</a></li>
+</ul>
+</blockquote>
+<ul>
+<li><code>export</code>用于创建一个组件的props</li>
+<li><code>let</code>绑定的变量被认为是响应式的（编译过程中在分配给<code>let</code>绑定之后无效的操作会被自动地注入）</li>
+<li>以<code>$</code>开始的标签语句被用于表示计算属性值或者响应式语句。</li>
+<li>导入svelte的stores包（和Vue内的ref相像），通过使用对应<code>$</code>前缀变量，可以像一个正常变量一样使用，</li>
+</ul>
+<h1 id="评论"><a href="#评论" class="headerlink" title="评论"></a>评论</h1><h2 id="1"><a href="#1" class="headerlink" title="1"></a>1</h2><blockquote>
+<p>A drawback of this RFC, which was also a drawback of <code>&lt;script setup&gt;</code> on its own but has become worse now, is the vast amount of options to write the exact same thing. Experienced Vue users (such as the people commenting on this RFC) know all the options, understand how they relate to each other etc., this will however not be the case for a big part of Vue’s userbase.</p>
+</blockquote>
+<p>这个RFC的一个缺点，它自身也是<code>&lt;script setup&gt;</code>的缺点，但是现在变得更糟糕了，因为有大量的选择来书写完全一样的东西。有经验的Vue用户（比如在这个RFC下面评论的）知道所有的方式，理解这些方式之间的联系。但对于大部分用户而言，情况并非如此。</p>
+<blockquote>
+<p>In Vue 2, you only the had the Options API, and eventually we got the class component plugin. With this RFC, you’d have the following options:</p>
+</blockquote>
+<p>在Vue2版本中，你只有配置式的API，最终也有了基于类的组件的插件。在本RFC中，你可以有如下的选择：</p>
+<blockquote>
+<ul>
+<li>Options API</li>
+<li>Class API (still an official plugin AFAIK)</li>
+<li>Composition API (Vue 2 &amp; Vue 3 versions which are also different!)</li>
+<li><code>&lt;script setup&gt;</code> w&#x2F;o ref sugaring</li>
+<li><code>&lt;script setup&gt;</code> w&#x2F; ref sugaring</li>
+</ul>
+</blockquote>
+<ul>
+<li>配置式API</li>
+<li>类API（据我所知仍然是一个官方的插件）</li>
+<li>组合API（Vue2和Vue3版本是不一样的！）</li>
+<li>使用<code>&lt;script setup&gt;</code>且使用ref语法糖</li>
+<li>使用<code>&lt;script setup&gt;</code>不使用ref语法糖</li>
+</ul>
+<blockquote>
+<p>This fragments the userbase a lot, making it harder to get started, to search for help on SO and to pick which one you should use. It’d be much easier if you’re just starting out with Vue that you know: “Options API for the magic reactivity, composition API for more standard JS, better compositions and better TS support”.</p>
+</blockquote>
+<p>用户接触了太多的方式，很难去上手，得去在网上搜索应该选择哪一个。如果刚开始使用Vue，且知道“魔法的响应式的配置API，更加标准的组合API，更好的代码编写和更好的TS支持”，这会变得容易上手</p>
+<blockquote>
+<p>However: it is clear that people like this “magic” VCA syntax (see the linked RFCS). Isn’t it possible to extend the custom block API a bit more so that if people really want this syntax, it can also be achieved outside of Vue core, in a (third) party library? If this lands in Vue core it would need to be supported throughout future versions of Vue, so I’m not sure if you’d even want that, considering the very valid points already mentioned and the fact that you’d need to support many APIs.</p>
+</blockquote>
+<p>然而，明显用户喜欢这种魔法的语法，如果用户真想要这个语法，可以扩展成自定义的API包吗？这个API可以在Vue的核心包之外获得，比如在第三方的库中？如果放到Vue的核心中，那么必须在Vue之后的版本进行支持，我不确定你们是否真的想要这样，考虑到已经提及到很多合法的书写方式，事实上你们需要去支持很多的API</p>
+<blockquote>
+<p>Going into the API itself a bit: I think the <code>$</code> is very confusing if you don’t perfectly understand why it’s there! I.e. you need to KNOW a function requires an actual ref and you need to understand that you are dealing with a sugared ref and in that case you need to prefix it with <code>$</code>, but not in other cases when you need to pass a value. I’m convinced this will cause a lot of problems with many users and to me it just sounds like a hack to get around <a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/214#issuecomment-699680052">#214 (comment)</a>评论。</p>
+</blockquote>
+<p>回到API本身：我认为<code>$</code>符号非常令人困惑，如果你不能完全的理解为什么它在这里的话！即你不仅需要知道他是一个ref的函数，而且需要去理解在处理带糖的ref时需要使用<code>$</code>前缀进行修饰，但在其他的情况下，比如传递一个值，则不需要添加前缀<code>$</code>，我觉得这将会给用户造成许多的问题。但对于我来说它只是一个hack（标记），比如214下面的<a target="_blank" rel="noopener" href="https://github.com/vuejs/rfcs/pull/214#issuecomment-699680052">这个</a>评论。</p>
+<blockquote>
+<p>To conclude; why don’t we just say to the users that don’t like the verbosity of the composition API: use the Options API?</p>
+</blockquote>
+<p>结论就是：为什么我们不对那些讨厌冗长的组合式API的用户说：使用配置式API吧？</p>
+<p><strong>尤大的回复</strong></p>
+<blockquote>
+<p>the vast amount of options to write the exact same thing</p>
+<ul>
+<li>Options API</li>
+<li>Class API (still an official plugin AFAIK)</li>
+<li>Composition API (Vue 2 &amp; Vue 3 versions which are also different!)</li>
+<li><code>&lt;script setup&gt;</code> w&#x2F;o ref sugaring</li>
+<li><code>&lt;script setup&gt;</code> w&#x2F; ref sugaring</li>
+</ul>
+</blockquote>
+<p>（上面这段为引用原作者的话）</p>
+<blockquote>
+<p>This is vastly exaggerating.</p>
+</blockquote>
+<p>这是及其夸大的。</p>
+<blockquote>
+<ul>
+<li>The Class API is an official plugin, but is a plugin. It’s not part of the core API and only attracts users who specifically have strong preference towards classes. In other words, it’s not “idiomatic”.</li>
+<li>Composition API v2 and v3 aims to be identical, and most if not all the code will look the same. The small technical differences do not count them as “two ways of doing the same thing.”</li>
+<li>Composition API code written in <code>&lt;script setup&gt;</code>, as proposed in this RFC, w&#x2F;o ref sugar, <strong>is 100% the same as normal Composition API usage</strong> (you just don’t need to manually return everything). In fact, if the user is using SFC, I can’t really find a reason not to use the new <code>&lt;script setup&gt;</code> over a raw <code>export default &#123; components: &#123;...&#125;, setup() &#123; ... &#125;&#125;</code>, given that the former always results in less code.</li>
+<li><code>ref:</code> sugar is a purely additive syntax sugar. It doesn’t change how <code>&lt;script setup&gt;</code> or Composition API works. If one already understands Composition API, it shouldn’t take more than 10 minutes to understand <code>ref:</code>.</li>
+</ul>
+</blockquote>
+<ul>
+<li>基于类的API是一个官方的插件，但也只是一个插件。它不是核心的API的一部分，只会吸引到那些对类方式有相当偏爱的用户。换句话说，类API不是一种常用的方式。</li>
+<li>基于组合的API在2.x版本和3.x版本目的是一致的，大多数的（但不是全部）看起来是一样的。细小的技术上的差异不会使得这两种方式计算为“做相同事情的两种方式”。</li>
+<li>书写在<code>&lt;script setup&gt;</code>组合API代码，就像这个RFC提出的一样，使用ref语法糖，和正常的组合API用法100%一样。（你只是不需要手动地返回任何东西）。事实上，如果一个用户使用单文件组件用法，我真无法找到一个不使用<code>&lt;script setup&gt;</code>而使用<code>export default &#123; components: &#123;...&#125;, setup() &#123; ... &#125;&#125;</code>的理由，前者使用了更少的代码。</li>
+<li><code>ref:</code>语法糖是一个纯的新增语法糖。它不会改变<code>&lt;script setup&gt;</code>或者基于组合的API的使用方式。如果一个人已经理解了基于组合的API，那么理解<code>ref:</code>语法糖不会超过10分钟。</li>
+</ul>
+<blockquote>
+<p>To sum up - there are two “paradigms”: (1) Options API and (2) Composition API. <code>&lt;script setup&gt;</code> and <code>ref:</code> sugar are not different APIs or paradigms. They are extensions of the Composition API - compiler-based sugar to allow you to express the same logic with less code.</p>
+</blockquote>
+<p>综上，在Vue中有两种”范式“，（1）基于配置的API和（2）基于组合的API，<code>&lt;script setup&gt;</code>和<code>ref:</code>语法糖不是不同的API或者范式。他们只是基于组合API的扩展 - 基于编译的语法糖，允许你以更少的代码来表达相同的逻辑。</p>
+<blockquote>
+<p>Isn’t it possible to extend the custom block API a bit more so that if people really want this syntax, it can also be achieved outside of Vue core, in a (third) party library?（引用评论）</p>
+</blockquote>
+<blockquote>
+<p>So - you agree that many people want a ref syntax sugar, but then suggest not supporting it in core, and instead encouraging them to each implement their own. Isn’t this going to only lead to more fragmentation? Think CSS-in-JS in the React ecosystem.</p>
+</blockquote>
+<p>你都认为很多用户会想要ref语法糖了，但是却建议不要在核心包中支持它，而是鼓励他们各自的实现。这不是会导致更多碎片化的信息吗？比如React生态中的CSS-in-JS。</p>
+<blockquote>
+<p>I think the <code>$</code> is very confusing… you need to KNOW a function requires an actual ref and you need to understand that you are dealing with a sugared ref and in that case you need to prefix it with <code>$</code>, but not in other cases when you need to pass a value.（引用评论）</p>
+</blockquote>
+<blockquote>
+<p>You literally summed it up in a single sentence. I can also make it even simpler: <code>$foo</code> to <code>foo</code> is like <code>foo</code> to <code>foo.value</code>. Is it really that confusing? With TypeScript (assuming the IDE support is done), if an external function expects <code>Ref&lt;any&gt;</code>, you’ll get an error passing a <code>ref:</code> binding without the <code>$</code>.</p>
+</blockquote>
+<p>你用了一句话来总结，那我也可以简单地说：<code>$foo</code>对于<code>foo</code>就像<code>foo</code>对于<code>foo.value</code>。这真的很令人困惑吗？使用TypeScript（假定IDE支持已经实现），如果一个外部的函数接收了<code>Ref&lt;any&gt;</code>类型的参数，传入一个不加<code>$</code>前缀的的<code>ref:</code>绑定的变量将会报错。</p>
+<blockquote>
+<p>I’m convinced this will cause a lot of problems with many users（引用评论）</p>
+</blockquote>
+<blockquote>
+<p>What exact, concrete problems can this lead to? Forgetting to add the <code>$</code> when they should? Note that even without the sugar we already have the problem of forgetting <code>.value</code> when you should and the latter is much more likely to happen. Specifically, even with TS, <code>foo</code> can still sometimes be type-valid where <code>foo.value</code> is actually expected (e.g. in a ternary expression <code>foo ? bar : baz</code> where <code>foo</code> is <code>Ref&lt;boolean&gt;</code>), but with ref sugar it’s <strong>always</strong> going to result in a type error if you forget the <code>$</code> prefix.</p>
+</blockquote>
+<p>精确的讲这到底会导致什么具体的问题？当需要添加<code>$</code>的时候忘记了？注意即使不使用语法糖，仍然会存在忘记添加<code>.value</code>这个问题，而且后者更可能发生。特别对于TS，某些时候期待传入<code>foo.value</code>的地方使用了<code>foo</code>，但此时类型合法（比如，在一个三元表达式<code>foo ? bar : baz</code>中<code>foo</code>的类型为<code>Ref&lt;boolean&gt;</code>）,但如果使用语法糖，如果忘记添加<code>$</code>那么总是会导致一个类型错误。</p>
+<blockquote>
+<p>why don’t we just say to the users that don’t like the verbosity of the composition API: use the Options API?（引用评论）</p>
+</blockquote>
+<blockquote>
+<p>You are asking users to give up the benefits of Composition API because you don’t like a syntax sugar that makes Composition API less verbose for them. I don’t think that really makes sense.</p>
+</blockquote>
+<p>你要用户去放弃基于组合API的优点，因为你不喜欢一个对于用户而言使得组合API更加简洁的语法糖。我不认为这说得通。</p>
+<h2 id="2"><a href="#2" class="headerlink" title="2"></a>2</h2><blockquote>
+<p><code>&lt;script setup&gt;</code> now directly exposes top level bindings to template （引用RFC的话）</p>
+</blockquote>
+<blockquote>
+<p>What would we do for intermediate variables?</p>
+</blockquote>
+<p>如何处理一些中间变量</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="title function_">inject</span>(<span class="string">&#x27;my-store&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="attr">ref</span>: stateICareAbout = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> store.<span class="property">state</span>.<span class="property">myState</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">addState</span>(<span class="params">newState</span>) &#123;</span><br><span class="line">  store.<span class="title function_">add</span>(newState)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This would expose <code>store</code> to the template even though i don’t really need it to. But is that actually a problem?</p>
+</blockquote>
+<p>上面的代码暴露了<code>store</code>变量给模板，即使我真的不需要<code>store</code>这个变量。但，这算是一个问题吗？</p>
+<blockquote>
+<p><strong>On the downside</strong>, it will make the generated code bigger as it makes the object returned by setup larger, and we loose a bit of “clarity” about what’s being exposed to the template.</p>
+</blockquote>
+<p>缺点：会使得代码变得更多因为通过setup函数返回的对象变得更大了。我们失去了如何暴露给模板的一点清晰性。</p>
+<blockquote>
+<p><strong>On the upside</strong>, one could argue that explicitly defining what gets exposed to the templates is tedious, and this change would make SFCs act a bit more like JSX in that every(*) variable in <code>&lt;script setup&gt;</code> is automatically in the “scope” of the template.</p>
+</blockquote>
+<p>优点：有些人也可以争辩说，明确地定义暴露给模板地变量这个操作是乏味的。这个改变使得单文件组件的运作有点像JSX，任何定义在<code>&lt;script setup&gt;</code>里面的变量自动地成为模板的作用域。</p>
+<p>(*) except imports of non-vue files, if I’m right.</p>
+<p>如果我想没错的话，任何非vue文件的导入都会被暴露给模板（注：个人认为这里的vue文件应该是指vue的API，比如<code>reactive</code>这些不会暴露给模板）。</p>
+<p><strong>尤大回复</strong></p>
+<blockquote>
+<p>yes, they are always exposed. Technically, if this is merged, we can also introduce a different template compilation mode where the render function is returned directly from setup. This makes the scoping even more direct and avoids the need of the render proxy.</p>
+</blockquote>
+<p>对的，你说的这些总是会被暴露给模板。技术上讲，如果提案合并进来，我们也可以使用一个不同的模板编译模式来让render函数直接从setup函数返回，这样也就不需要render代理对象。</p>
+<h2 id="3"><a href="#3" class="headerlink" title="3"></a>3</h2><blockquote>
+<p>From the proposal:</p>
+</blockquote>
+<p>在提案中有</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// if useMyRef() returns a ref, it will be untouched</span><br><span class="line">// otherwise it&#x27;s wrapped into a ref</span><br><span class="line">// 如果useMyRef函数返回一个ref类型对象，那么它不会被操作</span><br><span class="line">// 否则它会被包装成一个ref</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Just to clarify something here: does this mean that given a composable function returning, say, one refs and two functions (e.g. <code>function useTimer(): &#123; time: Ref&lt;number&gt;, start: () =&gt; void, stop: () =&gt; void &#125;</code>), the ref AND also the functions will wrapped in ref? Wrapping in ref essentially has no impact on the one ref that’s returned. But the functions will also be wrapped in a ref, is that correct?</p>
+</blockquote>
+<p>这里应该讲清楚：是指组合函数的返回吗，比如，一个refs和两个函数（比如<code>function useTimer(): &#123; time: Ref&lt;number&gt;, start: () =&gt; void, stop: () =&gt; void &#125;</code>），ref对象和函数都会被包装成ref吗？包装成ref本质上不会影响返回的ref对象吗？但是函数也会被包装成一个ref对象，这也是正确的吗？</p>
+<blockquote>
+<p>example:（例子）</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ref</span>: (&#123; time, start, stop &#125; = <span class="title function_">useTimer</span>()) </span><br><span class="line"><span class="comment">// does start and stop get wrapped in a ref?</span></span><br><span class="line"><span class="comment">// start函数和stop函数会包装成一个ref吗？</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>I know it doesn’t make much of difference in this example (a function getting wrapped doesn’t cause any issue), but it seems a little weird like you could end up with some amount of accidental code bloat or unintended behavior, so wanted to confirm. If it were a problem I guess you would just assign the refs separately.</p>
+</blockquote>
+<p>我知道在这个例子中其实没有什么不同（一个函数被包装成ref不会造成任何问题）。但它就是有点奇怪，就感觉会得到一些膨胀意外的代码。所以我想确认下，如果真的算问题的话，我猜想你们会单独地去包装成ref</p>
+<p><strong>尤大的回复</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">ref</span>: (&#123; time, start, stop &#125; = <span class="title function_">useTimer</span>()) <span class="comment">// （引用）</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>You are correct, all three will be wrapped in refs, although you can use <code>start()</code> and <code>stop()</code> just fine. It does create a bit of unnecessary overhead, although the overhead should be fairly acceptable (some bench numbers here).</p>
+</blockquote>
+<p>你是对的，这三个对象都会被包装成ref类型，即使这样你也可以正常地使用start和stop函数。它的确会生成一些没必要开销，即使这些开销是相等可以接受的。</p>
+<blockquote>
+<p>To avoid the wrapping you’d have to write three lines:</p>
+</blockquote>
+<p>为了避免包装你可以写成下面三行</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> timer = <span class="title function_">useTimer</span>()</span><br><span class="line"><span class="keyword">const</span> &#123; start, stop &#125; = timer</span><br><span class="line"><span class="attr">ref</span>: (&#123; time &#125;) = timer</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>This is a problem I’ve thought about as well. Maybe we can introduce extra syntax to deal with it but I want to keep it minimal for now.</p>
+</blockquote>
+<p>这个问题我也想过。可能我们可以采用一种额外的语法来解决它，但现在我想先暂时把它放在一边。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>个人感觉提案很有趣，毕竟我也没有做过大的项目，对于非标准语义的加入只能说很有趣</p>
+<p>使用了标签语句（<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/label">Labeled Statement</a>）来表示Vue中特定的语义，标签语句是JavaScript一个原生的语法，但是基本用不到。</p>
+<p>这里也提到了另一个前端框架<code>Svelte</code>，这个框架和Vue，React相比，最大的不同就是没有虚拟dom，编写的代码会生成直接操作dom的代码。最大的特点就是减少了运行时依赖库的体积（基本可以不依赖）</p>
+<p><code>&lt;script setup&gt;</code>减少了样板代码的编写，更加的专注于组合函数逻辑的编写，不过如何声明props和其他的配置感觉是一个比较不好处理（也不能说是难处理，RFC中提到直接导出一个对象来声明props，不过感觉又回到了之前的样子…），很期待可以解决这方面的问题</p>
+<p>现在Vue也开始由很多的方式来编写一个组件了，Vue2最普通的基于配置的组件，Vue3基于组合API的组件，基于类组件，还可以基于JSX组件，感觉开始有点React的味道，这么多方式感觉对开发者其实不是特别的友好</p>
+<p>如果Vue3可以大力推广组合API组件，逐步地减少对配置式组件的支持，在某个版本完全放弃，我觉得是非常需要的一步</p>
+<p>当然上面纯属我的yy，当作乐子就完事</p>
+<p>TS&#x2F;IDE工具的支持也是一个问题，但我感觉问题不大，能用代码实现的东西问题都不会很大，大的问题是如何决定Vue之后的整体走向，到底是百花齐放，还是一枝独秀？</p>
+<p>我非常期待Vue的后续发展，开源社区的力量可能没有公司支持的力量大，但是不同人的想法碰撞在一起，总能出现别具一格的想法~</p>
+<p>作为一个初步进入软件开发的开发者，我很敬佩框架开发者~</p>
+<p>（评论会逐步地翻译） </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/89a850efd727" title="Vue@next提案之script setup和ref sugar">https://prohibitorum.top/89a850efd727</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/269d28640b0a" rel="prev" title="轮播图的简单实现flex版">
+                  <i class="fa fa-angle-left"></i> 轮播图的简单实现flex版
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/adaf14f3e5d5" rel="next" title="Promise上的一些工具函数的实现">
+                  Promise上的一些工具函数的实现 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1604761304"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

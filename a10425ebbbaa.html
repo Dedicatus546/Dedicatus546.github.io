@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言ECMAScript2021（es12）新特性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ECMAScript2021（es12）新特性">
+<meta property="og:url" content="https://prohibitorum.top/a10425ebbbaa">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言ECMAScript2021（es12）新特性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-26T15:29:54.000Z">
+<meta property="article:modified_time" content="2024-12-26T15:29:54.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/a10425ebbbaa.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/a10425ebbbaa","path":"a10425ebbbaa.html","title":"ECMAScript2021（es12）新特性"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ECMAScript2021（es12）新特性 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%BB%E8%BE%91%E8%B5%8B%E5%80%BC%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">逻辑赋值运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E5%80%BC%E5%88%86%E9%9A%94%E7%AC%A6"><span class="nav-number">2.2.</span> <span class="nav-text">数值分隔符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#String-prototype-replaceAll"><span class="nav-number">2.3.</span> <span class="nav-text">String.prototype.replaceAll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Promise-any"><span class="nav-number">2.4.</span> <span class="nav-text">Promise.any</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WeakRef"><span class="nav-number">2.5.</span> <span class="nav-text">WeakRef</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FinalizationRegistry"><span class="nav-number">2.6.</span> <span class="nav-text">FinalizationRegistry</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/a10425ebbbaa">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ECMAScript2021（es12）新特性 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ECMAScript2021（es12）新特性
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-26 15:29:54" itemprop="dateCreated datePublished" datetime="2024-12-26T15:29:54+00:00">2024-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>770</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>3 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>ECMAScript2021（es12）新特性。</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="逻辑赋值运算符"><a href="#逻辑赋值运算符" class="headerlink" title="逻辑赋值运算符"></a>逻辑赋值运算符</h2><p>有三个，分别是 <code>&amp;&amp;=</code> ， <code>||=</code> ， <code>??=</code> 。</p>
+<p><code>&amp;&amp;=</code> 为左侧变量为真值时，将右侧的值赋给左边，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">a &amp;&amp;= <span class="number">2</span>; <span class="comment">// 输出 2</span></span><br><span class="line"><span class="comment">// 等效于</span></span><br><span class="line">a &amp;&amp; (a = <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>||=</code> 为左侧变量为假值时，将右侧的值赋给左边，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">a ||= <span class="number">2</span>; <span class="comment">// 输出 2</span></span><br><span class="line"><span class="comment">// 等效于</span></span><br><span class="line">a || (a = <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+<p>这里的假值为 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Glossary/Falsy">Falsy</a></p>
+<p><code>??=</code> 可以理解为 <code>||=</code> 的一个严格版本，首先 <code>??</code> 为 es11 引入的空值操作符，它的检测的值为 <code>null</code> 和 <code>undefined</code> ，这两个值在虚值的范围内，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> a = <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line">a ??= <span class="number">2</span> <span class="comment">// 输出 2</span></span><br><span class="line"><span class="comment">// 等效于</span></span><br><span class="line">a ?? (a = <span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="数值分隔符"><a href="#数值分隔符" class="headerlink" title="数值分隔符"></a>数值分隔符</h2><p>让数字更加可读，比如以万分割，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> o = <span class="number">1000_0000</span>; <span class="comment">// 1000 万</span></span><br></pre></td></tr></table></figure>
+
+<p>感觉一般用不到…</p>
+<h2 id="String-prototype-replaceAll"><a href="#String-prototype-replaceAll" class="headerlink" title="String.prototype.replaceAll"></a>String.prototype.replaceAll</h2><p>字符串的替换操作，和 <code>String.prototype.replace</code> 的区别就是第一个参数为字符串时可以替换全部了，比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;123123&quot;</span>.<span class="title function_">replace</span>(<span class="string">&quot;123&quot;</span>, <span class="string">&quot;===&quot;</span>); <span class="comment">// 输出 ===123</span></span><br><span class="line"><span class="string">&quot;123123&quot;</span>.<span class="title function_">replaceAll</span>(<span class="string">&quot;123&quot;</span>, <span class="string">&quot;===&quot;</span>); <span class="comment">// 输出 ======</span></span><br></pre></td></tr></table></figure>
+
+<p>在第一个参数为正则的时候，务必对正则添加 <code>g</code> 模式，不然会出现报错。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;123123&quot;</span>.<span class="title function_">replaceAll</span>(<span class="regexp">/\d/</span>, <span class="string">&quot;=&quot;</span>); <span class="comment">// 报错</span></span><br><span class="line"><span class="string">&quot;123123&quot;</span>.<span class="title function_">replaceAll</span>(<span class="regexp">/\d/g</span>, <span class="string">&quot;=&quot;</span>); <span class="comment">// 正确，输出 ======</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Promise-any"><a href="#Promise-any" class="headerlink" title="Promise.any"></a>Promise.any</h2><p>Promise 上新的静态方法，依然是用来处理多个 Promise 并发时的情景， <code>Promise.any</code> 只要参数中有一个已被 resolve 的 Promise ，那么整个 Promise 就会被 resolve ，如果参数为空或者所有的 Promise 都被 reject ，那么整个 Promise 就被 reject 。例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Promise</span>.<span class="title function_">any</span>([</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(<span class="number">1</span>),</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="string">&quot;error&quot;</span>)</span><br><span class="line">]).<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;resolve&quot;</span>, res); <span class="comment">// res 为 1</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 空参数</span></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">any</span>([]).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;&#125;, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(err); </span><br><span class="line">  <span class="comment">// 输出 </span></span><br><span class="line">  <span class="comment">// [AggregateError: All promises were rejected] &#123; [errors]: [] &#125;</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有 promise 都 reject</span></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">any</span>([</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="string">&quot;error1&quot;</span>),</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="string">&quot;error2&quot;</span>)</span><br><span class="line">]).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;&#125;, <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">error</span>(err); </span><br><span class="line">  <span class="comment">// 输出 </span></span><br><span class="line">  <span class="comment">// [AggregateError: All promises were rejected] &#123;</span></span><br><span class="line">  <span class="comment">//   [errors]: [ &#x27;error1&#x27;, &#x27;error2&#x27; ]</span></span><br><span class="line">  <span class="comment">// &#125;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里的某个 Promise resolve 是有时间顺序的，也就是第一个被 resolve 的 Promise 会 resolve 整个 Promise ，例子如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">delayResolve</span> = (<span class="params">timeout, val</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(resolve, timeout, val);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Promise</span>.<span class="title function_">any</span>([</span><br><span class="line">  <span class="title class_">Promise</span>.<span class="title function_">reject</span>(<span class="string">&quot;立即 reject&quot;</span>),</span><br><span class="line">  <span class="title function_">delayResolve</span>(<span class="number">1000</span>, <span class="string">&quot;1 秒延迟&quot;</span>),</span><br><span class="line">  <span class="title function_">delayResolve</span>(<span class="number">2000</span>, <span class="string">&quot;2 秒延迟&quot;</span>)</span><br><span class="line">]).<span class="title function_">then</span>(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;resolve&quot;</span>, res); <span class="comment">// res 为 &quot;1 秒延迟&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="WeakRef"><a href="#WeakRef" class="headerlink" title="WeakRef"></a>WeakRef</h2><p>这个特性应该是比较高级的特性了， <code>WeakRef</code> 允许用户持有一个对象的弱引用，弱引用使得该引用不会影响 GC （垃圾回收）。用法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这里 target 为一个强引用</span></span><br><span class="line"><span class="keyword">let</span> target = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="attr">b</span>: <span class="number">2</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> weakRef = <span class="keyword">new</span> <span class="title class_">WeakRef</span>(target);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(weakRef.<span class="title function_">deref</span>()); <span class="comment">// 对象还存在</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 去除对象引用</span></span><br><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">globalThis.<span class="title function_">gc</span>(); <span class="comment">// 需要开启 node 的 --expose gc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 强制等待并检测</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(weakRef.<span class="title function_">deref</span>()); <span class="comment">// undefined (如果 GC 发生)</span></span><br><span class="line">&#125;, <span class="number">5000</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="FinalizationRegistry"><a href="#FinalizationRegistry" class="headerlink" title="FinalizationRegistry"></a>FinalizationRegistry</h2><p>这个特性和 <code>WeakRef</code> 类似，它也持有一个对象的弱引用，当对象被回收的时候执行一个回调函数，用法如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> registry = <span class="keyword">new</span> <span class="title class_">FinalizationRegistry</span>(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;被回收了&quot;</span>, val);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> target = &#123;</span><br><span class="line">  <span class="attr">a</span>: <span class="number">1</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">registry.<span class="title function_">register</span>(target, <span class="string">&quot;回调值&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 去除对象引用</span></span><br><span class="line">target = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">globalThis.<span class="title function_">gc</span>(); <span class="comment">// 需要开启 node 的 --expose gc</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 强制等待</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;&#125;, <span class="number">5000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>注意这里的回调函数的值<strong>不是</strong>持有的对象，而是在 <code>register</code> 的时候第二个参数的值，从 <code>FinalizationRegistry</code> 的定义上说，回调执行的时候持有的对象已被回收，此时如果再出现在回调参数中也是不对的。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/a10425ebbbaa" title="ECMAScript2021（es12）新特性">https://prohibitorum.top/a10425ebbbaa</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/52175647e20f" rel="prev" title="ECMAScript2020（es11）新特性">
+                  <i class="fa fa-angle-left"></i> ECMAScript2020（es11）新特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/c9d56f099acf" rel="next" title="ECMAScript2022（es13）新特性">
+                  ECMAScript2022（es13）新特性 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1734011336"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

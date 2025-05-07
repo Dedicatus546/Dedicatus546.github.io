@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言记一次使用篡改猴脚本获取 DNF 游戏活动奖励。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次使用篡改猴脚本获取 DNF 游戏活动奖励">
+<meta property="og:url" content="https://prohibitorum.top/11f96bc93260">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次使用篡改猴脚本获取 DNF 游戏活动奖励。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143402348.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143623653.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143846064.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144543197.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144447833.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144923665.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145057124.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145239507.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145432265.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145818522.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103150231165.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103151817815.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103152110107.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103152557250.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103153647032.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103154136689.avif">
+<meta property="article:published_time" content="2025-01-03T16:10:11.000Z">
+<meta property="article:modified_time" content="2025-01-03T16:10:11.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="篡改猴">
+<meta property="article:tag" content="tampermonkey">
+<meta property="article:tag" content="地下城与勇士">
+<meta property="article:tag" content="勇士的意志">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143402348.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/11f96bc93260.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/11f96bc93260","path":"11f96bc93260.html","title":"记一次使用篡改猴脚本获取 DNF 游戏活动奖励"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次使用篡改猴脚本获取 DNF 游戏活动奖励 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E7%AF%A1%E6%94%B9%E7%8C%B4"><span class="nav-number">2.1.</span> <span class="nav-text">安装篡改猴</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="nav-number">2.2.</span> <span class="nav-text">安装脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2%E6%93%8D%E4%BD%9C"><span class="nav-number">2.3.</span> <span class="nav-text">页面操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="nav-number">2.4.</span> <span class="nav-text">源码解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/11f96bc93260">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次使用篡改猴脚本获取 DNF 游戏活动奖励 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次使用篡改猴脚本获取 DNF 游戏活动奖励
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-01-03 16:10:11" itemprop="dateCreated datePublished" datetime="2025-01-03T16:10:11+00:00">2025-01-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次使用篡改猴脚本获取 DNF 游戏活动奖励。</p>
+<span id="more"></span>
+
+<p>最近也是回来重新玩 DNF 了，但是回归什么都没有，没有黑钻，没有契约，太难受了，搜活动的时候发现有个看漫画拿星星的活动，即 <a target="_blank" rel="noopener" href="https://dnf.qq.com/cp/a20231211comic/index.html">《勇士的意志》第 2 季-地下城与勇士：创新世纪-DNF-官方网站-腾讯游戏 </a> 。里面有个点漫画得星星的部分，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143402348.avif"></p>
+<p>得到星星后就可以在下面奖励换黑钻了。</p>
+<p>不过得一个个点，太麻烦了，所以本文会通过篡改猴脚本来自动获取星星。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="安装篡改猴"><a href="#安装篡改猴" class="headerlink" title="安装篡改猴"></a>安装篡改猴</h2><p>先进入篡改猴的官网：<a target="_blank" rel="noopener" href="https://tampermonkey.net/">Tampermonkey</a> 。</p>
+<p>然后下载篡改猴的扩展，这里可以去扩展商店下载或者直接下载 crx 文件然后加载。</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143623653.avif"></p>
+<p>注意默认情况下是 Chrome 的版本的，如果使用 Edge 或者火狐的要在 tab 那里切换到对应的页面：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103143846064.avif"></p>
+<p><del>当然我还是推荐 Chrome 的。</del></p>
+<h2 id="安装脚本"><a href="#安装脚本" class="headerlink" title="安装脚本"></a>安装脚本</h2><p>脚本我已经放在 Github 上了。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/dnf-comic-start-script">Dedicatus546&#x2F;dnf-comic-start-script</a></p>
+<p>进入上面的仓库后点击 <code>index.js</code> ，即可进入脚本内容页面：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144543197.avif"></p>
+<p>然后点击右上角的篡改猴点击新建脚本，点击图中红色框住的部分的按钮复制代码：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144447833.avif"></p>
+<p>然后在新建脚本的页面粘贴拷贝的脚本：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103144923665.avif"></p>
+<p>然后 ctrl + s 保存，会出现下面这个页面：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145057124.avif"></p>
+<h2 id="页面操作"><a href="#页面操作" class="headerlink" title="页面操作"></a>页面操作</h2><p>重新打开（或者刷新）活动页面，如果安装正确，左上角会出现脚本增加的额外的 UI ：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145239507.avif"></p>
+<p>等待页面加载完成后就可以点击开始获取星星，然后会有相关的信息显示出来：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145432265.avif"></p>
+<p>在操作完成后页面会自动刷新，脚本操作的时候尽量不要操作页面，防止出现意外的情况。</p>
+<p>每个话对应的星星只能获取一次，所以上图中的星星为已领取该奖励。</p>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><p>接下来我们稍微解析一下脚本的实现原理，如果是单纯做活动的用户，后面的东西就不用看了。</p>
+<p>首先在话数这里我们直接 F12 ，可以发现是一个 <code>a</code> 标签，除了 <code>href</code> 还有 <code>onclick</code> 点击函数：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103145818522.avif"></p>
+<p>这里 <code>href</code> 会跳转到腾讯动漫的站点，重点是这里的 <code>onclick</code> 绑定的 <code>amsCommon.lotteryStar(1)</code> ，由于是直接在 html 中编写调用代码，那么 <code>amsCommon</code> 应该是全局的一个对象，直接在控制台输出看下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103150231165.avif"></p>
+<p>从这些暴露的函数来看，八九不离十应该是整个页面的活动逻辑。</p>
+<p>文件的地址为 <a target="_blank" rel="noopener" href="https://dnf.qq.com/cp/a20231211comic/js/ams.js">ams.js</a> 。</p>
+<p>直接把 <code>lotteryStar</code> 函数的源码贴上来。这个源码没混淆还加了一些注释，还是挺方便理解的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> amsCommon = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 观看漫画，领取星星</span></span><br><span class="line">  <span class="attr">lotteryStar</span>: <span class="keyword">function</span> (<span class="params">index</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> sData = &#123;</span><br><span class="line">      <span class="attr">index</span>: index,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> successCallback = <span class="keyword">function</span> (<span class="params">res</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> starNum = $(<span class="string">&quot;#starNum&quot;</span>).<span class="title function_">text</span>();</span><br><span class="line">      starNum = starNum * <span class="number">1</span> + <span class="number">1</span>;</span><br><span class="line">      $(<span class="string">&quot;#starNum&quot;</span>).<span class="title function_">text</span>(starNum);</span><br><span class="line">      <span class="comment">// $(&#x27;#comicLinkBtn_&#x27; + index).find(&#x27;a&#x27;).removeAttr(&#x27;onclick&#x27;);</span></span><br><span class="line">      amsCommon.<span class="title function_">showMsgDia</span>(<span class="string">&quot;恭喜您，获得1个星星&quot;</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">var</span> failCallback = <span class="keyword">function</span> (<span class="params">res</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (res.<span class="property">iRet</span> == <span class="number">100001</span>) &#123;</span><br><span class="line">        <span class="comment">// $(&#x27;#comicLinkBtn_&#x27; + index).find(&#x27;a&#x27;).removeAttr(&#x27;onclick&#x27;);</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      amsCommon.<span class="title function_">handleFail</span>(res);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">submitFlow</span>(<span class="string">&quot;0a571a&quot;</span>, <span class="literal">false</span>, sData, successCallback, failCallback);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在成功回调 <code>successCallback</code> 中提示了获得星星，最后是调用了 <code>submitFlow</code> ，源码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> amsCommon = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">submitFlow</span>: <span class="keyword">function</span> (<span class="params"></span></span><br><span class="line"><span class="params">    token,</span></span><br><span class="line"><span class="params">    showLoading,</span></span><br><span class="line"><span class="params">    sData,</span></span><br><span class="line"><span class="params">    successCallback,</span></span><br><span class="line"><span class="params">    failCallback</span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> flow = &#123;</span><br><span class="line">      <span class="attr">actId</span>: <span class="string">&quot;603984&quot;</span>,</span><br><span class="line">      <span class="attr">token</span>: token,</span><br><span class="line">      <span class="attr">loading</span>: showLoading,</span><br><span class="line">      <span class="attr">sData</span>: sData,</span><br><span class="line">      <span class="attr">success</span>: <span class="keyword">function</span> (<span class="params">res</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> successCallback == <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">          <span class="title function_">successCallback</span>(res);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">fail</span>: <span class="keyword">function</span> (<span class="params">res</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> failCallback == <span class="string">&quot;function&quot;</span>) &#123;</span><br><span class="line">          <span class="title function_">failCallback</span>(res);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          amsCommon.<span class="title function_">handleFail</span>(res);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="title class_">Milo</span>.<span class="title function_">emit</span>(flow);</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到出现了 Milo ，这里的 Milo 应该是腾讯开源的一个库，不过好像只是内部使用的，<a target="_blank" rel="noopener" href="https://tgideas.qq.com/milo/index.shtml">Milo</a> 。</p>
+<p>这里可以不用管 Milo ，从上面两个源码就基本上可以看出， <code>submitFlow</code> 是一个基础的接口，然后 <code>lotteryStar</code> 传入了 <code>0a571a</code> 这个 token ，这个 token 就是对应点漫画获取星星的。</p>
+<p>我们可以尝试直接在控制台输入 <code>amsCommon.lotteryStar(1)</code> 这段代码为领取第一话的星星，如果没领过的话会直接弹出一个方框提示获取星星成功，这是很重要的结果，这意味着这个结果不依赖腾讯动漫那边的数据，也就是说不用看漫画领取星星这个逻辑是可行的。</p>
+<p>执行完后，可以在网络一栏看到发送的接口，在启动器可以看到调用流程：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103151817815.avif"></p>
+<p>调用的结果也是提示已领取星星了：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103152110107.avif"></p>
+<p>ok，有了上面的理论之后，实际的代码就很好写了，首先是获取当前已更新的漫画，这里有两种思路</p>
+<ul>
+<li>分析 UI 结构，待更新的节点是没有 a 标签的。</li>
+<li>分析 <code>amsCommon</code> 代码，里面有话数的全局数据。</li>
+</ul>
+<p>待更新的节点没有 <code>a</code> 标签，如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103152557250.avif"></p>
+<p>由于这个特性，我们可以写出如下的代码获取所有已更新的话数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> indexList = [</span><br><span class="line">  <span class="comment">// li 节点数组</span></span><br><span class="line">  <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#comicList_1&quot;</span>).<span class="property">childNodes</span>),</span><br><span class="line">  <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#comicList_2&quot;</span>).<span class="property">childNodes</span>),</span><br><span class="line">  <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#comicList_3&quot;</span>).<span class="property">childNodes</span>),</span><br><span class="line">  <span class="title class_">Array</span>.<span class="title function_">from</span>(<span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#comicList_4&quot;</span>).<span class="property">childNodes</span>),</span><br><span class="line">]</span><br><span class="line">  <span class="comment">// 打平</span></span><br><span class="line">  .<span class="title function_">flat</span>()</span><br><span class="line">  <span class="comment">// 过滤没有 a 标签的项</span></span><br><span class="line">  .<span class="title function_">filter</span>(</span><br><span class="line">    <span class="function">(<span class="params">el</span>) =&gt;</span></span><br><span class="line">      el.<span class="property">childNodes</span>.<span class="property">length</span> === <span class="number">1</span> &amp;&amp;</span><br><span class="line">      el.<span class="property">childNodes</span>[<span class="number">0</span>].<span class="property">tagName</span>.<span class="title function_">toLowerCase</span>() === <span class="string">&quot;a&quot;</span></span><br><span class="line">  )</span><br><span class="line">  <span class="comment">// 根据 li 的 id 得到索引</span></span><br><span class="line">  <span class="comment">// 比如第一话的 li 的 id 为 comicLinkBtn_1 ，按 _ 分割取第二个元素即可</span></span><br><span class="line">  .<span class="title function_">map</span>(<span class="function">(<span class="params">el</span>) =&gt;</span> <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(el.<span class="property">id</span>.<span class="title function_">split</span>(<span class="string">&quot;_&quot;</span>)[<span class="number">1</span>]));</span><br><span class="line"><span class="comment">// 领取</span></span><br><span class="line"><span class="comment">// .forEach((id) =&gt; amsCommon.lotteryStar(id));</span></span><br></pre></td></tr></table></figure>
+
+<p>放到控制台输出一下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103153647032.avif"></p>
+<p>看起来没什么问题。</p>
+<p>如果细看 <code>amsCommon</code> 的代码的话，会发现页面上的 <code>li</code> 也是它负责渲染的，源码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> amsCommon = &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">//初始化漫画更新进度</span></span><br><span class="line">  <span class="attr">initComicProgress</span>: <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (pageName == <span class="string">&quot;indexm&quot;</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> html_1 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_2 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_3 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_4 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_5 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">      $.<span class="title function_">each</span>(<span class="variable constant_">DNF_2023COMIC_DATA</span>, <span class="keyword">function</span> (<span class="params">i, item</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> html = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> index = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">updateStatus</span> &gt; <span class="number">0</span> &amp;&amp; item.<span class="property">comicUrl</span> != <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">          <span class="comment">// html = &#x27;&lt;li id=&quot;comicLinkBtn_&#x27; + index + &#x27;&quot;&gt;&lt;a href=&quot;&#x27; + item.comicUrl + &#x27;&quot; onclick=&quot;amsCommon.lotteryStar(&#x27; + index + &#x27;)&quot;&gt;&lt;span&gt;第&#x27; + index + &#x27;话&lt;/span&gt;&lt;span class=&quot;zt updated&quot;&gt;已更新&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;&#x27;;</span></span><br><span class="line">          html =</span><br><span class="line">            <span class="string">&#x27;&lt;li id=&quot;comicLinkBtn_&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;&quot;&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;amsCommon.lotteryStar(&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&quot;);amsCommon.jumpComicPage(&#x27;&quot;</span> +</span><br><span class="line">            item.<span class="property">comicUrl</span> +</span><br><span class="line">            <span class="string">&quot;&#x27;)\&quot;&gt;&lt;span&gt;第&quot;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;话&lt;/span&gt;&lt;span class=&quot;zt updated&quot;&gt;已更新&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          html =</span><br><span class="line">            <span class="string">&#x27;&lt;li id=&quot;comicLinkBtn_&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;&quot;&gt;&lt;span&gt;第&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;话&lt;/span&gt;&lt;span class=&quot;zt&quot;&gt;待更新&lt;/span&gt;&lt;/li&gt;&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">20</span>) &#123;</span><br><span class="line">          html_1 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">40</span>) &#123;</span><br><span class="line">          html_2 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">60</span>) &#123;</span><br><span class="line">          html_3 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">80</span>) &#123;</span><br><span class="line">          html_4 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          html_5 += html;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      $(<span class="string">&quot;#comicList_1&quot;</span>).<span class="title function_">html</span>(html_1);</span><br><span class="line">      $(<span class="string">&quot;#comicList_2&quot;</span>).<span class="title function_">html</span>(html_2);</span><br><span class="line">      $(<span class="string">&quot;#comicList_3&quot;</span>).<span class="title function_">html</span>(html_3);</span><br><span class="line">      $(<span class="string">&quot;#comicList_4&quot;</span>).<span class="title function_">html</span>(html_4);</span><br><span class="line">      $(<span class="string">&quot;#comicList_5&quot;</span>).<span class="title function_">html</span>(html_5);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">var</span> html_1 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_2 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_3 = <span class="string">&quot;&quot;</span>,</span><br><span class="line">        html_4 = <span class="string">&quot;&quot;</span>;</span><br><span class="line">      $.<span class="title function_">each</span>(<span class="variable constant_">DNF_2023COMIC_DATA</span>, <span class="keyword">function</span> (<span class="params">i, item</span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> html = <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">var</span> index = i + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span> (item.<span class="property">updateStatus</span> &gt; <span class="number">0</span> &amp;&amp; item.<span class="property">comicUrl</span> != <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">          html =</span><br><span class="line">            <span class="string">&#x27;&lt;li id=&quot;comicLinkBtn_&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;&quot;&gt;&lt;a href=&quot;&#x27;</span> +</span><br><span class="line">            item.<span class="property">comicUrl</span> +</span><br><span class="line">            <span class="string">&#x27;&quot; onclick=&quot;amsCommon.lotteryStar(&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;)&quot; target=&quot;_blank&quot;&gt;&lt;span&gt;第&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;话&lt;/span&gt;&lt;span class=&quot;zt updated&quot;&gt;已更新&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;&#x27;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          html =</span><br><span class="line">            <span class="string">&#x27;&lt;li id=&quot;comicLinkBtn_&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;&quot;&gt;&lt;span&gt;第&#x27;</span> +</span><br><span class="line">            index +</span><br><span class="line">            <span class="string">&#x27;话&lt;/span&gt;&lt;span class=&quot;zt&quot;&gt;待更新&lt;/span&gt;&lt;/li&gt;&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (i &lt; <span class="number">30</span>) &#123;</span><br><span class="line">          html_1 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">60</span>) &#123;</span><br><span class="line">          html_2 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i &lt; <span class="number">90</span>) &#123;</span><br><span class="line">          html_3 += html;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          html_4 += html;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      $(<span class="string">&quot;#comicList_1&quot;</span>).<span class="title function_">html</span>(html_1);</span><br><span class="line">      $(<span class="string">&quot;#comicList_2&quot;</span>).<span class="title function_">html</span>(html_2);</span><br><span class="line">      $(<span class="string">&quot;#comicList_3&quot;</span>).<span class="title function_">html</span>(html_3);</span><br><span class="line">      $(<span class="string">&quot;#comicList_4&quot;</span>).<span class="title function_">html</span>(html_4);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到这里引用了 <code>DNF_2023COMIC_DATA</code> 这个全局数据，在控制台打印下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2025/01/03/20250103154136689.avif"></p>
+<p>可以看到是漫画的数据，其中 <code>updateStatus</code> 为 <code>1</code> 时为已更新，为 <code>0</code> 时为未更新，那么代码就更简单了，如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable constant_">DNF_2023COMIC_DATA</span></span><br><span class="line">  <span class="comment">// 过滤已更新漫画</span></span><br><span class="line">  .<span class="title function_">filter</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> item.<span class="property">updateStatus</span> === <span class="string">&quot;1&quot;</span>)</span><br><span class="line">  <span class="comment">// 提取 id</span></span><br><span class="line">  .<span class="title function_">map</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(item.<span class="property">id</span>));</span><br><span class="line"><span class="comment">// 领取</span></span><br><span class="line"><span class="comment">// .forEach((id) =&gt; amsCommon.lotteryStar(id));</span></span><br></pre></td></tr></table></figure>
+
+<p>核心的代码就是这样了，当然如果这样直接执行很有可能会报频繁请求，所以真实的脚本中加了一些 <code>delay</code> 来防止请求过于频繁，比如一个简单的 <code>delay</code> 实现：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">delay</span> = (<span class="params">ms</span>) =&gt; <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, ms));</span><br></pre></td></tr></table></figure>
+
+<p>这里再贴一个控制台版本的，直接 F12 拷贝到控制台执行即可，不用安装篡改猴：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">delay</span> = (<span class="params">ms</span>) =&gt; <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(resolve, ms));</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> id <span class="keyword">of</span> <span class="variable constant_">DNF_2023COMIC_DATA</span>.<span class="title function_">filter</span>(</span><br><span class="line">    <span class="function">(<span class="params">item</span>) =&gt;</span> item.<span class="property">updateStatus</span> === <span class="string">&quot;1&quot;</span></span><br><span class="line">  ).<span class="title function_">map</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> <span class="title class_">Number</span>.<span class="built_in">parseInt</span>(item.<span class="property">id</span>))) &#123;</span><br><span class="line">    amsCommon.<span class="title function_">lotteryStar</span>(id);</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">delay</span>(<span class="number">1500</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>上次玩还是巴老师的版本，自定义玩不动，这阵子玩自定义几乎一直送了，不过还是带了一套神未知的工作服，愉快地单机游戏，马上也是要到 115 了，一想到修武器的地图要没了我就心痛，一次修武器 16 万金币…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/11f96bc93260" title="记一次使用篡改猴脚本获取 DNF 游戏活动奖励">https://prohibitorum.top/11f96bc93260</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E7%AF%A1%E6%94%B9%E7%8C%B4/" rel="tag"># 篡改猴</a>
+              <a href="/tags/tampermonkey/" rel="tag"># tampermonkey</a>
+              <a href="/tags/%E5%9C%B0%E4%B8%8B%E5%9F%8E%E4%B8%8E%E5%8B%87%E5%A3%AB/" rel="tag"># 地下城与勇士</a>
+              <a href="/tags/%E5%8B%87%E5%A3%AB%E7%9A%84%E6%84%8F%E5%BF%97/" rel="tag"># 勇士的意志</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/518651390e8f" rel="prev" title="ECMAScript2023（es14）新特性">
+                  <i class="fa fa-angle-left"></i> ECMAScript2023（es14）新特性
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cba712e32138" rel="next" title="在 vue3 中动态引入 assets 内的图片">
+                  在 vue3 中动态引入 assets 内的图片 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1735891812"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

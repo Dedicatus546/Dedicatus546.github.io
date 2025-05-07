@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Redux源码解读 - applyMiddleware篇">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux源码解读 - applyMiddleware篇">
+<meta property="og:url" content="https://prohibitorum.top/d2273ba5e08d">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="Redux源码解读 - applyMiddleware篇">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/SnGHxR4OQVvkNBz.png">
+<meta property="og:image" content="https://i.loli.net/2020/07/10/LZdkCfrsgQyvwaG.png">
+<meta property="article:published_time" content="2020-07-10T13:10:03.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:45.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Redux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/07/10/SnGHxR4OQVvkNBz.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/d2273ba5e08d.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/d2273ba5e08d","path":"d2273ba5e08d.html","title":"Redux源码解读 - applyMiddleware篇"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Redux源码解读 - applyMiddleware篇 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#applyMiddleware"><span class="nav-number">1.</span> <span class="nav-text">applyMiddleware</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/d2273ba5e08d">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Redux源码解读 - applyMiddleware篇 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redux源码解读 - applyMiddleware篇
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-07-10 13:10:03" itemprop="dateCreated datePublished" datetime="2020-07-10T13:10:03+00:00">2020-07-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:45" itemprop="dateModified" datetime="2023-02-13T18:28:45+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><code>Redux</code>源码解读 - <code>applyMiddleware</code>篇</p>
+<span id="more"></span>
+
+<h1 id="applyMiddleware"><a href="#applyMiddleware" class="headerlink" title="applyMiddleware"></a><code>applyMiddleware</code></h1><p>先把源码贴出来：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">applyMiddleware</span>(<span class="params">...middlewares</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">createStore</span> =&gt;</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> store = <span class="title function_">createStore</span>(...args)</span><br><span class="line">    <span class="keyword">let</span> <span class="title function_">dispatch</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">        <span class="string">&#x27;Dispatching while constructing your middleware is not allowed. &#x27;</span> +</span><br><span class="line">          <span class="string">&#x27;Other middleware would not be applied to this dispatch.&#x27;</span></span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> middlewareAPI = &#123;</span><br><span class="line">      <span class="attr">getState</span>: store.<span class="property">getState</span>,</span><br><span class="line">      <span class="attr">dispatch</span>: <span class="function">(<span class="params">...args</span>) =&gt;</span> <span class="title function_">dispatch</span>(...args)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> chain = middlewares.<span class="title function_">map</span>(<span class="function"><span class="params">middleware</span> =&gt;</span> <span class="title function_">middleware</span>(middlewareAPI))</span><br><span class="line">    dispatch = <span class="title function_">compose</span>(...chain)(store.<span class="property">dispatch</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      ...store,</span><br><span class="line">      dispatch</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>刚开始我以为这函数这么短应该会很简单。</p>
+<p>但是到后面和<code>createStore</code>函数结合的时候我才发现比<code>createStore</code>难多了。</p>
+<p>主要是函数嵌套会有点晕（套，就嗯套）。</p>
+<p>先说说这个东西的作用。</p>
+<p>有些时候，我们想在每一次的状态变化之前，变化之后处理一些和业务无关的逻辑操作，比如写写日志。</p>
+<p>那么我们可能会这样写。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 某个业务</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line">  store.<span class="title function_">dispatch</span>(&#123;<span class="attr">type</span>:<span class="variable constant_">TYPE</span>&#125;);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">fn</span>();</span><br></pre></td></tr></table></figure>
+
+<p>但是这样写有一个问题，就是他耦合了业务函数<code>fn</code>。</p>
+<p>试想下如果我们在<code>100</code>个业务函数中都这样写，有问题吗？</p>
+<p>写当然没有问题，但是如果某一天要求在<code>dispatch</code>前打印下时间，那就完蛋了，要改<code>100</code>个地方，而且这<code>100</code>个函数还分布在不同的文件里。</p>
+<p>正所谓，复制黏贴一时爽，需求一变火葬场。</p>
+<p>所以<code>applyMiddleware</code>这个API就是为了解决这样的问题而出现的。</p>
+<p><code>middleware</code>单词意思为中间件，简单点讲就是可以通过外部代码来增强内部的逻辑。</p>
+<p>如果以我们的想法，可能会这么写：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> dispatch = store.<span class="property">dispatch</span>;</span><br><span class="line"></span><br><span class="line">store.<span class="property">dispatch</span> = <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line">  <span class="keyword">const</span> newAction = store.<span class="title function_">dispatch</span>(action);</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(store.<span class="title function_">getState</span>());</span><br><span class="line">  <span class="keyword">return</span> newAction;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">dispatch</span>(&#123;<span class="attr">type</span>:<span class="variable constant_">TYPE</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这就是增强<code>dispatch</code>方法来实现额外的逻辑，不会耦合在业务里面。</p>
+<p>而<code>applyMiddleware</code>也是通过增强<code>dispatch</code>来实现额外的逻辑。</p>
+<p>不过<code>applyMiddleware</code>支持多中间件，这个可以从它的参数看出来。</p>
+<p>举个使用<code>applyMiddleware</code>的小例子，就以状态改变前后输出日志为例。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">reducer</span> = (<span class="params">state = <span class="number">0</span>, action</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.<span class="property">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;add&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;delete&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义了一个打印日志的中间件</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loggerMiddleware</span> = (<span class="params">middlewareAPI</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">let</span> newAction = <span class="title function_">dispatch</span>(action);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">return</span> newAction;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(</span><br><span class="line">  reducer,</span><br><span class="line">  <span class="comment">// 用`applyMiddleware`包裹中间件和reducer一起传入createStore中</span></span><br><span class="line">  <span class="title function_">applyMiddleware</span>(loggerMiddleware)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">dispatch</span>(&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;add&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>当我们执行上面的代码时，会打印：</p>
+<p><img data-src="https://i.loli.net/2020/07/10/SnGHxR4OQVvkNBz.png"></p>
+<p>当然也可以用两个中间件：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">reducer</span> = (<span class="params">state = <span class="number">0</span>, action</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.<span class="property">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;add&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&quot;delete&quot;</span>:</span><br><span class="line">      <span class="keyword">return</span> state - <span class="number">1</span>;</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义了一个打印日志的中间件</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">loggerMiddleware</span> = (<span class="params">middlewareAPI</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">let</span> newAction = <span class="title function_">dispatch</span>(action);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">return</span> newAction;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义了一个打印时间的中间件</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">timeMiddleware</span> = (<span class="params">middlewareAPI</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">dispatch</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;time&#x27;</span>);</span><br><span class="line">      <span class="keyword">let</span> newAction = <span class="title function_">dispatch</span>(action);</span><br><span class="line">      <span class="keyword">return</span> newAction;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(</span><br><span class="line">  reducer,</span><br><span class="line">  <span class="comment">// 用`applyMiddleware`包裹中间件和reducer一起传入createStore中</span></span><br><span class="line">  <span class="title function_">applyMiddleware</span>(loggerMiddleware, timeMiddleware)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">store.<span class="title function_">dispatch</span>(&#123;</span><br><span class="line">  <span class="attr">type</span>: <span class="string">&quot;add&quot;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>运行之后就会出现：</p>
+<p><img data-src="https://i.loli.net/2020/07/10/LZdkCfrsgQyvwaG.png"></p>
+<p>ok，开始分析源码。</p>
+<p><code>applyMiddleware</code>函数传入中间件的数组，然后直接返回了一个函数。</p>
+<p>返回的函数传入了一个<code>createStore</code>，也就是我们上篇帖子说的函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="function"><span class="params">createStore</span> =&gt;</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123; </span><br><span class="line">  <span class="comment">// 主体逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>源代码这样写可能看着晕，完全可以把它拆开。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="function"><span class="params">createStore</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...arg</span>) =&gt;</span>&#123;</span><br><span class="line">    <span class="comment">// 主体逻辑</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主题的逻辑都在我上面标的位置。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="title function_">createStore</span>(...args)</span><br><span class="line"><span class="keyword">let</span> <span class="title function_">dispatch</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(</span><br><span class="line">    <span class="string">&#x27;Dispatching while constructing your middleware is not allowed. &#x27;</span> +</span><br><span class="line">      <span class="string">&#x27;Other middleware would not be applied to this dispatch.&#x27;</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先是通过传入的<code>createStore</code>创建函数，和第二层的<code>arg</code>参数创建了一个<code>store</code>。</p>
+<p>定义了一个初始的<code>dispatch</code>函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> middlewareAPI = &#123;</span><br><span class="line">  <span class="attr">getState</span>: store.<span class="property">getState</span>,</span><br><span class="line">  <span class="attr">dispatch</span>: <span class="function">(<span class="params">...args</span>) =&gt;</span> <span class="title function_">dispatch</span>(...args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来定义了一个<code>middlewareAPI</code>，对应我们创建中间件时最外层函数的参数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chain = middlewares.<span class="title function_">map</span>(<span class="function"><span class="params">middleware</span> =&gt;</span> <span class="title function_">middleware</span>(middlewareAPI))</span><br></pre></td></tr></table></figure>
+
+<p>接着处理中间件数组，把中间件的API传进去，也就是解开了一层函数的包装</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dispatch = <span class="title function_">compose</span>(...chain)(store.<span class="property">dispatch</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里我觉得就是这个函数最难理解的一段了。</p>
+<p>逻辑上就是合并（<code>compose</code>）已经给定<code>API</code>的中间件数组，提供一个最原始的<code>dispatch</code>，返回一个包装过的<code>dispatch</code>。</p>
+<p>可以先看一下<code>compose</code>这个函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">function</span> <span class="title function_">compose</span>(<span class="params">...funcs</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (funcs.<span class="property">length</span> === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">arg</span> =&gt;</span> arg</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (funcs.<span class="property">length</span> === <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> funcs[<span class="number">0</span>]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> funcs.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> <span class="title function_">a</span>(<span class="title function_">b</span>(...args)))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码中最重要的就是最后一句<code>funcs.reduce((a, b) =&gt; (...args) =&gt; a(b(...args)))</code></p>
+<p>使用到<code>reduce</code>这个<code>API</code>的时候，我很喜欢举一个例子，就是累加：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sum = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].<span class="title function_">reduce</span>(<span class="function">(<span class="params">sum, val</span>) =&gt;</span> sum + val);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(sum);</span><br></pre></td></tr></table></figure>
+
+<p>上面这段就会输出数字<code>6</code>啦。</p>
+<p>回到原来的函数，箭头函数如果套太深其实看着确实晕，所以把它拆出来。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">funcs.<span class="title function_">reduce</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">a</span>(<span class="title function_">b</span>(...args))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这里我们用三个中间件来表示这一个过程。</p>
+<p>PS：这里已经没有最外层的<code>middlewareAPI</code>为参数的函数了，因为上一句的<code>map</code>操作已经把这一层解开了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">m1</span> = dispatch =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">m2</span> = dispatch =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">m3</span> = dispatch =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">action</span> =&gt;</span> &#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>我们知道<code>reduce</code>如果没有传入第二个参数作为默认值的话，是会选择数组的第一项作为初始值，然后跳过第一次循环。</p>
+<p>所以在第二次循环的时候。</p>
+<p><code>a</code>就为<code>m1</code>，<code>b</code>就为<code>m2</code>，返回值作为下一次的<code>a</code>。</p>
+<p>第三次的循环的时候。</p>
+<p><code>a</code>就为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">m1</span>(<span class="title function_">m2</span>(args))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>b</code>为<code>m3</code>，返回值作为下一次的<code>a</code>。</p>
+<p>那么最后返回的就是第四次的<code>a</code>。</p>
+<p>此时<code>a</code>就为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="function">(<span class="params">...args</span>) =&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> (<span class="function">(<span class="params">...args</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">m1</span>(<span class="title function_">m2</span>(args))</span><br><span class="line">  &#125;)(<span class="title function_">m3</span>(args))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>m3(args)</code>返回了一个新的<code>dispatch</code>。</p>
+<p>然后依次是<code>m2(args)</code>返回新的<code>dispatch</code>。</p>
+<p>最后是<code>m1(args)</code>返回新的<code>dispatch</code>。</p>
+<p>最后<code>m1</code>返回的<code>dispatch</code>作为了新的<code>store</code>的<code>dispatch</code>。</p>
+<p>也就是最后的代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  ...store,</span><br><span class="line">  dispatch</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而且可以从这个嵌套看出来，越后面的中间件他的执行距离真正的<code>dispatch</code>会更近。</p>
+<p>也就是我们之前使用了两个中间件<code>loggerMiddleware</code>和<code>timeMiddleware</code>。</p>
+<p>传入的时候是先<code>loggerMiddleware</code>后<code>timeMiddleware</code>。</p>
+<p>输出的时候就是先<code>loggerMiddleware</code>后<code>timeMiddleware</code>。</p>
+<p>即</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">loggerMiddleware在dispatch之前的输出</span><br><span class="line">timeMiddleware在dispatch之前的输出</span><br><span class="line">真正的dispatch</span><br><span class="line">timeMiddleware在dispatch之后的输出</span><br><span class="line">loggerMiddleware在dispatch之后的输出</span><br></pre></td></tr></table></figure>
+
+<p>最后就是在<code>createStore</code>中在传入了中间件的情况下直接返回。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> enhancer !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> enhancer !== <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&#x27;Expected the enhancer to be a function.&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 传入了自己</span></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">enhancer</span>(createStore)(reducer, preloadedState)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意一个点</p>
+<p>就是<code>MiddlewareAPI</code>中的<code>dispatch</code>是整个<code>store</code>的<code>dispatch</code>。</p>
+<p>而构造的中间件函数中的<code>dispatch</code>参数是指包装了剩下中间件的<code>dispatch</code>。</p>
+<p>一般我们会把这个<code>dispatch</code>写为<code>next</code>，这样就更便于理解了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">loggerMiddleware</span> = (<span class="params">middlewareAPI</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">next</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">let</span> newAction = <span class="title function_">next</span>(action);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;logger before&quot;</span>);</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;state is &quot;</span> + middlewareAPI.<span class="title function_">getState</span>());</span><br><span class="line">      <span class="keyword">return</span> newAction;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/d2273ba5e08d" title="Redux源码解读 - applyMiddleware篇">https://prohibitorum.top/d2273ba5e08d</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/e245b6a116a9" rel="prev" title="Redux源码解读 - createStore篇">
+                  <i class="fa fa-angle-left"></i> Redux源码解读 - createStore篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/03481ca8609b" rel="next" title="Redux源码解读 - combineReducers篇">
+                  Redux源码解读 - combineReducers篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1594357803"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

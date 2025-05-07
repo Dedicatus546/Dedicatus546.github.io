@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言刚好最近公司的官网需要重写，基本上都交给我一个人负责了，所以使用 Nuxt3 来体验一把 SSR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次使用 nuxt3">
+<meta property="og:url" content="https://prohibitorum.top/7be15600c913">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言刚好最近公司的官网需要重写，基本上都交给我一个人负责了，所以使用 Nuxt3 来体验一把 SSR">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/25/202303252338983.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261752274.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261755775.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261810518.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261822006.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261831672.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261832198.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/27/202303271806731.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261859445.avif">
+<meta property="article:published_time" content="2023-03-25T22:47:37.000Z">
+<meta property="article:modified_time" content="2023-03-29T21:42:22.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Nuxt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/25/202303252338983.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/7be15600c913.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/7be15600c913","path":"7be15600c913.html","title":"记一次使用 nuxt3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次使用 nuxt3 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Nuxt3"><span class="nav-number">2.1.</span> <span class="nav-text">Nuxt3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Tailwind-CSS"><span class="nav-number">2.2.</span> <span class="nav-text">使用 Tailwind CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="nav-number">2.2.1.</span> <span class="nav-text">优点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%BA%E7%82%B9"><span class="nav-number">2.2.2.</span> <span class="nav-text">缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VueUse"><span class="nav-number">2.3.</span> <span class="nav-text">VueUse</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Iconify"><span class="nav-number">2.4.</span> <span class="nav-text">Iconify</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8-Nuxt-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E8%AE%BE%E7%BD%AE-TypeScript-%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.1.</span> <span class="nav-text">在 Nuxt 配置文件中设置 TypeScript 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%88%B0%E6%A0%B9-tsconfig-json-%E4%B8%AD"><span class="nav-number">2.4.2.</span> <span class="nav-text">配置到根 tsconfig.json 中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E7%BC%96%E5%86%99-d-ts-%E6%96%87%E4%BB%B6"><span class="nav-number">2.4.3.</span> <span class="nav-text">手动编写 d.ts 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.5.</span> <span class="nav-text">使用中遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSR-%E4%B8%8B-VueUse-%E6%9F%90%E4%BA%9B%E5%87%BD%E6%95%B0%E6%8A%A5%E9%94%99"><span class="nav-number">2.5.1.</span> <span class="nav-text">SSR 下 VueUse 某些函数报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSR-%E4%B8%8B%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE-SDK-%E6%8A%A5%E9%94%99"><span class="nav-number">2.5.2.</span> <span class="nav-text">SSR 下高德地图 SDK 报错</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/7be15600c913">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次使用 nuxt3 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次使用 nuxt3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-25 22:47:37" itemprop="dateCreated datePublished" datetime="2023-03-25T22:47:37+00:00">2023-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-29 21:42:22" itemprop="dateModified" datetime="2023-03-29T21:42:22+00:00">2023-03-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>刚好最近公司的官网需要重写，基本上都交给我一个人负责了，所以使用 Nuxt3 来体验一把 SSR</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>这次主要包含的技术栈包括 Nuxt</p>
+<p>引用的库有 Swiper 、 VueUse 、 Iconify 、 高德地图的 SDK 、 Pinia</p>
+<h2 id="Nuxt3"><a href="#Nuxt3" class="headerlink" title="Nuxt3"></a>Nuxt3</h2><p>使用 Nuxt 的决定性的原因就是 Nuxt 开箱支持 SSR ，作为一个官网，我觉得服务端渲染还是相当重要的</p>
+<p>虽然上级并没有提到这个需求，可能这个官网也只是交付其他软件的时候需要的资料吧…</p>
+<p>SSR ，全称为 Server-side Rendering ，即服务端渲染</p>
+<p>对于传统的 Vue 或者 React 应用，比如我做的最多的管理系统，一般我们不会采用这种模式</p>
+<p>因为对于一个管理系统 ， SSR 并不是必要的，甚至可以说是不需要，在这种情况下，我们使用的是 CSR （ Client-side Rendering ），即客户端渲染</p>
+<p>当然，这两种都属于 SPA （Single-page Application），即单页面应用</p>
+<p>不同的是，SSR 会在服务端生成完整的 HTML 结构然后返回，客户端再配合这些结果继续渲染，而 CSR 只能通过 js 来生成整个 dom ，html 只提供入口而已</p>
+<p>所以很多时候我们通过 Vite 初始化一个 Vue 项目都能看到如下的 index.html</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/25/202303252338983.avif"></p>
+<p>完整的 HTML 结构有助于 SEO ，CSR 下由于 HTML 结构需要通过 JS 来渲染，而一般情况下页面的数据是要通过 AJAX 请求来获取的</p>
+<p>而各大搜索引擎的爬虫并不会等待请求完成之后再进行爬取。</p>
+<h2 id="使用-Tailwind-CSS"><a href="#使用-Tailwind-CSS" class="headerlink" title="使用 Tailwind CSS"></a>使用 Tailwind CSS</h2><p>使用原子 CSS 类来构建应用，这也是我第一次使用这类 CSS 库。</p>
+<p>官网地址：<a target="_blank" rel="noopener" href="https://tailwindcss.com/">Rapidly build modern websites without ever leaving your HTML.</a></p>
+<p>当然，使用下来我个人而言，有优点也有缺点</p>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3><ul>
+<li>基本不用编写样式了，取而代之的是选择合适的类名，所见即所得</li>
+<li>类名支持响应式，即 <code>md:flex</code> 表示在大于 <code>md</code> 的宽度上应用 <code>flex</code> 样式</li>
+<li>支持按需生成所需的样式，加上本身原子化的形式，打包生成的样式文件大小取决于使用到的类的多少</li>
+<li>支持扩展类名，虽然我用不到，不过灵活性还是相当高的</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ul>
+<li>虽然样式文件体积小了，但是整体的 HTML 的样式就大了，当应用的类名很多的时候，看起来就会很杂（个人而言），这就很能印证那句话“笑（体）容（积）没有消失，只是转移罢了”</li>
+<li>需要额外去记忆类名，比如 <code>items-center</code> 表示 <code>align-items: center</code> ，虽然不是很难记忆，但总归是一个额外的心智负担</li>
+</ul>
+<hr>
+<p>当然，总体上用下来我还是相当喜欢的，毕竟不用说一次性记忆全部的类名，用到的也是一些布局类型的类名</p>
+<p>这些类名一般都比较好记，比如 <code>flex</code> ， <code>items-center</code> ， <code>justify-center</code> 等等</p>
+<h2 id="VueUse"><a href="#VueUse" class="headerlink" title="VueUse"></a>VueUse</h2><p>一个 Vue 的组合式函数库，封装了常用的函数</p>
+<p>比如事件监听 <code>useEventListener</code> ；节点 hover 监听 <code>useElementHover</code> ；断点监听 <code>useBreakpoints</code></p>
+<p>除了组合式函数，还提供了一些非常好用的指令以及组件</p>
+<p>比如常见的点击某个节点外部时，提供了 <code>vOnClickOutside</code> 指令，<code>OnClickOutside</code> 组件 ，<code>onClickOutside</code> 函数</p>
+<p>可以说，基本上写 Vue3 的项目时我都会引入这个库，即使只使用了很小的一部分功能，毕竟本身就是支持 Tree shaking 。</p>
+<h2 id="Iconify"><a href="#Iconify" class="headerlink" title="Iconify"></a>Iconify</h2><p>在最开始的时候，我是使用阿里的 iconfont 来为项目生成 icon 的</p>
+<p>但是之后我找到了一个更好的库，即 Iconify</p>
+<p>这里为了让 iconify 接入 nuxt ，我们还需要使用 <code>unplugin-icons</code> 这个插件</p>
+<p>然后我们在 nuxt 的配置文件中新增下面的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// nuxt.config.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    [<span class="string">&#x27;unplugin-icons/nuxt&#x27;</span>, &#123; <span class="comment">/* options */</span> &#125;]</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>当然，由于我们使用的是 TypeScript ，所以如果单单进行上面的配置，那么引入 icon 组件时会报错</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261752274.avif" alt="图片来自 unplugin-icons 的某个 issue 的用户截图"></p>
+<p>这里我们还要引入一个定义文件，这里有几种形式</p>
+<h3 id="在-Nuxt-配置文件中设置-TypeScript-配置"><a href="#在-Nuxt-配置文件中设置-TypeScript-配置" class="headerlink" title="在 Nuxt 配置文件中设置 TypeScript 配置"></a>在 Nuxt 配置文件中设置 TypeScript 配置</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// https://nuxt.com/docs/api/configuration/nuxt-config</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(&#123;</span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    <span class="string">&quot;unplugin-icons/nuxt&quot;</span>,</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">typescript</span>: &#123;</span><br><span class="line">    <span class="attr">tsConfig</span>: &#123;</span><br><span class="line">      <span class="attr">compilerOptions</span>: &#123;</span><br><span class="line">        <span class="comment">// 对 icon 导入的类型支持</span></span><br><span class="line">        <span class="attr">types</span>: [<span class="string">&quot;unplugin-icons/types/vue&quot;</span>],</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>配置完成后需要启动一次服务器，然后才能看到效果，原因是 Nuxt 会把这里的配置生成到 .nuxt 文件夹下的 <code>tsconfig.json</code> 中</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261755775.avif"></p>
+<p>在项目根目录下，我们可以看到根的 <code>tsconfig.json</code> 继承了 <code>.nuxt/tsconfig.json</code> 文件，所以 TypeScript 的类型检查能正确生效</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// https://nuxt.com/docs/guide/concepts/typescript</span></span><br><span class="line">  <span class="attr">&quot;extends&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./.nuxt/tsconfig.json&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="配置到根-tsconfig-json-中"><a href="#配置到根-tsconfig-json-中" class="headerlink" title="配置到根 tsconfig.json 中"></a>配置到根 tsconfig.json 中</h3><p>根据上一个方法，其实我们也可以直接配置到根的 <code>tsconfig.json</code> 中，只需要加上下面这段即可</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;types&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">      <span class="string">&quot;unplugin-icons/types/vue&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="手动编写-d-ts-文件"><a href="#手动编写-d-ts-文件" class="headerlink" title="手动编写 d.ts 文件"></a>手动编写 d.ts 文件</h3><p>如果我们直接点进去 <code>unplugin-icons/types/vue</code> 这个文件，我们会发现其实内部就是定义了一个 module 而已</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261810518.avif"></p>
+<p>所以，我们可以直接在根目录下建立一个 <code>types</code> 的文件夹，然后新建一个 <code>icon.d.ts</code> 文件，把上面的内容复制进去即可</p>
+<p>这样做能生效的原因 <code>.nuxt/tsconfig.json</code> 中包含了这些文件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261822006.avif"></p>
+<p>而且这样子会更加的灵活，你可以根据你安装的 icon 包来使用更加详细的前缀，比如</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="variable language_">module</span> <span class="string">&#x27;~icons/mdi/*&#x27;</span> &#123;</span><br><span class="line">  <span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">FunctionalComponent</span>, <span class="title class_">SVGAttributes</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line">  <span class="keyword">const</span> <span class="attr">component</span>: <span class="title class_">FunctionalComponent</span>&lt;<span class="title class_">SVGAttributes</span>&gt;</span><br><span class="line">  <span class="keyword">export</span> <span class="keyword">default</span> component</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样子 VSCode 在提示的时候就会直接把 mdi 也给提示出来了，非常地方便</p>
+<hr>
+<p>安装完成之后，我们就可以在 <a target="_blank" rel="noopener" href="https://icon-sets.iconify.design/mdi/">mdi icon set</a> 上面搜索我们想要的 icon ，然后 import 导入即可</p>
+<p>比如我们搜索下常见的 close 图标</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261831672.avif"></p>
+<p>然后我们点击选中一个</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261832198.avif"></p>
+<p>我们看到这个图标的名字是 <code>mdi:close</code> ，前面的 <code>mdi</code> 表示它是所属哪个图标集的，后面表示它在图标集里的名称</p>
+<p>我们通过 <code>import CloseIcon from &quot;~icons/mdi/close&quot;</code> 即可引入</p>
+<p>2023-03-27 更新：</p>
+<p>今天打算把配置下，让 Icon 能自动导入，省去写 import 语句，但是发现官方的文档并没有这个 Nuxt 框架的支持</p>
+<p>翻了翻 issue ，发现有人提了 <a target="_blank" rel="noopener" href="https://github.com/antfu/unplugin-icons/issues/219">Icons auto-import for Nuxt 3</a></p>
+<p>往后面看可以发现其实是有解决办法的，那就是通过暴露的 vite 参数来直接配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineNuxtConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;nuxt&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">IconsResolver</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-icons/resolver&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Icons</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-icons/vite&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">Components</span> <span class="keyword">from</span> <span class="string">&#x27;unplugin-vue-components/vite&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// https://v3.nuxtjs.org/api/configuration/nuxt.config</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineNuxtConfig</span>(<span class="title function_">async</span> () =&gt; (&#123;</span><br><span class="line">  <span class="attr">modules</span>: [</span><br><span class="line">    [<span class="string">&#x27;unplugin-icons/nuxt&#x27;</span>]</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">vue</span>: &#123;</span><br><span class="line">    <span class="attr">template</span>: &#123;</span><br><span class="line">      <span class="attr">compilerOptions</span>: &#123;</span><br><span class="line">        <span class="attr">isCustomElement</span>: <span class="function">(<span class="params">tag</span>) =&gt;</span> tag.<span class="title function_">startsWith</span>(<span class="string">&#x27;i-&#x27;</span>),</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">vite</span>: &#123;</span><br><span class="line">    <span class="attr">plugins</span>: [</span><br><span class="line">      <span class="title class_">Components</span>(&#123;</span><br><span class="line">        <span class="attr">resolvers</span>: [<span class="title class_">IconsResolver</span>()],</span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="title class_">Icons</span>(&#123;&#125;),</span><br><span class="line">    ],</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure>
+
+<p>虽然这也能工作，但总觉得不是官方支持的，有点别扭…</p>
+<p>所以我根据这个 issue ，最后选择了 <code>nuxt-icon</code> 这个库，支持自动导入，并且也是依赖 iconify 的图集包</p>
+<p>在 Nuxt 配置文件的 <code>module</code> 参数注册之后，在代码中直接使用 <code>Icon</code> 组件来引入图标</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Icon</span> <span class="attr">name</span>=<span class="string">&quot;mdi:close&quot;</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果使用的是 VSCode ，那么还可以下载 Iconify Intellisense 这个扩展，然后只要字符串符合规则，那么会直接显示对应的图标，相当地不错</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/27/202303271806731.avif"></p>
+<h2 id="使用中遇到的问题"><a href="#使用中遇到的问题" class="headerlink" title="使用中遇到的问题"></a>使用中遇到的问题</h2><h3 id="SSR-下-VueUse-某些函数报错"><a href="#SSR-下-VueUse-某些函数报错" class="headerlink" title="SSR 下 VueUse 某些函数报错"></a>SSR 下 VueUse 某些函数报错</h3><p>比如我在项目中使用到的 <code>useElementHover</code> 函数，如果开启 SSR 模式，那么会直接报错</p>
+<p>原因是实现的代码中直接获取了 <code>window</code> 这个对象</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2023/03/26/202303261859445.avif"></p>
+<p>最后我们只能通过 <code>import.meta.env.SSR</code> 来让服务端不报错</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> isHover = <span class="keyword">import</span>.<span class="property">meta</span>.<span class="property">env</span>.<span class="property">SSR</span> ? <span class="title function_">ref</span>(<span class="literal">false</span>) : <span class="title function_">useElementHover</span>(el);</span><br></pre></td></tr></table></figure>
+
+<p>这样子可以暂时解决这个问题，不过我看官方的文档，应该是支持 SSR 的，难道是我配置有问题？</p>
+<p>不过我也在 issue 中找到了和我一样报错的老哥，传送门：<a target="_blank" rel="noopener" href="https://github.com/vueuse/vueuse/issues/2874">problem with vueuse and nuxt 3 in docker : window is not defined</a></p>
+<p>我也在下面评论了，不过目前还没有回复，只能先等一等了</p>
+<h3 id="SSR-下高德地图-SDK-报错"><a href="#SSR-下高德地图-SDK-报错" class="headerlink" title="SSR 下高德地图 SDK 报错"></a>SSR 下高德地图 SDK 报错</h3><p>这里其实没有必要在服务端渲染地图结构，所以我直接使用 <code>ClientOnly</code> 组件让它只在客户端渲染，这样就解决了</p>
+<p>2023-03-27 更新：</p>
+<p>不知道为啥今天突然启动开发服务器就开始报错了，高德的 SDK 我是通过 <code>@amap/amap-jsapi-loader</code> 这个包提供的 loader 来加载 SDK 的</p>
+<p>类似下面这样</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">AMapLoader</span> <span class="keyword">from</span> <span class="string">&quot;@amap/amap-jsapi-loader&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="title class_">AMapLoader</span>.<span class="title function_">load</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// ...参数</span></span></span><br><span class="line"><span class="language-javascript">  &#125;).<span class="title function_">then</span>(<span class="function">(<span class="params">AMap</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// 进行操作</span></span></span><br><span class="line"><span class="language-javascript">  &#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">console</span>.<span class="title function_">error</span>(e);</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们通过 <code>ClientOnly</code> 把这个组件包起来，不知道为啥今天就报错，奇怪</p>
+<p>然后我就看了下控制台的错误，说是 <code>@amap/amap-jsapi-loader</code> 里面调用了 <code>window</code> 而导致的 window is not defined 错误</p>
+<p>最后我发现是 <code>@amap/amap-jsapi-loader</code> 在 import 时就执行了某段逻辑，而这段逻辑调用了 <code>window</code> 从而导致错误</p>
+<p>最后我使用了异步 import 来解决这个问题，代码如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="title function_">onMounted</span>(<span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span>(<span class="string">&quot;@amap/amap-jsapi-loader&quot;</span>).<span class="title function_">then</span>(<span class="function">(<span class="params">&#123;<span class="keyword">default</span>: AMapLoader&#125;</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="title class_">AMapLoader</span>.<span class="title function_">load</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// ...参数</span></span></span><br><span class="line"><span class="language-javascript">    &#125;).<span class="title function_">then</span>(<span class="function">(<span class="params">AMap</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// 进行操作</span></span></span><br><span class="line"><span class="language-javascript">    &#125;).<span class="title function_">catch</span>(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="variable language_">console</span>.<span class="title function_">error</span>(e);</span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript">  &#125;);</span></span><br><span class="line"><span class="language-javascript">&#125;);</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>首先在 node 环境下 <code>onMounted</code> 是不会执行的，所以我们可以在这里安全地使用 <code>window</code> （或者 <code>document</code> ）</p>
+<p>其次虽然我可以直接插入通过 Nuxt 的配置文件中直接插入 script 标签来引入 SDK ，但其实只有联系我们这个页面才需要用到 SDK 来加载地图</p>
+<p>在其他页面也夹在这个 Loader 是完全没必要的。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>整个项目差不多花了两周多一点吧，很开心有一个其他公司的 UI 来帮忙设计。</p>
+<p>使用 JQ 是不可能使用 JQ 的，这辈子都不可能用 JQ</p>
+<p>就算是静态页面，我也要上 Vue 哈哈哈哈哈</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/7be15600c913" title="记一次使用 nuxt3">https://prohibitorum.top/7be15600c913</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Nuxt/" rel="tag"># Nuxt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2fbccc5e3b09" rel="prev" title="为什么 Async/Await 不只是语法糖">
+                  <i class="fa fa-angle-left"></i> 为什么 Async/Await 不只是语法糖
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/4f1e26b032dc" rel="next" title="在 Hexo 中集成 Swiper">
+                  在 Hexo 中集成 Swiper <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1679755657"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

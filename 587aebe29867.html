@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言同班同学实习把我内推进去了…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2021汇量校招笔试题总结">
+<meta property="og:url" content="https://prohibitorum.top/587aebe29867">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言同班同学实习把我内推进去了…">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w2txPK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w26PED.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/13/wBE09s.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w24fC8.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w2caQI.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w2ItfK.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/16/w2IXX4.png">
+<meta property="article:published_time" content="2020-09-13T22:33:56.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="前端笔试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/16/w2txPK.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/587aebe29867.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/587aebe29867","path":"587aebe29867.html","title":"2021汇量校招笔试题总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2021汇量校招笔试题总结 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%BC%80%E4%B8%80%E4%B8%AA%E5%9C%B0%E5%9D%80%E5%88%B0%E4%B8%80%E4%B8%AA%E7%BD%91%E9%A1%B5%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">打开一个地址到一个网页的过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#display-none-%E5%92%8C-visibility-hidden-%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%8C%E4%BB%A5%E5%8F%8A%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="nav-number">2.2.</span> <span class="nav-text">display: none; 和 visibility: hidden; 的区别，以及适用范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AAavg%E8%AF%B7%E6%B1%82%E5%B9%B3%E5%9D%87%E5%80%BC%E7%9A%84%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">编写一个avg请求平均值的函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/587aebe29867">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2021汇量校招笔试题总结 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2021汇量校招笔试题总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-13 22:33:56" itemprop="dateCreated datePublished" datetime="2020-09-13T22:33:56+00:00">2020-09-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">笔试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>同班同学实习把我内推进去了…</p>
+<span id="more"></span>
+
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><p>写下一些比较有意思的题目</p>
+<h2 id="打开一个地址到一个网页的过程"><a href="#打开一个地址到一个网页的过程" class="headerlink" title="打开一个地址到一个网页的过程"></a>打开一个地址到一个网页的过程</h2><p>这里就把自己的理解写出来，包括</p>
+<ul>
+<li>DNS的域名到IP的转换（这里说了下本地的DNS缓存，以及host文件，以及DNS的迭代查询和递归查询）</li>
+<li>HTTP的报文格式（这里说了下报文分为响应和请求，HTTP的请求方法，然后说了点缓存的首部）</li>
+<li>三次握手（讲了下发送的报文格式，就是ACK，SYN怎么发过来发过去）</li>
+<li>基于TCP&#x2F;IP的协议栈（这里说了下数据从HTTP层如何一步步下传到物理层）</li>
+<li>浏览器的渲染（这里简单的说了下，把文档树和CSSOM树合并为渲染树然后交给浏览器的渲染引擎渲染，js由js引擎进行解析）</li>
+</ul>
+<p>写了小2000字吧，可能还是说的太皮毛了…</p>
+<h2 id="display-none-和-visibility-hidden-的区别，以及适用范围"><a href="#display-none-和-visibility-hidden-的区别，以及适用范围" class="headerlink" title="display: none; 和 visibility: hidden; 的区别，以及适用范围"></a><code>display: none;</code> 和 <code>visibility: hidden;</code> 的区别，以及适用范围</h2><p>这里写了下<code>display: none</code>此时不在渲染树里面了</p>
+<p>而<code>visibility: none</code>只是变得透明了，就像一块100%透明的玻璃放在你眼前，虽然看不见，但是它还是在那里</p>
+<p>去网上看了看，发现还有以下不同点，加上<code>opacity: 0</code>一起分析，这个表示不透明度为0，也就是完全透明</p>
+<ul>
+<li><code>visibility: hidden</code>具有继承性，子元素如果重新设置<code>visibility</code>为<code>visible</code>那么还是可以看见的，而<code>display: none</code>没有继承性</li>
+</ul>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w2txPK.png"></p>
+<p>上面我给<code>header</code>设置了<code>visibility: none</code>并且给<code>header</code>的子元素<code>h1</code>设置了<code>visibility: visible</code>，<code>h1</code>还是可以看见，并且此时标题下面的信息栏依然占据着原来的位置，并没有出现坍塌，<br><code>post-meta</code>还是占据着布局的部分,而<code>display: none</code>并没有继承属性，并且坍塌了，见下图</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w26PED.png"></p>
+<h2 id="编写一个avg请求平均值的函数"><a href="#编写一个avg请求平均值的函数" class="headerlink" title="编写一个avg请求平均值的函数"></a>编写一个<code>avg</code>请求平均值的函数</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入</span><br><span class="line">avg(1, 2, 3, 4, 5);     // 3</span><br><span class="line">avg(5, null, -5);       // 0</span><br><span class="line">avg(&#x27;1.0&#x27;, false, 1, true, 1, &#x27;A&#x27;, 1, &#x27;B&#x27;, 1, &#x27;C&#x27;);     // 输出0.5</span><br><span class="line">avg(0.1, 0.2);          // 0.15, 而不是0.15000000000002</span><br></pre></td></tr></table></figure>
+
+<p>emmm 这题前三个还好，是一些判断而已</p>
+<p>但是第四个我只是知道这种情况，因为只要是使用了IEEE754计数的都会有这种情况</p>
+<p>可以输出0.1和0.2的二进制来看看</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>((<span class="number">0.1</span>).<span class="title function_">toString</span>(<span class="number">2</span>));</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>((<span class="number">0.2</span>).<span class="title function_">toString</span>(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>发现由于IEEE754储存格式的问题，0.1和0.2并不能完全的表示，是被截断过的</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/13/wBE09s.png"></p>
+<p>这可以访问下面网站来了解</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://0.30000000000000004.com/#ada">Floating Point Math</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Floating-point_arithmetic#Internal_representation">Floating-point arithmetic - Wikipedia</a></li>
+</ul>
+<p>IEEE754中使用了64位双精度来存数字，11个数字位（指数域），52个指数位（尾数域），其中1个符号位，</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w24fC8.png"></p>
+<p>计算公式如图所示</p>
+<p>这题我傻逼的尽然想用新特性大数去解决，但是我只是简单使用过而已，并没有了解透彻，导致写了个通不过的代码<br>并不知道大数只能用于整数😂😂😂😂</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">avg</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> toString = <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>;</span><br><span class="line">  args = args.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> item !== <span class="literal">null</span> || item !== <span class="literal">undefined</span>)     <span class="comment">// 从第二条式子看出null应该算进元素的个数中，所以要过滤掉（顺便也把undefined，虽然没有提到）</span></span><br><span class="line">            .<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> toString.<span class="title function_">call</span>(item) === <span class="string">&#x27;[object String]&#x27;</span> ? <span class="number">0</span> : item)    <span class="comment">// 从第三条式子看出字符串应该看成0</span></span><br><span class="line">            .<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> <span class="title class_">BigInt</span>(item));       <span class="comment">// 这个我是想针对第四条的，但是没想到装了个大逼，没装成😂😂😂😂</span></span><br><span class="line">  <span class="keyword">const</span> sum = args.<span class="title function_">reduce</span>(<span class="function">(<span class="params">pre, val</span>) =&gt;</span> pre + val, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> sum / <span class="title class_">BigInt</span>(args.<span class="property">length</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>大数不支持小数，通过转换会报错</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w2caQI.png"></p>
+<p>所以我答的代码，完全是错误的…</p>
+<p>这几天想了想，也查了查网上的解决办法，大部分都是通过两数相减，然后小于<code>Number.EPSILON</code>这个值，就当作两者相等</p>
+<p>但是这个逻辑不具有普适性，可以看下面的代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">eq</span>(<span class="params">n1, n2</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">Math</span>.<span class="title function_">abs</span>(n1 - n2) &lt;= <span class="title class_">Number</span>.<span class="property">EPSILON</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">eq</span>(<span class="number">0.1</span> + <span class="number">0.2</span>, <span class="number">0.3</span>));    <span class="comment">// true</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">eq</span>(<span class="number">1.1</span> + <span class="number">2.2</span>, <span class="number">3.3</span>));    <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>搜了很久，折中的方法是先放大数字，然后计算完再缩小，只有这个方法比较靠谱</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">avg</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">  args = args.<span class="title function_">filter</span>(<span class="function"><span class="params">item</span> =&gt;</span> item !== <span class="literal">null</span> || item !== <span class="literal">undefined</span>)</span><br><span class="line">      .<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> toString.<span class="title function_">call</span>(item) === <span class="string">&#x27;[object String]&#x27;</span> ? <span class="number">0</span> : item)</span><br><span class="line">      .<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> <span class="title class_">Number</span>(item))</span><br><span class="line">      .<span class="title function_">map</span>(<span class="function"><span class="params">item</span> =&gt;</span> item * <span class="number">10000</span>);   <span class="comment">// 放大10000倍</span></span><br><span class="line">  <span class="keyword">const</span> sum = args.<span class="title function_">reduce</span>(<span class="function">(<span class="params">pre, cur</span>) =&gt;</span> pre + val, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">return</span> sum / args.<span class="property">length</span> / <span class="number">10000</span>;   <span class="comment">// 缩小10000倍</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试下</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w2ItfK.png"></p>
+<p>很好的解决了题目的问题，面向答案编程，哈哈哈哈😂😂😂</p>
+<p>当然，这种方法也没有普适性，</p>
+<p>如果放大之后依然出现了像 <code>.1 + .2</code> 依然会出现计算误差</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/16/w2IXX4.png"></p>
+<p>如果是项目上的话，可以使用<code>Mathjs</code>这个库，这个库支持强大的计算表达式</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/josdejong/mathjs">josdejong&#x2F;mathjs</a></p>
+<p>样例代码，来自项目的<code>README</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;</span><br><span class="line">  atan2, chain, derivative, e, evaluate, log, pi, pow, round, sqrt</span><br><span class="line">&#125; <span class="keyword">from</span> <span class="string">&#x27;mathjs&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// functions and constants</span></span><br><span class="line"><span class="title function_">round</span>(e, <span class="number">3</span>)                    <span class="comment">// 2.718</span></span><br><span class="line"><span class="title function_">atan2</span>(<span class="number">3</span>, -<span class="number">3</span>) / pi              <span class="comment">// 0.75</span></span><br><span class="line"><span class="title function_">log</span>(<span class="number">10000</span>, <span class="number">10</span>)                 <span class="comment">// 4</span></span><br><span class="line"><span class="title function_">sqrt</span>(-<span class="number">4</span>)                       <span class="comment">// 2i</span></span><br><span class="line"><span class="title function_">pow</span>([[-<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">1</span>]], <span class="number">2</span>)      <span class="comment">// [[7, 0], [0, 7]]</span></span><br><span class="line"><span class="title function_">derivative</span>(<span class="string">&#x27;x^2 + x&#x27;</span>, <span class="string">&#x27;x&#x27;</span>)     <span class="comment">// 2 * x + 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// expressions</span></span><br><span class="line"><span class="title function_">evaluate</span>(<span class="string">&#x27;12 / (2.3 + 0.7)&#x27;</span>)   <span class="comment">// 4</span></span><br><span class="line"><span class="title function_">evaluate</span>(<span class="string">&#x27;12.7 cm to inch&#x27;</span>)    <span class="comment">// 5 inch</span></span><br><span class="line"><span class="title function_">evaluate</span>(<span class="string">&#x27;sin(45 deg) ^ 2&#x27;</span>)    <span class="comment">// 0.5</span></span><br><span class="line"><span class="title function_">evaluate</span>(<span class="string">&#x27;9 / 3 + 2i&#x27;</span>)         <span class="comment">// 3 + 2i</span></span><br><span class="line"><span class="title function_">evaluate</span>(<span class="string">&#x27;det([-1, 2; 3, 1])&#x27;</span>) <span class="comment">// -7</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// chaining</span></span><br><span class="line"><span class="title function_">chain</span>(<span class="number">3</span>)</span><br><span class="line">    .<span class="title function_">add</span>(<span class="number">4</span>)</span><br><span class="line">    .<span class="title function_">multiply</span>(<span class="number">2</span>)</span><br><span class="line">    .<span class="title function_">done</span>()  <span class="comment">// 14</span></span><br></pre></td></tr></table></figure>
+
+<p>查资料的时候还看到了JS关于Decimal的提案，这个可以看</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-decimal">tc39&#x2F;proposal-decimal</a></p>
+<p>感觉很棒，通过使用特定的后缀<code>m</code>来标明（大数是<code>n</code>），然后可以进行安全的计算</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">calculateBill</span>(<span class="params">items, tax</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> total = 0m;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> &#123;price, count&#125; <span class="keyword">of</span> items) &#123;</span><br><span class="line">    total += price * <span class="title class_">BigDecimal</span>(count);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="title class_">BigDecimal</span>.<span class="title function_">round</span>(total * (1m + tax),</span><br><span class="line">                          &#123;<span class="attr">maximumFractionDigits</span>: <span class="number">2</span>, <span class="attr">round</span>: <span class="string">&quot;up&quot;</span>&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> items = [&#123;<span class="attr">price</span>: <span class="number">1.</span>25m, <span class="attr">count</span>: <span class="number">5</span>&#125;, &#123;<span class="attr">price</span>: 5m, <span class="attr">count</span>: <span class="number">1</span>&#125;];</span><br><span class="line"><span class="keyword">let</span> tax = .0735m;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title function_">calculateBill</span>(items, tax));</span><br></pre></td></tr></table></figure>
+
+<p>目前处于提案1，感觉不用很久就能使用到和大数相似的特性了</p>
+<p>JS一定会越来越好的~~</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>多搞搞面试，积累面试题目</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/587aebe29867" title="2021汇量校招笔试题总结">https://prohibitorum.top/587aebe29867</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E9%A2%98/" rel="tag"># 前端笔试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/352abd04ed41" rel="prev" title="2021腾讯初面总结">
+                  <i class="fa fa-angle-left"></i> 2021腾讯初面总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/092e4cc86593" rel="next" title="2021京东前端笔试题目总结">
+                  2021京东前端笔试题目总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1600007636"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

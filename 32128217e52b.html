@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言为 naive-ui 添加全局的 message ，notification ， loaddingBar ， dialog 函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为naive-ui添加全局的message函数">
+<meta property="og:url" content="https://prohibitorum.top/32128217e52b">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言为 naive-ui 添加全局的 message ，notification ， loaddingBar ， dialog 函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s4.ax1x.com/2021/12/14/ovKKRH.png">
+<meta property="og:image" content="https://s4.ax1x.com/2021/12/14/ovKUJg.png">
+<meta property="og:image" content="https://s4.ax1x.com/2021/12/14/ovMdAK.png">
+<meta property="article:published_time" content="2021-12-14T11:01:39.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Vue">
+<meta property="article:tag" content="Naive-UI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s4.ax1x.com/2021/12/14/ovKKRH.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/32128217e52b.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/32128217e52b","path":"32128217e52b.html","title":"为naive-ui添加全局的message函数"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>为naive-ui添加全局的message函数 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B2%E6%8E%89-useXXX"><span class="nav-number">2.1.</span> <span class="nav-text">干掉 useXXX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B2%E6%8E%89%E5%8F%AA%E8%83%BD%E5%9C%A8app%E5%86%85%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">干掉只能在app内使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/32128217e52b">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="为naive-ui添加全局的message函数 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为naive-ui添加全局的message函数
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-12-14 11:01:39" itemprop="dateCreated datePublished" datetime="2021-12-14T11:01:39+00:00">2021-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>为 <code>naive-ui</code> 添加全局的 <code>message</code> ，<code>notification</code> ， <code>loaddingBar</code> ， <code>dialog</code> 函数</p>
+<span id="more"></span> 
+
+<p>对于 <code>Vue3</code> ，个人非常喜欢 <code>naive-ui</code> 这个 <code>ui</code> 库，并且也在工作中把它应用到了相应的项目之中</p>
+<p>虽然它看起来有点像 <code>ant-design</code> ， 不过国内的 <code>ui</code> 库大体都是以蓝色为主色，看起来就有些审美疲劳了</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>我们都知道，像 <code>element-ui</code> ， <code>ant-design</code> 等都有一些通用的方法可供全局使用，即可以脱离组件的上下文</p>
+<p>比如 <code>element-plus</code> 的 </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://element-plus.gitee.io/zh-CN/component/message.html">ElMessage</a></li>
+<li><a target="_blank" rel="noopener" href="https://element-plus.gitee.io/zh-CN/component/notification.html">ElNotification</a></li>
+<li><a target="_blank" rel="noopener" href="https://element-plus.gitee.io/zh-CN/component/message-box.html">ElMessageBox</a></li>
+</ul>
+<p>我们可以在任何地方使用这些组件，比如 <code>axios</code> 的拦截器中，或者路由守卫（ <code>hooks</code> ）中</p>
+<p>而在 <code>naive-ui</code> 中，使用 <code>message</code> 的方法比较特别</p>
+<p>首先是必须包在 <code>n-message-provider</code> 组件下</p>
+<p>然后使用 <code>useMessage</code> 来获取 <code>message</code> 实例</p>
+<p><code>App.vue</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">NMessageProvider</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;naive-ui&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Content</span> <span class="keyword">from</span> <span class="string">&#x27;./Content.vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Content</span>&gt;</span><span class="tag">&lt;/<span class="name">Content</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>Content.vue</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; useMessage &#125; <span class="keyword">from</span> <span class="string">&#x27;naive-ui&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> message = <span class="title function_">useMessage</span>();</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">open</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  message.<span class="title function_">info</span>(<span class="string">&#x27;我是消息&#x27;</span>)</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;open&quot;</span>&gt;</span>打开message<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>看起来有点复杂</p>
+<p>我去翻了下历史的 <code>issues</code> 记录， 发现有人已经有提过相关的 <code>issue</code> 了</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/TuSimple/naive-ui/issues/1333">issue#1333 希望新增以下组件的一些方法</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/TuSimple/naive-ui/issues/771">issue#771 Loading Bar和Message全局使用</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/TuSimple/naive-ui/issues/665">issue#665 Message组件在setup外调用方式</a></li>
+</ul>
+<p>不过作者似乎并不想提供这样的 <code>api</code> ，作者在第三个 <code>issue</code> 中回复了</p>
+<blockquote>
+<p>If you must need to render a message before app is ready, you need to render a app outside current app and set message api globally. However remember message is a part of your app. You can’t operate a phone before you turn it on.</p>
+</blockquote>
+<p>意思是如果确实需要在 <code>app</code> 被挂在前调用 <code>message</code>， 那么需要在原 <code>app</code> 外部额外渲染一个 <code>app</code> ，并且把相关的 <code>api</code> 全局化</p>
+<p>作者的意思很简单，想用 <code>message</code>， 就是得 <code>app</code> 挂载了才能用，因为 <code>message</code> 就是整个 <code>app</code> 的一个部分</p>
+<p>作者还举了个例子：<strong>你不能在手机还没开机的时候就操作它</strong></p>
+<p>所以，我们需要按照作者说的来进行 <code>hack</code> </p>
+<h2 id="干掉-useXXX"><a href="#干掉-useXXX" class="headerlink" title="干掉 useXXX"></a>干掉 <code>useXXX</code></h2><p>每次都要 <code>useMessage</code> 很麻烦，那么如何才能导出一个全局变量呢？</p>
+<p>可以通过添加一个空的组件来把 <code>message</code> 提升到全局</p>
+<p><code>MessageInjectWindow.vue</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; useMessage &#125; <span class="keyword">from</span> <span class="string">&quot;naive-ui&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="variable language_">window</span>[<span class="string">&quot;$message&quot;</span>] = <span class="title function_">useMessage</span>();</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后我们把上面的组件放到 <code>App.vue</code> 中</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">NMessageProvider</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;naive-ui&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">Content</span> <span class="keyword">from</span> <span class="string">&#x27;./Content.vue&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MessageInjectWindow</span>&gt;</span><span class="tag">&lt;/<span class="name">MessageInjectWindow</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Content</span>&gt;</span><span class="tag">&lt;/<span class="name">Content</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在 <code>Content.vue</code> 中就可以使用 <code>$message</code> 了</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">const</span> <span class="title function_">open</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">  $message.<span class="title function_">info</span>(<span class="string">&#x27;我是消息&#x27;</span>);</span></span><br><span class="line"><span class="language-javascript">&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;open&quot;</span>&gt;</span>打开message<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>不过在代码的过程中总觉得缺了点啥？没错，就是代码提示</p>
+<p>这是一个 <code>ts</code> 的项目，通过添加 <code>d.ts</code> 可以为 <code>$message</code> 赋予类型提示</p>
+<p>创建 <code>global.d.ts</code> 然后输入以下内容</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="variable language_">global</span> &#123;</span><br><span class="line">  <span class="comment">// 可以直接使用 $message</span></span><br><span class="line">  <span class="keyword">const</span> <span class="attr">$message</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">MessageApi</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">$dialog</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">DialogApi</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">$notification</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">NotificationApi</span>;</span><br><span class="line">  <span class="keyword">const</span> <span class="attr">$loadingBar</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">LoadingBarApi</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">interface</span> <span class="title class_">Window</span> &#123;</span><br><span class="line">    <span class="comment">// 挂载需要的类型提示</span></span><br><span class="line">    <span class="comment">// 或者通过 window.$message 使用</span></span><br><span class="line">    <span class="attr">$message</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">MessageApi</span>;</span><br><span class="line">    <span class="attr">$dialog</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">DialogApi</span>;</span><br><span class="line">    <span class="attr">$notification</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">NotificationApi</span>;</span><br><span class="line">    <span class="attr">$loadingBar</span>: <span class="keyword">import</span>(<span class="string">&quot;naive-ui&quot;</span>).<span class="property">LoadingBarApi</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在 <code>Window</code> 下定义是因为需要通过 <code>window[&#39;$xxx&#39;] = useXXX()</code> 来挂载， 不加的话在 <code>ts</code> 项目下就会有红线</p>
+<p>在 <code>global</code> 下定义意味着除了 <code>window[&#39;$xxx&#39;]</code> 来调用之外，也可以直接使用 <code>$xxx</code> 直接使用</p>
+<p>这样子代码就有不错的提示了</p>
+<p><img data-src="https://s4.ax1x.com/2021/12/14/ovKKRH.png"></p>
+<p><img data-src="https://s4.ax1x.com/2021/12/14/ovKUJg.png"></p>
+<h2 id="干掉只能在app内使用"><a href="#干掉只能在app内使用" class="headerlink" title="干掉只能在app内使用"></a>干掉只能在app内使用</h2><p>虽然我们已经提取了全局的 <code>api</code> 了，但是依然无法在没有 <code>app</code> 的上下文下使用</p>
+<p>比如如果我想在 <code>mount</code> 之前调用一个接口，这个接口要使用 <code>message</code> 来显示一些信息，那么就会报错</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&quot;./App.vue&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">bootstrap</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 想在挂在前调用一个接口</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    $message.<span class="title function_">info</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 接口完成再挂载 app</span></span><br><span class="line">  <span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">mount</span>(<span class="string">&quot;#app&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">bootstrap</span>();</span><br></pre></td></tr></table></figure>
+
+<p>结果显而易见，报错</p>
+<p><img data-src="https://s4.ax1x.com/2021/12/14/ovMdAK.png"></p>
+<p>原因很简单，都没挂载 <code>app</code> ，那么 <code>MessageInjectWindow.vue</code> 的 <code>setup</code> 不会执行，自然也就没有注入 <code>message</code> 实例了</p>
+<p>那么这时候就需要构建一个空的 <code>app</code> ，在目标 <code>app</code> 之前挂载，然后全局化 <code>api</code></p>
+<p>创建 AppProvider.vue</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span> <span class="attr">setup</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> &#123; <span class="title class_">NMessageProvider</span> &#125; <span class="keyword">from</span> <span class="string">&quot;naive-ui&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"><span class="keyword">import</span> <span class="title class_">MessageInjectWindow</span> <span class="keyword">from</span> <span class="string">&quot;./MessageInjectWindow.vue&quot;</span>;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">MessageInjectWindow</span>&gt;</span><span class="tag">&lt;/<span class="name">MessageInjectWindow</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">NMessageProvider</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>内容基本一样，不过没有 <code>Content.vue</code> ，因为作为一个空的 app ，不需要渲染真正的内容节点</p>
+<p>然后修改 <code>main.ts</code></p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createApp &#125; <span class="keyword">from</span> <span class="string">&quot;vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">App</span> <span class="keyword">from</span> <span class="string">&quot;./App.vue&quot;</span>;</span><br><span class="line"><span class="keyword">import</span> <span class="title class_">AppProvider</span> <span class="keyword">from</span> <span class="string">&#x27;./AppProvider.vue&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">bootstrap</span> = <span class="keyword">async</span> (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="comment">// 挂载一个空的 app</span></span><br><span class="line">  <span class="title function_">createApp</span>(<span class="title class_">AppProvider</span>).<span class="title function_">mount</span>(<span class="string">&#x27;#app-provider&#x27;</span>);</span><br><span class="line">  <span class="comment">// 想在挂在前调用一个接口</span></span><br><span class="line">  <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>().<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    $message.<span class="title function_">info</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="comment">// 接口完成再挂载 app</span></span><br><span class="line">  <span class="title function_">createApp</span>(<span class="title class_">App</span>).<span class="title function_">mount</span>(<span class="string">&quot;#app&quot;</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="title function_">bootstrap</span>();</span><br></pre></td></tr></table></figure>
+
+<p>然后就可以愉快的使用全局的 <code>$message</code> 了</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>这个方法是从 <code>Naive-ui-admin</code> 以及相关的 <code>issues</code> 查找到的</p>
+<p>目前已经用在公司的项目中</p>
+<p>如果只是讨厌每次调用接口时写 <code>useXXX</code></p>
+<p><code>issues</code> 中也有用户提议可以封装通用的 <code>useRequest</code> </p>
+<p>反正，萝卜青菜各有所爱吧~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/32128217e52b" title="为naive-ui添加全局的message函数">https://prohibitorum.top/32128217e52b</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Vue/" rel="tag"># Vue</a>
+              <a href="/tags/Naive-UI/" rel="tag"># Naive-UI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/af69021a3b0b" rel="prev" title="使用pnpm来代替yarn1解决幻影依赖">
+                  <i class="fa fa-angle-left"></i> 使用pnpm来代替yarn1解决幻影依赖
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/167c74b8906d" rel="next" title="2021 - 2022 終わらない歌">
+                  2021 - 2022 終わらない歌 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1639450899"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

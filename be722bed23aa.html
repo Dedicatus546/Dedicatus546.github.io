@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言这个和之前的Reflect有一定的关系，也是Vue3实现的一个很重要的API，学学学。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript中的Proxy">
+<meta property="og:url" content="https://prohibitorum.top/be722bed23aa">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言这个和之前的Reflect有一定的关系，也是Vue3实现的一个很重要的API，学学学。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-12T10:09:46.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://prohibitorum.top/be722bed23aa.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/be722bed23aa","path":"be722bed23aa.html","title":"JavaScript中的Proxy"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JavaScript中的Proxy | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Proxy"><span class="nav-number">2.</span> <span class="nav-text">Proxy</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#getPrototypeOf"><span class="nav-number">2.1.</span> <span class="nav-text">getPrototypeOf()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setPrototypeOf"><span class="nav-number">2.2.</span> <span class="nav-text">setPrototypeOf()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#isExtensible"><span class="nav-number">2.3.</span> <span class="nav-text">isExtensible()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#preventExtensions"><span class="nav-number">2.4.</span> <span class="nav-text">preventExtensions()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getOwnPropertyDescriptor"><span class="nav-number">2.5.</span> <span class="nav-text">getOwnPropertyDescriptor()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#defineProperty"><span class="nav-number">2.6.</span> <span class="nav-text">defineProperty()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#has"><span class="nav-number">2.7.</span> <span class="nav-text">has()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#get"><span class="nav-number">2.8.</span> <span class="nav-text">get()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set"><span class="nav-number">2.9.</span> <span class="nav-text">set()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#deteleProperty"><span class="nav-number">2.10.</span> <span class="nav-text">deteleProperty()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ownKeys"><span class="nav-number">2.11.</span> <span class="nav-text">ownKeys()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apply"><span class="nav-number">2.12.</span> <span class="nav-text">apply()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#construct"><span class="nav-number">2.13.</span> <span class="nav-text">construct()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/be722bed23aa">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JavaScript中的Proxy | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JavaScript中的Proxy
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-06-12 10:09:46" itemprop="dateCreated datePublished" datetime="2020-06-12T10:09:46+00:00">2020-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这个和之前的Reflect有一定的关系，也是Vue3实现的一个很重要的API，学学学。</p>
+<span id="more"></span>
+
+<h1 id="Proxy"><a href="#Proxy" class="headerlink" title="Proxy"></a>Proxy</h1><p>顾名思义，就是一个代理对象，通过一组配置函数来拦截操作从而使得以源对象得以被扩展。</p>
+<p><code>Proxy</code>是一个构造函数</p>
+<p>由两个参数</p>
+<ul>
+<li><code>obj</code> 需要代理的对象</li>
+<li><code>handler</code> 一组由特定的处理函数组成的对象，如果没有指定，则会使用源对象的默认行为。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(o,&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<p>在Reflect上的方法，Proxy都可以拦截，具体包括</p>
+<ul>
+<li><code>getPrototypeOf</code></li>
+<li><code>setPrototypeOf</code></li>
+<li><code>isExtensible</code></li>
+<li><code>preventExtensible</code></li>
+<li><code>getOwnPropertyDescriptor</code></li>
+<li><code>defineProperty</code></li>
+<li><code>has</code></li>
+<li><code>get</code></li>
+<li><code>set</code></li>
+<li><code>deleteProperty</code></li>
+<li><code>ownKeys</code></li>
+<li><code>apply</code></li>
+<li><code>construct</code></li>
+</ul>
+<h2 id="getPrototypeOf"><a href="#getPrototypeOf" class="headerlink" title="getPrototypeOf()"></a>getPrototypeOf()</h2><p>读取代理对象的原型时，这个方法就会调用</p>
+<p>有一个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+</ul>
+<p>该函数必须返回一个对象或者<code>null</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> prototype = &#123;</span><br><span class="line">	<span class="attr">name</span>:<span class="string">&quot;prototype&quot;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(o,&#123;</span><br><span class="line">    <span class="title function_">getPrototypeOf</span>(<span class="params">target</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> prototype;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Reflect</span>.<span class="title function_">getPrototypeOf</span>(proxy) === prototype);	<span class="comment">// 打印true</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Object.getPrototypeOf</code></li>
+<li><code>Reflect.getPrototypeOf</code></li>
+<li><code>__proto__</code></li>
+<li><code>Object.prototype.isPrototypeOf</code></li>
+<li><code>instanceof</code></li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">getPrototypeOf</span>(<span class="params">target</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;调用了&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">getPrototypeOf</span>(target);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印了5次&quot;调用了&quot;</span></span><br><span class="line"><span class="title class_">Object</span>.<span class="title function_">getPrototypeOf</span>(proxy);</span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">getPrototypeOf</span>(proxy);</span><br><span class="line">proxy.<span class="property">__proto__</span>;</span><br><span class="line"><span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="title function_">isPrototypeOf</span>(proxy);</span><br><span class="line">proxy <span class="keyword">instanceof</span> <span class="title class_">Object</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="setPrototypeOf"><a href="#setPrototypeOf" class="headerlink" title="setPrototypeOf()"></a>setPrototypeOf()</h2><p>设置代理对象的原型时，这个方法就会调用。</p>
+<p>有两个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>prototype</code> 将设置的原型对象</li>
+</ul>
+<p>该函数在设置prototype成功返回true，失败返回false</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">setPrototypeOf</span>(<span class="params">obj,prototype</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;设置了prototype&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">setPrototypeOf</span>(obj,prototype);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">setPrototypeOf</span>(proxy,&#123;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Reflect.setProtytpeOf</code></li>
+<li><code>Object.setPrototypeOf</code></li>
+</ul>
+<h2 id="isExtensible"><a href="#isExtensible" class="headerlink" title="isExtensible()"></a>isExtensible()</h2><p>查询代理对象是否可以扩展时，这个方法就会调用。</p>
+<p>有一个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+</ul>
+<p>返回值必须为一个boolean值或者可以转为Boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">isExtensible</span>(<span class="params">obj</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;查询了是否能够扩展&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">isExtensible</span>(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">isExtensible</span>(proxy);</span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Reflect.isExtensible</code></li>
+<li><code>Object.isExtensible</code></li>
+</ul>
+<h2 id="preventExtensions"><a href="#preventExtensions" class="headerlink" title="preventExtensions()"></a>preventExtensions()</h2><p>禁止代理对象扩展时，这个方法就会调用。</p>
+<p>有一个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+</ul>
+<p>返回值必须为一个boolean值或者可以转为boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">preventExtensions</span>(<span class="params">obj</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;禁止了扩展&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">preventExtensions</span>(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">preventExtensions</span>(proxy);</span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Reflect.preventExtensions</code></li>
+<li><code>Object.preventExtensions</code></li>
+</ul>
+<h2 id="getOwnPropertyDescriptor"><a href="#getOwnPropertyDescriptor" class="headerlink" title="getOwnPropertyDescriptor()"></a>getOwnPropertyDescriptor()</h2><p>获取对象属性的属性描述符时，这个方法会调用。</p>
+<p>有两个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 需要获取属性描述符的属性名</li>
+</ul>
+<p>返回值必须为一个对象或者<code>undefined</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;</span><br><span class="line">    <span class="attr">name</span>:<span class="string">&quot;lwf&quot;</span></span><br><span class="line">&#125;,&#123;</span><br><span class="line">    <span class="title function_">getOwnPropertyDescriptor</span>(<span class="params">obj,propertyKey</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;获取了属性描述符&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">getOwnPropertyDescriptor</span>(obj,propertyKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">getOwnPropertyDescriptor</span>(proxy,<span class="string">&quot;name&quot;</span>);		<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Reflect.getOwnPropertyDescriptor</code></li>
+<li><code>Object.getOwnPropertyDescriptor</code></li>
+</ul>
+<h2 id="defineProperty"><a href="#defineProperty" class="headerlink" title="defineProperty()"></a>defineProperty()</h2><p>在定义代理对象的属性时，这个方法会调用。</p>
+<p>有三个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 将设置的属性名</li>
+<li><code>descriptor</code> 将设置属性的属性描述符</li>
+</ul>
+<p>返回值必须为一个boolean值或者可以转为boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">defineProperty</span>(<span class="params">obj,propertyKey,descriptor</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;设置了对象的属性&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">defineProperty</span>(obj,propertyKey,descriptor);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">defineProperty</span>(proxy,<span class="string">&quot;name&quot;</span>,&#123;</span><br><span class="line">    <span class="attr">value</span>:<span class="string">&quot;lwf&quot;</span></span><br><span class="line">&#125;);		<span class="comment">// 打印</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(proxy.<span class="property">name</span>);</span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Reflect.defineProperty</code></li>
+<li><code>Object.defineProperty</code></li>
+<li><code>proxyObj.propertyKey = value</code></li>
+</ul>
+<h2 id="has"><a href="#has" class="headerlink" title="has()"></a>has()</h2><p>在检查属性是否存在对象中时，这个方法会调用。</p>
+<p>有两个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 需要检查的属性名</li>
+</ul>
+<p>返回值必须为一个boolean值或者可以转为boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">has</span>(<span class="params">obj,propertyKey</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;检查了属性是否存在&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> propertyKey <span class="keyword">in</span> obj;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="string">&quot;name&quot;</span> <span class="keyword">in</span> proxy;	<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>propertyKey in proxy</code></li>
+<li><code>propertyKey in Object.create(proxy)</code></li>
+<li><code>Reflect.has</code></li>
+<li><code>with</code>操作</li>
+</ul>
+<h2 id="get"><a href="#get" class="headerlink" title="get()"></a>get()</h2><p>在读取代理对象属性时，这个方法会调用。</p>
+<p>有三个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 要获取的属性名</li>
+<li><code>context</code> 要绑定到getter的上下文，默认为调用对象本身。</li>
+</ul>
+<p>返回值可以为任何值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params">obj,propertyKey,context</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;获取了属性值&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(obj,propertyKey,context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">proxy.<span class="property">name</span>;		<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>proxy[propertyKey]</code>或者<code>proxy.propertyKey</code></li>
+<li><code>Object.create(proxy)[propertyKey]</code>或者<code>Object.create(proxy).propertyKey</code></li>
+<li><code>Reflect.get</code></li>
+</ul>
+<h2 id="set"><a href="#set" class="headerlink" title="set()"></a>set()</h2><p>在设置代理对象属性值时，这个方法会调用。</p>
+<p>有四个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 设置的属性名</li>
+<li><code>value</code> 设置的属性值</li>
+<li><code>context</code> 要绑定到setter的上下文，默认为调用对象本身。</li>
+</ul>
+<p><strong>TIPS:</strong><br>对于<code>get</code>和<code>set</code>，其中<code>context</code>参数的传入通常是<code>proxy</code>对象本身，但是对于处于原型链上的<code>proxy</code>，传入的就不是<code>proxy</code>对象了，而是触发操作的那个对象，比如，<code>obj.propertykey = value</code>，<code>obj</code>不是代理对象，但是<code>obj</code>的原型链上存在代理对象<code>proxy</code>，那传入<code>context</code>参数的就是<code>obj</code>而不是<code>proxy</code>了。而对于通过<code>Reflect.set</code>操作触发，<code>context</code>参数就跟<code>set</code>函数指定的一样了。</p>
+<p>返回值必须为一个boolean值或者可以转为boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">obj,propertyKey,value,context</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;调用了设置值&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">set</span>(obj,propertyKey,value,context);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">proxy.<span class="property">name</span> = <span class="string">&quot;lwf&quot;</span>;		<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>proxy[propertyKey] = value</code>或者<code>proxy.propertyKey = value</code></li>
+<li><code>Object.create(proxy)[propertyKey] = value</code>或者<code>Object.create(proxy).propertyKey = value</code></li>
+<li><code>Reflect.set</code></li>
+</ul>
+<h2 id="deteleProperty"><a href="#deteleProperty" class="headerlink" title="deteleProperty()"></a>deteleProperty()</h2><p>在删除对象的属性时，这个方法会调用</p>
+<p>有两个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+<li><code>propertyKey</code> 将删除的属性名</li>
+</ul>
+<p>返回值必须为一个boolean值或者可以转为boolean的值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">deleteProperty</span>(<span class="params">obj,propertyKey</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;删除了属性&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">deleteProperty</span>(obj,propertyKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> proxy.<span class="property">name</span>;	<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>delete proxy[propertyKey]</code>或者<code>delete proxy.propertyKey</code></li>
+<li><code>Reflect.deleteProperty</code></li>
+</ul>
+<h2 id="ownKeys"><a href="#ownKeys" class="headerlink" title="ownKeys()"></a>ownKeys()</h2><p>获取代理对象属性名组成的数组时，这个方法会调用</p>
+<p>有一个参数</p>
+<ul>
+<li><code>obj</code> 源对象</li>
+</ul>
+<p>返回值必须为一个可枚举的对象。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;,&#123;</span><br><span class="line">    <span class="title function_">ownKeys</span>(<span class="params">obj</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;获取了属性名组成的数组&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">ownKeys</span>(obj);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Reflect</span>.<span class="title function_">ownKeys</span>(proxy);		<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>Object.getOwnPropertyNames</code></li>
+<li><code>Object.getOwnPropertySymbols</code></li>
+<li><code>Reflect.ownKeys</code></li>
+<li><code>Object.keys</code></li>
+</ul>
+<h2 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h2><p>在对代理对象进行函数调用时，这个方法会调用</p>
+<p>有一个参数</p>
+<ul>
+<li><code>fn</code> 源函数</li>
+<li><code>context</code> 执行函数的上下文</li>
+<li><code>args</code> 参数的数组</li>
+</ul>
+<p>返回值可以为任意值。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">msg</span>)&#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(fn,&#123;</span><br><span class="line">    <span class="title function_">apply</span>(<span class="params">fn,context,args</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;执行了函数&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> fn.<span class="title function_">apply</span>(context,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="title function_">proxy</span>(<span class="string">&quot;hello world&quot;</span>);		<span class="comment">// 打印</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>proxy(arg1,arg2,...,argN)</code></li>
+<li><code>Function.prototype.apply</code>或者<code>Function.prototype.call</code></li>
+<li><code>Reflect.apply</code></li>
+</ul>
+<h2 id="construct"><a href="#construct" class="headerlink" title="construct()"></a>construct()</h2><p>以代理对象为构造器或者原型上存在代理对象的构造器生成对象时，这个方法会调用</p>
+<p>有三个参数</p>
+<ul>
+<li><code>obj</code> 源对象（可以被<code>new</code>）</li>
+<li><code>args</code> 参数数组</li>
+<li><code>newTarget</code> 被调用的构造函数</li>
+</ul>
+<p>返回值必须为一个对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">name</span>)&#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(fn,&#123;</span><br><span class="line">    <span class="title function_">construct</span>(<span class="params">obj,args,newTarget</span>)&#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;构造了新对象&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">construct</span>(obj,args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="title function_">proxy</span>(<span class="string">&quot;lwf&quot;</span>);	<span class="comment">// 打印</span></span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(p.<span class="property">name</span>);		<span class="comment">// 打印 &quot;lwf&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以触发该函数的操作包括</p>
+<ul>
+<li><code>new proxy(arg1,arg2,...,argN)</code></li>
+<li><code>Reflect.construct</code></li>
+</ul>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p><del>学完感觉我能看懂vue3源码了</del>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/be722bed23aa" title="JavaScript中的Proxy">https://prohibitorum.top/be722bed23aa</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/bbb824cff21a" rel="prev" title="JavaScript中的Reflect">
+                  <i class="fa fa-angle-left"></i> JavaScript中的Reflect
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/6da281009a11" rel="next" title="JavaScript中的Tasks, microtasks, queues and schedules（译）">
+                  JavaScript中的Tasks, microtasks, queues and schedules（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1591927786"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

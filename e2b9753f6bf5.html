@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="友邻社 - 前端开发实习生面试总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="友邻社 - 前端开发实习生面试总结">
+<meta property="og:url" content="https://prohibitorum.top/e2b9753f6bf5">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="友邻社 - 前端开发实习生面试总结">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w80OM9.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w8rEUP.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w8rfrd.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w8NtIg.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w8wv4S.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w80Pun.png">
+<meta property="og:image" content="https://s1.ax1x.com/2020/09/09/w80lHx.png">
+<meta property="article:published_time" content="2020-09-08T22:28:11.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="前端笔试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/09/09/w80OM9.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/e2b9753f6bf5.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/e2b9753f6bf5","path":"e2b9753f6bf5.html","title":"友邻社 - 前端开发实习生面试总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>友邻社 - 前端开发实习生面试总结 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#css%E5%AE%9E%E7%8E%B0%E5%B8%83%E5%B1%80"><span class="nav-number">1.</span> <span class="nav-text">css实现布局</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E9%98%B6%E4%B9%98%E5%87%BD%E6%95%B0"><span class="nav-number">3.</span> <span class="nav-text">实现阶乘函数</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BF%87%E6%A1%A5"><span class="nav-number">4.</span> <span class="nav-text">过桥</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOM-%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">DOM 题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/e2b9753f6bf5">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="友邻社 - 前端开发实习生面试总结 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          友邻社 - 前端开发实习生面试总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-09-08 22:28:11" itemprop="dateCreated datePublished" datetime="2020-09-08T22:28:11+00:00">2020-09-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">笔试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>友邻社 - 前端开发实习生面试总结</p>
+<span id="more"></span>
+
+<h1 id="css实现布局"><a href="#css实现布局" class="headerlink" title="css实现布局"></a><code>css</code>实现布局</h1><p>要求实现以下布局，讲思路：</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w80OM9.png"></p>
+<p>之前我是不知道有圣杯布局和双飞翼布局的，之后查了下才知道的，确实很厉害。</p>
+<p>这两个布局都是基于浮动来排版的，然后中间部分优先渲染，兼容性好。</p>
+<p>特点是两边宽度都是固定，中间<code>100</code>%自适应。</p>
+<p>这部分这几天开个帖子学习学习。</p>
+<p>这里我答的思路是使用<code>flex</code>布局。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>header<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span> <span class="attr">class</span>=<span class="string">&quot;main&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;left&quot;</span>&gt;</span>left<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center-top&quot;</span>&gt;</span>center-top<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center-bottom&quot;</span>&gt;</span>center-bottom<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;right&quot;</span>&gt;</span>right<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span>footer<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">header</span>,</span><br><span class="line"><span class="selector-tag">footer</span> &#123;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">20px</span> <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#c1c1c1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">main</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.left</span>,</span><br><span class="line"><span class="selector-class">.right</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">  <span class="attribute">flex-shrink</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#4b8cff</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.center</span> &#123;</span><br><span class="line">  <span class="attribute">flex-grow</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="comment">/* flex 默认水平布局 所以这里要设置成垂直布局 */</span></span><br><span class="line">  <span class="attribute">flex-direction</span>: column;</span><br><span class="line">  <span class="comment">/* 这里防止撑开 */</span></span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.center-top</span> &#123;</span><br><span class="line">  <span class="attribute">flex-grow</span>: <span class="number">1</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: deepskyblue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.center-bottom</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">flex-shrink</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: indianred;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w8rEUP.png"></p>
+<p>其实这里我是假定左右固定宽度，中间底部固定高度，然后中间顶部自适应的。</p>
+<p>在后面聊的时候也和面试官说了这个，面试官也没说啥…emmm…</p>
+<p>回来之后知道先渲染这个设定之后，觉得上面可以把<code>center</code>块提前。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">header</span>&gt;</span>header<span class="tag">&lt;/<span class="name">header</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">main</span> <span class="attr">class</span>=<span class="string">&quot;main&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center-top&quot;</span>&gt;</span>center-top<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;center-bottom&quot;</span>&gt;</span>center-bottom<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;left&quot;</span>&gt;</span>left<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;right&quot;</span>&gt;</span>right<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">main</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">footer</span>&gt;</span>footer<span class="tag">&lt;/<span class="name">footer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>把<code>left</code>块的<code>order</code>设为-1，让他提前。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.left</span> &#123;</span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">  <span class="attribute">order</span>: -<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w8rfrd.png"></p>
+<p>（感觉也挺不错？）</p>
+<h1 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h1><p>经典的<code>setTimeout</code>题目。</p>
+<p>给了两端代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++) &#123;</span><br><span class="line">  <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(i);</span><br><span class="line">  &#125;, <span class="number">1000</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>问输出。</p>
+<p>这个还是挺简单的，知识点就是。</p>
+<p><code>var</code>是基于函数作用域的，会出现变量提升的情况。</p>
+<p>而<code>let</code>，<code>const</code>是基于块级作用域的，每一次的遍历都会是一个全新的变量。</p>
+<p>所以输出就为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">3 3 3</span><br><span class="line">0 1 2</span><br></pre></td></tr></table></figure>
+
+<h1 id="实现阶乘函数"><a href="#实现阶乘函数" class="headerlink" title="实现阶乘函数"></a>实现阶乘函数</h1><p>这个简单。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">fn</span>(<span class="params">n</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">    sum *= i;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="过桥"><a href="#过桥" class="headerlink" title="过桥"></a>过桥</h1><p>这个是智力题吧。</p>
+<p>问，有甲乙丙丁四个人，现在有一座桥，每次可以过两个人，过桥一定要手电筒。</p>
+<p>这四个人需要过桥需要的分钟数分别为 1 2 5 10，问最少多少时间可以四个人全部过桥。</p>
+<p>这个我没多想，就是甲乙过桥，甲回来，甲丙过桥，甲回来，甲丁过桥。</p>
+<p>也就是<code>2 + 1 + 5 + 1 + 10 = 19</code> 也就是<code>19</code>分钟。</p>
+<p>算完之后，我算不出来更低了的，所以就直接写上去了…</p>
+<p>回宿舍问了舍友才发现我算错了，有更低的路程（舍友说这是微软的题目，我倒~）。</p>
+<p>首先是甲乙过桥，甲回来，然后丙丁过桥，乙回来，然后甲乙一起回来。</p>
+<p>总共的用时是<code> 2 + 1 + 10 + 2 + 2 = 17</code>。</p>
+<p>啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊~</p>
+<p>我是傻逼~</p>
+<h1 id="DOM-题"><a href="#DOM-题" class="headerlink" title="DOM 题"></a>DOM 题</h1><p>这个给的是一个 table，里面有一些数据，要进行分类计算。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w8NtIg.png"></p>
+<p>这里的话，有多个班，每个班有多个同学，每个同学三个科目。</p>
+<p>问：</p>
+<ul>
+<li>计算每个班级三科总分；</li>
+<li>计算每个人三科总分；</li>
+<li>计算每个班级每个人三科总分。</li>
+</ul>
+<p>（应该是这么问，问题有点不记得了）</p>
+<p>先贴下 html，和原来的可能不一样，有些地方忘记了。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">table</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">thead</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>班级<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>姓名<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>科目<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">th</span>&gt;</span>分数<span class="tag">&lt;/<span class="name">th</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">thead</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tbody</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小甲<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>语文<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>80<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小甲<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>数学<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>81<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小甲<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>英语<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>82<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小明<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>语文<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>70<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小明<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>数学<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>87<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>1班<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>小明<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>英语<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span>&gt;</span>85<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tbody</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>省略了一些 class 的类名，这些不是特别的重要。</p>
+<p>我的思路是，得到一个<code>tr</code>的数组，然后用一个字面对象量来存储结果。</p>
+<p>第一个问：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trElements = <span class="variable language_">document</span></span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;table&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tbody&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tr&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> trs = <span class="title class_">Array</span>.<span class="title function_">from</span>(trElements);</span><br><span class="line"><span class="keyword">const</span> map = &#123;&#125;;</span><br><span class="line">trs.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> className = item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">0</span>].<span class="property">innerText</span>;</span><br><span class="line">  <span class="keyword">if</span> (map[className] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    map[className] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  map[className] += +item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">3</span>].<span class="property">innerText</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>打印<code>map</code>之后。</p>
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w8wv4S.png"></p>
+<p>第二个问：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trElements = <span class="variable language_">document</span></span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;table&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tbody&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tr&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> trs = <span class="title class_">Array</span>.<span class="title function_">from</span>(trElements);</span><br><span class="line"><span class="keyword">const</span> map = &#123;&#125;;</span><br><span class="line">trs.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> name = item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">1</span>].<span class="property">innerText</span>;</span><br><span class="line">  <span class="keyword">if</span> (map[name] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    map[name] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  map[name] += +item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">3</span>].<span class="property">innerText</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w80Pun.png"></p>
+<p>第三问：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> trElements = <span class="variable language_">document</span></span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;table&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tbody&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">  .<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;tr&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> trs = <span class="title class_">Array</span>.<span class="title function_">from</span>(trElements);</span><br><span class="line"><span class="keyword">const</span> map = &#123;&#125;;</span><br><span class="line">trs.<span class="title function_">forEach</span>(<span class="function">(<span class="params">item</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> className = item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">0</span>].<span class="property">innerText</span>;</span><br><span class="line">  <span class="keyword">const</span> name = item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">1</span>].<span class="property">innerText</span>;</span><br><span class="line">  <span class="keyword">if</span> (map[className] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    map[className] = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (map[className][name] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">    map[className][name] = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  map[className][name] += +item.<span class="title function_">getElementsByTagName</span>(<span class="string">&quot;td&quot;</span>)[<span class="number">3</span>].<span class="property">innerText</span>;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://s1.ax1x.com/2020/09/09/w80lHx.png"></p>
+<p>三个问都是同一个思路，可能做的一般吧…</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/e2b9753f6bf5" title="友邻社 - 前端开发实习生面试总结">https://prohibitorum.top/e2b9753f6bf5</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E9%A2%98/" rel="tag"># 前端笔试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/b13c86f3a2a0" rel="prev" title="卓动科技 - Coco游戏开发实习生面试总结">
+                  <i class="fa fa-angle-left"></i> 卓动科技 - Coco游戏开发实习生面试总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/352abd04ed41" rel="next" title="2021腾讯初面总结">
+                  2021腾讯初面总结 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1599575291"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

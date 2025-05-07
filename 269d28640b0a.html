@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="轮播图的简单实现flex版。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="轮播图的简单实现flex版">
+<meta property="og:url" content="https://prohibitorum.top/269d28640b0a">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="轮播图的简单实现flex版。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/NIDkTQxJmXl95nO.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/EPBURzZ1Vvjtl48.png">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-8b30d73550d4b42f1c0b3dda3723dad4_720w.jpg?source=1940ef5c">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/7Xs6kWwpyQoHqrI.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/uzx2ATnyg4lUdB5.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/ev9wqfpgnVKz7ma.gif">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/TjruDChVevIG9pX.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/YxVNyUrPk7nb4QS.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/2ND6PoVEe5nH8rv.png">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/T5dPOjiC13SLGlw.gif">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/WNGepEzOmKoyucf.gif">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/QHRAh7J98n4uVjk.gif">
+<meta property="og:image" content="https://i.loli.net/2020/11/03/5zPMiVHN81wFZUI.gif">
+<meta property="og:image" content="https://i.loli.net/2020/11/06/iaeTrsbvSn3kmYP.gif">
+<meta property="article:published_time" content="2020-11-03T15:37:19.000Z">
+<meta property="article:modified_time" content="2020-11-03T15:37:19.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="CSS">
+<meta property="article:tag" content="轮播图">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/03/NIDkTQxJmXl95nO.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/269d28640b0a.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/269d28640b0a","path":"269d28640b0a.html","title":"轮播图的简单实现flex版"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>轮播图的简单实现flex版 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/269d28640b0a">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="轮播图的简单实现flex版 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          轮播图的简单实现flex版
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-11-03 15:37:19" itemprop="dateCreated datePublished" datetime="2020-11-03T15:37:19+00:00">2020-11-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.9k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>轮播图的简单实现<code>flex</code>版。</p>
+<span id="more"></span>
+
+<p>轮播图，一般就是几张图依次的滑动到当前盒子的可视窗口中。</p>
+<p>这里需要使用到<code>overflow: hidden</code>来隐藏溢出的盒子。</p>
+<p>以及使用<code>transform: translateX()</code>来做盒子的移动。</p>
+<p>先来写写<code>HTML</code>的部分，使用原生的<code>js</code>来完成。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__container&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里放图片的盒子 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里放左右按钮和下侧的小圆点 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>写一些简单的样式来看看：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: relative;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">500px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">300px</span>;</span><br><span class="line">  <span class="comment">/* 设置下左右居中以及给个背景色，方便看 */</span></span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">30px</span> auto;</span><br><span class="line">  <span class="attribute">background-color</span>: pink;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__container</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>ok，现在我们可以在网页上看到一块粉色的画布了：</p>
+<p><img data-src="https://i.loli.net/2020/11/03/NIDkTQxJmXl95nO.png"></p>
+<p>接着我们先不用<code>img</code>标签，先用不同背景色的<code>div</code>的盒子来填充<code>div.carousel__container</code>。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__container&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里放图片的盒子 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item green&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item orange&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里放左右按钮和下侧的小圆点 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后添加颜色的<code>class</code>类：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.red</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: darkred;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.orange</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: darkorange;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.green</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: darkgreen;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.blue</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: darkblue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/EPBURzZ1Vvjtl48.png"></p>
+<p>发现怎么都没显示。</p>
+<p><img data-src="https://pic2.zhimg.com/80/v2-8b30d73550d4b42f1c0b3dda3723dad4_720w.jpg?source=1940ef5c"></p>
+<p>没错，盒子的<code>div</code>忘记设置高度了，给他补上。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__item</span> &#123;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/7Xs6kWwpyQoHqrI.png"></p>
+<p>现在，高度也有了，但是 emmm，应该是横向摆放才对诶。</p>
+<p>由于盒子是<code>div</code>，<code>div</code>默认<code>display</code>为<code>block</code>，块级元素自动占据一行，所以会从上往下排列。</p>
+<p>为了使得从左向右排序，可以使用<code>display: flex</code>，然后设置<code>flex-wrap: no-wrap</code>，使得盒子即使在宽度不够的情况下不换行排放。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__container</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">flex-wrap</span>: nowrap;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__item</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/uzx2ATnyg4lUdB5.png"></p>
+<p>效果出来是出来了，但是四个盒子挤在父盒子里面了，我们希望挤出父盒子按一行排列。</p>
+<p>这时候要在<code>div.carousel__item</code>设置<code>flex-shrink</code>缩放比例来让盒子不进行缩放，给它设置成<code>0</code>。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__item</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100%</span>;</span><br><span class="line">  <span class="attribute">flex-shrink</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/ev9wqfpgnVKz7ma.gif"></p>
+<p>没问题，四个颜色盒子都是和最外面的大盒子的宽度一样，撑开了父盒子。</p>
+<p>接下来，在最外面的盒子上添加<code>overflow: hidden</code>，使得溢出的部分消失。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel</span> &#123;</span><br><span class="line">  <span class="comment">/*...其他样式*/</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">overflow</span>: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/TjruDChVevIG9pX.png"></p>
+<p>可以看到，在<code>red</code>后的<code>green</code>盒子已经被隐藏了。</p>
+<p>我们可以先写点<code>transform</code>样式看是否还存在盒子。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__container</span> &#123;</span><br><span class="line">  <span class="comment">/*...其他样式*/</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">translate3d</span>(-<span class="number">50%</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/YxVNyUrPk7nb4QS.png"></p>
+<p>确实有一半的图片显示出来了，接下来无非就是使用<code>js</code>来控制<code>div.carousel__container</code>上<code>transform: translate3d</code>的第一个参数的值了。</p>
+<p>ok，那先把<code>js</code>逻辑放一旁，先来设计左右两侧的按钮和下面的小点。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__container&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 这里放图片的盒子 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item red&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item green&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item blue&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__item orange&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger&quot;</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--这里放左右按钮和下侧的小圆点--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--左侧按钮--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__left&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--右侧按钮--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__right&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--底部小圆点--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__points&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__point__item&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__point__item&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__point__item&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">&quot;carousel__trigger__point__item&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，左右的按钮和下方的小点都是通过绝对定位来布局，所以<code>div.carousel</code>要加上<code>position: relative</code>。</p>
+<p>再加上一些<code>css</code></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__trigger__left</span>,</span><br><span class="line"><span class="selector-class">.carousel__trigger__right</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">top</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">margin</span>: auto <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">50px</span>;</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">204</span>, <span class="number">204</span>, <span class="number">204</span>, <span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__trigger__left</span> &#123;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__trigger__right</span> &#123;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__trigger__points</span> &#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">left</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">right</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">bottom</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> auto;</span><br><span class="line">  <span class="attribute">list-style</span>: none;</span><br><span class="line">  <span class="attribute">padding</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">  <span class="attribute">justify-content</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.carousel__trigger__point__item</span> &#123;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="built_in">rgba</span>(<span class="number">204</span>, <span class="number">204</span>, <span class="number">204</span>, <span class="number">0.5</span>);</span><br><span class="line">  <span class="attribute">border-radius</span>: <span class="number">50%</span>;</span><br><span class="line">  <span class="attribute">margin</span>: <span class="number">0</span> <span class="number">10px</span>;</span><br><span class="line">  <span class="attribute">cursor</span>: pointer;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/2ND6PoVEe5nH8rv.png"></p>
+<p>嗯，现在感觉有模有样了，当然，这里的样式可能有点丑，如果有按钮图标的话能好看很多。</p>
+<p>当然好看不是重点。</p>
+<p>接下来就可以编写<code>js</code>逻辑了。</p>
+<p>首先我们先实现按钮点击事件切换图片。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> leftBtn = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;carousel__trigger__left&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">const</span> rightBtn = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;carousel__trigger__right&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">const</span> container = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;carousel__container&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> curIndex = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> len = <span class="number">4</span>;</span><br><span class="line">leftBtn.<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (curIndex &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  curIndex--;</span><br><span class="line">  container.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">    <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">    <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br><span class="line">rightBtn.<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (curIndex &gt;= len) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  curIndex++;</span><br><span class="line">  container.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">    <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">    <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/T5dPOjiC13SLGlw.gif"></p>
+<p>逻辑基本没啥问题，但是没有动画效果。</p>
+<p>这是因为没有设置<code>transition</code>，可以在<code>.carousel__container</code>上设置。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.carousel__container</span> &#123;</span><br><span class="line">  <span class="comment">/*...其他样式*/</span></span><br><span class="line"></span><br><span class="line">  <span class="attribute">transition</span>: transform <span class="number">1s</span> linear;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/WNGepEzOmKoyucf.gif"></p>
+<p>现在就可以发现有动画效果了。</p>
+<p>接下来就是给下面四个点设置点击事件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接着上面的js继续往下写</span></span><br><span class="line"><span class="keyword">const</span> points = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(</span><br><span class="line">  <span class="string">&quot;carousel__trigger__point__item&quot;</span></span><br><span class="line">);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; points.<span class="property">length</span>; i++) &#123;</span><br><span class="line">  points[i].<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    curIndex = i;</span><br><span class="line">    container.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">      <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">      <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/QHRAh7J98n4uVjk.gif"></p>
+<p>四个点也可以点击然后切换到相应的图片了。</p>
+<p>现在还有一个比较重要的功能，就是自动轮播，也就是在鼠标不在这个轮播图中的时候，它会自动的跳到下一张或者上一张。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> timer;</span><br><span class="line"><span class="keyword">const</span> carousel = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;carousel&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> dir = <span class="number">1</span>;</span><br><span class="line">carousel.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseenter&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">carousel.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseleave&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  timer = <span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (curIndex === <span class="number">0</span>) &#123;</span><br><span class="line">      dir = <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (curIndex === len - <span class="number">1</span>) &#123;</span><br><span class="line">      dir = -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (dir === <span class="number">1</span>) &#123;</span><br><span class="line">      curIndex++;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      curIndex--;</span><br><span class="line">    &#125;</span><br><span class="line">    container.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">      <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">      <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">    );</span><br><span class="line">  &#125;, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/03/5zPMiVHN81wFZUI.gif"></p>
+<p>注意这里使用的是<code>mouseenter</code>和<code>mouseleave</code>事件，而不是<code>mouseover</code>和<code>mouseout</code>，这是因为前两个事件只会捕获而不会冒泡。</p>
+<p>冒泡会导致重复的事件调用，在进入内层时又会冒泡使得外层的绑定函数再一次被调用。</p>
+<p>发现鼠标划入和划出都符合预期的逻辑，但是有一个问题。</p>
+<p>就是逻辑上来讲，在刚进入页面时要自动轮播的，但是这里的设置定时器是在<code>mouseleave</code>事件里面设置的，导致了刚打开页面不会自动轮播。</p>
+<p>所以我们要在页面启动就设置一次定时器，代码可以改为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> timer;</span><br><span class="line"><span class="keyword">const</span> carousel = <span class="variable language_">document</span>.<span class="title function_">getElementsByClassName</span>(<span class="string">&quot;carousel&quot;</span>)[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> dir = <span class="number">1</span>;</span><br><span class="line">carousel.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseenter&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="built_in">clearInterval</span>(timer);</span><br><span class="line">    timer = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 封装成一个timerCall函数</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">timerCall</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (curIndex === <span class="number">0</span>) &#123;</span><br><span class="line">    dir = <span class="number">1</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (curIndex === len - <span class="number">1</span>) &#123;</span><br><span class="line">    dir = -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (dir === <span class="number">1</span>) &#123;</span><br><span class="line">    curIndex++;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    curIndex--;</span><br><span class="line">  &#125;</span><br><span class="line">  container.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">    <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">    <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">carousel.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseleave&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (timer) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">setInterval</span>(timerCall, <span class="number">2000</span>);</span><br><span class="line">&#125;);</span><br><span class="line">timer = <span class="built_in">setInterval</span>(timerCall, <span class="number">2000</span>);</span><br></pre></td></tr></table></figure>
+
+<p>现在有点不完美的地方就是下面的小点应该在每一次的切换时有一个样式。</p>
+<p>没关系，接下来我们开始来优化这个代码。</p>
+<p>之前写的代码都是写死几个图片，这次使用类来写这个代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="comment">// ... 这里写代码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>来写构造器，我们需要一个字符串的数组，表示图片的地址。</p>
+<p>还需要一个容器来放我们的通过<code>js</code>拼接的<code>html</code>代码。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  imgUrlArray;</span><br><span class="line">  mountNode;</span><br><span class="line"></span><br><span class="line">  __root;</span><br><span class="line">  __render;</span><br><span class="line">  __timer;</span><br><span class="line">  __curIndex;</span><br><span class="line">  __ms;</span><br><span class="line">  __triggerLeftBtnElement;</span><br><span class="line">  __triggerRightBtnElement;</span><br><span class="line">  __triggerPointElements;</span><br><span class="line">  __imgElements;</span><br><span class="line">  __imgContainer;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">imgUrlArray, config</span>) &#123;</span><br><span class="line">    <span class="comment">// 传入一个数组，存放url或者其他，可以通过config的render来配置每一个位置的渲染</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="title class_">Array</span>.<span class="title function_">isArray</span>(imgUrlArray)) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">warn</span>(<span class="string">&quot;argument &#x27;imgUrl&#x27; must be an Array&quot;</span>);</span><br><span class="line">      imgUrlArray = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">imgUrlArray</span> = imgUrlArray.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="comment">// config配置</span></span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      <span class="comment">// 挂载的节点，传入一个dom对象</span></span><br><span class="line">      mountNode,</span><br><span class="line">      <span class="comment">// 轮播的时间</span></span><br><span class="line">      ms = <span class="number">2000</span>,</span><br><span class="line">      <span class="comment">// 渲染函数，默认直接渲染内容</span></span><br><span class="line">      render = <span class="function">(<span class="params">v</span>) =&gt;</span> v,</span><br><span class="line">    &#125; = config;</span><br><span class="line">    <span class="keyword">if</span> (!mountNode) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;argument &#x27;root&#x27; in config must be exist&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">mountNode</span> = mountNode;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__render</span> = render;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__curIndex</span> = <span class="number">0</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__ms</span> = ms;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__dir</span> = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 创建整个轮播图的dom</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">createRoot</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过之前的代码可以发现每次我们改变<code>curIndex</code>时，就需要去改变相应的样式，所以可以先把样式的变化抽成一个函数</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="comment">// 所有改变curIndex的逻辑都要放到fn里面</span></span><br><span class="line">  <span class="title function_">callWithStyleUpdate</span>(<span class="params"></span></span><br><span class="line"><span class="params">    fn = noop,</span></span><br><span class="line"><span class="params">    callbacks = &#123;</span></span><br><span class="line"><span class="params">      before: <span class="variable language_">this</span>.clearStyle,</span></span><br><span class="line"><span class="params">      after: <span class="variable language_">this</span>.setStyle,</span></span><br><span class="line"><span class="params">    &#125;</span></span><br><span class="line"><span class="params">  </span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; before, after &#125; = callbacks;</span><br><span class="line">    <span class="comment">// 清除样式</span></span><br><span class="line">    before.<span class="title function_">call</span>(<span class="variable language_">this</span>, <span class="variable language_">this</span>.<span class="property">__curIndex</span>);</span><br><span class="line">    <span class="comment">// 执行逻辑，可能下一张，可能上一张，可能通过小点切换</span></span><br><span class="line">    <span class="title function_">fn</span>();</span><br><span class="line">    <span class="comment">// 赋予新的节点样式</span></span><br><span class="line">    after.<span class="title function_">call</span>(<span class="variable language_">this</span>, <span class="variable language_">this</span>.<span class="property">__curIndex</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 清除改变前对应curIndex节点样式</span></span><br><span class="line">  <span class="title function_">clearStyle</span>(<span class="params">curIndex</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; __triggerPointElements &#125; = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="comment">// 这里只要把小店的active删除即可，样式比较简单</span></span><br><span class="line">    __triggerPointElements[curIndex].<span class="property">classList</span>.<span class="title function_">remove</span>(<span class="string">&quot;active&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 设置改变后对应curIndex节点的样式</span></span><br><span class="line">  <span class="title function_">setStyle</span>(<span class="params">curIndex</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; __triggerPointElements, __imgContainer &#125; = <span class="variable language_">this</span>;</span><br><span class="line">    <span class="comment">// 整个container要便宜到新的位置</span></span><br><span class="line">    __imgContainer.<span class="property">style</span>.<span class="title function_">setProperty</span>(</span><br><span class="line">      <span class="string">&quot;transform&quot;</span>,</span><br><span class="line">      <span class="string">`translate3d(-<span class="subst">$&#123;curIndex * <span class="number">100</span>&#125;</span>%,0,0)`</span></span><br><span class="line">    );</span><br><span class="line">    <span class="comment">// 给对应小点赋值上active</span></span><br><span class="line">    __triggerPointElements[curIndex].<span class="property">classList</span>.<span class="title function_">add</span>(<span class="string">&quot;active&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改样式其实很多地方的逻辑都是一样的，没有必要在每个地方都写一样的代码，所以我个人把它抽成一个类似回调的调用。</p>
+<p>这样如果以后新增了样式，那么只需要在<code>clearStyle</code>或者<code>setStyle</code>里面进行修改即可，有点装饰器模式的味道。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="title function_">createRoot</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 给节点赋值class列表</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">setClass</span>(<span class="params">node, classList</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="title class_">Array</span>.<span class="title function_">isArray</span>(classList)) &#123;</span><br><span class="line">        classList = [classList];</span><br><span class="line">      &#125;</span><br><span class="line">      classList.<span class="title function_">forEach</span>(<span class="function">(<span class="params">className</span>) =&gt;</span> &#123;</span><br><span class="line">        node.<span class="property">classList</span>.<span class="title function_">add</span>(className);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建一个节点，然后赋值对应class</span></span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">createElement</span>(<span class="params">tag, classList</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> ele = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(tag);</span><br><span class="line">      <span class="title function_">setClass</span>(ele, classList);</span><br><span class="line">      <span class="keyword">return</span> ele;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建根，也就是div.carousel，是整个轮播图的最外层容器</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__root</span> = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> &#123; <span class="attr">__root</span>: root, imgUrlArray &#125; = <span class="variable language_">this</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 依次是对应的节点</span></span><br><span class="line">    <span class="keyword">const</span> container = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel__container&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> triggers = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel__trigger&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> triggerLeft = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel__trigger__left&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> triggerRight = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel__trigger__right&quot;</span>);</span><br><span class="line">    <span class="keyword">const</span> triggerPointContainer = <span class="title function_">createElement</span>(</span><br><span class="line">      <span class="string">&quot;ul&quot;</span>,</span><br><span class="line">      <span class="string">&quot;carousel__trigger__points&quot;</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 根据传入的数组来创建小点列表和轮播列表</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; imgUrlArray.<span class="property">length</span>; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> div = <span class="title function_">createElement</span>(<span class="string">&quot;div&quot;</span>, <span class="string">&quot;carousel__item&quot;</span>);</span><br><span class="line">      <span class="comment">// 这里使用了传入的render函数来生成节点的内容</span></span><br><span class="line">      <span class="keyword">const</span> content = <span class="variable language_">this</span>.<span class="title function_">__render</span>(imgUrlArray[i], i);</span><br><span class="line">      div.<span class="property">innerHTML</span> = content;</span><br><span class="line">      container.<span class="title function_">append</span>(div);</span><br><span class="line">      triggerPointContainer.<span class="title function_">append</span>(</span><br><span class="line">        <span class="title function_">createElement</span>(<span class="string">&quot;li&quot;</span>, <span class="string">&quot;carousel__trigger__point__item&quot;</span>)</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入对应父节点下面</span></span><br><span class="line">    triggers.<span class="title function_">append</span>(triggerLeft);</span><br><span class="line">    triggers.<span class="title function_">append</span>(triggerRight);</span><br><span class="line">    triggers.<span class="title function_">append</span>(triggerPointContainer);</span><br><span class="line"></span><br><span class="line">    root.<span class="title function_">append</span>(container);</span><br><span class="line">    root.<span class="title function_">append</span>(triggers);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 把常用的节点挂载到this上，方便之后调用</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__triggerPointElements</span> = triggerPointContainer.<span class="property">children</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__imgContainer</span> = container;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__imgElements</span> = container.<span class="property">children</span>;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__triggerLeftBtnElement</span> = triggerLeft;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">__triggerRightBtnElement</span> = triggerRight;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>createRoot</code>逻辑单一，就是创建整个轮播图的<code>dom</code>结构。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="comment">// 给小点和左右按钮定义点击事件</span></span><br><span class="line">  <span class="title function_">bindTriggerEvent</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123;</span><br><span class="line">      __triggerLeftBtnElement,</span><br><span class="line">      __triggerRightBtnElement,</span><br><span class="line">      __triggerPointElements,</span><br><span class="line">    &#125; = <span class="variable language_">this</span>;</span><br><span class="line">    __triggerLeftBtnElement.<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 如果已经是第一张，那么不能再继续上一张了，直接返回</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">__curIndex</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">callWithStyleUpdate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">__curIndex</span>--;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    __triggerRightBtnElement.<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="comment">// 如果是最后一张，那么不能再继续上一张，直接返回</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">__curIndex</span> === <span class="variable language_">this</span>.<span class="property">imgUrlArray</span>.<span class="property">length</span> - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">callWithStyleUpdate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">__curIndex</span>++;</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; __triggerPointElements.<span class="property">length</span>; i++) &#123;</span><br><span class="line">      __triggerPointElements[i].<span class="title function_">addEventListener</span>(<span class="string">&quot;click&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">callWithStyleUpdate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">          <span class="variable language_">this</span>.<span class="property">__curIndex</span> = i;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>bindTriggerEvent</code>用于绑定左右按钮和小点的事件，使得我们可以通过点击这些节点来切换到对应的轮播页。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="comment">// 定时器的函数</span></span><br><span class="line">  <span class="title function_">timerHandler</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">callWithStyleUpdate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">__curIndex</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// 第一张此时方向往右往左移动，最后一张为左往右移动</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">__dir</span> = <span class="number">1</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">__curIndex</span> === <span class="variable language_">this</span>.<span class="property">imgUrlArray</span>.<span class="property">length</span> - <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">__dir</span> = -<span class="number">1</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">__curIndex</span> += <span class="variable language_">this</span>.<span class="property">__dir</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 清除定时器</span></span><br><span class="line">  <span class="title function_">clearTimer</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">__timer</span>) &#123;</span><br><span class="line">      <span class="built_in">clearInterval</span>(<span class="variable language_">this</span>.<span class="property">__timer</span>);</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">__timer</span> = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 启动定时器来使得可以自动轮播</span></span><br><span class="line">  <span class="title function_">startTimer</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 小于等于1张不用设置定时器</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">imgUrlArray</span>.<span class="property">length</span> &gt; <span class="number">1</span>) &#123;</span><br><span class="line">      <span class="comment">// 鼠标进入根节点就清除定时器</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">__root</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseenter&quot;</span>, <span class="variable language_">this</span>.<span class="property">clearTimer</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>));</span><br><span class="line">      <span class="comment">// 鼠标离开根节点就设置定时器</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">__root</span>.<span class="title function_">addEventListener</span>(<span class="string">&quot;mouseleave&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="title function_">clearTimer</span>();</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">__timer</span> = <span class="built_in">setInterval</span>(<span class="variable language_">this</span>.<span class="property">timerHandler</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>), <span class="variable language_">this</span>.<span class="property">__ms</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">__timer</span> = <span class="built_in">setInterval</span>(<span class="variable language_">this</span>.<span class="property">timerHandler</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>), <span class="variable language_">this</span>.<span class="property">__ms</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这三个函数构成了定时器的逻辑。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Carousel</span> &#123;</span><br><span class="line">  <span class="comment">// 真正把轮播图挂载到节点上</span></span><br><span class="line">  <span class="title function_">mount</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">mountNode</span>.<span class="title function_">append</span>(<span class="variable language_">this</span>.<span class="property">__root</span>);</span><br><span class="line">    <span class="comment">// 绑定左右按钮和下面小点切换的函数</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">bindTriggerEvent</span>();</span><br><span class="line">    <span class="comment">// 启动计时器</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">startTimer</span>();</span><br><span class="line">    <span class="comment">// 初始化样式</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">callWithStyleUpdate</span>();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 销毁这个轮播图</span></span><br><span class="line">  <span class="title function_">destroy</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">clearTimer</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>基本上轮播图类就完成了，可以试下效果。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 测试代码</span></span><br><span class="line"><span class="keyword">const</span> carousel = <span class="keyword">new</span> <span class="title class_">Carousel</span>([<span class="string">&quot;A&quot;</span>, <span class="string">&quot;B&quot;</span>, <span class="string">&quot;C&quot;</span>], &#123;</span><br><span class="line">  <span class="attr">mountNode</span>: <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&quot;#app&quot;</span>),</span><br><span class="line">  <span class="attr">render</span>: <span class="function">(<span class="params">item, index</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`</span></span><br><span class="line"><span class="string">      &lt;div style=&quot;height: 100%;display: flex;align-items: center;justify-content: center;font-size: 20px&quot;&gt;</span></span><br><span class="line"><span class="string">        <span class="subst">$&#123;item&#125;</span></span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">     `</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line">carousel.<span class="title function_">mount</span>();</span><br></pre></td></tr></table></figure>
+
+<p><img data-src="https://i.loli.net/2020/11/06/iaeTrsbvSn3kmYP.gif"></p>
+<p>虽然完成了，但是还有很多可以优化的地方，比如这里的销毁只是把定时器给消除了。</p>
+<p>但是对于单页面组件来说，通过<code>addEventListener</code>监听的函数也必须删除，所以监听的函数必须在<code>destroy</code>中使用<code>removeEventListener</code>解除。</p>
+<p>由于篇幅的限制，本篇主要讲述我个人的轮播图的实现思路。</p>
+<p>当然，使用整个盒子移动的实现可能不是特别的常见，我看很多的轮播图都是基于绝对定位来进行动画的切换，下篇可能会写写思路。</p>
+<p>所以，当作一个小<code>demo</code>也未尝不可，自己实际写写也有助于理解嘛。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/269d28640b0a" title="轮播图的简单实现flex版">https://prohibitorum.top/269d28640b0a</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+              <a href="/tags/%E8%BD%AE%E6%92%AD%E5%9B%BE/" rel="tag"># 轮播图</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2ee3094db30f" rel="prev" title="Typescript中的工具类型">
+                  <i class="fa fa-angle-left"></i> Typescript中的工具类型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/89a850efd727" rel="next" title="Vue@next提案之script setup和ref sugar">
+                  Vue@next提案之script setup和ref sugar <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1604389039"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

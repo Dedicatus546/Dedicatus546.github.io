@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言最近在看 react 的源码，来写一写在 react 中的任务调度模块">
+<meta property="og:type" content="article">
+<meta property="og:title" content="react 源码之 scheduler">
+<meta property="og:url" content="https://prohibitorum.top/b2a5c571a69d">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言最近在看 react 的源码，来写一写在 react 中的任务调度模块">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/12/21/202212211704785.avif">
+<meta property="article:published_time" content="2022-12-21T17:46:22.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="react">
+<meta property="article:tag" content="react-scheduler">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/12/21/202212211704785.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/b2a5c571a69d.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/b2a5c571a69d","path":"b2a5c571a69d.html","title":"react 源码之 scheduler"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>react 源码之 scheduler | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/b2a5c571a69d">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="react 源码之 scheduler | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          react 源码之 scheduler
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-12-21 17:46:22" itemprop="dateCreated datePublished" datetime="2022-12-21T17:46:22+00:00">2022-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>15 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在看 <code>react</code> 的源码，来写一写在 <code>react</code> 中的任务调度模块</p>
+<span id="more"></span>
+
+<p>在 <code>react</code> 中， <code>react</code> 自己实现了一套任务调度系统，这个系统成为一个单独的模块，即 <code>scheduler</code></p>
+<p>为什么写这个，是因为其实 <code>scheduler</code> 包和 <code>react</code> 的耦合基本没有，而且实现比较简洁，所以拿出来写写</p>
+<p>（<del>最重要的一点是其他模块我看不懂啊</del>)</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本文一切的源码来源于 <code>react 18.2.0</code></p>
+<p><code>scheduler</code> 包的源码在 <code>package/scheduler</code> 下</p>
+<p>其核心的文件为 <code>package/scheduler/src/forks/Scheduler.js</code> ，主要的逻辑都在这个文件中</p>
+<p>在 <code>scheduler</code> 模块中定义了几种不同的优先级，放在 <code>package/scheduler/src/SchedulerPriorities.js</code> 中</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> <span class="title class_">PriorityLevel</span> = <span class="number">0</span> | <span class="number">1</span> | <span class="number">2</span> | <span class="number">3</span> | <span class="number">4</span> | <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">NoPriority</span> = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">ImmediatePriority</span> = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">UserBlockingPriority</span> = <span class="number">2</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">NormalPriority</span> = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">LowPriority</span> = <span class="number">4</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="title class_">IdlePriority</span> = <span class="number">5</span>;</span><br></pre></td></tr></table></figure>
+
+<p>数字越低，则优先级越高，意味着任务需要更快的被执行</p>
+<p>对于每种优先级，他们都对应了某个超时时间，在 <code>package/scheduler/src/forks/Scheduler.js</code> 的 <code>78 ~ 85</code> 行中，定义了几种如下的超时时间</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> maxSigned31BitInt = <span class="number">1073741823</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 立即执行</span></span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">IMMEDIATE_PRIORITY_TIMEOUT</span> = -<span class="number">1</span>;</span><br><span class="line"><span class="comment">// 在 x ms 内执行</span></span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">USER_BLOCKING_PRIORITY_TIMEOUT</span> = <span class="number">250</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">NORMAL_PRIORITY_TIMEOUT</span> = <span class="number">5000</span>;</span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">LOW_PRIORITY_TIMEOUT</span> = <span class="number">10000</span>;</span><br><span class="line"><span class="comment">// 可以无限超时</span></span><br><span class="line"><span class="keyword">var</span> <span class="variable constant_">IDLE_PRIORITY_TIMEOUT</span> = <span class="number">1073741823</span>;</span><br></pre></td></tr></table></figure>
+
+<p>对于每个优先级对应的超时时间，则是在 <code>unstable_scheduleCallback</code> 函数中匹配的</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">unstable_scheduleCallback</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">priorityLevel</span>: <span class="title class_">PriorityLevel</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">callback</span>: <span class="title class_">Callback</span>,</span></span><br><span class="line"><span class="params">  options?: &#123;delay: <span class="built_in">number</span>&#125;,</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Task</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">var</span> timeout;</span><br><span class="line">  <span class="keyword">switch</span> (priorityLevel) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">ImmediatePriority</span>:</span><br><span class="line">      timeout = <span class="variable constant_">IMMEDIATE_PRIORITY_TIMEOUT</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">UserBlockingPriority</span>:</span><br><span class="line">      timeout = <span class="variable constant_">USER_BLOCKING_PRIORITY_TIMEOUT</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">IdlePriority</span>:</span><br><span class="line">      timeout = <span class="variable constant_">IDLE_PRIORITY_TIMEOUT</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">LowPriority</span>:</span><br><span class="line">      timeout = <span class="variable constant_">LOW_PRIORITY_TIMEOUT</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="title class_">NormalPriority</span>:</span><br><span class="line">    <span class="attr">default</span>:</span><br><span class="line">      timeout = <span class="variable constant_">NORMAL_PRIORITY_TIMEOUT</span>;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在后面我们也会讲到，通过这个函数来向调度系统中注册任务</p>
+<p>在调度系统中，主要使用两个最小堆来存放任务列表，一个是处于调度中的任务列表，一个是延迟调度的任务列表</p>
+<p>在 <code>package/scheduler/src/forks/Scheduler.js</code> 的 <code>88 ~ 89</code> 行中</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="attr">taskQueue</span>: <span class="title class_">Array</span>&lt;<span class="title class_">Task</span>&gt; = [];</span><br><span class="line"><span class="keyword">var</span> <span class="attr">timerQueue</span>: <span class="title class_">Array</span>&lt;<span class="title class_">Task</span>&gt; = [];</span><br></pre></td></tr></table></figure>
+
+<p>在调度系统中，存在两种任务，又或者说任务的两种状态，一种是正在调度中任务，一种是延迟任务</p>
+<p>延迟任务会放到 <code>timerQueue</code> 中，如果延迟时间结束，那么它就会被放到 <code>taskQueue</code> 中执行调度过程</p>
+<p>这里要注意，<code>react</code> 自己实现了一个最小堆的算法，在 <code>package/scheduler/src/SchedulerMinHeap.js</code> 下</p>
+<p>该文件导出一些操作堆的工具函数，如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> push&lt;<span class="attr">T</span>: <span class="title class_">Node</span>&gt;(<span class="attr">heap</span>: <span class="title class_">Heap</span>&lt;T&gt;, <span class="attr">node</span>: T): <span class="built_in">void</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> peek&lt;<span class="attr">T</span>: <span class="title class_">Node</span>&gt;(<span class="attr">heap</span>: <span class="title class_">Heap</span>&lt;T&gt;): T | <span class="literal">null</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">function</span> pop&lt;<span class="attr">T</span>: <span class="title class_">Node</span>&gt;(<span class="attr">heap</span>: <span class="title class_">Heap</span>&lt;T&gt;): T | <span class="literal">null</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当然，这些函数的实现都不是重点，这里我们需要注意的是任务间的比较函数，即小根堆的堆顶是如何比较出来的</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">compare</span>(<span class="params"><span class="attr">a</span>: <span class="title class_">Node</span>, <span class="attr">b</span>: <span class="title class_">Node</span></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> diff = a.<span class="property">sortIndex</span> - b.<span class="property">sortIndex</span>;</span><br><span class="line">  <span class="keyword">return</span> diff !== <span class="number">0</span> ? diff : a.<span class="property">id</span> - b.<span class="property">id</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，任务的优先级和两个字段关联，一个是 <code>sortIndex</code>， 一个是 <code>id</code></p>
+<p>在小根堆中存放的是任务对象 <code>Task</code>，每一个 <code>Task</code> 它的 <code>js</code> 对象结构如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">Task</span> = &#123;</span><br><span class="line">  <span class="attr">id</span>: <span class="built_in">number</span>,</span><br><span class="line">  <span class="attr">callback</span>: <span class="title class_">Callback</span> | <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">priorityLevel</span>: <span class="title class_">PriorityLevel</span>,</span><br><span class="line">  <span class="attr">startTime</span>: <span class="built_in">number</span>,</span><br><span class="line">  <span class="attr">expirationTime</span>: <span class="built_in">number</span>,</span><br><span class="line">  <span class="attr">sortIndex</span>: <span class="built_in">number</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>id</code> 为数字，在全局有一个 <code>id</code> 自增变量，在 <code>package/scheduler/src/forks/Scheduler.js</code> 的 <code>92</code> 行</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Incrementing id counter. Used to maintain insertion order.</span></span><br><span class="line"><span class="keyword">var</span> taskIdCounter = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>每次有新的任务进来，就会把任务的 <code>id</code> 置为这个 <code>taskIdCounter</code> 的值，然后 <code>taskIdCounter</code> 自增，为下一个 <code>Task</code> 做准备</p>
+<p><code>callback</code> 即回调函数</p>
+<p><code>priorityLevel</code> 为该任务的优先级</p>
+<p><code>startTime</code> 有两个含义，如果此时是立即调度任务的话，那么这个值为 <code>currentTime()</code> 即注册这个任务的时间</p>
+<p>如果是延时任务的话，那么此时的值为 <code>currentTime() + delay</code> ，这里的 <code>delay</code> 为用户指定的延迟时间，后面在 <code>unstable_scheduleCallback</code> 函数也还会讲到</p>
+<p>也可以可以简单理解为开始调度的时间，在 <code>startTime</code> 开始调度任务</p>
+<p><code>expirationTime</code> 即任务的过期时间，可以简单理解为任务最晚执行的时间，即 <code>startTime + priorityLevel__timeout</code></p>
+<p><code>priorityLevel__timeout</code> 即该任务对应的优先级所对应的超时时间，前面的 <code>unstable_scheduleCallback</code> 函数内的 <code>switch</code> 有讲过</p>
+<p>对于 <code>sortIndex</code>， 它在调度队列和延时队列中的含义不同，在 <code>unstable_scheduleCallback</code> 函数中，分别赋予了不同的值，如下</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">unstable_scheduleCallback</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">priorityLevel</span>: <span class="title class_">PriorityLevel</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">callback</span>: <span class="title class_">Callback</span>,</span></span><br><span class="line"><span class="params">  options?: &#123;delay: <span class="built_in">number</span>&#125;,</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Task</span> &#123;</span><br><span class="line">  <span class="keyword">var</span> currentTime = <span class="title function_">getCurrentTime</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> startTime;</span><br><span class="line">  <span class="comment">// ... 确定 startTime ，有 delay 那么就是 currentTime() + delay ，没有就是 currentTime()</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> timeout;</span><br><span class="line">  <span class="comment">// ... 确定优先级的 timeout</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> <span class="attr">newTask</span>: <span class="title class_">Task</span> = &#123;</span><br><span class="line">    <span class="attr">id</span>: taskIdCounter++,</span><br><span class="line">    callback,</span><br><span class="line">    priorityLevel,</span><br><span class="line">    startTime,</span><br><span class="line">    expirationTime,</span><br><span class="line">    <span class="attr">sortIndex</span>: -<span class="number">1</span>,</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (startTime &gt; currentTime) &#123;</span><br><span class="line">    <span class="comment">// 延时任务</span></span><br><span class="line">    newTask.<span class="property">sortIndex</span> = startTime;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    newTask.<span class="property">sortIndex</span> = expirationTime;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newTask;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，调度队列的 <code>sortIndex</code> 为 <code>expirationTime</code> ，即任务的过期时间，也即任务的最晚执行时间</p>
+<p>如果任务 <code>A</code> 的过期时间比任务 <code>B</code> 早，那么 <code>A</code> 是一定要先执行的</p>
+<p>而延时任务的 <code>sortIndex</code> 则是任务的 <code>startTime</code> ，即任务应该<strong>从延时队列放到调度队列</strong>的时间</p>
+<p>当 <code>sortIndex</code> 相同的时候，此时会按照 <code>id</code> 进行判断，即先加入的会先执行，而后加入的会后执行</p>
+<p>在函数 <code>advanceTimers</code> 中，我们也可以看到，当一个延时任务从延时队列放到调度队列之后， <code>sortIndex</code> 属性也会更新成 <code>expirationTime</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">advanceTimers</span>(<span class="params">currentTime: number</span>) &#123;</span><br><span class="line">  <span class="comment">// 延时队列是否还有任务</span></span><br><span class="line">  <span class="keyword">let</span> timer = <span class="title function_">peek</span>(timerQueue);</span><br><span class="line">  <span class="keyword">while</span> (timer !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="comment">// 由于小根堆无法指定删除某个 Task</span></span><br><span class="line">    <span class="comment">// 而接口暴露了一个 unstable_cancelCallback 函数，内部就是把 Task 的 callback 属性置空</span></span><br><span class="line">    <span class="comment">// 所以这里要过滤掉这些被取消的 Task</span></span><br><span class="line">    <span class="keyword">if</span> (timer.<span class="property">callback</span> === <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="title function_">pop</span>(timerQueue);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="comment">// 检测到当前时间已经大于延时任务的启动时间了</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (timer.<span class="property">startTime</span> &lt;= currentTime) &#123;</span><br><span class="line">      <span class="comment">// 延时任务从延时队列弹出</span></span><br><span class="line">      <span class="title function_">pop</span>(timerQueue);</span><br><span class="line">      <span class="comment">// 更新 sortIndex ，此时它就是一个调度任务了</span></span><br><span class="line">      timer.<span class="property">sortIndex</span> = timer.<span class="property">expirationTime</span>;</span><br><span class="line">      <span class="comment">// 放到调度队列中</span></span><br><span class="line">      <span class="title function_">push</span>(taskQueue, timer);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// 没走到上面两个分支，那么确定此时的延时任务 startTime &gt; currentTime ，此时还不用将它放到调度队列中</span></span><br><span class="line">      <span class="comment">// 而又由于延时队列是最小堆，可以判断后面的延时任务的 startTime 都会大于 currentTime ，这里就直接跳出循环结束函数即可</span></span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 查看下个延时任务</span></span><br><span class="line">    timer = <span class="title function_">peek</span>(timerQueue);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>advanceTimers</code> 可以简单理解为把延时队列中应该放入调度队列的任务放到调度队列中</p>
+<p>前面我们分析了 <code>Task</code> 的数据结构以及 <code>Task</code> 的优先级，超时时间等</p>
+<p>对于每个 <code>Task</code> ，当轮到它执行的时候，并不是同步执行的，而是通过异步形式来执行</p>
+<p>在代码中的 <code>599 ~ 630</code> 行，我们可以发现有几个异步的 <code>api</code> ，<code>setImmediate</code> ，<code>MessageChannel</code> 以及 <code>setTimeout</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> schedulePerformWorkUntilDeadline;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> localSetImmediate === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">  schedulePerformWorkUntilDeadline = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">localSetImmediate</span>(performWorkUntilDeadline);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">MessageChannel</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> channel = <span class="keyword">new</span> <span class="title class_">MessageChannel</span>();</span><br><span class="line">  <span class="keyword">const</span> port = channel.<span class="property">port2</span>;</span><br><span class="line">  channel.<span class="property">port1</span>.<span class="property">onmessage</span> = performWorkUntilDeadline;</span><br><span class="line">  schedulePerformWorkUntilDeadline = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    port.<span class="title function_">postMessage</span>(<span class="literal">null</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  schedulePerformWorkUntilDeadline = <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">localSetTimeout</span>(performWorkUntilDeadline, <span class="number">0</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上往下，层层地降级，最优的选择是 <code>setImmediate</code> ，次优选择 <code>MessageChannel</code> ，如果前面都不支持，那么选择 <code>setTimeout</code> </p>
+<p>在该段代码的注释中，提到了使用每个 <code>api</code> 的原因</p>
+<p>对于 <code>setImmediate</code></p>
+<blockquote>
+<p>Node.js and old IE.<br>There’s a few reasons for why we prefer setImmediate.<br>Unlike MessageChannel, it doesn’t prevent a Node.js process from exiting.<br>(Even though this is a DOM fork of the Scheduler, you could get here<br>with a mix of Node.js 15+, which has a MessageChannel, and jsdom.)<br><a target="_blank" rel="noopener" href="https://github.com/facebook/react/issues/20756">https://github.com/facebook/react/issues/20756</a></p>
+<p>But also, it runs earlier which is the semantic we want.<br>If other browsers ever implement it, it’s better to use it.<br>Although both of these would be inferior to native scheduling.</p>
+</blockquote>
+<p>大意就是，这个 <code>api</code> 是 <code>node</code> 和老 <code>IE</code> 下支持的，对比 <code>MessageChannel</code> ，<code>setImmediate</code> 不会阻碍 <code>node</code> 进程的退出，以及会被更早的执行</p>
+<p>我们知道，<code>react</code> 在 <code>SSR</code> 下会跑在 <code>node</code> 端，所以这里会先判断 <code>setImmediate</code></p>
+<p>对于 <code>MessageChannel</code> ，对于很多人来说可能不是特别熟悉，这里放一个 <code>MDN</code> 的地址 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/MessageChannel">MessageChannel - MDN</a></p>
+<blockquote>
+<p>DOM and Worker environments.<br>We prefer MessageChannel because of the 4ms setTimeout clamping.</p>
+</blockquote>
+<p>这个 <code>api</code> 在 <code>DOM</code> 和 <code>Worker</code> 环境下可用，优先使用它的原因是 <code>setTimeout</code> 存在最小 <code>4ms</code> 的延迟，而 <code>MessageChannel</code> 没有这个限制</p>
+<p>关于 <code>setTimeout</code> 的 <code>4ms</code> 延迟，这里贴一个链接，讲的很好 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/155752686">为什么 setTimeout 有最小时延 4ms ? - 知乎</a></p>
+<p><code>react</code> 中会有嵌套 <code>setTimeout</code> 的情况，而在调度器的设置中，每个时间片为 <code>5ms</code> ，如果触发了 <code>4ms</code> 的限制，那么也就是说只剩 <code>1ms</code> 用于执行了，这对于调度来说是无法接受了</p>
+<p>接下来我们回到 <code>unstable_scheduleCallback</code> 这个函数</p>
+<p>在判断完是调度任务还是延时任务之后，这个函数除了把任务推入相应的小根堆之后，还会执行一些操作</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">unstable_scheduleCallback</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">priorityLevel</span>: <span class="title class_">PriorityLevel</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">callback</span>: <span class="title class_">Callback</span>,</span></span><br><span class="line"><span class="params">  options?: &#123;delay: <span class="built_in">number</span>&#125;,</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Task</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (startTime &gt; currentTime) &#123;</span><br><span class="line">    <span class="comment">// 延时任务</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="title function_">requestHostTimeout</span>(handleTimeout, startTime - currentTime);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 调度任务</span></span><br><span class="line">    <span class="keyword">if</span> (!isHostCallbackScheduled &amp;&amp; !isPerformingWork) &#123;</span><br><span class="line">      isHostCallbackScheduled = <span class="literal">true</span>;</span><br><span class="line">      <span class="title function_">requestHostCallback</span>(flushWork);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newTask;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里面有四个函数，<code>requestHostTimeout</code> 、 <code>requestHostCallback</code> 、 <code>handleTimeout</code> 、 <code>flushWork</code></p>
+<p>首先我们先看 <code>requestHostTimeout</code> 和 <code>requestHostCallback</code> 这两个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">requestHostTimeout</span>(<span class="params">callback, <span class="attr">ms</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  taskTimeoutID = <span class="title function_">localSetTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">callback</span>(<span class="title function_">getCurrentTime</span>());</span><br><span class="line">  &#125;, ms);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>requestHostTimeout</code> 很简单，就是启动了一个 <code>setTimeout</code> 宏任务，记录了任务的 <code>ID</code></p>
+<p>传入 <code>requestHostTimeout</code> 的 <code>callback</code> 为 <code>handleTimeout</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">handleTimeout</span>(<span class="params"><span class="attr">currentTime</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="comment">// 恢复标志位</span></span><br><span class="line">  isHostTimeoutScheduled = <span class="literal">false</span>;</span><br><span class="line">  <span class="comment">// 处理可以放到调度任务队列的延迟任务</span></span><br><span class="line">  <span class="title function_">advanceTimers</span>(currentTime);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果此时未调度，但是调度任务队列存在任务，要启动调度</span></span><br><span class="line">  <span class="comment">// 如果此时未调度，但是调度任务队列空了，而延迟任务队列非空，则要启动一个 setTimeout 来递归执行 handleTimeout </span></span><br><span class="line">  <span class="comment">// 用于下一次重新执行 advanceTimers 来处理能放入调度任务队列的延迟任务</span></span><br><span class="line">  <span class="keyword">if</span> (!isHostCallbackScheduled) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">peek</span>(taskQueue) !== <span class="literal">null</span>) &#123;</span><br><span class="line">      isHostCallbackScheduled = <span class="literal">true</span>;</span><br><span class="line">      <span class="title function_">requestHostCallback</span>(flushWork);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> firstTimer = <span class="title function_">peek</span>(timerQueue);</span><br><span class="line">      <span class="keyword">if</span> (firstTimer !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="title function_">requestHostTimeout</span>(handleTimeout, firstTimer.<span class="property">startTime</span> - currentTime);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>简单讲 <code>handleTimeout</code> 就是 <code>advanceTimers</code> 包了一层，然后在能启动调度的情况下启动调度</p>
+<p>对于 <code>requestHostTimeout(handleTimeout)</code> ，在整个调度过程中，某一时刻只会有一个 <code>setTimeout</code> 会真正地执行到</p>
+<p>因为延时队列任务的堆顶是在不断变化的，假设我们现在推入了三个延时任务 <code>2 1 3</code> 数字代表延迟的时间（单位：<code>s</code>）</p>
+<p>当我们把 <code>2</code> 放入延迟任务队列之后，调度系统会启动一个 <code>setTimeout</code> ，在 <code>2s</code> 之后执行一次 <code>handleTimeout</code></p>
+<p>而在 <code>0.5s</code> 之后我们放入了任务 <code>1</code> ，此时延时任务堆顶已经不是任务 <code>2</code> 了（任务 <code>2</code> 的 <code>startTime</code> 比任务 <code>1</code> 要大，即任务 <code>1</code> 的延迟时间比任务 <code>2</code> 要短），但是任务 <code>2</code> 的回调依然存在</p>
+<p>所以这时我们需要取消任务 <code>2</code> 的回调，再启动任务 <code>1</code> 的回调，这样逻辑上才是正确的</p>
+<p>接着我们立马加入延时任务 <code>3</code> ，由于此时延时任务 <code>3</code> 的 <code>startTime</code> 比任务 <code>1</code> 的大，此时延时任务队列堆顶还是任务 <code>1</code> ，此时则不用进行操作</p>
+<p>在代码中，有两处清理的情况，其中一处为 <code>unstable_scheduleCallback</code> 中，在处理延时任务时，会先清理回调</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">unstable_scheduleCallback</span>(<span class="params"></span></span><br><span class="line"><span class="params">  <span class="attr">priorityLevel</span>: <span class="title class_">PriorityLevel</span>,</span></span><br><span class="line"><span class="params">  <span class="attr">callback</span>: <span class="title class_">Callback</span>,</span></span><br><span class="line"><span class="params">  options?: &#123;delay: <span class="built_in">number</span>&#125;,</span></span><br><span class="line"><span class="params"></span>): <span class="title class_">Task</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (startTime &gt; currentTime) &#123;</span><br><span class="line">    newTask.<span class="property">sortIndex</span> = startTime;</span><br><span class="line">    <span class="title function_">push</span>(timerQueue, newTask);</span><br><span class="line">    <span class="comment">// 如果调度任务队列为空，且此时新的任务是最先该放到调度任务的队列的话</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">peek</span>(taskQueue) === <span class="literal">null</span> &amp;&amp; newTask === <span class="title function_">peek</span>(timerQueue)) &#123;</span><br><span class="line">      <span class="comment">// 原本的回调要取消，因为此时第一个该放到调度任务队列的任务已经改变</span></span><br><span class="line">      <span class="keyword">if</span> (isHostTimeoutScheduled) &#123;</span><br><span class="line">        <span class="title function_">cancelHostTimeout</span>();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        isHostTimeoutScheduled = <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 启动定时器</span></span><br><span class="line">      <span class="title function_">requestHostTimeout</span>(handleTimeout, startTime - currentTime);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> newTask;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另一处为 <code>flushWork</code> 中，在执行 <code>workLoop</code> 前会执行一次，因为 <code>workLoop</code> 结束前会把延迟任务队列的堆顶拿出来开一个 <code>setTimeout</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">flushWork</span>(<span class="params"><span class="attr">hasTimeRemaining</span>: <span class="built_in">boolean</span>, <span class="attr">initialTime</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 存在的话要取消掉，因为 workLoop 会重新启动 handleTimeout</span></span><br><span class="line">  <span class="keyword">if</span> (isHostTimeoutScheduled) &#123;</span><br><span class="line">    isHostTimeoutScheduled = <span class="literal">false</span>;</span><br><span class="line">    <span class="title function_">cancelHostTimeout</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">workLoop</span>(hasTimeRemaining, initialTime);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">workLoop</span>(<span class="params"><span class="attr">hasTimeRemaining</span>: <span class="built_in">boolean</span>, <span class="attr">initialTime</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> currentTime = initialTime;</span><br><span class="line">  <span class="title function_">advanceTimers</span>(currentTime);</span><br><span class="line">  currentTask = <span class="title function_">peek</span>(taskQueue);</span><br><span class="line">  <span class="keyword">while</span> (</span><br><span class="line">    currentTask !== <span class="literal">null</span> &amp;&amp;</span><br><span class="line">    !(enableSchedulerDebugging &amp;&amp; isSchedulerPaused)</span><br><span class="line">    ) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">if</span> (currentTask !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 延迟任务队列非空，取堆顶开启定时器</span></span><br><span class="line">    <span class="keyword">const</span> firstTimer = <span class="title function_">peek</span>(timerQueue);</span><br><span class="line">    <span class="keyword">if</span> (firstTimer !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="title function_">requestHostTimeout</span>(handleTimeout, firstTimer.<span class="property">startTime</span> - currentTime);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于 <code>requestHostCallback</code> ，它会把回调赋给 <code>scheduledHostCallback</code> 变量</p>
+<p>然后判断 <code>isMessageLoopRunning</code> ，在非调度状态下才执行一次调度，即执行 <code>schedulePerformWorkUntilDeadline</code> 函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">requestHostCallback</span>(<span class="params">callback</span>) &#123;</span><br><span class="line">  scheduledHostCallback = callback;</span><br><span class="line">  <span class="keyword">if</span> (!isMessageLoopRunning) &#123;</span><br><span class="line">    isMessageLoopRunning = <span class="literal">true</span>;</span><br><span class="line">    <span class="title function_">schedulePerformWorkUntilDeadline</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在前面我们知道 <code>schedulePerformWorkUntilDeadline</code> 就是取 <code>setImmediate</code> 、 <code>MessageChannel</code> 、 <code>setTimeout</code> 中的一个</p>
+<p>然后真正执行的是 <code>performWorkUntilDeadline</code> 这个函数，通过名字不难理解，就是执行任务直到截至时间</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">performWorkUntilDeadline</span> = (<span class="params"></span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (scheduledHostCallback !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> currentTime = <span class="title function_">getCurrentTime</span>();</span><br><span class="line">    <span class="keyword">const</span> hasTimeRemaining = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">let</span> hasMoreWork = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      hasMoreWork = <span class="title function_">scheduledHostCallback</span>(hasTimeRemaining, currentTime);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (hasMoreWork) &#123;</span><br><span class="line">        <span class="title function_">schedulePerformWorkUntilDeadline</span>();</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        isMessageLoopRunning = <span class="literal">false</span>;</span><br><span class="line">        scheduledHostCallback = <span class="literal">null</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    isMessageLoopRunning = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  needsPaint = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到上来就判断了 <code>scheduledHostCallback</code> 是否存在，然后在 <code>try</code> 里面执行了</p>
+<p>这里要注意，这个 <code>scheduledHostCallback</code> 其实就是 <code>flushWork</code> 这个函数，因为之前在 <code>unstable_scheduleCallback</code> 中，就调用了 <code>requestHostCallback(flushWork)</code></p>
+<p>在 <code>finally</code> 里面，会根据 <code>scheduledHostCallback</code> 返回的情况来判断是否继续进行调度，如果 <code>hasMoreWork</code> 为真，那么表明此时还有任务，需要继续进行调度</p>
+<p>如果为假，那么把全局变量 <code>isMessageLoopRunning</code> 置为假，意味着此时没有调度， <code>scheduledHostCallback</code> 置为 <code>null</code> ，等待下一次的 <code>flushWork</code></p>
+<p>接下来我们来看 <code>flushWork</code> 这个函数</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">flushWork</span>(<span class="params"><span class="attr">hasTimeRemaining</span>: <span class="built_in">boolean</span>, <span class="attr">initialTime</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 调度已完成</span></span><br><span class="line">  isHostCallbackScheduled = <span class="literal">false</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 开始执行回调</span></span><br><span class="line">  isPerformingWork = <span class="literal">true</span>;</span><br><span class="line">  <span class="comment">// 保存之前的优先级</span></span><br><span class="line">  <span class="keyword">const</span> previousPriorityLevel = currentPriorityLevel;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 执行回调</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">workLoop</span>(hasTimeRemaining, initialTime);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    <span class="comment">// 更新标志位</span></span><br><span class="line">    currentTask = <span class="literal">null</span>;</span><br><span class="line">    <span class="comment">// 恢复之前优先级</span></span><br><span class="line">    currentPriorityLevel = previousPriorityLevel;</span><br><span class="line">    <span class="comment">// 回调执行完成</span></span><br><span class="line">    isPerformingWork = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到核心逻辑为 <code>workLoop</code></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">workLoop</span>(<span class="params"><span class="attr">hasTimeRemaining</span>: <span class="built_in">boolean</span>, <span class="attr">initialTime</span>: <span class="built_in">number</span></span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> currentTime = initialTime;</span><br><span class="line">  <span class="title function_">advanceTimers</span>(currentTime);</span><br><span class="line">  <span class="comment">// 取调度队列堆顶元素</span></span><br><span class="line">  currentTask = <span class="title function_">peek</span>(taskQueue);</span><br><span class="line">  <span class="comment">// 调度队列非空情况下开始循环 （enableSchedulerDebugging &amp;&amp; isSchedulerPaused 这个条件不用看，调试用的）</span></span><br><span class="line">  <span class="keyword">while</span> (</span><br><span class="line">    currentTask !== <span class="literal">null</span> &amp;&amp;</span><br><span class="line">    !(enableSchedulerDebugging &amp;&amp; isSchedulerPaused)</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="comment">// 当前任务过期时间大于当前时间且此时无剩余时间</span></span><br><span class="line">    <span class="comment">// 或者此时前任务过期时间大于当前时间且此时应该交还主线程控制权</span></span><br><span class="line">    <span class="comment">// 则退出循环</span></span><br><span class="line">    <span class="keyword">if</span> (</span><br><span class="line">      currentTask.<span class="property">expirationTime</span> &gt; currentTime &amp;&amp;</span><br><span class="line">      (!hasTimeRemaining || <span class="title function_">shouldYieldToHost</span>())</span><br><span class="line">    ) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> callback = currentTask.<span class="property">callback</span>;</span><br><span class="line">    <span class="comment">// 只处理 callback 为函数的情况</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> callback === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">      currentTask.<span class="property">callback</span> = <span class="literal">null</span>;</span><br><span class="line">      currentPriorityLevel = currentTask.<span class="property">priorityLevel</span>;</span><br><span class="line">      <span class="comment">// 任务是否超时了</span></span><br><span class="line">      <span class="keyword">const</span> didUserCallbackTimeout = currentTask.<span class="property">expirationTime</span> &lt;= currentTime;</span><br><span class="line">      <span class="comment">// 执行任务，任务可能返回一个函数</span></span><br><span class="line">      <span class="keyword">const</span> continuationCallback = <span class="title function_">callback</span>(didUserCallbackTimeout);</span><br><span class="line">      currentTime = <span class="title function_">getCurrentTime</span>();</span><br><span class="line">      <span class="comment">// 返回了函数，则当前任务的 callback 更新为这个返回的函数</span></span><br><span class="line">      <span class="comment">// 然后进行下一次的调度</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">typeof</span> continuationCallback === <span class="string">&#x27;function&#x27;</span>) &#123;</span><br><span class="line">        currentTask.<span class="property">callback</span> = continuationCallback;</span><br><span class="line">        <span class="title function_">advanceTimers</span>(currentTime);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125; </span><br><span class="line">      <span class="comment">// 返回非函数，则表明当前任务执行完成了，直接弹出</span></span><br><span class="line">      <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (currentTask === <span class="title function_">peek</span>(taskQueue)) &#123;</span><br><span class="line">          <span class="title function_">pop</span>(taskQueue);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title function_">advanceTimers</span>(currentTime);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="title function_">pop</span>(taskQueue);</span><br><span class="line">    &#125;</span><br><span class="line">    currentTask = <span class="title function_">peek</span>(taskQueue);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 任务还有，即上面的 while 提前退出</span></span><br><span class="line">  <span class="comment">// 此时返回 true ，表明还有任务未处理，performWorkUntilDeadline 里的 hasMoreWork 为 true</span></span><br><span class="line">  <span class="comment">// 这样会再次执行 schedulePerformWorkUntilDeadline ，在下一个宏任务时执行 performWorkUntilDeadline 函数，构成一个循环</span></span><br><span class="line">  <span class="keyword">if</span> (currentTask !== <span class="literal">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> firstTimer = <span class="title function_">peek</span>(timerQueue);</span><br><span class="line">    <span class="keyword">if</span> (firstTimer !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="title function_">requestHostTimeout</span>(handleTimeout, firstTimer.<span class="property">startTime</span> - currentTime);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里面的逻辑中，有两个很重要的点，一个是 <code>shouldYieldToHost</code> 以及 <code>continuationCallback</code> </p>
+<p><code>shouldYieldToHost</code> 会计算时间片是否有剩余，有的话就会继续执行任务，无剩余就会结束循环</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">shouldYieldToHost</span>(<span class="params"></span>): <span class="built_in">boolean</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> timeElapsed = <span class="title function_">getCurrentTime</span>() - startTime;</span><br><span class="line">  <span class="comment">// frameInterval 为 5ms ，即时间片长度</span></span><br><span class="line">  <span class="keyword">if</span> (timeElapsed &lt; frameInterval) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 这个 enableIsInputPending 目前是 false 不管</span></span><br><span class="line">  <span class="keyword">if</span> (enableIsInputPending) &#123;</span><br><span class="line">    <span class="keyword">if</span> (needsPaint) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (timeElapsed &lt; continuousInputInterval) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isInputPending !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">isInputPending</span>();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (timeElapsed &lt; maxInterval) &#123;</span><br><span class="line">      <span class="keyword">if</span> (isInputPending !== <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">isInputPending</span>(continuousOptions);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 还没到时间片长度，可以继续执行</span></span><br><span class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>中间这一段其实目前可以不管，因为 <code>enableIsInputPending</code> 这个配置目前是关闭的</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/12/21/202212211704785.avif"></p>
+<p>所以整段的逻辑就是时间片是否消耗完</p>
+<p>然后是 <code>continuationCallback</code> ，在调度中，其实是执行单位是一个 <code>callback</code> ，调度系统在执行完一个 <code>callback</code> 之后才能执行时间片判断</p>
+<p>这会导致如果一个 <code>callback</code> 如果时间过长，那么调度系统就起不了作用了，所以这个 <code>continuationCallback</code> 可以看成暴露给调用者的一个接口</p>
+<p>调用者可以自行对 <code>callback</code> 进行分割，返回一个新的 <code>callback</code> ，用于下一轮的调度</p>
+<p>到此，核心的代码就基本讲完了，整个流程我们可以总结如下</p>
+<p>在不引入延时任务这个概念的前提下，可以很简单地概括调度流程</p>
+<p>每次通过 <code>MessageChannel</code> 启动调度，调度的内容为，如果当前时间片还有剩余，则拿出调度队列里的任务执行，直到时间片消耗完成或者调度任务队列为空</p>
+<p>如果时间片消耗完，但是此时调度队列不为空，那么重新启动一个 <code>MessageChannel</code> 回调，然后重复上一行的流程</p>
+<p>而延时任务也很简单，先放延时任务队列里面，然后把最应该先调度的延时任务通过 <code>setTimeout</code> 放入调度任务队列中，然后按照上面的流程执行</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>虽然 <code>scheduler</code> 包和 <code>react</code> 的整体关系不大，但是看起来对于我来说还是有一些难度</p>
+<p>当然，除了整体的逻辑，还有一些写法可以学习，比如代码里会保存 <code>setTimeout</code> 等一些定时器的引用</p>
+<p>保证执行过程中调度系统的稳定性</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> localSetTimeout = <span class="keyword">typeof</span> <span class="built_in">setTimeout</span> === <span class="string">&#x27;function&#x27;</span> ? <span class="built_in">setTimeout</span> : <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> localClearTimeout =</span><br><span class="line">  <span class="keyword">typeof</span> <span class="built_in">clearTimeout</span> === <span class="string">&#x27;function&#x27;</span> ? <span class="built_in">clearTimeout</span> : <span class="literal">null</span>;</span><br><span class="line"><span class="keyword">const</span> localSetImmediate =</span><br><span class="line">  <span class="keyword">typeof</span> setImmediate !== <span class="string">&#x27;undefined&#x27;</span> ? setImmediate : <span class="literal">null</span>;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/b2a5c571a69d" title="react 源码之 scheduler">https://prohibitorum.top/b2a5c571a69d</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/react/" rel="tag"># react</a>
+              <a href="/tags/react-scheduler/" rel="tag"># react-scheduler</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/84f2b2dfb381" rel="prev" title="记一次 VSCode Java类型无法被识别问题">
+                  <i class="fa fa-angle-left"></i> 记一次 VSCode Java类型无法被识别问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/ce261f1dbe1d" rel="next" title="《本是社畜的我》">
+                  《本是社畜的我》 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1671615982"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>

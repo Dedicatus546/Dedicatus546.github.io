@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言CSS 样式权重">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS样式权重">
+<meta property="og:url" content="https://prohibitorum.top/1f70e1987c43">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言CSS 样式权重">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/oN374g1TAyJ8GQi.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/GZUqzkBCIocRheN.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/6uO5cVAHi2BjFDz.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/sQXRduKvEImGrZM.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/MeDtUFoCvT2SPwV.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/xYaWmjrtfGXezKy.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/MuopHBTn3bWNmyX.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/moRa3QLD4S57Zcs.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/qzDgRZYJfbn9KO7.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/OwynTjeZsXuJKgA.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/yqlOACDacr3R5nF.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/Viq3zgRMxTfp9ea.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/WafNwcvY6EPGbMp.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/ul2GD6YeyJ1swSK.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/QZXqBEvYy1ugDxk.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/i5Ut6kErybAMLqK.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/ty8spv94CrqDmAH.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/UCqIF8aH3pAJ5Ke.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/15/PtrhObRpME2WQLy.png">
+<meta property="article:published_time" content="2020-10-12T10:03:55.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Dedicatus545">
+<meta property="article:tag" content="CSS">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/15/oN374g1TAyJ8GQi.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/1f70e1987c43.html">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/1f70e1987c43","path":"1f70e1987c43.html","title":"CSS样式权重"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CSS样式权重 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js"></script>
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container"></div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container">
+  <div class="algolia-stats"><hr></div>
+  <div class="algolia-hits"></div>
+  <div class="algolia-pagination"></div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CSS-%E6%A0%B7%E5%BC%8F%E6%9D%83%E9%87%8D"><span class="nav-number">2.</span> <span class="nav-text">CSS 样式权重</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#important"><span class="nav-number">2.1.</span> <span class="nav-text">!important</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#style"><span class="nav-number">2.2.</span> <span class="nav-text">style&#x3D;&quot;...&quot;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E8%81%94-VS-ID"><span class="nav-number">2.2.1.</span> <span class="nav-text">内联 VS ID</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E8%81%94-VS-%E7%B1%BB%E5%90%8D"><span class="nav-number">2.2.2.</span> <span class="nav-text">内联 VS 类名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E8%81%94-VS-%E6%A0%87%E7%AD%BE"><span class="nav-number">2.2.3.</span> <span class="nav-text">内联 VS 标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idName"><span class="nav-number">2.3.</span> <span class="nav-text">#idName</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ID-VS-%E7%B1%BB%E5%90%8D"><span class="nav-number">2.3.1.</span> <span class="nav-text">ID VS 类名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ID-VS-%E6%A0%87%E7%AD%BE"><span class="nav-number">2.3.2.</span> <span class="nav-text">ID VS 标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#className"><span class="nav-number">2.4.</span> <span class="nav-text">.className</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%90%8D-VS-%E6%A0%87%E7%AD%BE"><span class="nav-number">2.4.1.</span> <span class="nav-text">类名 VS 标签</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AE%A1%E7%AE%97%E6%9D%83%E9%87%8D%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">如何计算权重？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">注意点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9D%83%E9%87%8D%E8%AE%A1%E7%AE%97"><span class="nav-number">3.1.1.</span> <span class="nav-text">权重计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#important-1"><span class="nav-number">3.1.2.</span> <span class="nav-text">!important</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Dedicatus545"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Dedicatus545</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">192</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/1f70e1987c43">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Dedicatus545">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CSS样式权重 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CSS样式权重
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-12 10:03:55" itemprop="dateCreated datePublished" datetime="2020-10-12T10:03:55+00:00">2020-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>CSS 样式权重</p>
+<span id="more"></span>
+
+<h1 id="CSS-样式权重"><a href="#CSS-样式权重" class="headerlink" title="CSS 样式权重"></a>CSS 样式权重</h1><p>之前做的两个项目，写一些组件时会出现样式无法覆盖的情况，所以写写，来增加理解。</p>
+<p>CSS 中的样式有一套规则，来判断样式的权重，对一个元素，权重最大的生效，也就是其他的样式都此样式被覆盖。</p>
+<p>对于权重，分了几个等级，依次递减为。</p>
+<ul>
+<li><code>!important</code> 此样式的权重最高，为<code>1|0|0|0|0</code>；</li>
+<li><code>style=&quot;...&quot;</code> 内联样式，此样式权重次高，为<code>1|0|0|0</code>；</li>
+<li><code>#idname</code> id 选择器，此样式权重次次高，为<code>1|0|0</code>；</li>
+<li><code>.classname</code>|<code>:hover</code>|<code>input[disable]</code> 类选择器，伪类选择器，属性选择器，此样式权重次次次高，为<code>1|0</code>；</li>
+<li><code>h1</code>|<code>::after</code> 标签选择器，伪元素选择器，此样式权重倒数第二，为<code>1</code>；</li>
+<li><code>*</code>|<code>+</code>|<code>~</code>|<code>&gt;</code>|<code>:not</code> 通用选择器，相邻选择器，同胞选择器，子选择器，以及否定伪类，此样式权重最低，为<code>0</code>，即这几个不参与样式权重的计算。</li>
+</ul>
+<h2 id="important"><a href="#important" class="headerlink" title="!important"></a><code>!important</code></h2><p>每次当我不知道为啥无法覆盖当前的样式时，我就会使用此来覆盖样式 😂。</p>
+<p>不过这样做并不好，因为写不出覆盖效果大概率是没懂 css 的权重计算，理解了并使用才是最好的。</p>
+<p>给某个 css 属性值末尾加上<code>!important</code>之后，那么这个样式的优先级就变得最高了，无论是先写还是后写（对于权重相同的样式，后写的会覆盖先写的）。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: pink!important;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/oN374g1TAyJ8GQi.png"></p>
+<p>发现写在内联的样式中的<code>!important</code>背景色覆盖了类名<code>.div1</code>的样式</p>
+<p>不过这么些并没有什么说服力，因为刚开始我们就说<strong>内联样式权重</strong>是大于<strong>类名样式权重</strong>的。</p>
+<p>所以<strong>内联样式</strong>就是会覆盖<strong>类名样式</strong>的</p>
+<p>所以我们换个思路</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: pink;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="comment">/*无!important修饰*/</span></span><br><span class="line">  <span class="comment">/*background-color: #1890ff;*/</span></span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span> <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们在类里面使用<code>!important</code>设定背景色，然后在内联样式中也设定背景色。</p>
+<p>按照之前的排行，<strong>内联样式</strong>是会覆盖<strong>类名样式</strong>的。</p>
+<p>我们不加<code>!important</code>看看效果。</p>
+<p><img data-src="https://i.loli.net/2020/10/15/GZUqzkBCIocRheN.png"></p>
+<p>图中展示确实是内联覆盖了类名。</p>
+<p>然后我们在类名中加上<code>!important</code>，看看效果。</p>
+<p><img data-src="https://i.loli.net/2020/10/15/6uO5cVAHi2BjFDz.png"></p>
+<p>类名的样式覆盖了内联样式了，有点意思 😏。</p>
+<p>当然这里的覆盖只会应用于背景色这个样式，其他没设置的依然是内联覆盖类名的。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span></span></span><br><span class="line"><span class="tag">  <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">style</span>=<span class="string">&quot;width:150px;height:150px;background-color: pink;&quot;</span></span></span><br><span class="line"><span class="tag">&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span> <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/sQXRduKvEImGrZM.png"></p>
+<p>内联的高度和宽度还是覆盖了类名的，只有背景色<code>background-color</code>是类名覆盖内联的，因为加上了<code>!important</code>。</p>
+<p>前面说过，有几种选择器是不参与权重计算的，他们的权重为<code>0</code>。</p>
+<p>那么我们试试如果把<code>!important</code>写到这些选择器里面会是什么效果，就以通用符<code>*</code>来作例子。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">* &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span> <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: white;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按照前面的说法，如果<code>*</code>不参与权重计算，那么页面应该是白色，但是在<code>*</code>里面使用<code>!important</code>之后。</p>
+<p><img data-src="https://i.loli.net/2020/10/15/MeDtUFoCvT2SPwV.png"></p>
+<p>整个页面都变成蓝色了，也就是<code>!important</code>覆盖了标签名的样式。</p>
+<h2 id="style"><a href="#style" class="headerlink" title="style=&quot;...&quot;"></a><code>style=&quot;...&quot;</code></h2><p>内联样式大部分的时候都是在想动态的计算 css 属性值时才会使用。</p>
+<p>像 Bilibili 首页的轮播图就是使用了内联的<code>transform</code>来动态的控制<code>translate3d</code>中水平 X 坐标的位置（第一个参数）。</p>
+<p><img data-src="https://i.loli.net/2020/10/15/xYaWmjrtfGXezKy.png"></p>
+<p>内联样式是仅次于<code>!important</code>的，优先级很高，但是很多的时候都不会写大量的内联样式。</p>
+<h3 id="内联-VS-ID"><a href="#内联-VS-ID" class="headerlink" title="内联 VS ID"></a>内联 VS ID</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: pink;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#div1</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://i.loli.net/2020/10/15/MuopHBTn3bWNmyX.png"></p>
+<p>内联的粉色覆盖了<code>id</code>的蓝色。</p>
+<h3 id="内联-VS-类名"><a href="#内联-VS-类名" class="headerlink" title="内联 VS 类名"></a>内联 VS 类名</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">style</span>=<span class="string">&quot;background-color: pink;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.div1</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://i.loli.net/2020/10/15/moRa3QLD4S57Zcs.png"></p>
+<p>内联的粉色覆盖了类名的蓝色。</p>
+<h3 id="内联-VS-标签"><a href="#内联-VS-标签" class="headerlink" title="内联 VS 标签"></a>内联 VS 标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;background-color: pink;&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://i.loli.net/2020/10/15/qzDgRZYJfbn9KO7.png"></p>
+<p>内联的粉色覆盖了标签的蓝色。</p>
+<h2 id="idName"><a href="#idName" class="headerlink" title="#idName"></a>#idName</h2><p>id 选择器，怎么说呢，我做的两个项目都只在根上使用了 id 选择器，主要是设置字体大小和颜色等一些基本的样式。</p>
+<p>id 选择器的优先级次于<code>!important</code>和内联。</p>
+<h3 id="ID-VS-类名"><a href="#ID-VS-类名" class="headerlink" title="ID VS 类名"></a>ID VS 类名</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span> <span class="attr">class</span>=<span class="string">&quot;div&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.div</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#div1</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: pink;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/OwynTjeZsXuJKgA.png"></p>
+<p>ID 的粉色覆盖了类名的蓝色。</p>
+<h3 id="ID-VS-标签"><a href="#ID-VS-标签" class="headerlink" title="ID VS 标签"></a>ID VS 标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-id">#div1</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: pink;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/yqlOACDacr3R5nF.png"></p>
+<p>ID 的粉色覆盖了标签的蓝色。</p>
+<h2 id="className"><a href="#className" class="headerlink" title=".className"></a>.className</h2><p>类名选择器，这个可以说是最常用的了，一般不会写很多内联，也不会写很多 id 选择器，而是通过类名来分组，通过类的名字来表示类的作用。</p>
+<p>之前在做学校新的官网的时候，使用了一点’语义化’的<code>css</code>（应该可以这么比喻）。</p>
+<p>项目中很多地方使用了<code>flex</code>布局，以及间距等，所以写了一些公共的样式来直接的使用，比如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.mt-10</span> &#123;</span><br><span class="line">  <span class="attribute">margin-top</span>: <span class="number">10px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.pt-10</span> &#123;</span><br><span class="line">  <span class="attribute">padding-top</span>: <span class="number">10px</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.flex</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: flex;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.t-center</span> &#123;</span><br><span class="line">  <span class="attribute">text-align</span>: center;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*etc...*/</span></span><br></pre></td></tr></table></figure>
+
+<p>总体而言效果还不错，可能是项目比较小的缘故 🤣。</p>
+<h3 id="类名-VS-标签"><a href="#类名-VS-标签" class="headerlink" title="类名 VS 标签"></a>类名 VS 标签</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">display</span>: inline-block;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">100px</span>;</span><br><span class="line">  <span class="attribute">background-color</span>: <span class="number">#1890ff</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.div1</span> &#123;</span><br><span class="line">  <span class="attribute">background-color</span>: pink;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图：</p>
+<p><img data-src="https://i.loli.net/2020/10/15/Viq3zgRMxTfp9ea.png"></p>
+<h1 id="如何计算权重？"><a href="#如何计算权重？" class="headerlink" title="如何计算权重？"></a>如何计算权重？</h1><p>前面我么写的都是些简单的比较，而实际上可能我们的选择链会很长，比如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.button</span> <span class="selector-class">.button__icon</span> <span class="selector-class">.button__icon--color</span> &#123;</span><br><span class="line">  <span class="comment">/*写样式..*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么应该如何计算选择链条的权重呢？</p>
+<p>前面已经把每种选择器的权重都写出来了，比如对于下面这个选择链：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-attr">[href=<span class="string">&quot;#achor1&quot;</span>]</span> &gt; <span class="selector-class">.inline-warning</span> &#123;</span><br><span class="line">  <span class="comment">/*写样式...*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以根据之前的说明，发现这个里面存在了两个标签选择器<code>li</code>和<code>a</code>。</p>
+<p>此时的权重应该是<code>0|0|0|0|2</code>。</p>
+<p>接着又发现了里面存在一个类选择器<code>.inline-warning</code>和属性选择器<code>[href=&quot;#achor1&quot;]</code>。</p>
+<p>此时的权重应该是<code>0|0|0|2|2</code>。。</p>
+<p>由于直接子元素选择权重为 0，所以无需计算。</p>
+<p>所以此时的权重为<code>0|0|0|2|2</code>。</p>
+<p>那么此时如果出现了另一个选择器，为如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#l1</span> &gt; <span class="selector-tag">a</span><span class="selector-attr">[href=<span class="string">&quot;#achor1&quot;</span>]</span> &gt; <span class="selector-class">.inline-warning</span> &#123;</span><br><span class="line">  <span class="comment">/*写样式...*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么同样根据计算，这个的权重应该为<code>0|0|1|2|1</code>。</p>
+<p>那么此时下面这个的权重是大于上面那个的，可以实验一下。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#achor1&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;inline-warning&quot;</span>&gt;</span>我是一个链接<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">li</span> <span class="attr">id</span>=<span class="string">&quot;l1&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;#achor1&quot;</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;inline-warning&quot;</span>&gt;</span>我是一个链接<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#l1</span> &gt; <span class="selector-tag">a</span><span class="selector-attr">[href=<span class="string">&quot;#achor1&quot;</span>]</span> &gt; <span class="selector-class">.inline-warning</span> &#123;</span><br><span class="line">  <span class="comment">/*写样式...*/</span></span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">li</span> &gt; <span class="selector-tag">a</span><span class="selector-attr">[href=<span class="string">&quot;#achor1&quot;</span>]</span> &gt; <span class="selector-class">.inline-warning</span> &#123;</span><br><span class="line">  <span class="comment">/*写样式...*/</span></span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/WafNwcvY6EPGbMp.png"></p>
+<p>发现使用 id 选择器开头的覆盖了使用标签开头的。</p>
+<p>OK，权重大的覆盖权重小的，完全没什么问题，但是如果两者权重相同呢？</p>
+<p>比如下面这两个选择链</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">&quot;div1&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;span&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">&quot;icon&quot;</span>&gt;</span>我是一个icon<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.div1</span> &gt; <span class="selector-tag">span</span> &gt; <span class="selector-class">.icon</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.div1</span> &gt; <span class="selector-class">.span</span> &gt; <span class="selector-tag">span</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这两个选择链都是两个类选择器和一个标签选择器，所以权重是一样的，都是<code>0|0|0|2|1</code></p>
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/ul2GD6YeyJ1swSK.png"></p>
+<p>发现后面一个样式链生效了，难道是先写类名的权重高吗？？</p>
+<p>不急，我们调换 css 的书写顺序</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.div1</span> &gt; <span class="selector-class">.span</span> &gt; <span class="selector-tag">span</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.div1</span> &gt; <span class="selector-tag">span</span> &gt; <span class="selector-class">.icon</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果图</p>
+<p><img data-src="https://i.loli.net/2020/10/15/QZXqBEvYy1ugDxk.png"></p>
+<p>发现变成红色了。</p>
+<p>其实没有那么的复杂，由于权重相同，所以后写就会覆盖先写的，就是这么的简单。</p>
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><h3 id="权重计算"><a href="#权重计算" class="headerlink" title="权重计算"></a>权重计算</h3><p>网上比较多的文章以 <code>10000</code>，<code>1000</code>，<code>100</code>，<code>10</code>，<code>1</code> 来表示每类的权重，并通过相加来计算权重。</p>
+<p>这么做其实有个问题，那就是权重它并不是按<code>10</code>进<code>1</code>的，也就是说：</p>
+<p><strong>1000 个标签选择器也比不过 1 个类选择器</strong>。</p>
+<p>比如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &gt; <span class="selector-tag">div</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.div1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果按照上面权重相加来计算的话。</p>
+<p>此时第一条的权重为<code>00011</code>，第二条为<code>00010</code>。</p>
+<p>那么应该显示红色才对。</p>
+<p><img data-src="https://i.loli.net/2020/10/15/i5Ut6kErybAMLqK.png"></p>
+<p>但其实是显示的蓝色 🤣。</p>
+<p>所以我在写的时候，用了一个<code>|</code>来隔开，只要单纯把每个位置当成计数位，而不是通过相加，即：</p>
+<p>第一条权重应该为<code>0|0|0|0|11</code>。</p>
+<p>第二条权重应该为<code>0|0|0|1|0</code>。</p>
+<p>所以就不会出现相加误判的情况了。</p>
+<h3 id="important-1"><a href="#important-1" class="headerlink" title="!important"></a><code>!important</code></h3><p>网上有些帖子<code>!important</code>为绝对的优先，后面的覆盖前面。</p>
+<p>其实它也是可以计算出权重的，而权重会影响到覆盖的。</p>
+<p>比如下面两个带<code>!important</code>的样式应该是哪个覆盖哪个。</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-id">#d1</span> &gt; <span class="selector-class">.div</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.div</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按照绝对优先的说法应该是显示红色的</p>
+<p><img data-src="https://i.loli.net/2020/10/15/ty8spv94CrqDmAH.png"></p>
+<p>但其实是蓝色，也就是上面的权重大于下面，下面的无法覆盖上面</p>
+<p>第一个的权重<code>1|0|1|1|0</code></p>
+<p>第二个的权重<code>1|0|0|1|0</code></p>
+<p>第一个权重大于第二个，所以显示第一个。</p>
+<p>这也引申出了如何去覆盖一个定义的<code>!important</code>样式，</p>
+<p>比如它在一个标签上定义了</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: red <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么此时想要覆盖，就得使得权重比上面这个大，上面这个的权重为<code>1|0|0|0|1</code></p>
+<p>比如可以写一个权重为<code>1|0|0|0|2</code>的，比如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">section</span> &gt; <span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>覆盖成功（并且此时带<code>section</code>的是先写的，也就是不存在覆盖的推断，实打实的权重高）</p>
+<p><img data-src="https://i.loli.net/2020/10/15/UCqIF8aH3pAJ5Ke.png"></p>
+<p>或者可以写一个权重为<code>1|0|0|1|1</code>的，比如</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.section</span> &gt; <span class="selector-tag">h1</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: blue <span class="meta">!important</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也可以成功覆盖</p>
+<p><img data-src="https://i.loli.net/2020/10/15/PtrhObRpME2WQLy.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Dedicatus545
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/1f70e1987c43" title="CSS样式权重">https://prohibitorum.top/1f70e1987c43</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CSS/" rel="tag"># CSS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/09304f3a6c9b" rel="prev" title="a标签的那些伪类">
+                  <i class="fa fa-angle-left"></i> a标签的那些伪类
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/80b586a52fc0" rel="next" title="2020年蓝桥杯题目">
+                  2020年蓝桥杯题目 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Dedicatus545</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">425k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25:45</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous"></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@4.23.3/dist/algoliasearch-lite.umd.js" integrity="sha256-1QNshz86RqXe/qsCBldsUu13eAX6n/O98uubKQs87UI=" crossorigin="anonymous"></script>
+<script src="https://fastly.jsdelivr.net/npm/instantsearch.js@4.67.0/dist/instantsearch.production.min.js" integrity="sha256-TW7D3X/i/W+RUgEeDppEnFT2ixv5lzplKH0c58D92dY=" crossorigin="anonymous"></script><script src="/js/third-party/search/algolia-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+
+  
+
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1602468235"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.9/swiper-bundle.min.css">
+<style>
+    :root {
+      --swiper-theme-color: var(--theme-color);
+      --swiper-pagination-bottom: 0;
+    }
+    .swiper {
+      padding-bottom: 32px;
+      margin-bottom: 20px;
+    }
+    .swiper .swiper-slide .swiper-slide-img {
+      display: block;
+      width: 100%;
+      object-fit: contain;
+      background: var(--body-bg-color);
+      margin: 0;
+    }
+  </style><!-- hexo injector body_end end --></body>
+</html>
