@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 5.9">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 5.9（译）">
+<meta property="og:url" content="https://prohibitorum.top/e796f396fcff">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 5.9">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2025/06/bare-hover-5.8-01.png">
+<meta property="article:published_time" content="2026-03-10T14:33:25.002Z">
+<meta property="article:modified_time" content="2026-03-10T14:33:25.002Z">
+<meta property="article:author" content="Par9uet">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2025/06/bare-hover-5.8-01.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/e796f396fcff.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/e796f396fcff","path":"e796f396fcff.html","title":"TypeScript 5.9（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 5.9（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@5.36.0/dist/lite/builds/browser.umd.js" integrity="sha256-o49zoHLDPBm9WLg6AiliAVi3axCRTqe3ltTxLvhzAVg=" crossorigin="anonymous" defer></script><script src="/js/third-party/search/algolia-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fab fa-algolia fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B2%BE%E7%AE%80-tsc-%E2%80%93init-%E7%94%9F%E6%88%90%E7%BB%93%E6%9E%9C"><span class="nav-number">2.1.</span> <span class="nav-text">精简 tsc –init 生成结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-import-defer"><span class="nav-number">2.2.</span> <span class="nav-text">支持 import defer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-%E2%80%93module-node20"><span class="nav-number">2.3.</span> <span class="nav-text">支持 –module node20</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA-DOM-API-%E6%B7%BB%E5%8A%A0%E7%AE%80%E8%A6%81%E6%8F%8F%E8%BF%B0"><span class="nav-number">2.4.</span> <span class="nav-text">为 DOM API 添加简要描述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E5%B1%95%E5%BC%80%E7%9A%84%E6%82%AC%E5%81%9C%E6%8F%90%E7%A4%BA%EF%BC%88%E9%A2%84%E8%A7%88%E5%8A%9F%E8%83%BD%EF%BC%89"><span class="nav-number">2.5.</span> <span class="nav-text">可展开的悬停提示（预览功能）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E9%85%8D%E7%BD%AE%E7%9A%84%E6%9C%80%E9%95%BF%E6%82%AC%E5%81%9C%E9%95%BF%E5%BA%A6"><span class="nav-number">2.6.</span> <span class="nav-text">可配置的最长悬停长度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%98%E5%8C%96"><span class="nav-number">2.7.</span> <span class="nav-text">优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98-Mappers-%E4%B8%8A%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.7.1.</span> <span class="nav-text">缓存 Mappers 上的实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%BF%E5%85%8D%E5%9C%A8-fileOrDirectoryExistsUsingSource-%E4%B8%AD%E5%88%9B%E5%BB%BA%E9%97%AD%E5%8C%85"><span class="nav-number">2.7.2.</span> <span class="nav-text">避免在 fileOrDirectoryExistsUsingSource 中创建闭包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E8%A1%8C%E4%B8%BA%E5%8F%98%E6%9B%B4"><span class="nav-number">2.8.</span> <span class="nav-text">需要注意的行为变更</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lib-d-ts"><span class="nav-number">2.8.1.</span> <span class="nav-text">lib.d.ts</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0%E6%8E%A8%E6%96%AD%E5%8F%98%E6%9B%B4"><span class="nav-number">2.9.</span> <span class="nav-text">类型参数推断变更</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Par9uet"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Par9uet</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">194</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/e796f396fcff">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Par9uet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 5.9（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 5.9（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-10 14:33:25" itemprop="dateCreated datePublished" datetime="2026-03-10T14:33:25+00:00">2026-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>10 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-5-9/">Announcing TypeScript 5.9</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="精简-tsc-–init-生成结果"><a href="#精简-tsc-–init-生成结果" class="headerlink" title="精简 tsc –init 生成结果"></a>精简 tsc –init 生成结果</h2><p>TypeScript 编译器支持通过 <code>--init</code> 标志来在当前文件夹下创建 <code>tsconfig.json</code> 配置文件这一功能已经有一段时间了，在过去的几年，执行 <code>tsc --init</code> 会创建一个 “完整” 的 <code>tsconfig.json</code> 文件，包含注释掉的配置以及这些配置的说明。这样设计的初衷是让这些配置易于寻找并且容易切换。</p>
+<p>然而，通过外部的反馈（以及我们自身的经验），我们发现在用户创建 <code>tsconfig.json</code> 后立即删除大部分的内容是一种很普遍的情况。当用户想要寻找某些新的配置时，我们发现他们会依赖编辑器的自动完成功能，或者去官网的 <a target="_blank" rel="noopener" href="https://www.typescriptlang.org/tsconfig/">TSConfig Reference</a> 站点翻阅（生成的 <code>tsconfig.json</code> 文件会关联这个链接）。这个页面上也记录了每个设置的作用，也能通过编辑器的 悬停&#x2F;提示&#x2F;快速信息 来查看。虽然展示一些被注释的设置可能会有帮助，但生成的 <code>tsconfig.json</code> 总感觉设计过头了。</p>
+<p>我们觉得是时候让 <code>tsc --init</code> 初始化时生成比已启用的设置多一些更规范的设置了。我们审视了一些用户在创建 TypeScript 项目时的痛点和槽点，比如：</p>
+<ul>
+<li>大多数用户编写模块化脚本（非全局脚本）， <code>--moduledetection</code> 可以让 TypeScript 强制将每个实现的文件当作一个模块。</li>
+<li>由于开发者很多时候想要在运行时直接使用最新的 ECMAScript 特性，所以 <code>--target</code> 通常情况下可以设置为 <code>esnext</code> 。</li>
+<li>JSX 用户经常在重新设置 <code>--jsx</code> 上产生不必要的摩擦，它的选项有轻微的矛盾。</li>
+<li>很多时候，项目会从 <code>node_modules/@types</code> 下加载比 TypeScript 实际需要的更多的声明文件，但通过将 <code>types</code> 设置为一个空的数组可以限制这种情况。</li>
+</ul>
+<p>在 TypeScript 5.9 ，执行不带其他任何标志的 <code>tsc --init</code> 会生成如下的 <code>tsconfig.json</code> 文件：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="comment">// Visit https://aka.ms/tsconfig to read more about this file</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// File Layout</span></span><br><span class="line">    <span class="comment">// &quot;rootDir&quot;: &quot;./src&quot;,</span></span><br><span class="line">    <span class="comment">// &quot;outDir&quot;: &quot;./dist&quot;,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Environment Settings</span></span><br><span class="line">    <span class="comment">// See also https://aka.ms/tsconfig_modules</span></span><br><span class="line">    <span class="attr">&quot;module&quot;</span><span class="punctuation">:</span> <span class="string">&quot;nodenext&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;esnext&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;types&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="comment">// For nodejs:</span></span><br><span class="line">    <span class="comment">// &quot;lib&quot;: [&quot;esnext&quot;],</span></span><br><span class="line">    <span class="comment">// &quot;types&quot;: [&quot;node&quot;],</span></span><br><span class="line">    <span class="comment">// and npm install -D @types/node</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Other Outputs</span></span><br><span class="line">    <span class="attr">&quot;sourceMap&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;declaration&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;declarationMap&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Stricter Typechecking Options</span></span><br><span class="line">    <span class="attr">&quot;noUncheckedIndexedAccess&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;exactOptionalPropertyTypes&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Style Options</span></span><br><span class="line">    <span class="comment">// &quot;noImplicitReturns&quot;: true,</span></span><br><span class="line">    <span class="comment">// &quot;noImplicitOverride&quot;: true,</span></span><br><span class="line">    <span class="comment">// &quot;noUnusedLocals&quot;: true,</span></span><br><span class="line">    <span class="comment">// &quot;noUnusedParameters&quot;: true,</span></span><br><span class="line">    <span class="comment">// &quot;noFallthroughCasesInSwitch&quot;: true,</span></span><br><span class="line">    <span class="comment">// &quot;noPropertyAccessFromIndexSignature&quot;: true,</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Recommended Options</span></span><br><span class="line">    <span class="attr">&quot;strict&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;jsx&quot;</span><span class="punctuation">:</span> <span class="string">&quot;react-jsx&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;verbatimModuleSyntax&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;isolatedModules&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;noUncheckedSideEffectImports&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;moduleDetection&quot;</span><span class="punctuation">:</span> <span class="string">&quot;force&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;skipLibCheck&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>更多细节可以浏览这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61813">PR</a> ，或者谈论的 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/issues/58420">issue</a> 。</p>
+<h2 id="支持-import-defer"><a href="#支持-import-defer" class="headerlink" title="支持 import defer"></a>支持 import defer</h2><p>TypeScript 5.9 通过使用新的 <code>import defer</code> 语法引入了对 <a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-defer-import-eval/">模块延迟计算提案</a> 的支持。</p>
+<p>这个特性允许你在导入一个模块的时候无需立即执行该模块以及它的依赖，这能更好地控制任务执行和副作用产生的时机。</p>
+<p>该语法只允许通过命名空间导入：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> feature <span class="keyword">from</span> <span class="string">&#x27;./some-feature.js&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><code>import defer</code> 的主要优点是只有第一次使用到模块的导出项时它才会执行。考虑以下例子：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ./some-feature.ts</span></span><br><span class="line"><span class="title function_">initializationWithSideEffects</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">initializationWithSideEffects</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  specialConstant = <span class="number">42</span></span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Side effects have occurred!&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">let</span> <span class="attr">specialConstant</span>: <span class="built_in">number</span></span><br></pre></td></tr></table></figure>
+
+<p>当使用 <code>import defer</code> 导入时， <code>initializationWithSideEffects</code> 函数不会执行，直到你实际上访问了导入命名空间上的属性。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> feature <span class="keyword">from</span> <span class="string">&#x27;./some-feature.js&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 副作用还未执行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 一旦 `specialConstant` 被访问， feature 模块就立刻加载执行副作用</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(feature.<span class="property">specialConstant</span>) <span class="comment">// 42</span></span><br></pre></td></tr></table></figure>
+
+<p>由于模块的计算会被延迟到获取模块成员的那一刻，所以使用 <code>import defer</code> 时无法使用具名导入或默认导入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// ❌ 不允许</span><br><span class="line">import defer &#123; doSomething &#125; from &quot;some-module&quot;;</span><br><span class="line"></span><br><span class="line">// ❌ 不允许</span><br><span class="line">import defer defaultExport from &quot;some-module&quot;;</span><br><span class="line"></span><br><span class="line">// ✅ 只允许该语法</span><br><span class="line">import defer * as feature from &quot;some-module&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>请注意，使用 <code>import defer</code> 时，模块以及它的依赖会被完整地加载，准备完成后就会执行。这意味着模块需要存在，可以是从文件系统加载，也可以是从网络加载。常规的 <code>import</code> 导入和 <code>import defer</code> 导入的关键不同是语句和声明的执行会延迟到从导入的命名空间获取属性的时候。</p>
+<p>这个特性对于那些有条件地加载昂贵的模块或者执行特定平台的初始化的情况格外有用。它也可以通过延迟模块加载直到这些应用功能实际需要用到时候，以此提升启动性能。</p>
+<p>请注意，TypeScript 完全不会转化或者 “降级” <code>import defer</code> 语法。它的目的是让原生支持该特性的运行时处理，或者通过类似捆绑器的工具来进行合适的转化。这意味着 <code>import defer</code> 只能在 <code>--module</code> 为 <code>preserve</code> 和 <code>esnext</code> 下工作。</p>
+<h2 id="支持-–module-node20"><a href="#支持-–module-node20" class="headerlink" title="支持 –module node20"></a>支持 –module node20</h2><p>TypeScript 为 <code>--module</code> 和 <code>--moduleResolution</code> 设置提供了一些 <code>node*</code> 选项。最近， <code>--module nodenext</code> 支持了在 CommonJS 模块中 <code>require</code> ECMAScript 模块，并正确地拒绝导入断言（支持符合标准的 <a target="_blank" rel="noopener" href="https://github.com/tc39/proposal-import-attributes">import attributes</a>）。</p>
+<p>TypeScript 5.9 为这些设置带来了一个稳定的选项 <code>node20</code> ，其目的是模拟 Nodejs v20 的行为。这个选项与 <code>--module nodenext</code> 或者 <code>-- moduleResolution nodenext</code> 不同，它在未来不太可能会有新的行为。同时，与 <code>nodenext</code> 不同的是，指定 <code>--module node20</code> 会默认将 <code>--target</code> 设置为 <code>es2023</code> ，除非你在其他地方配置。另一方面，<code>--module nodenext</code> 则会默认设置 <code>--target esnext</code> （该 esnext 的特性会动态更新）</p>
+<p>更多信息，请翻阅这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61805">PR</a>。</p>
+<h2 id="为-DOM-API-添加简要描述"><a href="#为-DOM-API-添加简要描述" class="headerlink" title="为 DOM API 添加简要描述"></a>为 DOM API 添加简要描述</h2><p>以前，TypeScript 内许多的 DOM API 只是简单链接到 MDN 对应的 API 文档上。这些链接有用，但是无法简要的描述 API 的作用。感谢 <a target="_blank" rel="noopener" href="https://github.com/Bashamega">Adam Naji</a> ， TypeScript 现在基于 MDN 文档，为许多的 DOM API 提供了简要的描述。</p>
+<p>相关变更可以查看 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/1993">PR-1993</a> 和 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript-DOM-lib-generator/pull/1940">PR-1940</a> 。</p>
+<h2 id="可展开的悬停提示（预览功能）"><a href="#可展开的悬停提示（预览功能）" class="headerlink" title="可展开的悬停提示（预览功能）"></a>可展开的悬停提示（预览功能）</h2><p>快速信息（也叫编辑器提示或者悬浮）对观察变量的类型，或者它们实际关联的类型别名非常有用。不过，对于用户来说，想了解快速信息提示更深入的细节是很常见的需求。比如，在下面的例子中，如果我们在 <code>options</code> 参数上悬停鼠标：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">drawButton</span>(<span class="params"><span class="attr">options</span>: <span class="title class_">Options</span></span>): <span class="built_in">void</span></span><br></pre></td></tr></table></figure>
+
+<p>我们最终会得到 <code>(parameter) options: Options</code> 这样的提示。</p>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2025/06/bare-hover-5.8-01.png"></p>
+<p>我们真的需要跳到 <code>Options</code> 类型的定义处才能观察到它包含的成员吗？</p>
+<p>在之前，我们确实需要这么做。为了更好的体验， TypeScript 5.9 提供了一个名叫可展开悬停提示，或者叫 “详情的快速信息” 的预览功能。如果你使用 VS Code 这样的编辑器，你就可以在这些悬停提示内容的左侧看到一个 <code>+</code> 和 <code>-</code> 的按钮。点击 <code>+</code> 按钮会展开更深层的类型，而点击 <code>-</code> 按钮则会收起它。</p>
+<p><video style="width: 100%;" src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2025/06/expandable-quick-info-1.mp4" loop="loop" width="300" height="150" aria-label="Expanding quick info to see more about the type of `Options`." controls="controls"></video></p>
+
+<p>这个特性目前处于预览状态，我们会收集 TypeScript 以及我们在 VS Code 中成员的反馈。更多详情，查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/59940">PR</a> 。</p>
+<h2 id="可配置的最长悬停长度"><a href="#可配置的最长悬停长度" class="headerlink" title="可配置的最长悬停长度"></a>可配置的最长悬停长度</h2><p>某些时候，快速信息提示会变得非常的长， TypeScript 会裁剪这些提示使得它们更加可读。这里带来的缺点是很多时候许多重要的信息在悬停提示中被省略了，用户可能会感到沮丧。为了改善这种情况， TypeScript 5.9 语言服务支持了一个可配置的悬停长度配置，可以通过 VS Code 的 <code>js/ts.hover.maximumLength</code> 来设置。</p>
+<p>并且，新的默认悬停长度的值比先前设置的默认值要大的多。这意味着在 TypeScript 5.9 ，默认情况下你可以看到更多悬停信息。更多细节可以查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61662">PR</a> 以及 VS Code 对应的变更 <a target="_blank" rel="noopener" href="https://github.com/microsoft/vscode/pull/248181">PR</a> 。</p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><h3 id="缓存-Mappers-上的实例"><a href="#缓存-Mappers-上的实例" class="headerlink" title="缓存 Mappers 上的实例"></a>缓存 Mappers 上的实例</h3><p>当 TypeScript 将形参替换为特定的实参时，它最终会反复地实例化许多相同的中间类型。在类似 Zod 和 tRPC 这样复杂的库中，这会导致性能问题，继而引发由于过多类型实例化深度产生的错误。 TypeScript 5.9 能够在一个特定类型实例化工作开始时缓存许多中间的实例。这样就能避免许多不必要的工作和资源分配。</p>
+<h3 id="避免在-fileOrDirectoryExistsUsingSource-中创建闭包"><a href="#避免在-fileOrDirectoryExistsUsingSource-中创建闭包" class="headerlink" title="避免在 fileOrDirectoryExistsUsingSource 中创建闭包"></a>避免在 fileOrDirectoryExistsUsingSource 中创建闭包</h3><p>在 JavaScript 中，一个函数表达式通常情况下会分配一个新的函数对象，即使包装函数不捕获变量，只是将参数传递给另一个函数。在文件存在性检查的相关代码路径中， <a target="_blank" rel="noopener" href="https://github.com/VincentBailly">Vincent Bailly</a> 发现了这些透传的例子，即使底层函数只接受了单个参数。考虑到大型项目中可能需要执行大量的存在性检查，他指出删除这些透传代码大约能提升 11% 的速度，相关变更请查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61822/">PR</a> 。</p>
+<h2 id="需要注意的行为变更"><a href="#需要注意的行为变更" class="headerlink" title="需要注意的行为变更"></a>需要注意的行为变更</h2><h3 id="lib-d-ts"><a href="#lib-d-ts" class="headerlink" title="lib.d.ts"></a>lib.d.ts</h3><p>DOM 的类型在可能会影响代码库的类型检查。</p>
+<p>此外，有个需要注意的变更是， <code>ArrayBuffer</code> 不再是几种不同 <code>TypedArray</code> 类型的超类（父类）。这也包含了 <code>UInt8Array</code> 的子类，比如 Node.js 的 <code>Buffer</code> 。因此，你会看到如下的新错误信息：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">error TS2345: Argument of type &#x27;ArrayBufferLike&#x27; is not assignable to parameter of type &#x27;BufferSource&#x27;.</span><br><span class="line">error TS2322: Type &#x27;ArrayBufferLike&#x27; is not assignable to type &#x27;ArrayBuffer&#x27;.</span><br><span class="line">error TS2322: Type &#x27;Buffer&#x27; is not assignable to type &#x27;Uint8Array&lt;ArrayBufferLike&gt;&#x27;.</span><br><span class="line">error TS2322: Type &#x27;Buffer&#x27; is not assignable to type &#x27;ArrayBuffer&#x27;.</span><br><span class="line">error TS2345: Argument of type &#x27;Buffer&#x27; is not assignable to parameter of type &#x27;string | Uint8Array&lt;ArrayBufferLike&gt;&#x27;.</span><br></pre></td></tr></table></figure>
+
+<p>如果你遇到了 <code>Buffer</code> 相关的问题，首先可以检查是否正在使用罪行版本的 <code>@types/node</code> 包。如果需要，可以执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm update @types/node --save-dev</span><br></pre></td></tr></table></figure>
+
+<p>很多时候，可以通过指定一个更具体的底层 buffer 类型而非使用默认的 <code>ArrayBufferLike</code> （比如，显式使用 <code>Uint8Array&lt;ArrayBuffer&gt;</code> 而不是一个普通的 <code>Uint8Array</code> ）来解决。在某些情况下，比如向一个期望 <code>ArrayBuffer</code> 或者 <code>SharedArrayBuffer</code> 的函数传递 <code>TypedArray</code> （比如 <code>UInt8Array</code> ） 时，你也可以尝试像下面这个例子一样获取 <code>buffer</code> 属性：</p>
+<figure class="highlight javascript"><figcaption><span>diff</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> data = <span class="keyword">new</span> <span class="title class_">Uint8Array</span>([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="title function_">someFunc</span>(data) <span class="comment">// [!code --]</span></span><br><span class="line"><span class="title function_">someFunc</span>(data.<span class="property">buffer</span>) <span class="comment">// [!code ++]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="类型参数推断变更"><a href="#类型参数推断变更" class="headerlink" title="类型参数推断变更"></a>类型参数推断变更</h2><p>为了修复推理过程中类型变量的“泄露”问题， TypeScript 5.9 引入了一些变更，这些变更可能在某些代码库上会产生错误。这种情况虽然很难预测，但可以通过添加类型参数泛型化函数调用来解决。更多细节查看这个 <a target="_blank" rel="noopener" href="https://github.com/microsoft/TypeScript/pull/61668">PR</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Par9uet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/e796f396fcff" title="TypeScript 5.9（译）">https://prohibitorum.top/e796f396fcff</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/a8e2313857a7" rel="prev" title="在 vue3 中集成 eslint9 和 prettier">
+                  <i class="fa fa-angle-left"></i> 在 vue3 中集成 eslint9 和 prettier
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/d2a6b711fd29" rel="next" title="TypeScript 7 进度 – 2025-12（译）">
+                  TypeScript 7 进度 – 2025-12（译） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Par9uet</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">433k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">26:14</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","body":null,"js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"5af7b9ae92fa"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+<style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+        --swiper-pagination-bottom: 0;
+      }
+      .swiper {
+        padding-bottom: 32px;
+        margin-bottom: 20px;
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>

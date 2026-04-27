@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前言感觉许久没发帖子了，最近使用了 Vue3 + Ts 来写公司的一个项目 正好记录一下这个过程，方便以后没搞懂可以回过头来查看，毕竟我这记忆力，离老年痴呆应该是不远了😂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目">
+<meta property="og:url" content="https://prohibitorum.top/ab320da75195">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言感觉许久没发帖子了，最近使用了 Vue3 + Ts 来写公司的一个项目 正好记录一下这个过程，方便以后没搞懂可以回过头来查看，毕竟我这记忆力，离老年痴呆应该是不远了😂">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201629891.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201805116.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201807808.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201809932.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201811983.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201814942.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201819421.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201821765.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201824307.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201825324.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201839187.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201840206.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201845768.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201847042.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201901501.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201902324.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202123317.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202134868.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202150886.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202200338.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202209676.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202212376.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202220068.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202217226.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202224824.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202226833.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211439914.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211447228.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211453695.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211454343.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211454751.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202258323.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202325146.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202326089.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202348980.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202349083.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202354833.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202357309.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202359369.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208210004132.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211147398.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211154467.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211157649.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211511516.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211211628.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211216930.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211217161.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211222852.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211230971.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211233279.avif">
+<meta property="article:published_time" content="2022-08-20T15:09:25.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:44.000Z">
+<meta property="article:author" content="Par9uet">
+<meta property="article:tag" content="Eslint">
+<meta property="article:tag" content="Pinia">
+<meta property="article:tag" content="Prettier">
+<meta property="article:tag" content="TypeScript">
+<meta property="article:tag" content="Vite">
+<meta property="article:tag" content="Vue-Router">
+<meta property="article:tag" content="Vue3">
+<meta property="article:tag" content="husky">
+<meta property="article:tag" content="lint-staged">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201629891.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/ab320da75195.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/ab320da75195","path":"ab320da75195.html","title":"从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@5.36.0/dist/lite/builds/browser.umd.js" integrity="sha256-o49zoHLDPBm9WLg6AiliAVi3axCRTqe3ltTxLvhzAVg=" crossorigin="anonymous" defer></script><script src="/js/third-party/search/algolia-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fab fa-algolia fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Vue3-Ts-%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.1.</span> <span class="nav-text">创建 Vue3 + Ts 项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-Pinia-%E5%92%8C-Vue-Router"><span class="nav-number">2.2.</span> <span class="nav-text">引入 Pinia 和 Vue-Router</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-Naive-UI-%E7%BB%84%E4%BB%B6%E5%BA%93"><span class="nav-number">2.3.</span> <span class="nav-text">引入 Naive-UI 组件库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-unplugin-auto-import-%E5%92%8C-unplugin-vue-components"><span class="nav-number">2.4.</span> <span class="nav-text">引入 unplugin-auto-import 和 unplugin-vue-components</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-Axios"><span class="nav-number">2.5.</span> <span class="nav-text">引入 Axios</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-Eslint-%E5%92%8C-Prettier-%E5%92%8C-EditorConfig"><span class="nav-number">2.6.</span> <span class="nav-text">引入 Eslint 和 Prettier 和 EditorConfig</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5-husky-%E5%92%8C-lint-staged"><span class="nav-number">2.7.</span> <span class="nav-text">引入 husky 和 lint-staged</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Par9uet"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Par9uet</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">194</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/ab320da75195">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Par9uet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-20 15:09:25" itemprop="dateCreated datePublished" datetime="2022-08-20T15:09:25+00:00">2022-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:44" itemprop="dateModified" datetime="2023-02-13T18:28:44+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>3.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>感觉许久没发帖子了，最近使用了 <code>Vue3 + Ts</code> 来写公司的一个项目</p>
+<p>正好记录一下这个过程，方便以后没搞懂可以回过头来查看，毕竟我这记忆力，离老年痴呆应该是不远了😂</p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>最先开始，我们直接使用 <code>Vite</code> 脚手架创建一个 <code>Vue3 + Ts</code> 的项目</p>
+<p>然后我们在这个项目上进行添砖加瓦</p>
+<h2 id="创建-Vue3-Ts-项目"><a href="#创建-Vue3-Ts-项目" class="headerlink" title="创建 Vue3 + Ts 项目"></a>创建 Vue3 + Ts 项目</h2><p><code>Vite</code> 文档地址 <a target="_blank" rel="noopener" href="https://vitejs.dev/guide/#scaffolding-your-first-vite-project">Scaffolding Your First Vite Project</a></p>
+<p>这里由于我们使用的是 <code>pnpm</code> 包管理工具，所以执行 <code>pnpm create vite</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201629891.avif"></p>
+<p>输入项目名，选择 <code>vue</code> 和 <code>vue-ts</code> 即可，然后我们就成功创建了一个最简单的 <code>Vue3 + Ts</code> 的项目</p>
+<p>然后我们进入项目执行 <code>pnpm i</code> 安装依赖</p>
+<p>到这一步还是相当简单的，我们可以查看下项目的结构</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201805116.avif"></p>
+<h2 id="引入-Pinia-和-Vue-Router"><a href="#引入-Pinia-和-Vue-Router" class="headerlink" title="引入 Pinia 和 Vue-Router"></a>引入 Pinia 和 Vue-Router</h2><p><code>Pinia</code> 作为 <code>Vue3</code> 官方的全局状态管理库，使用上更加方便，对比 <code>Vuex</code> 来说拥有更好的类型推断，以及简单的 <code>Api</code> 导出</p>
+<p><code>Vue-Router 4</code> 是 <code>Vue3</code> 官方的路由库，相对于 <code>React</code> 的许许多多的路由实现，<code>Vue</code> 的选择就只有 <code>Vue-Router</code> ，毕竟是官方的，遇到问题也容易找到解决办法</p>
+<p>安装 <code>Vue-Router</code> 很简单，直接执行 <code>pnpm add vue-router</code> 即可， 安装 <code>Pinia</code> 只需执行 <code>pnpm add pinia</code></p>
+<p>然后我们需要把它安装到 <code>Vue</code> 上</p>
+<p>默认情况下的 <code>main.ts</code> 长下面这样</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201807808.avif"></p>
+<p>这时候我们需要先修改下目录结构，增加 <code>router</code> 和 <code>store</code> 两个文件夹</p>
+<p>并且分别在这两个文件夹下面建一个 <code>index.ts</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201809932.avif"></p>
+<p>之后我们来编写 <code>store</code> 下面的 <code>index.ts</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201811983.avif"></p>
+<p>接着我们编写 <code>router</code> 下面的 <code>index.ts</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201814942.avif"></p>
+<p>然后我们修改下 <code>main.ts</code> 的代码</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201819421.avif"></p>
+<p>然后我们可以执行 <code>pnpm run dev</code> 看一下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201821765.avif"></p>
+<p>这时候我们发现 <code>Vue-Router</code> 报了一个警告，意思就是没有设置 <code>/</code> 对应的路由</p>
+<p>我们可以把默认的 <code>HelloWorld</code> 组件作为路由映射出去</p>
+<p>先修改 <code>App.vue</code> ，使用 <code>RouterView</code> 来定义一个路由入口</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201824307.avif"></p>
+<p>然后我们添加一个路由</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201825324.avif"></p>
+<p>这样子这个警告就会消失了，当然，这只是为了演示如何设置路由而已，实际情况下可能会比较复杂</p>
+<p><code>Vue-Router</code> 使用起来和在 <code>Vue2</code> 其实差不多，基本上是一模一样</p>
+<p>这里写下 <code>Pinia</code> 的使用</p>
+<p>对于很多的网站，我们都是要记录登录状态和当前登录用户的信息的，这个就可以用中心状态管理来做</p>
+<p>我们新建一个 <code>useLoginStore.ts</code> （这里写的代码有点长，就不截图了…</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineStore &#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span></span><br><span class="line"><span class="keyword">import</span> &#123; computed, reactive, toRefs &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> useLoginStore = <span class="title function_">defineStore</span>(<span class="string">&#x27;LoginStore&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> state = reactive&lt;&#123;</span><br><span class="line">    <span class="attr">loginUser</span>: <span class="title class_">Record</span>&lt;<span class="built_in">string</span>, <span class="built_in">any</span>&gt; | <span class="literal">null</span></span><br><span class="line">  &#125;&gt;(&#123;</span><br><span class="line">    <span class="attr">loginUser</span>: <span class="literal">null</span>,</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> isLogin = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> state.<span class="property">loginUser</span> !== <span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> <span class="title function_">loginAction</span> = <span class="keyword">async</span> (<span class="params"><span class="attr">username</span>: <span class="built_in">string</span>, <span class="attr">password</span>: <span class="built_in">string</span></span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 这里是模拟登录</span></span><br><span class="line">    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(&#123;</span><br><span class="line">      <span class="attr">username</span>: <span class="string">&#x27;lwf&#x27;</span>,</span><br><span class="line">      <span class="attr">email</span>: <span class="string">&#x27;xxx@qq.com&#x27;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    state.<span class="property">loginUser</span> = &#123;</span><br><span class="line">      <span class="attr">username</span>: res.<span class="property">username</span>,</span><br><span class="line">      <span class="attr">email</span>: res.<span class="property">email</span>,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ...<span class="title function_">toRefs</span>(state),</span><br><span class="line">    isLogin,</span><br><span class="line">    loginAction,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> useLoginStore</span><br></pre></td></tr></table></figure>
+
+<p>虽然 <code>Pinia</code> 也可以写成和 <code>Vuex</code> 一样，但是我觉得还是不够优雅，我还是更喜欢这种 <code>setup</code> 写法，没有 <code>this</code> 干扰</p>
+<p>然后我们可以写个简答的登录页，新建一个 <code>Login.vue</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">setup</span> <span class="attr">lang</span>=<span class="string">&quot;ts&quot;</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> &#123; reactive &#125; <span class="keyword">from</span> <span class="string">&#x27;vue&#x27;</span></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">import</span> useLoginStore <span class="keyword">from</span> <span class="string">&#x27;./store/useLoginStore&#x27;</span></span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> loginStore = <span class="title function_">useLoginStore</span>()</span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> model = <span class="title function_">reactive</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">username</span>: <span class="string">&#x27;&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">    <span class="attr">password</span>: <span class="string">&#x27;&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">  &#125;)</span></span><br><span class="line"><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">const</span> <span class="title function_">login</span> = (<span class="params"></span>) =&gt; &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">try</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      loginStore.<span class="title function_">loginAction</span>(model.<span class="property">username</span>, model.<span class="property">password</span>)</span></span><br><span class="line"><span class="language-javascript">    &#125; <span class="keyword">catch</span> (e) &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// 处理错误</span></span></span><br><span class="line"><span class="language-javascript">    &#125;</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span>&gt;</span>是否登录: &#123;&#123; loginStore.isLogin &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;model.username&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">v-model</span>=<span class="string">&quot;model.password&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">br</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">button</span> @<span class="attr">click</span>=<span class="string">&quot;login&quot;</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>注册到路由中</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201839187.avif"></p>
+<p>打开 <code>http://localhost:5173/login</code> 就可以看到效果</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201840206.avif"></p>
+<p>当然这里不写账号密码是没问题的，只是用来做个例子，随便输入然后点击登录，<code>isLogin</code> 为 <code>true</code> 了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201845768.avif"></p>
+<p>我们可以用 <code>dev-tools</code> 来查看 <code>Pinia</code> 的状态</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201847042.avif"></p>
+<h2 id="引入-Naive-UI-组件库"><a href="#引入-Naive-UI-组件库" class="headerlink" title="引入 Naive-UI 组件库"></a>引入 Naive-UI 组件库</h2><p>一般而言做一些 <code>ToB</code> 的系统，基本上都不会有 <code>UI</code> 图的，要求的就是一个成型快，所以需要一个组件库来帮助我们开发</p>
+<p>我个人还是比较喜欢 <code>Naive-UI</code> 这个组件库的，<code>Ant-Design</code> 和 <code>Element-UI</code> 其实也不错，看个人喜好吧</p>
+<p>这里我们直接使用 <code>pnpm add naive-ui</code> 安装</p>
+<p><code>Naive-UI</code> 默认就支持 <code>tree-shaking</code> ，所以我们只需要在需要用到的时候引入相应组件即可</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201901501.avif"></p>
+<p>这里我们引入一个 <code>Button</code> 组件，刷新页面就可以看到效果了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208201902324.avif"></p>
+<h2 id="引入-unplugin-auto-import-和-unplugin-vue-components"><a href="#引入-unplugin-auto-import-和-unplugin-vue-components" class="headerlink" title="引入 unplugin-auto-import 和 unplugin-vue-components"></a>引入 unplugin-auto-import 和 unplugin-vue-components</h2><p>每次我们写页面很多时候都需要引入 <code>reactive</code>, <code>ref</code>, <code>watchEffect</code> 等函数，一旦还引用了其他的资源</p>
+<p>那么 <code>&lt;script setup&gt;</code> 部分看起来就会比较乱，一坨的 <code>import { } from vue</code></p>
+<p>为了解决这个问题，大神 <code>antfd</code> 开发了 <code>unplugin-auto-import</code> 的插件，支持 <code>vite</code>, <code>rollup</code>, <code>webpack</code>，非常的牛逼</p>
+<p>使用这个插件，我们就不用写重复的 <code>import</code> 语句了</p>
+<p>使用 <code>pnpm add unplugin-auto-import -D</code> 安装</p>
+<p>然后修改 <code>vite.config.ts</code> 文件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202123317.avif"></p>
+<p>注意，这里我们主要配置两个属性，一个是 <code>imports</code> ，一个是 <code>dts</code></p>
+<p><code>imports</code> 用来表明我们需要全局注册的 <code>import</code> 语句</p>
+<p>我们可以点进去看 <code>imports</code> 的类型，支持的自动导入是非常多的</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">const</span> <span class="attr">presets</span>: &#123;</span><br><span class="line">  <span class="attr">ahooks</span>: <span class="function">() =&gt;</span> <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@nuxtjs/composition-api&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@vue/composition-api&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@vueuse/core&#x27;</span>: <span class="function">() =&gt;</span> <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@vueuse/math&#x27;</span>: <span class="function">() =&gt;</span> <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@vueuse/head&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">mobx</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;mobx-react-lite&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">pinia</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">preact</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">quasar</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">react</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;react-router&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;react-router-dom&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;react-i18next&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">svelte</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;svelte/animate&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;svelte/easing&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;svelte/motion&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;svelte/store&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;svelte/transition&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;vee-validate&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">vitepress</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;vue-demi&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;vue-i18n&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;vue-router&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">vue</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;vue/macros&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">vuex</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">vitest</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;uni-app&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;solid-js&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;@solidjs/router&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;solid-app-router&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">jotai</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="string">&#x27;jotai/utils&#x27;</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">  <span class="attr">recoil</span>: <span class="title class_">ImportsMap</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样子我们使用相关的 <code>api</code> 了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202134868.avif"></p>
+<p>导出的 <code>api</code> 列表我们可以查看 <code>src/auto-import.d.ts</code></p>
+<p>当然，由于我们使用的是 <code>TypeScript</code> ，所以不报错的功劳是这个 <code>src/auto-import.d.ts</code> 文件</p>
+<p>默认情况下是有生成 <code>d.ts</code> 文件的，但是不是在 <code>src</code> 目录下，这会导致一个问题</p>
+<p>因为 <code>tsconfig.json</code> 并没有识别这个 <code>d.ts</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202150886.avif"></p>
+<p>当然你也可以不设置 <code>dts</code> 属性，然后把 <code>auto-import.d.ts</code> 加入到 <code>tsconfig.json</code> 的 <code>includes</code> 属性中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  // ...</span><br><span class="line">  include: [&#x27;auto-import.d.ts&#x27;, &#x27;src/**/*.ts&#x27;, &#x27;src/**/*.d.ts&#x27;, &#x27;src/**/*.tsx&#x27;, &#x27;src/**/*.vue&#x27;],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样也可以顺利识别了</p>
+<p>同样，由于我们使用组件库，每个页面也需要引入很多的组件库组件，一旦引入很多代码看起来也会很杂</p>
+<p>所以大神又开发了 <code>unplugin-vue-components</code> 插件，它能够全局导出组件库组件，而且是支持 tree-shaking 的</p>
+<p>使用 <code>pnpm add unplugin-vue-components -D</code> 安装</p>
+<p>然后继续修改 <code>vite.config.ts</code> 文件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202200338.avif"></p>
+<p>这里配置了 <code>resolvers</code> 和 <code>dts</code> ，<code>dts</code> 的作用和上个插件一样</p>
+<p><code>resolvers</code> 配置了需要自动导入的组件库，这里我们使用了 <code>Naive-UI</code> ，所以使用 <code>NaiveUiResolver</code> ，主流的 <code>UI</code> 都能支持，比如 <code>Ant Design</code> ， <code>Element-UI</code> 等</p>
+<p>默认情况下啊，他还会把 <code>src/components</code> 下的组件也设为自动导入</p>
+<p>可以打开 <code>src/components.d.ts</code> 文件查看，发现 <code>HelloWorld</code> 和 <code>NButton</code> 已经被注册了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202209676.avif"></p>
+<p>tips：如果你使用的是 <code>pnpm</code> ，那么此时会出现一个问题，虽然已经有 <code>d.ts</code> 文件了，但是 <code>vue</code> 文件并没有类型提示</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202212376.avif"></p>
+<p>这是由于生成的 <code>d.ts</code> 是在 <code>@vue/runtime-core</code> 模块下的，但是 <code>pnpm</code> 并不会存在幻影依赖，在 <code>node_modules</code> 下不会扁平依赖</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202220068.avif"></p>
+<p>所以该 <code>d.ts</code> 就无效了，可以把 <code>@vue/runtime-core</code> 改成 <code>vue</code> 这时候你会发现提示就有了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202217226.avif"></p>
+<p>但是由于这个文件是自动生成的，如果有新的组件需要生成定义，那么又会被插件改成 <code>@vue/runtime-core</code></p>
+<p>这时候我们就要用 <code>.npmrc</code> 来告诉 <code>pnpm</code> 把 <code>@vue/runtime-core</code> 提升到 <code>node_modules</code> 目录下</p>
+<p>我们在项目根目录下建一个 <code>.npmrc</code> 文件</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 修复 pnpm 安装无法获得提示问题</span><br><span class="line"># issue https://github.com/antfu/unplugin-vue-components/issues/406</span><br><span class="line"># 提升 @vue/runtime-core 这个依赖到 node_modules 下</span><br><span class="line">public-hoist-pattern[]=@vue/runtime-core</span><br></pre></td></tr></table></figure>
+
+<p>然后我们重新运行 <code>pnpm i</code> ，这时候 <code>@vue/runtime-core</code> 就在 <code>node_modules</code> 下了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202224824.avif"></p>
+<p>这时候就可以正确的识别类型了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202226833.avif"></p>
+<h2 id="引入-Axios"><a href="#引入-Axios" class="headerlink" title="引入 Axios"></a>引入 Axios</h2><p>基本上创建项目都需要 <code>Axios</code> 来作为 <code>http</code> 请求库</p>
+<p>当然，如果是单纯的引入其实不难，这里主要是写一下我的封装</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211439914.avif"></p>
+<p>这里的 <code>baseURL</code> 参数主要看后端接口，像我司不搞跨域配置的，就需要我在 <code>Vite</code> 中开启一个 <code>proxy</code> 来代理接口，然后对 <code>api</code> 进行转发</p>
+<p>拦截器主要是返回实体数据，不然每次都要 <code>res.data.data</code> 来取数据还是比较麻烦的，以及处理错误请求等</p>
+<p>这个要根据具体情况来配置，当然，对于 <code>TypeScript</code> ，我们自然希望能够有完整的类型提示</p>
+<p>所以我们可以封装下四个方法，这里以 <code>get</code> 举例</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211447228.avif"></p>
+<p>然后我们可以写对应的 <code>api</code> ，比如获取用户列表</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211453695.avif"></p>
+<p>这样子引入 <code>getUserListApi</code> 这个 <code>api</code> 执行就能有完整的类型提示了</p>
+<p>请求参数</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211454343.avif"></p>
+<p>返回结果</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211454751.avif"></p>
+<h2 id="引入-Eslint-和-Prettier-和-EditorConfig"><a href="#引入-Eslint-和-Prettier-和-EditorConfig" class="headerlink" title="引入 Eslint 和 Prettier 和 EditorConfig"></a>引入 Eslint 和 Prettier 和 EditorConfig</h2><p>前面的配置基本上都是功能类的，现在我们需要配置 <code>Eslint</code> 和 <code>Prettier</code> 来保证代码格式和代码质量</p>
+<p>代码格式和代码质量是相当重要的，因为我看过公司之前的项目，那个代码看的我真的是头皮发麻，感到不适</p>
+<p>但是没办法，该往上加功能还是要加的…</p>
+<p>执行 <code>pnpm add eslint prettier -D</code> 安装这两个库</p>
+<p><code>prettier</code> 使用默认配置即可，这里主要是配置 <code>eslint</code></p>
+<p>创建 <code>.eslintrc.json</code> 和 <code>.eslintignore</code> 两个文件</p>
+<p>其中 <code>.eslintignore</code> 要排除 <code>node_modules</code> 以及 <code>src/auto-import.d.ts</code> 和 <code>src/component.d.ts</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202258323.avif"></p>
+<p>因为 <code>prettier</code> 默认情况下使用双引号的，而这两个 <code>d.ts</code> 都是用单引号的，所以我们避免去格式化这几个文件</p>
+<p>在<a target="_blank" rel="noopener" href="https://staging-cn.vuejs.org/guide/scaling-up/tooling.html#linting">官方文档</a>中，提示我们可以使用 <code>eslint-plugin-vue</code> 这个插件，所以我们安装上它，然后配置 <code>.eslintrc.json</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202325146.avif"></p>
+<p>接着我们可以执行 <code>eslint src/App.vue</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202326089.avif"></p>
+<p>可以看到 <code>eslint</code> 正确地提示了问题</p>
+<p>我们用 <code>prettier</code> 格式化 <code>App.vue</code> ，但是问题并没有消失，这是因为 <code>eslint</code> 的规则和 <code>prettier</code> 冲突了</p>
+<p>所以我们需要解决 <code>eslint</code> 和 <code>prettier</code> 的冲突</p>
+<p>安装 <code>eslint-config-prettier</code> ，这个配置能够让关掉 <code>eslint</code> 中和 <code>prettier</code> 冲突的规则，修改配置文件如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202348980.avif"></p>
+<p>这时候我们执行 <code>eslint src/App.vue</code> 就不会提示错误了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202349083.avif"></p>
+<p>冲突解决之后，还有一个问题，就是 <code>eslint</code> 它不报 <code>prettier</code> 的错误</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202354833.avif"></p>
+<p>这里我们使用了单引号，但是 <code>eslint</code> 没报错，接下来，我们就需要让 <code>eslint</code> 在格式不符合 <code>prettier</code> 的情况下报相关的错误</p>
+<p>安装 <code>eslint-plugin-prettier</code> ，修改配置文件如下</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202357309.avif"></p>
+<p>现在 <code>eslint</code> 就能正确地报错了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/20/202208202359369.avif"></p>
+<p>当然，我们可以直接把配置修改为如下，等价于上边配置的 <code>eslint-plugin-prettier</code> 和 <code>eslint-config-prettier</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208210004132.avif"></p>
+<p>当然，<code>eslint-plugin-prettier</code> 使用了 <code>vue-eslint-parser</code> 来解析 <code>vue</code> 文件，对于其他文件，会使用默认的 <code>espree</code> 解析器来解析</p>
+<p>如果想替换其他解析器，必须在 <code>parserOptions</code> 下设置 <code>parser</code> ，而不能在根下设置，不然 <code>vue-eslint-parser</code> 会失效，这里官方的文档也有说明</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211147398.avif"></p>
+<p><code>VSCode</code> 安装 <code>Eslint</code> ， <code>Prettier</code> 插件</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211154467.avif"></p>
+<p>然后我们打开 <code>settings.json</code> ，配置保存的时候自动使用 <code>eslint</code> 格式化</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211157649.avif"></p>
+<p>最后我们通过 <code>.editorconfig</code> 文件来设置一些编辑器的规则</p>
+<p>主要是为了防止不同的 <code>ide</code> 会有不同的设置，比如换行符号，从而影响编码</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211511516.avif"></p>
+<h2 id="引入-husky-和-lint-staged"><a href="#引入-husky-和-lint-staged" class="headerlink" title="引入 husky 和 lint-staged"></a>引入 husky 和 lint-staged</h2><p>虽然设置了代码格式化，但是很多时候项目并不是一个人在开发，是很多人协同合作</p>
+<p>你不能要求别人每次提交代码之前都执行一次 <code>eslint</code> ，同时这对于自己来说也很麻烦</p>
+<p>所以我们需要使用 <code>git</code> 的 <code>pre-commit</code> 钩子配合 <code>lint-staged</code> 来对暂存区的文件进行自动格式化</p>
+<p>执行 <code>pnpm add husky lint-staged -D</code> 安装这两个依赖</p>
+<p><code>husky</code> 需要该项目为 <code>git</code> 仓库，所以需要 <code>git init</code> 初始化，然后执行 <code>pnpx husky install</code> 开启钩子功能</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211211628.avif"></p>
+<p>然后执行 <code>pnpx husky add .husky/pre-commit &quot;pnpm run lint-staged&quot;</code> 添加 <code>pre-commit</code> 钩子</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211216930.avif"></p>
+<p>这里记得要在 <code>package.json</code> 中添加相应的 <code>script</code></p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211217161.avif"></p>
+<p>然后我们在 <code>package.json</code> 中添加 <code>lint-staged</code> 的配置</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211222852.avif"></p>
+<p>然后我们可以测试一下，我们修改下 <code>main.ts</code> 代码</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211230971.avif"></p>
+<p><code>git add</code> 之后提交，可以看到自动格式化了</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2022/08/21/202208211233279.avif"></p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>到此我们基本上就搭建了一个功能比较完备的项目了，当然，可操作的地方还有很多</p>
+<p>比如 <code>git commit</code> 规范，打包前 <code>eslint</code> 检查，代码分割等</p>
+<p>这些以后在慢慢写吧，不急，慢慢来，细水长流嘛</p>
+<p>相关的仓库已经上传到我的 <code>git</code> 上了，有需要的直接拉下来删除 <code>.git</code> ，再初始化 <code>git</code> 即可作为一个不错的模板项目</p>
+<p>仓库地址：<a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/vue3-ts-template">Dedicatus546 &#x2F; vue3-ts-template</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Par9uet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/ab320da75195" title="从0搭建一个Vue3+Ts+Pinia+Vue-Router+Eslint+Prettier项目">https://prohibitorum.top/ab320da75195</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Vue-Router/" rel="tag"># Vue-Router</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+              <a href="/tags/lint-staged/" rel="tag"># lint-staged</a>
+              <a href="/tags/Eslint/" rel="tag"># Eslint</a>
+              <a href="/tags/Prettier/" rel="tag"># Prettier</a>
+              <a href="/tags/Vue3/" rel="tag"># Vue3</a>
+              <a href="/tags/Vite/" rel="tag"># Vite</a>
+              <a href="/tags/Pinia/" rel="tag"># Pinia</a>
+              <a href="/tags/husky/" rel="tag"># husky</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/992fb248bc26" rel="prev" title="2022年7月新番个人推荐">
+                  <i class="fa fa-angle-left"></i> 2022年7月新番个人推荐
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/faf19ae1e3f6" rel="next" title="lint-staged 原理浅析">
+                  lint-staged 原理浅析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Par9uet</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">433k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">26:14</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","body":null,"js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ab320da75195"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+<style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+        --swiper-pagination-bottom: 0;
+      }
+      .swiper {
+        padding-bottom: 32px;
+        margin-bottom: 20px;
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>

@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前言在美团的校招尾声试着投了下，百度应该是没了，就一直挂着，挺揪心的，不过也无所谓了，当作尝试吧。 早上10点到12点，做的还行把，总共5道，ac了4道，1道确实不会😂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="美团2021校招前端笔试题">
+<meta property="og:url" content="https://prohibitorum.top/0d82814cc49b">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言在美团的校招尾声试着投了下，百度应该是没了，就一直挂着，挺揪心的，不过也无所谓了，当作尝试吧。 早上10点到12点，做的还行把，总共5道，ac了4道，1道确实不会😂">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/10/25/xGKEzRghfrw3I9A.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/25/gBJDt1pVGiLKqjC.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/25/bQS9AisXF5aWKd7.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/25/X1GTuWFSdlHf5wO.png">
+<meta property="og:image" content="https://i.loli.net/2020/10/25/6HyMKmel1I8nObu.png">
+<meta property="article:published_time" content="2020-10-25T12:03:38.000Z">
+<meta property="article:modified_time" content="2023-02-13T18:28:43.000Z">
+<meta property="article:author" content="Par9uet">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="前端笔试题">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/10/25/xGKEzRghfrw3I9A.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/0d82814cc49b.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/0d82814cc49b","path":"0d82814cc49b.html","title":"美团2021校招前端笔试题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>美团2021校招前端笔试题 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@5.36.0/dist/lite/builds/browser.umd.js" integrity="sha256-o49zoHLDPBm9WLg6AiliAVi3axCRTqe3ltTxLvhzAVg=" crossorigin="anonymous" defer></script><script src="/js/third-party/search/algolia-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fab fa-algolia fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">题目</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%89%E5%A4%BA%E5%9C%B0%E7%9B%98"><span class="nav-number">2.1.</span> <span class="nav-text">争夺地盘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="nav-number">2.2.</span> <span class="nav-text">修改大小写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%8F%E5%AD%90%E6%B1%82%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text">式子求值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%8F%B8%E7%AE%A1%E7%90%86"><span class="nav-number">2.4.</span> <span class="nav-text">公司管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A9%E9%98%B5%E6%B8%B8%E6%88%8F"><span class="nav-number">2.5.</span> <span class="nav-text">矩阵游戏</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Par9uet"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Par9uet</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">194</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/0d82814cc49b">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Par9uet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="美团2021校招前端笔试题 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          美团2021校招前端笔试题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-25 12:03:38" itemprop="dateCreated datePublished" datetime="2020-10-25T12:03:38+00:00">2020-10-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-13 18:28:43" itemprop="dateModified" datetime="2023-02-13T18:28:43+00:00">2023-02-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%AC%94%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">笔试</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在美团的校招尾声试着投了下，百度应该是没了，就一直挂着，挺揪心的，不过也无所谓了，当作尝试吧。</p>
+<p>早上<code>10</code>点到<code>12</code>点，做的还行把，总共<code>5</code>道，<code>ac</code>了<code>4</code>道，<code>1</code>道确实不会😂</p>
+<span id="more"></span>
+
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h2 id="争夺地盘"><a href="#争夺地盘" class="headerlink" title="争夺地盘"></a>争夺地盘</h2><p><img data-src="https://i.loli.net/2020/10/25/xGKEzRghfrw3I9A.png"></p>
+<p>第一题，感觉是白给的，做做循环累加数量即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.HashSet;</span><br><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 输入</span></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">p</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">q</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="comment">// 把A想要的p块土地的序号丢到set里面</span></span><br><span class="line">        Set&lt;Integer&gt; setA = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;(p);</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; p; i++) &#123;</span><br><span class="line">            setA.add(in.nextInt());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// B想要的q块存数组即可</span></span><br><span class="line">        <span class="type">int</span>[] B = <span class="keyword">new</span> <span class="title class_">int</span>[q];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; q; i++) &#123;</span><br><span class="line">            B[i] = in.nextInt();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 两个国家共同想要的土地序号存在set里面</span></span><br><span class="line">        Set&lt;Integer&gt; r = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">        <span class="comment">// 遍历B，如果setA里面也有，加入r里面</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; q; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (setA.contains(B[i])) &#123;</span><br><span class="line">                r.add(B[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 现在有两个国家共同想要的土地序号了，直接遍历计数即可</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">cA</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cB</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 遍历setA找A单独想要的土地序号</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i : setA) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!r.contains(i)) &#123;</span><br><span class="line">                cA++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 遍历B找到B到哪都想要的土地序号</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i : B) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!r.contains(i)) &#123;</span><br><span class="line">                cB++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 输出</span></span><br><span class="line">        System.out.println(cA + <span class="string">&quot; &quot;</span> + cB + <span class="string">&quot; &quot;</span> + r.size());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不看输入操作，时间复杂度<code>O(p + 2q)=O(p + q)</code>（应该是这么计算的把😂）</p>
+<p>空间复杂度（这里不算数组<code>B</code>）最好情况下<code>O(Math.min(p,q))</code>，也就是<code>setA</code>此时为长度较小的一方，且没有公共的土地序号（<code>r</code>长度为<code>0</code>）</p>
+<p>最坏情况下<code>O(p + q)</code></p>
+<h2 id="修改大小写"><a href="#修改大小写" class="headerlink" title="修改大小写"></a>修改大小写</h2><p><img data-src="https://i.loli.net/2020/10/25/gBJDt1pVGiLKqjC.png"></p>
+<p>第二题，感觉还是白给，对大小写计数，然后与长度的<code>1/2</code>相减即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">String</span> <span class="variable">p</span> <span class="operator">=</span> in.next();</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> p.length();</span><br><span class="line">        <span class="comment">// 大写字符个数</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">upperCount</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 计数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (p.charAt(i) &gt;= <span class="string">&#x27;A&#x27;</span> &amp;&amp; p.charAt(i) &lt;= <span class="string">&#x27;Z&#x27;</span>) &#123;</span><br><span class="line">                upperCount++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 通过大写字符推出小写字符</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">lowerCount</span> <span class="operator">=</span> len - upperCount;</span><br><span class="line">        <span class="comment">// 为了使数量相同，大写小写应该都是len/2的个数，然后就是和大写或者小写个数相减即可</span></span><br><span class="line">        System.out.println(len / <span class="number">2</span> - Math.min(lowerCount, upperCount));</span><br><span class="line">        <span class="comment">// 下面这样写也可以</span></span><br><span class="line">        <span class="comment">// System.out.println(Math.max(lowerCount, upperCount) - len / 2);</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="式子求值"><a href="#式子求值" class="headerlink" title="式子求值"></a>式子求值</h2><p><img data-src="https://i.loli.net/2020/10/25/bQS9AisXF5aWKd7.png"></p>
+<p>这道花了最多的时间，思路没错</p>
+<p>就是刚开始没想到其实可以先开个数组把累计异或的数组求出来，后面直接使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 输入</span></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span>[] array = <span class="keyword">new</span> <span class="title class_">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            array[i] = in.nextInt();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 这个dp的意思就是dp[k]，代表1^2^3^4^...^k的值</span></span><br><span class="line">        <span class="type">int</span>[] dp = <span class="keyword">new</span> <span class="title class_">int</span>[len + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= len; i++) &#123;</span><br><span class="line">            dp[i] = i ^ dp[i - <span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根据题意，完全可以先把每个元素异或，用result保存</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">result</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            result ^= array[i];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 本题的核心过程</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= len; i++) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> len % i;</span><br><span class="line">            <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> len / i;</span><br><span class="line">            <span class="keyword">if</span> (c % <span class="number">2</span> != <span class="number">0</span>) &#123;</span><br><span class="line">                result ^= dp[i - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (r &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                result ^= dp[r];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 输出</span></span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这题难点就是上面我标的核心过程这段，我们可假设现在有<code>6</code>个数，也就是说现在要<code>mod1</code>一直到<code>mod6</code></p>
+<p>比如现在位于第一个数<code>n1</code>，那么异或的过程就是</p>
+<p><code>n1 ^ (1 % 6) ^ (2 % 6) ^ (3 % 6) ^ (4 % 6) ^ (5 % 6) ^ (6 % 6)</code></p>
+<p>我们可以列出来一个表，如下</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="center">mod1</th>
+<th align="center">mod2</th>
+<th align="center">mod3</th>
+<th align="center">mod4</th>
+<th align="center">mod5</th>
+<th align="center">mod6</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">n1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">n2</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">n3</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">n4</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">n5</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">5</td>
+</tr>
+<tr>
+<td align="center">n6</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+</tbody></table>
+<p>刚开始的时候我列了这个表，试图从横向来找规律，使得能够在<code>O(1)</code>时间内得到异或的结果，不过没想出来</p>
+<p>卡了一会之后，尝试在纵向上做文章，发现了纵向上数字的规律</p>
+<p>首先我们要知道异或，也就是<code>^</code>这个符号的意思，也就是二进制的两个位相同为<code>0</code>，不同为<code>1</code>，也就是</p>
+<p><code>1 ^ 1 == 0, 0 ^ 1 == 1</code></p>
+<p>对于两个相同的数字，他们的二进制表示是一样的，那么异或之后就会为<code>0</code></p>
+<p>OK，回到上边那个表，我们可以每一列进行分析</p>
+<ul>
+<li>对于<code>mod1</code>这一列，结果都是<code>0</code>，不太好看出规律</li>
+<li>对于<code>mod2</code>这一列，<code>1，3，5</code>对<code>mod2</code>的结果是一样的，<code>2，4，6</code>也是，也就是数据可以分成<code>3</code>组</li>
+<li>对于<code>mod3</code>这一列，<code>1，4</code>|<code>2，5</code>|<code>3，6</code>对<code>mod3</code>结果是相同的，也就是数据分成了两组</li>
+<li>对于<code>mod4</code>这一列，<code>1，5</code>|<code>2，6</code>|<code>3</code>|<code>4</code>对<code>mod4</code>结果相同，这里<code>3</code>，<code>4</code><strong>没有下一个数字与之对应</strong></li>
+<li>对于<code>mod5</code>这一列，<code>1，6</code>|<code>2</code>|<code>3</code>|<code>4</code>|<code>5</code>对<code>mod5</code>结果相同，这里<code>2</code>，<code>3</code>，<code>4</code>，<code>5</code><strong>没有下一个数字与之对应</strong></li>
+<li>对于<code>mod6</code>这一列，<code>1</code>|<code>2</code>|<code>3</code>|<code>4</code>|<code>5</code>|<code>6</code>对<code>mod6</code>结果相同，这里每个数都没有<strong>没有下一个数字与之对应</strong></li>
+</ul>
+<p>那么根据上面的分析，表可以变为</p>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr>
+        <th align="center"></th>
+        <th align="center">mod1</th>
+        <th align="center">mod2</th>
+        <th align="center">mod3</th>
+        <th align="center">mod4</th>
+        <th align="center">mod5</th>
+        <th align="center">mod6</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td align="center">n1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+      </tr>
+      <tr>
+        <td align="center">n2</td>
+        <td align="center" style="background-color: rgb(141,238,255)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">2</td>
+        <td align="center" style="background-color: rgb(253,255,141)">2</td>
+        <td align="center" style="background-color: rgb(253,255,141)">2</td>
+        <td align="center" style="background-color: rgb(253,255,141)">2</td>
+      </tr>
+      <tr>
+        <td align="center">n3</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(141,238,255)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">3</td>
+        <td align="center" style="background-color: rgb(253,255,141)">3</td>
+        <td align="center" style="background-color: rgb(253,255,141)">3</td>
+      </tr>
+      <tr>
+        <td align="center">n4</td>
+        <td align="center" style="background-color: rgb(141,238,255)">0</td>
+        <td align="center" style="background-color: rgb(141,238,255)">0</td>
+        <td align="center" style="background-color: rgb(141,238,255)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">4</td>
+        <td align="center" style="background-color: rgb(253,255,141)">4</td>
+      </tr>
+      <tr>
+        <td align="center">n5</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">1</td>
+        <td align="center" style="background-color: rgb(141,238,255)">2</td>
+        <td align="center" style="background-color: rgb(141,238,255)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">5</td>
+      </tr>
+      <tr>
+        <td align="center">n6</td>
+        <td align="center" style="background-color: rgb(141,238,255)">0</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+        <td align="center" style="background-color: rgb(141,238,255)">0</td>
+        <td align="center" style="background-color: rgb(141,238,255)">2</td>
+        <td align="center" style="background-color: rgb(141,238,255)">1</td>
+        <td align="center" style="background-color: rgb(253,255,141)">0</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>没错，每列都一直在重复，比如</p>
+<p>第二列<code>1-&gt;0</code>为重复序列</p>
+<p>第三列<code>1-&gt;2-&gt;0</code>为重复序列</p>
+<p>第四列<code>1-&gt;2-&gt;3-&gt;0</code>为重复序列</p>
+<p>第四列<code>1-&gt;2-&gt;3-&gt;4-&gt;0</code>为重复序列</p>
+<p>那么结合之前说的异或的性质，如果是偶数次重复且没有剩余元素的话的话，那么本列结果一定为<code>0</code>，</p>
+<p>如果奇数次重复且没有剩余元素，那么只要计算一次重复的序列</p>
+<p>如果存在剩余元素，那么再单独异或然后加入结果集即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 本题的核心过程</span></span><br><span class="line">        <span class="comment">// 每次循环计算1列的值</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= len; i++) &#123;</span><br><span class="line">            <span class="comment">// 计算重复序列的次数</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> len % i;</span><br><span class="line">            <span class="comment">// 计算不足一次重复序列的数字数量</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> len / i;</span><br><span class="line">            <span class="comment">// 奇数次</span></span><br><span class="line">            <span class="keyword">if</span> (c % <span class="number">2</span> != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// i-1是因为重复序列最后一个数必是0</span></span><br><span class="line">                result ^= dp[i - <span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 剩余元素加入，不足一次重复序列</span></span><br><span class="line">            <span class="keyword">if</span> (r &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                result ^= dp[r];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>刚开始没使用<code>dp</code>来提前计算累计的异或的话，还是超时，使用之后，就可以通过了。</p>
+<h2 id="公司管理"><a href="#公司管理" class="headerlink" title="公司管理"></a>公司管理</h2><p><img data-src="https://i.loli.net/2020/10/25/X1GTuWFSdlHf5wO.png" alt="1.png"></p>
+<p>这题完全看不懂啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊，最后没时间做了…🤣</p>
+<h2 id="矩阵游戏"><a href="#矩阵游戏" class="headerlink" title="矩阵游戏"></a>矩阵游戏</h2><p><img data-src="https://i.loli.net/2020/10/25/6HyMKmel1I8nObu.png"></p>
+<p>这题放在第二部分的卷子，刚开始看感觉很难，但是试了试其实不难，递归回到<code>2x2</code>的情况即可</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="comment">// 输入</span></span><br><span class="line">        <span class="type">Scanner</span> <span class="variable">in</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);</span><br><span class="line">        <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">b</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> in.nextInt();</span><br><span class="line">        <span class="comment">// 输出次数循环</span></span><br><span class="line">        <span class="keyword">while</span> (n &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> in.nextInt() - <span class="number">1</span>;</span><br><span class="line">            <span class="type">int</span> <span class="variable">y</span> <span class="operator">=</span> in.nextInt() - <span class="number">1</span>;</span><br><span class="line">            <span class="comment">// 构造一个2x2数组</span></span><br><span class="line">            <span class="type">int</span>[][] twoXTwo = &#123;</span><br><span class="line">                    &#123;<span class="number">0</span>, a&#125;,</span><br><span class="line">                    &#123;b, c&#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="comment">// 对输入的点(x,y)进行递归</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">r</span> <span class="operator">=</span> dfs(x, y, twoXTwo);</span><br><span class="line">            <span class="comment">// 输出</span></span><br><span class="line">            System.out.println(r);</span><br><span class="line">            n--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span>[][] twoXTwo)</span> &#123;</span><br><span class="line">        <span class="comment">// 已经在2x2范围内了，直接返回对应位置的值</span></span><br><span class="line">        <span class="keyword">if</span> (x &lt; <span class="number">2</span> &amp;&amp; y &lt; <span class="number">2</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> twoXTwo[x][y];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 找到这个坐标最少应该是几x几的格子</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">len</span> <span class="operator">=</span> <span class="number">2</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">max</span> <span class="operator">=</span> Math.max(x, y);</span><br><span class="line">        <span class="keyword">while</span> (len &lt;= max) &#123;</span><br><span class="line">            len = len * <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算这个坐标位于哪个位置，左上，左下，右上，右下</span></span><br><span class="line">        <span class="type">int</span> <span class="variable">div</span> <span class="operator">=</span> len / <span class="number">2</span>;</span><br><span class="line">        <span class="type">int</span> result;</span><br><span class="line">        <span class="keyword">if</span> (x &gt;= div &amp;&amp; y &gt;= div) &#123;</span><br><span class="line">            <span class="comment">// 右下角元素</span></span><br><span class="line">            result = twoXTwo[<span class="number">1</span>][<span class="number">1</span>] + dfs(x - div, y - div, twoXTwo);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (x &lt; div &amp;&amp; y &gt;= div) &#123;</span><br><span class="line">            <span class="comment">// 左上角元素</span></span><br><span class="line">            result = twoXTwo[<span class="number">0</span>][<span class="number">1</span>] + dfs(x, y - div, twoXTwo);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 左下角元素</span></span><br><span class="line">            result = twoXTwo[<span class="number">1</span>][<span class="number">0</span>] + dfs(x - div, y, twoXTwo);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 根据题意取mod</span></span><br><span class="line">        <span class="keyword">return</span> result % <span class="number">1000000000</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>总体上感觉很好，难度适中，下次一定还来😂</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Par9uet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/0d82814cc49b" title="美团2021校招前端笔试题">https://prohibitorum.top/0d82814cc49b</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/%E5%89%8D%E7%AB%AF%E7%AC%94%E8%AF%95%E9%A2%98/" rel="tag"># 前端笔试题</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/8fc28eac39a3" rel="prev" title="Vuex@next源码解析 - module-collection篇">
+                  <i class="fa fa-angle-left"></i> Vuex@next源码解析 - module-collection篇
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/751322f675bd" rel="next" title="Vuex@next源码解析 - module篇">
+                  Vuex@next源码解析 - module篇 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Par9uet</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">433k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">26:14</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","body":null,"js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"0d82814cc49b"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+<style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+        --swiper-pagination-bottom: 0;
+      }
+      .swiper {
+        padding-bottom: 32px;
+        margin-bottom: 20px;
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>

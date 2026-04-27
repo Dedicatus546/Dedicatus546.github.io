@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前言记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题">
+<meta property="og:url" content="https://prohibitorum.top/76b2f722ca99">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/03/19/20260319164748308.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421144919637.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421171405285.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421171649844.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421172231562.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421172549150.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423105550050.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423111648432.avif">
+<meta property="og:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423112658662.avif">
+<meta property="article:published_time" content="2026-03-19T14:59:33.277Z">
+<meta property="article:modified_time" content="2026-03-19T14:59:33.277Z">
+<meta property="article:author" content="Par9uet">
+<meta property="article:tag" content="Unocss">
+<meta property="article:tag" content="Vuetify">
+<meta property="article:tag" content="css layer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/03/19/20260319164748308.avif">
+
+
+<link rel="canonical" href="https://prohibitorum.top/76b2f722ca99.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/76b2f722ca99","path":"76b2f722ca99.html","title":"记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题 | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@5.36.0/dist/lite/builds/browser.umd.js" integrity="sha256-o49zoHLDPBm9WLg6AiliAVi3axCRTqe3ltTxLvhzAVg=" crossorigin="anonymous" defer></script><script src="/js/third-party/search/algolia-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fab fa-algolia fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-Layer"><span class="nav-number">2.1.</span> <span class="nav-text">CSS Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-Layer"><span class="nav-number">2.1.1.</span> <span class="nav-text">定义 Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89-Layer-%E9%A1%BA%E5%BA%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">定义 Layer 顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.1.3.</span> <span class="nav-text">其他</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3"><span class="nav-number">2.2.</span> <span class="nav-text">解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Par9uet"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Par9uet</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">194</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/76b2f722ca99">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Par9uet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题 | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-03-19 14:59:33" itemprop="dateCreated datePublished" datetime="2026-03-19T14:59:33+00:00">2026-03-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BC%96%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">编程</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.8k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题。</p>
+<span id="more"></span>
+
+<p>最近也是发布了 vite8 ，所以把手头的 <a target="_blank" rel="noopener" href="https://github.com/Dedicatus546/jm-desktop">jm-desktop</a> 进行依赖升级，顺带升了 vuetify 和 unocss 。</p>
+<p>不过升级完发现 vuetify 的组件中的 margin padding 几乎都变为 0 了。</p>
+<p>于是打开 F12 观察了一下，发现是 unocss 的样式覆盖了 vuetify 的样式。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="CSS-Layer"><a href="#CSS-Layer" class="headerlink" title="CSS Layer"></a>CSS Layer</h2><p>vuetify 在 v3.6.0 引入了 css layer ，所有的样式都会被分类到对应的 layer 上，比如 v-btn 的样式：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/03/19/20260319164748308.avif"></p>
+<p>官方文档地址：<a target="_blank" rel="noopener" href="https://vuetifyjs.com/en/styles/layers/#utilities-group">点我直达</a>。</p>
+<p>关于 css layer ，在 MDN 上给的解释是：</p>
+<blockquote>
+<p>The <code>@layer</code> CSS at-rule is used to declare a cascade layer and can also be used to define the order of precedence in case of multiple cascade layers.</p>
+</blockquote>
+<p>用我们中文的大白话讲，就是给 css 分类了，可以给一组样式起一个名字，然后指定这些名字的顺序，从而固定住优先级。</p>
+<p>在先前，如果我们要覆盖某些样式，可能有以下几个办法：</p>
+<ul>
+<li>在标签上的 style 编写样式</li>
+<li>使用 !important 标记</li>
+<li>使用 id 选择器</li>
+<li>在该样式的“后面”编写一段选择器相同的样式</li>
+</ul>
+<p>这几个其实都是一个原理，那就是提高所编写样式的权重，相关文章可以看 <a href="/1f70e1987c43">CSS样式权重</a> 。</p>
+<p>而 css layer 的出现，意味着我们无需再计算权重，权重低（层级高）的也能覆盖权重高的（层级低）。</p>
+<h3 id="定义-Layer"><a href="#定义-Layer" class="headerlink" title="定义 Layer"></a>定义 Layer</h3><p>定义一个层级，在 CSS 钟使用 @layer 关键字，比如定义一个 utilities 层级：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> utilities &#123;</span><br><span class="line">  <span class="selector-class">.padding-sm</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0.5rem</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="selector-class">.padding-lg</span> &#123;</span><br><span class="line">    <span class="attribute">padding</span>: <span class="number">0.8rem</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>层级也可以嵌套，也可以不指定名字，这里我们只已最简单的举例，详情可以查看 MDN 上的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Reference/At-rules/@layer#%E8%AF%AD%E6%B3%95">文档</a></p>
+<h3 id="定义-Layer-顺序"><a href="#定义-Layer-顺序" class="headerlink" title="定义 Layer 顺序"></a>定义 Layer 顺序</h3><p>在定义完一些 Layer 之后，我们就需要知道如何定义他们的顺序，也就是优先级了，同样，也是使用 @layer 关键字，比如现在有两个层级 layer1 ，layer2 ，我们想让 layer2 优先级比 layer1 高，那么可以这么写：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> layer1, layer2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer2 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>没错，如果我们不写那个花括号，这个语句就是用来确定优先级的，排越后的优先级越高，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421144919637.avif"></p>
+<p>这时候眼尖的帅哥就会问了，你这不对啊，如果不用 @layer ，在相同的权重下也是后面的生效啊。</p>
+<p>没错，所以我们可以再使用以下例子，这次我们把 layer2 的定义放 layer1 前面：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> layer1, layer2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer2 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421171405285.avif"></p>
+<p>可以看到依然应用的是 layer2 的绿色样式。</p>
+<p>或许这样还是不那么明显，我们可以将 layer1 的样式优先级提高，效果如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> layer1, layer2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer2 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span><span class="selector-class">.text</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果不使用 @layer ，那么 p.text 的优先级是比 p 要高的，文本的颜色就是红色，而在上面的代码下，应用的是 layer2 的绿色，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421171649844.avif"></p>
+<p>那要是不写 <code>@layer layer1, layer2</code> 会是什么结果呢，我们在 layer1 内使用较高的优先级以排除不使用 @layer 下的影响：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span><span class="selector-class">.text</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer2 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421172231562.avif"></p>
+<p>可以发现 layer2 的 p 生效了，这其实是因为 <code>@layer layerName {}</code> 也是一种定义层级优先级的方式，越后写的层级优先级越高。</p>
+<p>这时候聪明的小伙子就要问了，要是我在后面加上 @layer layer2, layer1 能让 layer2 的层级优先级比 layer1 高吗？事实是不能，层级顺序只要确定，就无法再变更，代码如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span><span class="selector-class">.text</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer2 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: green;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 企图让 layer1 高于 layer2 */</span></span><br><span class="line"><span class="keyword">@layer</span> layer2, layer1;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/21/20260421172549150.avif"></p>
+<p>当然这其实也符合逻辑，如果后写能覆盖的话，那其实就和之前的样式优先级问题一样了，大家（每个库）都想尽可能的往后引入，以避免被覆盖，这就违背提出 @layer 的理念了。</p>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>如果某个样式不在任何一个层级中，那么它和层级中的样式是如何比较的？</p>
+<p>我们先让 layer1 放非 layer 样式之后，代码如下：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123;</span><br><span class="line">  <span class="attribute">color</span>: green;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">@layer</span> layer1 &#123;</span><br><span class="line">  <span class="selector-tag">p</span> &#123;</span><br><span class="line">    <span class="attribute">color</span>: red;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423105550050.avif"></p>
+<p>可以看到生效的是绿色，这是因为非 layer 的样式就是高于 layer 内的样式的，你可以理解为没有被 @layer 包裹的样式默认生成了一个匿名的 layer ，这个 layer 位于所有定义的 layer 之后。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>在了解上面的东西后，为了解决 unocss 和 vuetify 的样式冲突问题，我们要知道问题在哪。</p>
+<p>首先，vuetify 在 3.6.0 引入了 css layer ，所有的样式都被定义在了层级里面，vuetify 定义了如下的层级：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@layer</span> vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, vuetify-final;</span><br></pre></td></tr></table></figure>
+
+<p>unocss 在默认情况下并不会生成 layer ，需要我们手动配置：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423111648432.avif"></p>
+<p>在更新依赖之前，我们在 main.ts 编写的导入顺序是：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;virtual:uno.css&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;vuetify/styles&#x27;</span></span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<p>根据相同优先级下后写的覆盖前写的，所以这段代码在非 layer 样式下的表现几乎正常，虽然在 unocss 中我们并没有关闭 reset 的样式。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig, presetWind4 &#125; <span class="keyword">from</span> <span class="string">&#x27;unocss&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">presets</span>: [</span><br><span class="line">    <span class="title function_">presetWind4</span>(&#123;</span><br><span class="line">      <span class="attr">prefix</span>: <span class="string">&#x27;wind-&#x27;</span>,</span><br><span class="line">      <span class="comment">// 并没有去除 unocss 的 reset</span></span><br><span class="line">      <span class="comment">// preflights: &#123;</span></span><br><span class="line">      <span class="comment">//   reset: false,</span></span><br><span class="line">      <span class="comment">// &#125;,</span></span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>但是当 vuetify 改为 layer 样式后，问题就来了，由于 unocss 依然是非 layer 样式，导致 unocss 样式优先级全部高于了 vuetify 的样式，而 我们又没关闭 unocss 的 reset 样式，导致了组件的样式不正确，最明显的就是边框全部归零，效果如下：</p>
+<p><img data-src="https://fastly.jsdelivr.net/gh/Dedicatus546/image@main/2026/04/23/20260423112658662.avif"></p>
+<p>ok，知道了这个问题后，我们就大体知道如何解决了，首先是去掉 unocss 的 reset 样式注入，因为 vuetify 其实已经自带了一套 reset 了，并且在这个项目中，我们主要是使用 unocss 工具类多一些，比如 <code>flex flex-col h-full</code> 等等。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfig, presetWind4 &#125; <span class="keyword">from</span> <span class="string">&#x27;unocss&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">presets</span>: [</span><br><span class="line">    <span class="title function_">presetWind4</span>(&#123;</span><br><span class="line">      <span class="attr">prefix</span>: <span class="string">&#x27;wind-&#x27;</span>,</span><br><span class="line">      <span class="comment">// 去除 unocss 的 reset</span></span><br><span class="line">      <span class="attr">preflights</span>: &#123;</span><br><span class="line">        <span class="attr">reset</span>: <span class="literal">false</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>接着我们要让 unocss 也生成基于 layer 的样式，这样可以保证我们可以随时调整每个 layer 的优先级</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; defineConfi &#125; <span class="keyword">from</span> <span class="string">&#x27;unocss&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title function_">defineConfig</span>(&#123;</span><br><span class="line">  <span class="attr">outputToCssLayers</span>: &#123;</span><br><span class="line">    <span class="attr">cssLayerName</span>: <span class="function">(<span class="params">layer</span>) =&gt;</span> <span class="string">`unocss-<span class="subst">$&#123;layer&#125;</span>`</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>这样子 unocss 就会把样式包裹在 layer 中。</p>
+<p>经过这个修改后，基本上 unocss 的样式就不会影响到 vuetify 了，从导入顺序看， vuetify 的 layer 优先级都是高于 unocss 。</p>
+<p>如果我们想让 unocss 的样式高于 vuetify ，那么也无需修改引入顺序了，我们可以创建一个 layer.css 来定义层级顺序，在 main.ts 开头就引入这个文件，代码如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据层优先级定义后无法变更的特性，确保定义层优先级的 css 在第一个引入</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;./layer.css&#x27;</span></span><br><span class="line"><span class="comment">//...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 无需 vuetify 和 unocss 的引入顺序</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;virtual:uno.css&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;vuetify/styles/core&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 定义这些层的顺序（优先级） */</span></span><br><span class="line"><span class="keyword">@layer</span> unocss-base, unocss-properties, unocss-theme, unocss-default, unocss-icons, vuetify-core, vuetify-components, vuetify-overrides, vuetify-utilities, vuetify-final;</span><br></pre></td></tr></table></figure>
+
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>最后，由于 vuetify 自身其实也是有一套工具类的，但是我们几乎用不到，所以我们只引入 core 层的样式即可，vuetify 的组件通过插件自动导入对应样式：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;virtual:uno.css&#x27;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&#x27;vuetify/styles/core&#x27;</span></span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Par9uet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/76b2f722ca99" title="记一次由于 layer 层级造成 vuetify 样式与 unocss 样式冲突问题">https://prohibitorum.top/76b2f722ca99</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Vuetify/" rel="tag"># Vuetify</a>
+              <a href="/tags/Unocss/" rel="tag"># Unocss</a>
+              <a href="/tags/css-layer/" rel="tag"># css layer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/d2a6b711fd29" rel="prev" title="TypeScript 7 进度 – 2025-12（译）">
+                  <i class="fa fa-angle-left"></i> TypeScript 7 进度 – 2025-12（译）
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Par9uet</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">433k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">26:14</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","body":null,"js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"37232f4692a4"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+<style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+        --swiper-pagination-bottom: 0;
+      }
+      .swiper {
+        padding-bottom: 32px;
+        margin-bottom: 20px;
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>
