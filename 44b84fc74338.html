@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.2">
+
+
+  <link rel="apple-touch-icon" href="/other/favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/other/favicon.svg">
+  <link rel="mask-icon" href="/other/favicon.svg" color="#222">
+
+  <link rel="manifest" href="/other/mainfest.json">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.css" integrity="sha256-gkQVf8UKZgQ0HyuxL/VnacadJ+D2Kox2TCEBuNQg5+w=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"prohibitorum.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.27.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"atom-one-light","dark":"atom-one-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"flat"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"algolia":{"appID":"T3MJ56EZKX","apiKey":"d231b9edc85683ea50e37ff0bdc95d43","indexName":"blog","hits":{"per_page":10}}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="前言原文地址：Announcing TypeScript 7.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TypeScript 7.0（译）">
+<meta property="og:url" content="https://prohibitorum.top/44b84fc74338">
+<meta property="og:site_name" content="恋の歌">
+<meta property="og:description" content="前言原文地址：Announcing TypeScript 7.0">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2026/07/7-0-speedup-chart-2.png">
+<meta property="og:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2026/07/7-0-mem-chart-2.png">
+<meta property="article:published_time" content="2026-08-19T09:30:20.000Z">
+<meta property="article:modified_time" content="2026-08-21T14:03:00.000Z">
+<meta property="article:author" content="Par9uet">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="TypeScript">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2026/07/7-0-speedup-chart-2.png">
+
+
+<link rel="canonical" href="https://prohibitorum.top/44b84fc74338.html">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://prohibitorum.top/44b84fc74338","path":"44b84fc74338.html","title":"TypeScript 7.0（译）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TypeScript 7.0（译） | 恋の歌</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TDBJV1DQ49"></script>
+  <script class="next-config" data-name="google_analytics" type="application/json">{"tracking_id":"G-TDBJV1DQ49","only_pageview":false,"measure_protocol_api_secret":null}</script>
+  <script src="/js/third-party/analytics/google-analytics.js" defer></script>
+
+
+
+
+
+
+
+
+  
+  <script src="https://fastly.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/@fancyapps/ui@5.0.31/dist/fancybox/fancybox.umd.js" integrity="sha256-a+H7FYzJv6oU2hfsfDGM2Ohw/cR9v+hPfxHCLdmCrE8=" crossorigin="anonymous" defer></script>
+  <script src="https://fastly.jsdelivr.net/npm/lozad@1.16.0/dist/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://fastly.jsdelivr.net/npm/algoliasearch@5.36.0/dist/lite/builds/browser.umd.js" integrity="sha256-o49zoHLDPBm9WLg6AiliAVi3axCRTqe3ltTxLvhzAVg=" crossorigin="anonymous" defer></script><script src="/js/third-party/search/algolia-search.js" defer></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js" defer></script>
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<!-- hexo injector head_end start --><style>.vue-playground-container {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.vue-playground-container .vue-playground-iframe {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 1100px;
+  aspect-ratio: 16/7;
+  border: 1px solid rgb(238, 238, 238);
+  border-radius: 4px;
+  overflow: hidden;
+}</style><!-- hexo injector head_end end --></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">恋の歌</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">koi-no-uta</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fab fa-algolia fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E6%96%87"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E6%9B%B4%E5%BF%AB%E7%9A%84-TypeScript-%E6%84%8F%E5%91%B3%E7%9D%80%E4%BB%80%E4%B9%88"><span class="nav-number">2.1.</span> <span class="nav-text">一个更快的 TypeScript 意味着什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%BF%E6%B3%9B%E6%B5%8B%E8%AF%95%EF%BC%8C%E5%87%86%E5%A4%87%E5%A5%BD%E7%94%A8%E4%BA%8E%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83"><span class="nav-number">2.2.</span> <span class="nav-text">广泛测试，准备好用于生产环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E8%BF%90%E8%A1%8C-TypeScript-6-0"><span class="nav-number">2.3.</span> <span class="nav-text">同时运行 TypeScript 6.0</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%8F%E6%97%A5%E6%9E%84%E5%BB%BA%E7%89%88%E6%9C%AC-typescritp-native-preview"><span class="nav-number">2.3.1.</span> <span class="nav-text">每日构建版本 @typescritp&#x2F;native-preview</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%A7%84%E6%A8%A1%EF%BC%9A%E5%B9%B6%E8%A1%8C%E5%92%8C%E6%8E%A7%E5%88%B6"><span class="nav-number">2.4.</span> <span class="nav-text">自定义规模：并行和控制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E6%A3%80%E6%9F%A5%E5%99%A8%E5%B9%B6%E8%A1%8C"><span class="nav-number">2.4.1.</span> <span class="nav-text">类型检查器并行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E5%BC%95%E7%94%A8%E6%9E%84%E5%BB%BA%E5%99%A8%E5%B9%B6%E8%A1%8C%E5%8C%96"><span class="nav-number">2.4.2.</span> <span class="nav-text">项目引用构建器并行化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.4.3.</span> <span class="nav-text">单线程模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E5%8D%87-watch-%E6%A8%A1%E5%BC%8F%E6%80%A7%E8%83%BD"><span class="nav-number">2.5.</span> <span class="nav-text">提升 --watch 模式性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA-5-x-%E4%BB%A5%E6%9D%A5%E7%9A%84%E6%9B%B4%E6%96%B0%EF%BC%8C%E4%BB%A5%E5%8F%8A-6-0-%E6%96%B0%E7%9A%84%E8%A1%8C%E4%B8%BA"><span class="nav-number">2.6.</span> <span class="nav-text">自 5.x 以来的更新，以及 6.0 新的行为</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A8%A1%E6%9D%BF%E5%AD%97%E9%9D%A2%E7%B1%BB%E5%9E%8B%E7%8E%B0%E5%9C%A8%E6%94%AF%E6%8C%81-Unicode-%E4%BB%A3%E7%A0%81%E7%82%B9"><span class="nav-number">2.6.1.</span> <span class="nav-text">模板字面类型现在支持 Unicode 代码点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E-JavaScript-%E4%B8%8D%E5%90%8C"><span class="nav-number">2.6.2.</span> <span class="nav-text">与 JavaScript 不同</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E4%BD%93%E9%AA%8C"><span class="nav-number">2.7.</span> <span class="nav-text">编辑体验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TypeScript-%E9%9B%86%E6%88%90"><span class="nav-number">2.7.1.</span> <span class="nav-text">TypeScript 集成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%BA%BF%E5%B1%95%E6%9C%9B"><span class="nav-number">2.8.</span> <span class="nav-text">路线展望</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-number">3.</span> <span class="nav-text">后记</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Par9uet"
+      src="https://avatars.githubusercontent.com/u/48575405?v=4">
+  <p class="site-author-name" itemprop="name">Par9uet</p>
+  <div class="site-description" itemprop="description">Index-Librorum-Prohibitorum</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">198</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">163</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Dedicatus546" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Dedicatus546" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1607611087@qq.com" title="E-Mail → mailto:1607611087@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" class="cc-opacity" rel="noopener" target="_blank"><img src="https://fastly.jsdelivr.net/npm/@creativecommons/vocabulary@2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://prohibitorum.top/44b84fc74338">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://avatars.githubusercontent.com/u/48575405?v=4">
+      <meta itemprop="name" content="Par9uet">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="恋の歌">
+      <meta itemprop="description" content="Index-Librorum-Prohibitorum">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TypeScript 7.0（译） | 恋の歌">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TypeScript 7.0（译）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2026-08-19 09:30:20" itemprop="dateCreated datePublished" datetime="2026-08-19T09:30:20+00:00">2026-08-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-08-21 14:03:00" itemprop="dateModified" datetime="2026-08-21T14:03:00+00:00">2026-08-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%BF%BB%E8%AF%91/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>22 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>原文地址：<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/">Announcing TypeScript 7.0</a></p>
+<span id="more"></span>
+
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="一个更快的-TypeScript-意味着什么"><a href="#一个更快的-TypeScript-意味着什么" class="headerlink" title="一个更快的 TypeScript 意味着什么"></a>一个更快的 TypeScript 意味着什么</h2><p>一个更快的 TypeScript 纸面上听起来很棒，但它在实践中意味着什么？或许思考 TypeScript 在每个开发阶段出现的地方会有帮助。</p>
+<p>一个开发者典型的一天包括，打开编辑器，打开一个 TypeScript 文件，执行类似“在项目中寻找所有引用”的操作。当你开始编辑时可能会期待弹出代码自动完成，以及在编辑过程中随时弹出红色波浪线，当你（在当下或许是一个 AI 智能体）准备好构建项目的时候，执行 <code>tsc</code> 命令，检查输出文件是否存在错误，接着使用某种方式执行生成的代码。</p>
+<p>一个更快的 TypeScript 意味着上面提到每个步骤都能得到简化。等待编辑器完全加载项目这个操作体感上会瞬间完成。寻找所有引用，自动完成以及代码诊断只需消耗以前所用时间的一小部分。当你执行 <code>tsc</code> ，或许加上了 <code>--watch</code> 模式，反馈周期将被缩短，迭代速度要远快于以前。</p>
+<p>这里有一些开始使用 TypeScript 7 的真实项目。你也可以自己尝试比较一些开源项目，下面是一些相当大的开源代码库在使用 TypeScript 6 和 TypeScript 7 所需的构建时间。</p>
+<table>
+<thead>
+<tr>
+<th>Codebase</th>
+<th>TypeScript 6</th>
+<th>TypeScript 7</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vscode</td>
+<td>125.7s</td>
+<td>10.6s</td>
+<td>11.9x</td>
+</tr>
+<tr>
+<td>sentry</td>
+<td>139.8s</td>
+<td>15.7s</td>
+<td>8.9x</td>
+</tr>
+<tr>
+<td>bluesky</td>
+<td>24.3s</td>
+<td>2.8s</td>
+<td>8.7x</td>
+</tr>
+<tr>
+<td>playwright</td>
+<td>12.8s</td>
+<td>1.47s</td>
+<td>8.7x</td>
+</tr>
+<tr>
+<td>tldraw</td>
+<td>11.2s</td>
+<td>1.46s</td>
+<td>7.7x</td>
+</tr>
+</tbody></table>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2026/07/7-0-speedup-chart-2.png"></p>
+<p>TypeScript 7 通常在整个构建过程中也有更少的内存占用。</p>
+<table>
+<thead>
+<tr>
+<th>Codebase</th>
+<th>TypeScript 6</th>
+<th>TypeScript 7</th>
+<th>Memory Delta</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vscode</td>
+<td>5.2GB</td>
+<td>4.2GB</td>
+<td>-18%</td>
+</tr>
+<tr>
+<td>sentry</td>
+<td>4.9GB</td>
+<td>4.6GB</td>
+<td>-6%</td>
+</tr>
+<tr>
+<td>bluesky</td>
+<td>1.8GB</td>
+<td>1.3GB -26%</td>
+<td></td>
+</tr>
+<tr>
+<td>playwright</td>
+<td>1.0GB</td>
+<td>0.9GB</td>
+<td>-11%</td>
+</tr>
+<tr>
+<td>tldraw</td>
+<td>0.6GB</td>
+<td>0.5GB</td>
+<td>-15%</td>
+</tr>
+</tbody></table>
+<p><img data-src="https://devblogs.microsoft.com/typescript/wp-content/uploads/sites/11/2026/07/7-0-mem-chart-2.png"></p>
+<p>当然，体验不止完整的构建过程。在相同的电脑上，打开 VSCode 代码库中一个带有一个错误的文件，从打开编辑器到看见第一个错误，先前花费大概 17.5 秒，而使用 TypeScript 7 ，下降到 1.3 秒，超过 13 倍的速度提升。</p>
+<h2 id="广泛测试，准备好用于生产环境"><a href="#广泛测试，准备好用于生产环境" class="headerlink" title="广泛测试，准备好用于生产环境"></a>广泛测试，准备好用于生产环境</h2><p>在十余年的开发中，TypeScript 项目包含数万个测试用例， <code>main</code> 分支上的每个提交都会执行这些测试用例。这确保了每个 release 版本都是稳定且可靠的。</p>
+<p>不过 TypeScript 7 不是一个普通的 release 版本。除了这些测试套件之外，我们还利用了许多不同的资源，来确保 TypeScript 7 能稳定地用于生产环境上。</p>
+<p>过去一年我们与许多内部的、外部的大型团队配合工作，测试 TypeScript 7 在真实代码库上的表现，结果非常可观，全部的公司都表示 TypeScript 7 稳定，快速，易于使用。比如， <a target="_blank" rel="noopener" href="https://code.visualstudio.com/blogs/2026/06/26/iterating-faster-with-ts-7">VSCode 团队近期特别发表了使用 TypeScript 7 预览版的体验</a>，TypeScript 7 的使用加快了他们的开发周期。我们也和微软内的 Loop 、 Office 、 PowerBI 、 Teams 以及 Xbox 等团队配合工作，确保 TypeScript 已准备好应用于最大的代码库。还有，像 Bloomberg 、 Canva 、 Figma 、 Google 、 Lattice 、 Linear 、 Miro 、 Notion 、 Sentry 、 Slack 、 Vanta 、 Vercel 、 VoidZero 等公司也配合我们测试 TypeScript 7 在他们代码库上的表现，并给与我们反馈让 TypeScript 变得更好。</p>
+<p>此外，我们还重构了许多广泛的测试基础设施，用于适配 TypeScript 7 ， TypeScript 6 及之前的版本会自动按需地为那些 Github 上的 TypeScript 和 JavaScript 项目进行测试，以检测编译器和语言服务的回归问题。相同的测试已回归，在真实的代码库中使用 TypeScript 7 进行测试查找问题，这样可以发现核心测试套件的不足，提供更好的用户体验。</p>
+<p>显式的反馈，自动的崩溃报告以及积极的测试，这些过程的结合使得 TypeScript 在质量方面有了可衡量的变化。事实上，我们的数据已经向我们展示了 TypeScript 7.0 新的语言服务端对比 TypeScript 6 ，实际上减少了超过 80% 的执行失败的语言服务命令，减少了超过 60% 的语言服务端崩溃。</p>
+<p>我们也听到了大量来自不同团队中令人难以置信的反馈：</p>
+<ul>
+<li>Slack 工程师告诉我们 TypeScript 7 减少了 40% 的合并队列时间，并且 <a target="_blank" rel="noopener" href="https://bsky.app/profile/slack.engineering/post/3lry3ml3qok2f">CI 上的类型检查时间大约 7.5 分钟降到了 1.25 分钟</a>。本地开发由于语言服务的加载时间以及工程师通常会让 CI 做一个完整的类型检查，几乎“不可用”，而 TypeScript 7 花费几秒就可以加载同一个代码库，使得本地检查再次成为可能。</li>
+<li>Vanta 的构建得到了显著地提升，<a target="_blank" rel="noopener" href="https://bsky.app/profile/chriskrycho.com/post/3melxwy2lkycq">在他们最大的项目中，速度提升高达 9 倍</a>。</li>
+<li>类似的，微软的 News Services 团队告诉我们使用 TypeScript 7 每个月在等待 CI 构建上节省了 400 小时。</li>
+<li>去年， PowerBI 的工程师将 TypeScript 7 描述为“拯救了他们在代码库上的工作”。甚至在 TypeScript 7 在 VSCode 上支持重命名功能之前，他们就已使用 TypeScript 7 作为默认选项。</li>
+<li>为 Loop 单仓库工作的开发者也非常开心。先前的编辑器体验在他们的规模下无法使用，而 TypeScript 7 的使用体验是惊人的。</li>
+<li>Canva 的开发者告诉我们 TypeScript 7 的语言服务带来了惊人的速度提升，在他们的编辑中从大约 58 秒观察到第一个错误降低到了 4.8 秒。</li>
+</ul>
+<h2 id="同时运行-TypeScript-6-0"><a href="#同时运行-TypeScript-6-0" class="headerlink" title="同时运行 TypeScript 6.0"></a>同时运行 TypeScript 6.0</h2><p>虽然 TypeScript 已发布，但它不自带编程式 API 。我们希望 TypeScript 7.1 附带一个新的 API （与先前的不同），但在这之前我们需要优先确保 TypeScript 7.0 可以和 TypeScript 6.0 并行，以便那些需要以编程的形式访问编译器的工作能正常工作（比如 typescript-eslint ）。</p>
+<p>作为 6.0&#x2F;7.0 过渡进程的一部分，我们发布了一个新的兼容性的包 <code>@typescript/typescript6</code> 。这个包提供了名为 <code>tsc6</code> 的可执行命令，所以如果需要，你可以同时安装 TypeScript 7.0 （附带了 <code>tsc</code> 二进制命令）而不会出现命名冲突。新的包也重新导出了 TypeScript 6.0 的 API ，所以你可以使用 TypeScript 7.0 的 tsc ，而其他工具继续依赖 6.0 。</p>
+<p>由于某些工具，比如 typescript-eslint ，需要从对等依赖项直接从 <code>typscript</code> 包导入，我们推荐使用 npm 的别名来实现它。你可以执行下面的命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D typescript@npm:@typescript/typescript6</span><br></pre></td></tr></table></figure>
+
+<p>或者将 <code>package.json</code> 内的 <code>typescript</code> 路径改为如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;typescript&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm:@typescript/typescript6@^6.0.2&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>注意这么做后只有 <code>tsc6</code> 命令了。为了拿到 7.0 的 <code>tsc</code> ，你可以为 TypeScript 7 添加另一个别名，这样 <code>npx tsc</code> 就会工作在 7.0 下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;devDependencies&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;@typescript/native&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm:typescript@^7.0.2&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;typescript&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npm:@typescript/typescript6@^6.0.2&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="每日构建版本-typescritp-native-preview"><a href="#每日构建版本-typescritp-native-preview" class="headerlink" title="每日构建版本 @typescritp/native-preview"></a>每日构建版本 <code>@typescritp/native-preview</code></h3><p>直到现在，许多开发者通过 <code>@typescript/native-preview</code> 安装 TypeScript 7 。这个包附带了新代码库的每日构建版本，为社区提供了每周超过 850 万的下载。</p>
+<p>不过，在不久的将来，每日构建版本将会恢复到标准 <code>typescript</code> 包的 <code>next</code> 标签下。你可以通过如下命令安装它：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -D typescript@next</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义规模：并行和控制"><a href="#自定义规模：并行和控制" class="headerlink" title="自定义规模：并行和控制"></a>自定义规模：并行和控制</h2><p>TypeScript 7 现在很多步骤都是并行执行的，包括解析，类型检查以及代码生成。这些步骤中的一部分，像解析和代码生成几乎可以跨文件独立完成。像这样，并行化能够自动很好地扩展到更大的代码库，并带来相对更小的开销，但并不是每个 TypeScript 的构建步骤都能简单地并行。</p>
+<p>TypeScript 7 引入了实验性质的 <code>--checkers</code> 和 <code>--builders</code> 标志，来为那些不那么琐碎的步骤，比如类型检查和项目引用构建，微调其并行行为。同时也引入了 <code>--singleThreaded</code> 标志来完全禁用并行特性，这对那些资源有限的环境的调试或执行操作很有帮助。</p>
+<h3 id="类型检查器并行"><a href="#类型检查器并行" class="headerlink" title="类型检查器并行"></a>类型检查器并行</h3><p>其他一些步骤，比如类型检查，它在跨文件间有着更复杂的依赖关系。许多文件最终依赖于来自其自身依赖和全局作用域的相同类型信息，所以完全独立地运行类型检查器是浪费的，包括计算和内存占用。另一方面，类型检查器偶尔会依赖程序中的相对顺序信息，所以从零开始的类型检查必须总是按照相同的顺序检查相同的文件，以确保获得相同的结果。</p>
+<p>为了在避免这些陷阱的情况下启用并行， TypeScript 7.0 创建了一部分固定数量的，有独立状态的类型检查器线程，这些线程可能最终会重复某些共同的工作，但给与相同的文件输入，它们总是能将这些文件划分为相同的部分，并产生相同的结果。</p>
+<p>默认的类型检查器线程数量为 4 ，它可以通过新的 <code>--checkers</code> 标志来配置。你可能会发现增加这个数量在 CPU 核心更多的机器上可以进一步加速构建更大型的代码库，但通常情况下也会带来内存使用量的增加。比如在上面的表格展示了 TypeScript 7 在默认 <code>--checkers 4</code> 执行的结果，而下图则展示了在相同机器下，在 <code>--checkers 8</code> 的执行结果。</p>
+<table>
+<thead>
+<tr>
+<th>Codebase</th>
+<th>TypeScript 6</th>
+<th>TypeScript 7 (–checkers 8)</th>
+<th>Speedup</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vscode</td>
+<td>125.7s</td>
+<td>7.51s</td>
+<td>16.7x</td>
+</tr>
+<tr>
+<td>sentry</td>
+<td>139.8s</td>
+<td>12.08s</td>
+<td>11.6x</td>
+</tr>
+<tr>
+<td>bluesky</td>
+<td>24.3s</td>
+<td>2.01s</td>
+<td>12.1x</td>
+</tr>
+<tr>
+<td>playwright</td>
+<td>12.8s</td>
+<td>1.16s</td>
+<td>11x</td>
+</tr>
+<tr>
+<td>tldraw</td>
+<td>11.2s</td>
+<td>1.06s</td>
+<td>10.6x</td>
+</tr>
+</tbody></table>
+<p>正如你所看到的那样，这些代码库使用更多的核心从而得到了一个更快的速度，但不同的项目和不同的底层机器使得结果有所不同。</p>
+<p>另一方面，在更少核心和更少内存的机器上（比如 CI 执行器），你可能想要减少这个数字来避免不必要或额外的开销。你可以将数字设置到很小，比如 <code>--checkers 1</code> ，有效地让类型检查单线程话，并且消除重复的工作。</p>
+<p>极少数情况下， <code>--checkers</code> 的数量变化可能会导致结果出现顺序依赖性问题。跨构建环境为 <code>--checkers</code> 指定一个固定的数量可以确保每个人得到相同的结果，但这由你们团队决定。</p>
+<h3 id="项目引用构建器并行化"><a href="#项目引用构建器并行化" class="headerlink" title="项目引用构建器并行化"></a>项目引用构建器并行化</h3><p>TypeScript 7.0 不仅可以在一个项目内并行构建，还可以立刻同时构建多个项目。这个行为可以通过配置新的 <code>--builders</code> 标志，这个标志控制了在执行 <code>--build</code> 时项目应用构建器并行的数量。这对那些有多个项目的单仓库有特别的帮助。</p>
+<p>就像 <code>--checkers</code> ，增加构建器的数量可以加快构建速度，但会带来内存使用量的增加。它和 <code>--checkers</code> 还会产生乘法效应，所以为代码库和机器找到一个正确的平衡是很重要的，比如，使用 <code>--checkers 4 --builders 4</code> 允许至多 16 个类型检查器同时执行，这个数量过多了。</p>
+<p>与 <code>--checkers</code> 不同，<code>--builders</code> 的数量变化不会产生不同的结果。然而，构建项目引用从根本上受限于项目的关系依赖图（除了在代码库上利用 <code>--isolatedDeclarations</code> 和分开生成与发声明来进行代码检查）。</p>
+<h3 id="单线程模式"><a href="#单线程模式" class="headerlink" title="单线程模式"></a>单线程模式</h3><p>在某些情况下，强制整个编译器运行在单线程下是很有帮助的。这有助于调试、对比 TypeScript 6 和 TypeScript 7 的性能，在外部协调并行构建，也有助于在资源非常有限的环境中执行。启用单线程模式，可以使用新的 <code>--signleThreaded</code> 标志，这不仅会将类型检查器的线程覆盖为 1 ，也会确保解析和代码生成在一个线程中完成。</p>
+<h2 id="提升-watch-模式性能"><a href="#提升-watch-模式性能" class="headerlink" title="提升 --watch 模式性能"></a>提升 <code>--watch</code> 模式性能</h2><p>TypeScript 7 附带了一个完全重建的 <code>--watch</code> 模式。现在 <code>--watch</code> 由一个基于 Parcel 捆绑器的<a target="_blank" rel="noopener" href="https://github.com/parcel-bundler/watcher">文件监视器</a>的新基础提供支持，它提供了高效和稳定的跨平台文件监视能力。</p>
+<p>当我们的团队开始着手移植我们的文件监视逻辑时，我们遇到了一些 Go 在跨平台文件监视的挑战。标准库并没有提供内置的监视 API ，我们浏览了现有的三方库，但它们在稳定性，性能，跨平台支持，构建工具集成等方面存在问题。我们使用了定时轮询来检测文件的变更，这种方法在许多操作系统中普遍适用。但是这样的计算是很昂贵的，特别是在面对有着许多依赖的 node_modules 的大规模的项目。即使使用动态调度策略，我们也发现纯轮询的解决方法在普遍使用情况下依然费力。</p>
+<p>许多年来， VSCode 依赖 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@parcel/watcher"><code>@parcel/watcher</code></a> ，近些年来在 VSCode 中的 TypeScript 已经直接依赖了其文件监视能力。虽然它看起来很棒，但是对我们来说有一个问题，就是这个库是由 C++ 写的，也就是说它需要一个完整的 C++ 工具链用于构建。鉴于我们在 VSCode 中使用 Parcel 的监视器时获得的良好体验，我们尝试将其移植到 Go 上，配合上一些垫片来避免引入新的工具链依赖。</p>
+<p>这个尝试是成功的，最初只是将 C++ 代码直接翻译到 Go 上，之后进一步地改为地道的 Go 代码并且其仍能通过移植的测试套件。监视器是一个独立的包，它允许我们清晰地区分“要监视什么文件”以及“为什么要监视”。我们现在可以观察到在各个平台上的 <code>--watch</code> 模式下的效率都有极大的提升，我们也收到了来自 TypeScript 7 早期用户的积极反馈。</p>
+<p>感谢 Devon Govett ，他在 Parcel 上的工作给 VSCode 和 TypeScript 项目带来了巨大的好处。我们希望这个移植版本能够随着时间推移为原本的 Parcel 监视器代码库带来灵感。</p>
+<h2 id="自-5-x-以来的更新，以及-6-0-新的行为"><a href="#自-5-x-以来的更新，以及-6-0-新的行为" class="headerlink" title="自 5.x 以来的更新，以及 6.0 新的行为"></a>自 5.x 以来的更新，以及 6.0 新的行为</h2><p>TypeScript 7.0 兼容 TypeScript 6.0 的类型检查和命令行行为。几乎所有能够被 TypeScript 6.0 编译的的 TypeScript 代码（启用 <code>stableTypeOrdering</code> 标志，并且没有任何 <code>ignoreDeprecations</code> 标志）都能直接被 TypeScript 7.0 编译。</p>
+<p>正如我们所说， TypeScript 7.0 采用了 6.0 新的默认设置，当遇到任何在 TypeScript 6.0 弃用的标志和结构时发出硬性的错误。值得注意的是 6.0 仍是一个较新的版本，许多项目还需要适应这些新的行为。我们鼓励开发者使用 TypeScript 6.0 ，这样能更加简单地迁移到 TypeScript 7.0 ，你可以阅读 TypeScript 6.0 相关<a target="_blank" rel="noopener" href="https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/">博客</a>来获取更多关于这些弃用项的信息。</p>
+<p>简而言之，需要注意的默认变更配置包括：</p>
+<ul>
+<li><code>strict</code> 默认为 <code>true</code> 。</li>
+<li><code>module</code> 默认为 <code>esnext</code> 。</li>
+<li><code>target</code> 立即默认为当前稳定的 ECMAScript 版本，也就是在 <code>esnext</code> 的上一个版本。</li>
+<li><code>noUncheckedSideEffectImports</code> 默认为 <code>true</code> 。</li>
+<li><code>libReplacement</code> 默认为 <code>false</code> 。</li>
+<li><code>stableTypeOrdering</code> 默认为 <code>true</code> ，并且无法关闭。</li>
+<li><code>rootDir</code> 默认为 <code>./</code> ，内部的源代码目录必须显式地指定。</li>
+<li><code>types</code> 默认为 <code>[]</code> ，旧的行为可以通过覆盖 <code>[&quot;*&quot;]</code> 来设置。</li>
+</ul>
+<p>我们认为 <code>rootDir</code> 和 <code>types</code> 的变更是最令人“惊喜”的，但它们可以简单地迁移。如果 <code>tsconfig.json</code> 位于项目文件夹的外面，比如 <code>src</code> ，则需要包含在 <code>rootDir</code> 中以保持相同的文件夹结构。</p>
+<figure class="highlight json"><figcaption><span>diff</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="attr">&quot;rootDir&quot;</span><span class="punctuation">:</span> <span class="string">&quot;./src&quot;</span> <span class="comment">// 添加此行</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;include&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;./src&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对于 <code>types</code> 变更，依赖指定全局定义的项目需要显示地列出它们自身：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;compilerOptions&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="comment">// 显式地列出你需要的 @types 包</span></span><br><span class="line">    <span class="comment">// 比如： bun 、 mocha 、 jasmine 等</span></span><br><span class="line">    <span class="attr">&quot;types&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;node&quot;</span><span class="punctuation">,</span> <span class="string">&quot;jest&quot;</span><span class="punctuation">]</span> <span class="comment">// 添加此行</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>以下是那些已经变为空行为，并且会报错的废弃项：</p>
+<ul>
+<li><code>target: es5</code> 不再支持。</li>
+<li><code>downlevelIteration</code> 不再支持。</li>
+<li><code>moduleResolution: node/node10</code> 不再支持，现在推荐使用 <code>nodenext</code> 和 <code>bundler</code> 。</li>
+<li><code>module: amd, umd, systemjs, none</code> 不再支持，现在推荐使用 <code>esnext</code> 或者 <code>preserve</code> 结合打包器或者基于浏览器模块的解析器。</li>
+<li><code>baseUrl</code> 不再支持，现在 <code>paths</code> 根据项目的根进行相对定位。</li>
+<li><code>moduleResolution: classic</code> 不再支持，现在推荐使用 <code>bundler</code> 或者 <code>nodenext</code> 。</li>
+<li><code>esModuleInterop</code> 和 <code>allowSyntheticDefaultImports</code> 不可设为 <code>false</code> 。</li>
+<li><code>alwaysStrict</code> 默认为 <code>true</code> ，并且无法更改为 <code>false</code> 。</li>
+<li><code>module</code> 关键字不可在命名空间声明中使用。</li>
+<li><code>asserts</code> 关键字不可在导入语句中使用，必须配合 <code>with</code> 使用（为了对其 ECMAScript 的导入属性语法的进展）。</li>
+<li><code>/// &lt;reference no-default-lib /&gt;</code> 指令在 <code>skipDefaultLibCheck</code> 下不再识别。</li>
+<li>命令行构建不可在一个包含 <code>tsconfig.json</code> 的文件夹下包含文件输入，除非显式指定 <code>--ignoreConfig</code> 标志。</li>
+</ul>
+<h3 id="模板字面类型现在支持-Unicode-代码点"><a href="#模板字面类型现在支持-Unicode-代码点" class="headerlink" title="模板字面类型现在支持 Unicode 代码点"></a>模板字面类型现在支持 Unicode 代码点</h3><p>TypeScript 7.0 现在在推断模板字面类型时会更自然地处理 Unicode 代码点，比如：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="title class_">HeadTail</span>&lt;S&gt; = S <span class="keyword">extends</span> <span class="string">`<span class="subst">$&#123;infer Head&#125;</span><span class="subst">$&#123;infer Tail&#125;</span>`</span> ? [<span class="title class_">Head</span>, <span class="title class_">Tail</span>] : <span class="built_in">never</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="title class_">Result</span> = <span class="title class_">HeadTail</span>&lt;<span class="string">&#x27;😀abc&#x27;</span>&gt;</span><br><span class="line"><span class="comment">//   ^</span></span><br><span class="line"><span class="comment">// 在 7.0: [&quot;😀&quot;, &quot;abc&quot;]</span></span><br><span class="line"><span class="comment">// 先前版本: [&quot;\ud83d&quot;, &quot;\ude00abc&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<p>先前， TypeScript 遵循 JavaScript 的 UTF-16 索引行为，将 <code>&quot;😀&quot;</code> 分为一个代理对的两半（即 <code>\ud83d</code> and <code>\ude00</code> ）。技术上来讲这与 JavaScript 的索引行为是一致的（比如，对 <code>Head</code> 类型的推断等效于 <code>&quot;😀abc&quot;[0]</code>），但通常情况下并不是开发者的意图，而且产生了包含未配对的，语义上无意义的代理对。</p>
+<p>对于特意模拟 UTF-16 代码单元的类型等级字符串的操作来说，这是一个破坏性的变更，例如某些计算字符串长度的工具，实际上，我们预计新的行为会更加有用并且减少对用户的影响：模板字面推断现在和使用 <code>for...of</code> 迭代字符串或者通过 <code>[...str]</code> 展开符号展开字符串的行为保持一致，也就是 <code>&quot;😀&quot;</code> 会被视为一个单元。</p>
+<h3 id="与-JavaScript-不同"><a href="#与-JavaScript-不同" class="headerlink" title="与 JavaScript 不同"></a>与 JavaScript 不同</h3><p>当我们迁移现有的代码库时，我们借此机会也重新审视了我们是如何进行 JavaScript 的支持工作。</p>
+<p>TypeScript 原本支持通过 JSDoc 注释和识别某些代码模式进行分析和类型推断来支持 JavaScript 文件。很多时候，这基于流行的代码模式，但偶尔会基于 Closure 和 JSDoc 文档生成工具工具能够理解的任何人编写的内容。这个方法有助于开发者编写不规范的 JSDoc ，这需要在多处妥协并且处理一些特殊的情况才能正常工作，并且与 TypeScript 对 <code>.ts</code> 文件的分析存在一些差异。</p>
+<p>在 TypeScript 7.0 ，我们重新实现了对 JavaScript 的支持，使其和对 TypeScript 文件的分析方式保持一致。其中包括：</p>
+<ul>
+<li>需要类型的地方不能使用值，除了 <code>typeof someValue</code></li>
+<li><code>@enum</code> 不再被特殊识别，而是通过创建一个 <code>@typedef (typeof YourEnumDeclaration)[keyof typeof YourEnumDeclaration]</code></li>
+<li>单独的 <code>?</code> 不再作为一个类型使用，替换为 <code>any</code></li>
+<li><code>@class</code> 不会将函数视为一个构造器，应该使用 <code>class</code> 来定义</li>
+<li>后置 <code>!</code> 不再支持，请使用 <code>T</code> 。</li>
+<li>类型命名必须在 <code>@typedef </code>内进行定义（比如：<code>/** @typedef {T} TypeAliasName */</code>），而不能挨着标识符（比如：<code>/** @typedef {T} */ TypeAliasName;</code>）</li>
+<li>闭包式函数语法（比如： <code>function(string): void</code>）不再支持，请使用 TypeScript 的简化方式（比如： <code>(s: string) =&gt; void</code> ）。</li>
+</ul>
+<p>此外，一些 JavaScript 模式，比如 <code>this</code> 别名，重写整个函数的 <code>prototype</code> 属性不再被特别对待。</p>
+<p>某些 JS 支持仍在调整中，我们会更新 <a target="_blank" rel="noopener" href="https://github.com/microsoft/typescript-go/blob/main/CHANGES.md">CHANGE.md</a> 文件来描述 TypeScript 6.0 和 7.0 间更多不同的细节。</p>
+<h2 id="编辑体验"><a href="#编辑体验" class="headerlink" title="编辑体验"></a>编辑体验</h2><p>正如我们如上提到， TypeScript 7.0 的性能提升不局限于命令行体验，也包括编辑体验。对于 VSCode 用户，我们创建了一个专门用于的 TypeScript 7 的<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=TypeScriptTeam.native-preview">扩展</a>。当你安装这个扩展后，便会自动地切换到 TypeScript 7 的默认体验。你可以通过命令面板的 “Disabled TypeScript Language Server” 和 “Enable TypeScript Language Server” 命令随时禁用或启用它。在几个星期后 VSCode 自身便会附带对 TypeScript 7 的支持。</p>
+<p>对于 VS 的用户，最新版本的 IDE 已会在工作区自动启用 TypeScript 7 ，无需进行任何的变更。</p>
+<p>当然， TypeScript 7 可以在你选择的任何编辑工具上良好地运行。新的基础设施建立在语言服务协议（LSP），它能够利用多线程尽可能快地同时服务多个请求。</p>
+<p>当 TypeScript 7 第一次亮相的时候，我们添加了缺失的功能，比如自动导入，悬停面板，行内提示，代码引用信息，转到源码定义，JSX的联动编辑和标签的自动完成等等。7.0 beta 以来缺失的特性，比如语法高亮，导入排序，删除无用导入等等也已实现。</p>
+<p>此外，在过去的几个月，我们持续的提升性能和稳定性。我们重构了许多测试和诊断的基础设置，来确保质量处于高标准状态，我们也在 Github 上对那些热门的 TypeScript 和 JavaScript 代码库的语言服务进行模糊测试。就像我们上面提到的那样， TypeScript 7 的新的语言服务比起 TypeScript 6 更加稳定。</p>
+<h3 id="TypeScript-集成"><a href="#TypeScript-集成" class="headerlink" title="TypeScript 集成"></a>TypeScript 集成</h3><p>值得一提的是像 Vue 、 MDX 、 Astro 、 Svelte 等工作流还无法利用 TypeScript 7 。类似地，像 Angular 这样的专门用于对模板进行类型检查的工具也无法使用 TypeScript 7 。这主要是因为 TypeScript 7 还未暴露出一个稳定的编程式的 API ，所以这些集成了 TypeScript 到他们自身编译器和语言服务的工具（类似 Volar）目前只能依赖 TypeScript 6.0 。我们预计这只是一个暂时性的问题，我们也致力于提供一个解决方法。我们也会与这些项目的维护者保持联系以确保 TypeScript 7 可以支持这些工作流。</p>
+<p>在此之前，我们推荐团队在无需使用语言服务的场景下使用 TypeScript 7 。使用 Angular 的项目可以使用 TypeScript 7 的 tsc 命令来快速检测项目的绝大多数错误，而在编辑支持上则使用 TypeScript 6.0 。其他使用 Vue 、 MDX 、 Astro 、 Svelte 等项目目前需要继续使用 TypeScript 6.0 。在 VScode 中，用户可以简单地执行 “Disable TypeScript 7 Language Server” 命令来恢复到 TypeScript 6.0 的环境。</p>
+<h2 id="路线展望"><a href="#路线展望" class="headerlink" title="路线展望"></a>路线展望</h2><p>TypeScript 7.0 在项目上是一个及其重大的里程碑。我们的团队专注这项迁移已超过了一年。随着 7.0 发布，我们也将恢复到新特性的开发，人体工程学的提升，更棒的性能以及实现一个新的 API 来支持广泛的生态系统。虽然这个功能似乎影响很大，但我们预计和先前版本到 TypeScript 7.0 所花费的时间大致相同，也就是 3-4 个月发布带有新特性的版本。随着 TypeScript 7.1 即将发布，我们希望可以减少迁移带来的影响，让社区稳步前进。</p>
+<p>我们也鼓励你分享使用 TypeScript 7.0 的体验。可以关注 Bluesky 上的 <a target="_blank" rel="noopener" href="https://bsky.app/profile/typescriptlang.org">@typescriptlang.org</a> 或者 Mastodon 上的 <a target="_blank" rel="noopener" href="https://fosstodon.org/@TypeScript/">@typescript@fosstodon.org</a> ，或者 Twitter 上的 <a target="_blank" rel="noopener" href="https://twitter.com/typescript">@typescript</a> 并添加相关 tag ，向我们以及其他人分享你对 TypeScript 7 的看法。</p>
+<p>我们深知这个版本会对 TypeScript 生态系统产生难以致信的价值。我们希望它可以让你每天的代码体验，更快，更有趣，更高的生产力，更加专注其中。</p>
+<p>欢迎来到 TypeScript 原生工具集的时代。</p>
+<p>祝你编程愉快！</p>
+<p>—— TypeScript 团队敬上。</p>
+<h1 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h1><p>希望快快支持 Vue ~~</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>Par9uet
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://prohibitorum.top/44b84fc74338" title="TypeScript 7.0（译）">https://prohibitorum.top/44b84fc74338</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/TypeScript/" rel="tag"># TypeScript</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/7fc5116994d1" rel="prev" title="记一次 @antv&#x2F;x6 库 mouseenter 事件不生效问题">
+                  <i class="fa fa-angle-left"></i> 记一次 @antv/x6 库 mouseenter 事件不生效问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/481f9c7a2428" rel="next" title="记一次将 xposed 模块迁移到新版 api">
+                  记一次将 xposed 模块迁移到新版 api <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Par9uet</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">444k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">26:54</span>
+  </span>
+</div>
+
+<div class="site_sign">
+  <span class="post-meta-item">
+    <span>
+      如果我和狗一样有尾巴的话，一定会藏不住这份喜悦，而尾巴一直摇个不停吧。
+    </span>
+  </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<link rel="stylesheet" href="https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"Dedicatus546","repo":"gitalk","client_id":"f7dc1ebbf18fc0fd3a5c","client_secret":"0893318788a1b62f883bdace8c12e6c42d76b402","admin_user":"Dedicatus546","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","body":null,"js":{"url":"https://fastly.jsdelivr.net/npm/gitalk@1.8.0/dist/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"15cc4d5f48db"}</script>
+<script src="/js/third-party/comments/gitalk.js" defer></script>
+
+<!-- hexo injector body_end start -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12.1.3/swiper-bundle.min.css">
+<style>
+      :root {
+        --swiper-theme-color: var(--theme-color);
+        --swiper-pagination-bottom: 0;
+      }
+      .swiper {
+        padding-bottom: 32px;
+        margin-bottom: 20px;
+      }
+      .swiper .swiper-slide .swiper-slide-img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        background: var(--body-bg-color);
+        margin: 0;
+      }
+    </style><!-- hexo injector body_end end --></body>
+</html>
